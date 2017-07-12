@@ -25,7 +25,7 @@ and *multi-threading* capabilities present in nowadays multi-core
 processors so as to accelerate the compression/decompression process
 to a maximum.
 
-To wet your appetite look at the kind of speed that Blosc can reach:
+To whet your appetite look at the kind of speed that Blosc can reach:
 
 .. |blosclz-c| image::   /images/blosclz-comp.png
 .. |blosclz-d| image::   /images/blosclz-decomp.png

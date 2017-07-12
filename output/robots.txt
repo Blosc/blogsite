@@ -1,4 +1,0 @@
-Sitemap: http://blosc.org/sitemapindex.xml
-
-User-Agent: *
-Host: blosc.org
