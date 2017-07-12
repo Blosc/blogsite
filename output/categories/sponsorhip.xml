@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Site (Posts about sponsorhip)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/sponsorhip.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2017 &lt;a href="mailto:francesc@blosc.org"&gt;Francesc Alted&lt;/a&gt; </copyright><lastBuildDate>Tue, 11 Jul 2017 15:33:15 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Seeking Sponsorship for Bcolz/Blosc</title><link>http://blosc.org/posts/seeking-sponsoship/</link><dc:creator>Valentin Haenel</dc:creator><description>&lt;div&gt;&lt;p&gt;Dear Everyone,&lt;/p&gt;
+&lt;p&gt;as you may or may not know, the &lt;a class="reference external" href="https://github.com/blosc/c-blosc"&gt;Blosc&lt;/a&gt;
+compressor has become the basis for some novel, innovative technological
+experiments in the PyData space.  Especially the &lt;a class="reference external" href="https://github.com/blosc/bcolz"&gt;Bcolz&lt;/a&gt; and &lt;a class="reference external" href="https://github.com/blosc/bloscpack"&gt;Bloscpack&lt;/a&gt; projects which provide a way to perform
+out-of-core computations on column based datasets have become particularly
+interesting for the analysis of medium-sized time-series datasets.&lt;/p&gt;
+&lt;p&gt;In this post, we would like to convince you to give us some money to
+foster the project, development and accelerate growth of our community.
+Historically, it has always been a difficult endeavour to monetize
+open-source development and so, below is a non-exhaustive list of
+potential models that we are considering:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p class="first"&gt;Direct sponsoring / Donations&lt;/p&gt;
+&lt;p&gt;This involves paying either a single lump-sum or monthly installments
+to foster continued development and innovation. This type of
+sponsoring isn't bound to any specific goal or feature and would allow
+us for example maintain and release the projects regularly.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Feature-driven sponsoring&lt;/p&gt;
+&lt;p&gt;Paying for specific features to be implemented, bugs to be fixed or
+paying to have a voice when it comes to prioritizing items in the
+issue-tracker(s).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Hiring us as freelancers for Blosc/Bcolz projects&lt;/p&gt;
+&lt;p&gt;This means that you hire one or both of us to implement a project that
+uses bcolz inside your company. Any bugs we find or improvements that
+need to be made would flow back into the open source code-base.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Hiring us as part-time freelancers for general projects&lt;/p&gt;
+&lt;p&gt;This means you hire one or both of us as part-time freelancers for two
+to three days a week to work on general projects. These can be related
+to Python and data or open-source work on other projects. This would
+allow us to spend the remaining days on Blosc/Bcolz.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;PhD positions&lt;/p&gt;
+&lt;p&gt;There are still a few interesting theoretical aspects to be unlocked,
+for example certain mathematical properties of the shuffle filter and
+a compressed extension of the external-memory-model (EMM) to analyse
+the runtime of Blosc style out-of-core algorithms and Bcolz operations
+in general.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We welcome any feedback regarding the above options and please do tell
+us about any additional models that may be interesting to us or for you.&lt;/p&gt;
+&lt;p&gt;With best wishes and looking forward to your input,&lt;/p&gt;
+&lt;p&gt;Francesc Alted and Valentin Haenel&lt;/p&gt;&lt;/div&gt;</description><category>blosc</category><category>blosclz</category><category>sponsorhip</category><guid>http://blosc.org/posts/seeking-sponsoship/</guid><pubDate>Tue, 26 May 2015 08:41:20 GMT</pubDate></item></channel></rss>

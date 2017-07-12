@@ -1,0 +1,81 @@
+--> 1, 2097152, 8, 19
+********************** Run info ******************************
+Blosc version: 1.0.dev (2010-06-28)
+Using synthetic data with 19 significant bits (out of 32)
+Dataset size: 2097152 bytes	Type size: 8 bytes
+Working set: 256.0 MB		Number of threads: 1
+********************** Running benchmarks *********************
+memcpy(write):		 2466.9 us, 810.7 MB/s
+memcpy(read):		 2705.0 us, 739.4 MB/s
+Compression level: 0
+comp(write):	 2502.2 us, 799.3 MB/s	  Final bytes: 2097168  Ratio: 1.00
+decomp(read):	 2469.6 us, 809.8 MB/s	  OK
+Compression level: 1
+comp(write):	 8246.6 us, 242.5 MB/s	  Final bytes: 1095184  Ratio: 1.91
+decomp(read):	 4616.1 us, 433.3 MB/s	  OK
+Compression level: 2
+comp(write):	 8215.0 us, 243.5 MB/s	  Final bytes: 584976  Ratio: 3.59
+decomp(read):	 4945.1 us, 404.4 MB/s	  OK
+Compression level: 3
+comp(write):	 8912.6 us, 224.4 MB/s	  Final bytes: 584976  Ratio: 3.59
+decomp(read):	 4948.3 us, 404.2 MB/s	  OK
+Compression level: 4
+comp(write):	 13925.4 us, 143.6 MB/s	  Final bytes: 558608  Ratio: 3.75
+decomp(read):	 5798.0 us, 344.9 MB/s	  OK
+Compression level: 5
+comp(write):	 17339.3 us, 115.3 MB/s	  Final bytes: 558608  Ratio: 3.75
+decomp(read):	 5866.0 us, 340.9 MB/s	  OK
+Compression level: 6
+comp(write):	 15569.9 us, 128.5 MB/s	  Final bytes: 324880  Ratio: 6.46
+decomp(read):	 13418.0 us, 149.1 MB/s	  OK
+Compression level: 7
+comp(write):	 14660.4 us, 136.4 MB/s	  Final bytes: 274768  Ratio: 7.63
+decomp(read):	 13912.6 us, 143.8 MB/s	  OK
+Compression level: 8
+comp(write):	 14647.6 us, 136.5 MB/s	  Final bytes: 274768  Ratio: 7.63
+decomp(read):	 13899.8 us, 143.9 MB/s	  OK
+Compression level: 9
+comp(write):	 13204.8 us, 151.5 MB/s	  Final bytes: 215872  Ratio: 9.71
+decomp(read):	 12933.7 us, 154.6 MB/s	  OK
+--> 2, 2097152, 8, 19
+********************** Run info ******************************
+Blosc version: 1.0.dev (2010-06-28)
+Using synthetic data with 19 significant bits (out of 32)
+Dataset size: 2097152 bytes	Type size: 8 bytes
+Working set: 256.0 MB		Number of threads: 2
+********************** Running benchmarks *********************
+memcpy(write):		 2465.6 us, 811.2 MB/s
+memcpy(read):		 2494.4 us, 801.8 MB/s
+Compression level: 0
+comp(write):	 2641.8 us, 757.0 MB/s	  Final bytes: 2097168  Ratio: 1.00
+decomp(read):	 2638.4 us, 758.0 MB/s	  OK
+Compression level: 1
+comp(write):	 7028.3 us, 284.6 MB/s	  Final bytes: 1095184  Ratio: 1.91
+decomp(read):	 3927.6 us, 509.2 MB/s	  OK
+Compression level: 2
+comp(write):	 6667.3 us, 300.0 MB/s	  Final bytes: 584976  Ratio: 3.59
+decomp(read):	 3968.0 us, 504.0 MB/s	  OK
+Compression level: 3
+comp(write):	 7203.1 us, 277.7 MB/s	  Final bytes: 584976  Ratio: 3.59
+decomp(read):	 3953.7 us, 505.9 MB/s	  OK
+Compression level: 4
+comp(write):	 10616.3 us, 188.4 MB/s	  Final bytes: 558608  Ratio: 3.75
+decomp(read):	 4356.8 us, 459.1 MB/s	  OK
+Compression level: 5
+comp(write):	 13142.9 us, 152.2 MB/s	  Final bytes: 558608  Ratio: 3.75
+decomp(read):	 4330.7 us, 461.8 MB/s	  OK
+Compression level: 6
+comp(write):	 11654.7 us, 171.6 MB/s	  Final bytes: 324880  Ratio: 6.46
+decomp(read):	 9729.8 us, 205.6 MB/s	  OK
+Compression level: 7
+comp(write):	 11255.4 us, 177.7 MB/s	  Final bytes: 274768  Ratio: 7.63
+decomp(read):	 11264.0 us, 177.6 MB/s	  OK
+Compression level: 8
+comp(write):	 11275.9 us, 177.4 MB/s	  Final bytes: 274768  Ratio: 7.63
+decomp(read):	 11317.0 us, 176.7 MB/s	  OK
+Compression level: 9
+comp(write):	 10911.3 us, 183.3 MB/s	  Final bytes: 215872  Ratio: 9.71
+decomp(read):	 11218.9 us, 178.3 MB/s	  OK
+
+Round-trip compr/decompr on 15.0 GB
+Elapsed time:	  143.3 s, 235.8 MB/s

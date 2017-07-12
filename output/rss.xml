@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page </title><link>http://blosc.org/</link><description>Blosc, an extremely fast, multi-threaded, meta-compressor library</description><atom:link href="http://blosc.org/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2017 &lt;a href="mailto:francesc@blosc.org"&gt;Francesc Alted&lt;/a&gt; </copyright><lastBuildDate>Wed, 12 Jul 2017 09:22:22 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Zstd has just landed in Blosc</title><link>http://blosc.org/posts/zstd-has-just-landed-in-blosc/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;a class="reference external" href="http://www.zstd.net"&gt;Zstd&lt;/a&gt;, aka Zstandard, is a new breed of compression
+library that promises to achieve better compression ratios than &lt;a class="reference external" href="http://www.zlib.net/"&gt;Zlib&lt;/a&gt;, and at better speeds too. The fact that Zstd is geared
+towards fast compression / decompression since the beginning was an indication
+for me that it could be a good fit for Blosc. After some months of
+experimentation with Zstd in &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/6"&gt;Blosc2&lt;/a&gt;, I am really happy to say that I am
+quite impressed on how the pair performs.&lt;/p&gt;
+&lt;p&gt;And now that the Zstd format has been declared &lt;a class="reference external" href="http://fastcompression.blogspot.com.es/2016_07_03_archive.html"&gt;stable&lt;/a&gt; and that its
+API is maturing rapidly, it is a good time for inclusion in the &lt;a class="reference external" href="https://github.com/Blosc/c-blosc/pull/171"&gt;Blosc1&lt;/a&gt; project too. In Blosc1 there was
+still a couple of slots available for additional codecs, and after my positive
+experiences with Zstd I decided that it would be an excellent candidate to take
+one of the free seats (will see which one will take the last one, if any).&lt;/p&gt;
+&lt;p&gt;Beware: the Zstd support in Blosc should still be considered in &lt;strong&gt;beta&lt;/strong&gt;
+and so it is not recommended to use this new codec in production yet. It is
+indeed recommended to start experimenting with it so as to see the kind of
+improvements that it can bring to your scenario, and specially report possible
+flaws back.&lt;/p&gt;
+&lt;div class="section" id="a-compression-beast-for-blosc-operation"&gt;
+&lt;h2&gt;A compression beast for Blosc operation&lt;/h2&gt;
+&lt;p&gt;As said, Zstd is meant to achieve better compression ratios than Zlib, and this
+is indeed the &lt;a class="reference external" href="http://www.zstd.net"&gt;case for many situations already&lt;/a&gt;. But it
+turns out that Zstd shines specially when faced to the kind of data that is left
+after the shuffle (or bitshuffle) filter passes.&lt;/p&gt;
+&lt;p&gt;As for one, here it is the typical benchmark plot for compressing with Zstd on
+my machine (Intel Xeon E3-1245-v5 @ 3.5GHz), side-by-side with Zlib which was
+the codec having the best compression ratios among all the supported inside
+Blosc:&lt;/p&gt;
+&lt;table border="1" class="docutils"&gt;
+&lt;colgroup&gt;
+&lt;col width="50%"&gt;
+&lt;col width="50%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody valign="top"&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img alt="lap-zstd-c" src="http://blosc.org/images/zstd-E3-1245-v5-4p-compr.png"&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img alt="lap-zlib-c" src="http://blosc.org/images/zlib-E3-1245-v5-compr.png"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;As can be seen, Zstd achieves a maximum compression ratio of more than 300x for
+this specific dataset, which is quite a lot more than the 70x achieved by Zlib.
+But the coolest thing is that we are not paying a performance price for this
+increased compression ratio, rather the contrary, because Zstd is clearly
+superior (up to a 25%) in compression speed to Zlib.&lt;/p&gt;
+&lt;p&gt;But one of the most distinctive features for Blosc is its ability to decompress
+data very fast (sometimes faster than memcpy() as I like to remind). And look at
+what Zstd is able to achieve in this case:&lt;/p&gt;
+&lt;table border="1" class="docutils"&gt;
+&lt;colgroup&gt;
+&lt;col width="50%"&gt;
+&lt;col width="50%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody valign="top"&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img alt="lap-zstd-d" src="http://blosc.org/images/zstd-E3-1245-v5-4p.png"&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img alt="lap-zlib-d" src="http://blosc.org/images/zlib-E3-1245-v5.png"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;With peak speeds larger than 10 GB/s, Zstd can decompress data more than 2x
+faster than Zlib peaks (~ 4 GB/s). And more importantly, when it comes to
+decompress data at the highest compression level, Zstd can do that about 6x
+faster than Zlib (~6 GB/s vs ~1 GB/s), which is a welcome surprise.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="not-the-fastest-but-a-nicely-balanced-one"&gt;
+&lt;h2&gt;Not the fastest, but a nicely balanced one&lt;/h2&gt;
+&lt;p&gt;Of course, Zstd is still far from the fastest codecs in Blosc. See for example
+how the internal BloscLZ codec can perform in this machine:&lt;/p&gt;
+&lt;table border="1" class="docutils"&gt;
+&lt;colgroup&gt;
+&lt;col width="50%"&gt;
+&lt;col width="50%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody valign="top"&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img alt="lap-blosclz-c" src="http://blosc.org/images/blosclz-E3-1245-v5-compr.png"&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img alt="lap-blosclz-d" src="http://blosc.org/images/blosclz-E3-1245-v5.png"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;But nevertheless, due to its impressive balance between compression ratio and
+speed, Zstd is called to be one of the most attractive codecs in Blosc for the
+near future.&lt;/p&gt;
+&lt;p&gt;As always, all these benchmarks here were made for the specific, synthetic
+dataset that I am using for Blosc since the beginning (mainly for
+reproducibility purposes). But I am pretty sure that most of the capabilities
+shown here will be experienced in a large variety of datasets that Blosc is
+meant to tackle (in fact, it would be nice if you can share your experience by
+adding a comment below).&lt;/p&gt;
+&lt;p&gt;Finally, my special thanks to Yann Collet, the author of Zstd (as well as &lt;a class="reference external" href="http://www.lz4.org/"&gt;LZ4&lt;/a&gt;, also included in Blosc) for putting his genius at the
+service of the community by opening not only his code, but also his mind in his
+amazing series of blogs about compression: &lt;a class="reference external" href="http://fastcompression.blogspot.com"&gt;http://fastcompression.blogspot.com&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="appendix-what-can-be-expected-in-blosc2"&gt;
+&lt;h2&gt;Appendix: What can be expected in Blosc2&lt;/h2&gt;
+&lt;p&gt;Blosc2 has support for Zstd contexts and
+a new way to split chunks into blocks that makes codecs go faster in general.
+Below you have a couple of plots on how the Blosc2/Zstd couple behaves:&lt;/p&gt;
+&lt;table border="1" class="docutils"&gt;
+&lt;colgroup&gt;
+&lt;col width="50%"&gt;
+&lt;col width="50%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody valign="top"&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img alt="blosc2-zstd-c" src="http://blosc.org/images/zstd-E3-1245-v5-compr-blosc2.png"&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img alt="blosc2-zstd-d" src="http://blosc.org/images/zstd-E3-1245-v5-blosc2.png"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;As can be seen, in Blosc2 Zstd can get peaks of more than 15 GB/s, almost reaching
+memcpy() speed in this machine (~17 GB/s).  Also, decompression speed at the
+highest compression ratio can scale when throwing more threads at it (a thing
+that Blosc1 is not able to achieve), and easily surpasses 10 GB/s.  Notice
+that reaching such a high speed while decompressing a buffer with a really high
+compression ratio (~300x) is really impressing.  On his part, compression speed
+is a bit less (25%) than in Blosc1 but still quite competitive (and on par with Zlib).&lt;/p&gt;
+&lt;p&gt;This is really exciting news to be added on top of the new planned features for Blosc2.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>Zstandard</category><category>Zstd</category><guid>http://blosc.org/posts/zstd-has-just-landed-in-blosc/</guid><pubDate>Wed, 20 Jul 2016 11:32:20 GMT</pubDate></item><item><title>ARM is becoming a first-class citizen for Blosc</title><link>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;We are happy to announce that Blosc is receiving official support for
+ARM processors.  Blosc has always been meant to support all platforms
+where a C89 compliant C compiler can be found, but until now the only
+hardware platforms that we were testing on a regular basis has been
+Intel (on top of Unix/Linux, Mac OSX and Windows).&lt;/p&gt;
+&lt;p&gt;We want this to change and the ARM architecture has been our first
+candidate to become a fully supported platform besides Intel/AMD.  You
+may be wondering that we could have chosen any other architecture like
+MIPS or PowerPC, so why ARM?&lt;/p&gt;
+&lt;div class="section" id="arm-is-eating-the-world"&gt;
+&lt;h2&gt;ARM is eating the world&lt;/h2&gt;
+&lt;p&gt;ARM is an increasingly popular architecture and we can find
+implementation exemplars of it not only in the phones, tablets or
+ChromeBooks, but also acting as embedded processors, as well as in
+providing computing power to immensely popular Raspberry Pi's and
+Arduinos and even environments so &lt;em&gt;apparently&lt;/em&gt; alien to it like &lt;a class="reference external" href="http://www.theplatform.net/2015/06/16/mont-blanc-sets-the-stage-for-arm-hpc/"&gt;High
+Performance Computing&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Contrarily to what has been traditional for other computer platforms,
+one of the most important design features for ARM is to keep energy
+consumption under very strict limits.  Nowadays, the ARM architecture
+can run decently powerful CPUs where each core &lt;a class="reference external" href="http://www.androidauthority.com/arms-secret-recipe-for-power-efficient-processing-409850"&gt;consumes just 600 to
+750 mWatt or less&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In my opinion, it is precisely this energy efficiency what makes of
+ARM one of the platforms with more projection to gain ground as a
+general computer platform in the short future.  By now, we all know
+that ARM allows packing more cores into a single die (e.g. your phone
+having more cores than your laptop, anyone?).  And more cores also
+means more combined computing throughput (albeit a bit more difficult
+to program), but more importantly, &lt;strong&gt;more cores being able to bring
+data from memory at the same time&lt;/strong&gt;.  Contrarily to what one might
+think, having different threads transmitting data from RAM to the CPU
+caches provides a better utilization of memory buses, and hence, a
+much better global memory bandwidth.  This can be seen, for example,
+in &lt;a class="reference external" href="http://blosc.org/benchmarks-blosclz.html"&gt;typical Blosc benchmarks&lt;/a&gt; by looking at how the
+bandwidth grows with the number of threads in all the dots, but
+specially where compression ratio equals 1 (i.e. no compression is
+active, so Blosc is only doing a &lt;em&gt;memory copy&lt;/em&gt; in this case).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="blosc-is-getting-ready-for-arm"&gt;
+&lt;h2&gt;Blosc is getting ready for ARM&lt;/h2&gt;
+&lt;p&gt;So ARM is cool indeed, but what we are doing for making it a
+first-class citizen?  For starters, we have created a new &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2"&gt;C-Blosc2&lt;/a&gt; repository that is going to act
+as a playground for some time and where we are going to experiment
+with a new range of features (those will be discussed in a later
+post).  And this is exactly the place where we have already started
+implementing a NEON version of the shuffle filter.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dht0002a/BABIIFHA.html"&gt;NEON&lt;/a&gt;
+is an SIMD extension in the same spirit than SSE2 or AVX2 present in
+Intel/AMD offerings.  NEON extension was introduced in ARMv7
+architecture, and is present in most of the current high-end devices
+(including most of the phones and tablets floating around, including
+the new Raspberry Pi 2).  As many of you know, leveraging SIMD in
+modern CPUs is key for allowing Blosc to be one of the fastest
+compressors around, and if we wanted to be serious about ARM, NEON
+support had to be here, &lt;strong&gt;period&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The new NEON implementation of shuffle for Blosc has been entirely
+made by &lt;a class="reference external" href="https://github.com/LucianMarc"&gt;Lucian Marc&lt;/a&gt;, a summer
+student that joined the project at the beginning of July 2015.  Lucian
+did a terrific work on implementing the &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/blosc/shuffle-neon.c"&gt;shuffle filter NEON&lt;/a&gt;,
+and during the 2-months stage he did not only that, but he also had
+time to do a preliminary version of the bitshuffle filter as well (not
+completely functional yet, but as time allows, he plans to finish that).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="some-hints-on-the-measured-increase-in-performance"&gt;
+&lt;h2&gt;Some hints on the measured increase in performance&lt;/h2&gt;
+&lt;p&gt;So you might be asking, how fast can perform Blosc on an ARM with
+NEON?  Well, let's start first by showing how fast it works on a
+Raspberry Pi 2 (Broadcom BCM2836 ARMv7 Quad Core Processor) having
+NEON and running Raspbian (gcc 4.7.2).  To not bore people, we are
+going to show just decompression speeds:&lt;/p&gt;
+&lt;img alt="/images/blosclz-shuffle-neon-rpi2.png" src="http://blosc.org/images/blosclz-shuffle-neon-rpi2.png"&gt;
+&lt;p&gt;It turns out that, when using the 4 cores and low compression levels,
+Blosc with NEON support already shows evidence that it can equal the
+performance of memcpy() on ARM.  This is an important fact because I
+did not think that ARM performance was enough to allow Blosc doing
+that already.  I was wrong.&lt;/p&gt;
+&lt;p&gt;Okay, so Blosc using NEON can be fast, but exactly how much when
+compared to a &lt;a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/blosc/shuffle-generic.h"&gt;shuffle implementation in pure C&lt;/a&gt;?
+Here you have the figures for the generic C shuffle:&lt;/p&gt;
+&lt;img alt="/images/blosclz-shuffle-generic-rpi2.png" src="http://blosc.org/images/blosclz-shuffle-generic-rpi2.png"&gt;
+&lt;p&gt;That means that NEON can accelerate the whole decompression process
+between 2x and 3x, which is pretty significant, and also speaks highly
+about the quality of Lucian's NEON implementation.&lt;/p&gt;
+&lt;p&gt;Does that mean that we can extrapolate these figures for all ARM
+processors out there?  Not quite.  In fact, the performance of a
+Raspberry Pi 2 is quite mild compared with other boards.  So, let's
+see what is the performance on a &lt;a class="reference external" href="http://www.hardkernel.com/main/products/prdt_info.php?g_code=G140448267127"&gt;ODROID-XU3&lt;/a&gt;
+(although it has been replaced by &lt;a class="reference external" href="http://www.hardkernel.com/main/products/prdt_info.php"&gt;ODROID-XU4&lt;/a&gt;, the XU3 has
+the same processor, so we are testing a pretty powerful CPU model
+here).  This board comes with a Samsung Exynos5422 Cortex-A15 2.0 GHz
+quad core and Cortex™-A7 quad core CPUs, so it is a representative of
+the ARM Heterogeneous Multi-Processing solution (aka big.LITTLE).
+Here are its figures:&lt;/p&gt;
+&lt;img alt="/images/blosclz-shuffle-neon-odroid.png" src="http://blosc.org/images/blosclz-shuffle-neon-odroid.png"&gt;
+&lt;p&gt;So, the first thing to note is the memcpy() speed that at 1.6 GB/s,
+is considerably faster than the RPi2 (&amp;lt; 0.9 GB/s).  Yeah, this is a
+much more capable board from a computational point of view.  The
+second thing is that decompression speed &lt;em&gt;almost doubles the memcpy()
+speed&lt;/em&gt;.  Again, I was very impressed because I did not expect this
+range of speeds &lt;em&gt;at all&lt;/em&gt;.  ARM definitely is getting in a situation
+where compression can be used for an advantage, computationally
+speaking.&lt;/p&gt;
+&lt;p&gt;The third thing to note is a bit disappointing though: why only 3
+threads appear in the plot?  Well, it turns out that the benchmark
+suite fails miserably when using 4 threads or more.  As the Raspberry
+setup does not suffer from this problem at all, I presume that this is
+more related with the board or the libraries that come with the
+operating system (Ubuntu 14.04).  This is rather unfortunate because I
+was really curious to see such an ARMv7 8-core beast running at full
+steam using the 8 threads.  At any rate, time will tell if the problem
+is in the board or in Blosc itself.&lt;/p&gt;
+&lt;p&gt;Just to make the benchmarks a bit more complete, let me finish this
+benchmark section showing the performance using the generic C code for
+the shuffling algorithm:&lt;/p&gt;
+&lt;img alt="/images/blosclz-shuffle-generic-odroid.png" src="http://blosc.org/images/blosclz-shuffle-generic-odroid.png"&gt;
+&lt;p&gt;If we compare with NEON figures for the ODROID board, we can see again
+an increase in speed of between 2x and 4x, which is crazy amazing
+(sorry if I seem a bit over-enthusiastic, but again, I was not really
+prepared for seeing this).  Again, only figures for 2 threads are
+in this plot because the benchmark crashes for 3 threads (this is
+another hint that points to the fault being outside Blosc itself
+and not in its NEON implementation of the shuffle filter).&lt;/p&gt;
+&lt;p&gt;At decompression speeds of 3 GB/s and ~ 2 Watt of energy consumption,
+the ARM platform has one of the best bandwidth/Watt ratios that you can find
+in the market, and this can have (and will have) profound implications
+on how computations will be made in the short future (as the &lt;a class="reference external" href="http://www.montblanc-project.eu/publications/energy-efficiency-high-performance-computing-mont-blanc-project"&gt;Mont
+Blanc initiative is trying to demonstrate&lt;/a&gt;).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="what-to-expect-from-arm-blosc-in-the-forthcoming-months"&gt;
+&lt;h2&gt;What to expect from ARM/Blosc in the forthcoming months&lt;/h2&gt;
+&lt;p&gt;This work on supporting ARM platforms is just the beginning.  As ARM
+processors get more spread, and most specially, &lt;a class="reference external" href="http://www.arm.com/products/processors/cortex-a/cortex-a72-processor.php"&gt;faster&lt;/a&gt;,
+we will need to refine the support for ARM in Blosc.&lt;/p&gt;
+&lt;p&gt;NEON support is only a part of the game, and things like efficient
+handling of ARM heterogeneous architectures (&lt;a class="reference external" href="https://en.wikipedia.org/wiki/ARM_big.LITTLE"&gt;big.LITTLE&lt;/a&gt;) or making specific
+tweaks for ARM cache sizes will be critical so as to make of ARM a
+truly first-citizen for the Blosc ecosystem.&lt;/p&gt;
+&lt;p&gt;If you have ideas on what can be improved, and most specially &lt;strong&gt;how&lt;/strong&gt;,
+we want to learn from you :) If you want to contribute code to the
+project, your pull requests are very welcome too!  If you like what we
+are doing and want to see more of this, you can also &lt;a class="reference external" href="http://blosc.org/blog/seeking-sponsoship.html"&gt;sponsor us&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>ARM</category><category>Blosc2</category><category>NEON</category><guid>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</guid><pubDate>Wed, 09 Sep 2015 11:32:20 GMT</pubDate></item><item><title>Hairy situation of Microsoft Windows compilers</title><link>http://blosc.org/posts/hairy-msvc-situation.rst/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;Recently -- and to the requirement of a customer who recently
+&lt;a class="reference external" href="http://blosc.org/blog/seeking-sponsoship.html"&gt;sponsorized us&lt;/a&gt; -- I
+struggled a lot trying to get the maximum performance out of Visual
+Studio compilers.  Here there are some quick benchmarks to show you an
+overview of the kind of performance that C-Blosc can reach on Windows.&lt;/p&gt;
+&lt;p&gt;First, let's use Visual Studio 2008 32-bit (extremely common platform
+because Python 2 still requires this compiler) and see how C-Blosc
+performs for decompressing on my laptop with Windows 7 Pro (64-bit)
+with an Intel i5-3380M @ 2.90GHz:&lt;/p&gt;
+&lt;img alt="/images/vs2008-32bit-decompress.png" src="http://blosc.org/images/vs2008-32bit-decompress.png"&gt;
+&lt;p&gt;Now, let us see how the same benchmark performs with Visual Studio
+2013:&lt;/p&gt;
+&lt;img alt="/images/vs2013-64bit-decompress.png" src="http://blosc.org/images/vs2013-64bit-decompress.png"&gt;
+&lt;p&gt;Well, there is an important boost in speed, not only because a native
+64-bit compiler has been used, but also because natural improvements
+in compiler technology.&lt;/p&gt;
+&lt;p&gt;At this point I wondered whether Visual Studio 2013 is doing just a
+decent job or if there is still some performance that can still be
+squeezed.  So what kind of performance other compilers for Windows are
+reaching?  For checking this, I tested the excellent &lt;a class="reference external" href="https://sourceforge.net/projects/mingw-w64"&gt;MinGW-w64&lt;/a&gt; compiler (thanks to
+Jack Pappas for suggesting this!).  Here it is the result:&lt;/p&gt;
+&lt;img alt="/images/mingw-w64-64bit-decompress.png" src="http://blosc.org/images/mingw-w64-64bit-decompress.png"&gt;
+&lt;p&gt;So, one can be seen that GCC 4.9 (included in latest Mingw-w64) can
+reach a performance that is still far beyond of what you can reach
+with modern Microsoft compilers (specially for lower compression
+levels, which is an important scenario when maximum speed is
+required), and very close to what I get on Linux.&lt;/p&gt;
+&lt;p&gt;Possibly the newest Visual Studio 2015 would allow more performance,
+but IMO, there is still some time until this is more spread, whereas
+GCC 4.9 (with GCC 5.1 starting to show up) is already shipping in many
+distributions, Windows and Mac OSX, which gives GCC a lot of advantage
+with respect to Visual Studio.&lt;/p&gt;
+&lt;p&gt;With regards the reason on why GCC shows that much performance for
+C-Blosc is probably a consequence of how it has been developed.  It
+turns out that C-Blosc main development platform was (and still is)
+Linux/GCC, and after many profile/optimize cycles, this tends to favor
+that combination respect to others.&lt;/p&gt;
+&lt;p&gt;Provided this, and regarding the original request to reach optimal
+performance on Windows / Visual Studio 2013 64-bit environments, I
+ended implementing an example where existing Visual Studio
+applications can dynamically link a C-Blosc DLL that is in the PATH.
+You can see how this technique works at:
+&lt;a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/examples/win-dynamic-linking.c"&gt;https://github.com/Blosc/c-blosc/blob/master/examples/win-dynamic-linking.c&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This is quite interesting because at compilation time you don't need
+to make reference to the C-Blosc DLL &lt;em&gt;at all&lt;/em&gt;.  I.e. the next is
+enough for compiling the example above:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+cl /Ox /Fewin-dynamic-linking.exe /I..\blosc win-dynamic-linking.c
+&lt;/pre&gt;
+&lt;p&gt;And that's all.  After that, you only need to place the C-Blosc DLL
+anywhere in your PATH and it will be dynamically detected.  I have
+tested that with different combinations of compilers (e.g. Visual
+Studio for the app, and MinGW-w64 for the DLL library) and it works
+beautifully.  I think this is quite powerful and certainly I don't
+know an equivalent technique for Unix (although it probably exists
+also), allowing to use top-performance DLLs in your apps using
+different compilers in a quite easy way.&lt;/p&gt;
+&lt;p&gt;In case you have more hints on how to get better performance on
+Windows, please tell us.&lt;/p&gt;&lt;/div&gt;</description><category>blosc</category><category>compilers</category><category>windows</category><guid>http://blosc.org/posts/hairy-msvc-situation.rst/</guid><pubDate>Mon, 06 Jul 2015 10:04:20 GMT</pubDate></item><item><title>New 'bitshuffle' filter</title><link>http://blosc.org/posts/new-bitshuffle-filter/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;Although Blosc was meant for hosting more than one filter since day 0,
+it has traditionally came with just a single filter, known as
+'shuffle', meant for shuffling bytes in binary blocks.  Today this has
+changed, and c-blosc has officially received a new filter called
+'bitshuffle' (a backport of the one included in the
+&lt;a class="reference external" href="https://github.com/kiyo-masui/bitshuffle"&gt;bithsuffle project&lt;/a&gt;).
+And you guess it, it works in a very similar way than
+'shuffle', just that the shuffling happens at the bit level and not at
+the byte one.&lt;/p&gt;
+&lt;p&gt;Just for whetting your appetite here there are some small synthetic
+benchmarks on what you can expect from the newcomer.  I'll start using
+my own laptop (Intel i5-3380M @ 2.90GHz, GCC 4.9.1, Ubuntu 14.10) and
+showing how the benchmark that comes with c-blosc performs with the
+LZ4 compressor and the regular 'shuffle' filter:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+$ bench/bench lz4 shuffle single 2
+Blosc version: 1.7.0.dev ($Date:: 2015-05-27 #$)
+List of supported compressors in this build: blosclz,lz4,lz4hc,snappy,zlib
+Supported compression libraries:
+  BloscLZ: 1.0.5
+  LZ4: 1.7.0
+  Snappy: 1.1.1
+  Zlib: 1.2.8
+Using compressor: lz4
+Using shuffle type: shuffle
+Running suite: single
+--&amp;gt; 2, 2097152, 8, 19, lz4, shuffle
+********************** Run info ******************************
+Blosc version: 1.7.0.dev ($Date:: 2015-05-27 #$)
+Using synthetic data with 19 significant bits (out of 32)
+Dataset size: 2097152 bytes     Type size: 8 bytes
+Working set: 256.0 MB           Number of threads: 2
+********************** Running benchmarks *********************
+memcpy(write):            529.1 us, 3780.3 MB/s
+memcpy(read):             245.6 us, 8143.4 MB/s
+Compression level: 0
+comp(write):      267.3 us, 7483.3 MB/s   Final bytes: 2097168  Ratio: 1.00
+decomp(read):     200.0 us, 9997.5 MB/s   OK
+Compression level: 1
+comp(write):      462.8 us, 4321.1 MB/s   Final bytes: 554512  Ratio: 3.78
+decomp(read):     246.6 us, 8111.5 MB/s   OK
+Compression level: 2
+comp(write):      506.6 us, 3947.7 MB/s   Final bytes: 498960  Ratio: 4.20
+decomp(read):     331.9 us, 6025.1 MB/s   OK
+Compression level: 3
+comp(write):      486.8 us, 4108.8 MB/s   Final bytes: 520824  Ratio: 4.03
+decomp(read):     233.5 us, 8565.2 MB/s   OK
+Compression level: 4
+comp(write):      497.9 us, 4017.0 MB/s   Final bytes: 332112  Ratio: 6.31
+decomp(read):     258.3 us, 7743.8 MB/s   OK
+Compression level: 5
+comp(write):      474.6 us, 4214.5 MB/s   Final bytes: 327112  Ratio: 6.41
+decomp(read):     287.8 us, 6949.0 MB/s   OK
+Compression level: 6
+comp(write):      558.0 us, 3584.4 MB/s   Final bytes: 226308  Ratio: 9.27
+decomp(read):     284.8 us, 7022.7 MB/s   OK
+Compression level: 7
+comp(write):      689.9 us, 2899.1 MB/s   Final bytes: 211880  Ratio: 9.90
+decomp(read):     363.0 us, 5509.1 MB/s   OK
+Compression level: 8
+comp(write):      691.9 us, 2890.6 MB/s   Final bytes: 220464  Ratio: 9.51
+decomp(read):     385.5 us, 5188.5 MB/s   OK
+Compression level: 9
+comp(write):      567.0 us, 3527.6 MB/s   Final bytes: 132154  Ratio: 15.87
+decomp(read):     627.3 us, 3188.2 MB/s   OK
+
+Round-trip compr/decompr on 7.5 GB
+Elapsed time:       3.6 s, 4755.3 MB/s
+&lt;/pre&gt;
+&lt;p&gt;Now, look at what bitshuffle can do with the same datasets and compressor:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+$ bench/bench lz4 bitshuffle single 2
+Blosc version: 1.7.0.dev ($Date:: 2015-05-27 #$)
+List of supported compressors in this build: blosclz,lz4,lz4hc,snappy,zlib
+Supported compression libraries:
+  BloscLZ: 1.0.5
+  LZ4: 1.7.0
+  Snappy: 1.1.1
+  Zlib: 1.2.8
+Using compressor: lz4
+Using shuffle type: bitshuffle
+Running suite: single
+--&amp;gt; 2, 2097152, 8, 19, lz4, bitshuffle
+********************** Run info ******************************
+Blosc version: 1.7.0.dev ($Date:: 2015-05-27 #$)
+Using synthetic data with 19 significant bits (out of 32)
+Dataset size: 2097152 bytes     Type size: 8 bytes
+Working set: 256.0 MB           Number of threads: 2
+********************** Running benchmarks *********************
+memcpy(write):            518.5 us, 3857.3 MB/s
+memcpy(read):             248.6 us, 8045.7 MB/s
+Compression level: 0
+comp(write):      259.5 us, 7706.1 MB/s   Final bytes: 2097168  Ratio: 1.00
+decomp(read):     217.5 us, 9196.3 MB/s   OK
+Compression level: 1
+comp(write):     1099.0 us, 1819.9 MB/s   Final bytes: 72624  Ratio: 28.88
+decomp(read):     824.2 us, 2426.5 MB/s   OK
+Compression level: 2
+comp(write):     1093.2 us, 1829.5 MB/s   Final bytes: 71376  Ratio: 29.38
+decomp(read):    1293.2 us, 1546.5 MB/s   OK
+Compression level: 3
+comp(write):     1084.5 us, 1844.2 MB/s   Final bytes: 69200  Ratio: 30.31
+decomp(read):    1331.2 us, 1502.4 MB/s   OK
+Compression level: 4
+comp(write):     1193.2 us, 1676.2 MB/s   Final bytes: 42480  Ratio: 49.37
+decomp(read):     833.8 us, 2398.7 MB/s   OK
+Compression level: 5
+comp(write):     1190.9 us, 1679.4 MB/s   Final bytes: 42928  Ratio: 48.85
+decomp(read):     880.2 us, 2272.2 MB/s   OK
+Compression level: 6
+comp(write):      969.7 us, 2062.5 MB/s   Final bytes: 32000  Ratio: 65.54
+decomp(read):     854.8 us, 2339.8 MB/s   OK
+Compression level: 7
+comp(write):     1056.2 us, 1893.6 MB/s   Final bytes: 40474  Ratio: 51.81
+decomp(read):     960.8 us, 2081.7 MB/s   OK
+Compression level: 8
+comp(write):     1018.5 us, 1963.8 MB/s   Final bytes: 28050  Ratio: 74.76
+decomp(read):     966.8 us, 2068.7 MB/s   OK
+Compression level: 9
+comp(write):     1161.7 us, 1721.6 MB/s   Final bytes: 25188  Ratio: 83.26
+decomp(read):    1245.5 us, 1605.8 MB/s   OK
+
+Round-trip compr/decompr on 7.5 GB
+Elapsed time:       7.8 s, 2161.7 MB/s
+&lt;/pre&gt;
+&lt;p&gt;Amazing! the compression ratios are much higher (up to 83x vs 16x)
+which is very exciting.  The drawback is that with 'bitshuffle' the
+compression/decompression speed is between 2x and 4x slower than with
+the regular 'shuffle'.  In fact, this slowdown is unusually light
+because the additional work should be much more (1 byte has 8 bits),
+so that's not too bad.&lt;/p&gt;
+&lt;p&gt;But we have some good news: besides SSE2, 'bitshuffle' also supports
+AVX2 SIMD instructions (as 'shuffle' itself) but unfortunately my
+laptop does not have them (pre-Haswell).  So let's run the benchmark
+above in a AVX2 server (Intel Xeon E3-1240 v3 @ 3.40GHz, GCC 4.9.3,
+Gentoo 2.2):&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+$ bench/bench lz4 bitshuffle single 8
+Blosc version: 1.7.0.dev ($Date:: 2015-05-27 #$)
+List of supported compressors in this build: blosclz,lz4,lz4hc,snappy,zlib
+Supported compression libraries:
+  BloscLZ: 1.0.5
+  LZ4: 1.7.0
+  Snappy: 1.1.1
+  Zlib: 1.2.8
+Using compressor: lz4
+Using shuffle type: bitshuffle
+Running suite: single
+--&amp;gt; 8, 2097152, 8, 19, lz4, bitshuffle
+********************** Run info ******************************
+Blosc version: 1.7.0.dev ($Date:: 2015-05-27 #$)
+Using synthetic data with 19 significant bits (out of 32)
+Dataset size: 2097152 bytes     Type size: 8 bytes
+Working set: 256.0 MB           Number of threads: 8
+********************** Running benchmarks *********************
+memcpy(write):            264.9 us, 7551.1 MB/s
+memcpy(read):             174.1 us, 11488.6 MB/s
+Compression level: 0
+comp(write):      173.1 us, 11551.7 MB/s          Final bytes: 2097168  Ratio: 1.00
+decomp(read):     119.3 us, 16765.2 MB/s          OK
+Compression level: 1
+comp(write):      271.8 us, 7358.1 MB/s   Final bytes: 72624  Ratio: 28.88
+decomp(read):     225.7 us, 8862.7 MB/s   OK
+Compression level: 2
+comp(write):      275.7 us, 7253.7 MB/s   Final bytes: 71376  Ratio: 29.38
+decomp(read):     229.2 us, 8724.8 MB/s   OK
+Compression level: 3
+comp(write):      274.5 us, 7285.9 MB/s   Final bytes: 69200  Ratio: 30.31
+decomp(read):     238.8 us, 8374.6 MB/s   OK
+Compression level: 4
+comp(write):      249.5 us, 8015.5 MB/s   Final bytes: 42480  Ratio: 49.37
+decomp(read):     229.8 us, 8701.6 MB/s   OK
+Compression level: 5
+comp(write):      249.1 us, 8028.1 MB/s   Final bytes: 42928  Ratio: 48.85
+decomp(read):     243.9 us, 8198.8 MB/s   OK
+Compression level: 6
+comp(write):      332.4 us, 6017.5 MB/s   Final bytes: 32000  Ratio: 65.54
+decomp(read):     322.2 us, 6206.4 MB/s   OK
+Compression level: 7
+comp(write):      431.9 us, 4630.2 MB/s   Final bytes: 40474  Ratio: 51.81
+decomp(read):     437.6 us, 4570.7 MB/s   OK
+Compression level: 8
+comp(write):      421.5 us, 4745.0 MB/s   Final bytes: 28050  Ratio: 74.76
+decomp(read):     437.2 us, 4574.5 MB/s   OK
+Compression level: 9
+comp(write):      941.1 us, 2125.2 MB/s   Final bytes: 25188  Ratio: 83.26
+decomp(read):     674.7 us, 2964.2 MB/s   OK
+
+Round-trip compr/decompr on 7.5 GB
+Elapsed time:       2.8 s, 6047.8 MB/s
+&lt;/pre&gt;
+&lt;p&gt;Wow, in this case we are having compression speed peaks even higher
+than a memcpy (8 GB/s vs 7.5 GB/s), and decompression speed is pretty
+good too (8.8 GB/s vs 11.5 GB/s memcpy).  With AVX2 support,
+'bitshuffle' does have a pretty good performance.  But yeah, this
+server has 8 physical cores, so we are not actually comparing pears
+with pears.  So let's re-run the benchmark with just 2 threads:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+$ bench/bench lz4 bitshuffle single 2
+Blosc version: 1.7.0.dev ($Date:: 2015-05-27 #$)
+List of supported compressors in this build: blosclz,lz4,lz4hc,snappy,zlib
+Supported compression libraries:
+  BloscLZ: 1.0.5
+  LZ4: 1.7.0
+  Snappy: 1.1.1
+  Zlib: 1.2.8
+Using compressor: lz4
+Using shuffle type: bitshuffle
+Running suite: single
+--&amp;gt; 2, 2097152, 8, 19, lz4, bitshuffle
+********************** Run info ******************************
+Blosc version: 1.7.0.dev ($Date:: 2015-05-27 #$)
+Using synthetic data with 19 significant bits (out of 32)
+Dataset size: 2097152 bytes     Type size: 8 bytes
+Working set: 256.0 MB           Number of threads: 2
+********************** Running benchmarks *********************
+memcpy(write):            253.9 us, 7877.5 MB/s
+memcpy(read):             174.1 us, 11488.8 MB/s
+Compression level: 0
+comp(write):      133.4 us, 14995.6 MB/s          Final bytes: 2097168  Ratio: 1.00
+decomp(read):     117.5 us, 17026.6 MB/s          OK
+Compression level: 1
+comp(write):      604.1 us, 3310.7 MB/s   Final bytes: 72624  Ratio: 28.88
+decomp(read):     431.2 us, 4638.3 MB/s   OK
+Compression level: 2
+comp(write):      624.3 us, 3203.5 MB/s   Final bytes: 71376  Ratio: 29.38
+decomp(read):     452.3 us, 4421.5 MB/s   OK
+Compression level: 3
+comp(write):      623.7 us, 3206.8 MB/s   Final bytes: 69200  Ratio: 30.31
+decomp(read):     442.3 us, 4521.9 MB/s   OK
+Compression level: 4
+comp(write):      585.2 us, 3417.6 MB/s   Final bytes: 42480  Ratio: 49.37
+decomp(read):     395.3 us, 5058.9 MB/s   OK
+Compression level: 5
+comp(write):      530.0 us, 3773.4 MB/s   Final bytes: 42928  Ratio: 48.85
+decomp(read):     400.5 us, 4994.0 MB/s   OK
+Compression level: 6
+comp(write):      542.6 us, 3686.0 MB/s   Final bytes: 32000  Ratio: 65.54
+decomp(read):     426.7 us, 4687.2 MB/s   OK
+Compression level: 7
+comp(write):      605.6 us, 3302.4 MB/s   Final bytes: 40474  Ratio: 51.81
+decomp(read):     494.5 us, 4044.5 MB/s   OK
+Compression level: 8
+comp(write):      588.1 us, 3400.7 MB/s   Final bytes: 28050  Ratio: 74.76
+decomp(read):     487.3 us, 4104.6 MB/s   OK
+Compression level: 9
+comp(write):      692.5 us, 2888.2 MB/s   Final bytes: 25188  Ratio: 83.26
+decomp(read):     591.4 us, 3381.8 MB/s   OK
+
+Round-trip compr/decompr on 7.5 GB
+Elapsed time:       3.9 s, 4294.1 MB/s
+&lt;/pre&gt;
+&lt;p&gt;Now, for 2 threads we are getting times that are about 2x slower than
+for 8 threads.  But the interesting thing here is that the compression
+speed is still ~2x faster than my laptop (peaks at 3.7 GB/s vs 1.8
+GB/s) and the same goes for decompression (peaks at 5 GB/s vs 2.4
+GB/s).  Agreed, the server can run at 3.4GHz vs 2.9 GHz of my laptop,
+but this alone cannot explain the difference in speed, so the big
+responsible for the speedup is the AVX2 support in 'bitshuffle'.&lt;/p&gt;
+&lt;p&gt;In summary, the new 'bitshuffle' filter is very good news for the
+users of the Blosc ecosystem because it adds yet another powerful
+resource that will help in the fight for storing datasets with less
+space, but still keeping good performance.  Of course, this is just a
+quick experiment with synthetic data, but I am pretty sure that the
+new 'bitshuffle' filter will find a good niche in real world datasets.
+Anyone interested in contributing some real data benchmark?&lt;/p&gt;
+&lt;p&gt;I'd like to thank Kiyo Masui for his help in this 'bitshuffle' backport.&lt;/p&gt;&lt;/div&gt;</description><category>blosc</category><category>filters</category><guid>http://blosc.org/posts/new-bitshuffle-filter/</guid><pubDate>Sun, 05 Jul 2015 15:24:20 GMT</pubDate></item><item><title>Seeking Sponsorship for Bcolz/Blosc</title><link>http://blosc.org/posts/seeking-sponsoship/</link><dc:creator>Valentin Haenel</dc:creator><description>&lt;div&gt;&lt;p&gt;Dear Everyone,&lt;/p&gt;
+&lt;p&gt;as you may or may not know, the &lt;a class="reference external" href="https://github.com/blosc/c-blosc"&gt;Blosc&lt;/a&gt;
+compressor has become the basis for some novel, innovative technological
+experiments in the PyData space.  Especially the &lt;a class="reference external" href="https://github.com/blosc/bcolz"&gt;Bcolz&lt;/a&gt; and &lt;a class="reference external" href="https://github.com/blosc/bloscpack"&gt;Bloscpack&lt;/a&gt; projects which provide a way to perform
+out-of-core computations on column based datasets have become particularly
+interesting for the analysis of medium-sized time-series datasets.&lt;/p&gt;
+&lt;p&gt;In this post, we would like to convince you to give us some money to
+foster the project, development and accelerate growth of our community.
+Historically, it has always been a difficult endeavour to monetize
+open-source development and so, below is a non-exhaustive list of
+potential models that we are considering:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p class="first"&gt;Direct sponsoring / Donations&lt;/p&gt;
+&lt;p&gt;This involves paying either a single lump-sum or monthly installments
+to foster continued development and innovation. This type of
+sponsoring isn't bound to any specific goal or feature and would allow
+us for example maintain and release the projects regularly.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Feature-driven sponsoring&lt;/p&gt;
+&lt;p&gt;Paying for specific features to be implemented, bugs to be fixed or
+paying to have a voice when it comes to prioritizing items in the
+issue-tracker(s).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Hiring us as freelancers for Blosc/Bcolz projects&lt;/p&gt;
+&lt;p&gt;This means that you hire one or both of us to implement a project that
+uses bcolz inside your company. Any bugs we find or improvements that
+need to be made would flow back into the open source code-base.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Hiring us as part-time freelancers for general projects&lt;/p&gt;
+&lt;p&gt;This means you hire one or both of us as part-time freelancers for two
+to three days a week to work on general projects. These can be related
+to Python and data or open-source work on other projects. This would
+allow us to spend the remaining days on Blosc/Bcolz.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;PhD positions&lt;/p&gt;
+&lt;p&gt;There are still a few interesting theoretical aspects to be unlocked,
+for example certain mathematical properties of the shuffle filter and
+a compressed extension of the external-memory-model (EMM) to analyse
+the runtime of Blosc style out-of-core algorithms and Bcolz operations
+in general.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We welcome any feedback regarding the above options and please do tell
+us about any additional models that may be interesting to us or for you.&lt;/p&gt;
+&lt;p&gt;With best wishes and looking forward to your input,&lt;/p&gt;
+&lt;p&gt;Francesc Alted and Valentin Haenel&lt;/p&gt;&lt;/div&gt;</description><category>blosc</category><category>blosclz</category><category>sponsorhip</category><guid>http://blosc.org/posts/seeking-sponsoship/</guid><pubDate>Tue, 26 May 2015 08:41:20 GMT</pubDate></item><item><title>Compress Me, Stupid!</title><link>http://blosc.org/posts/compress-me-stupid/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;div class="section" id="how-it-all-started"&gt;
+&lt;h2&gt;How it all started&lt;/h2&gt;
+&lt;p&gt;I think I began to become truly interested in compression when, back
+in 1992, I was installing &lt;a class="reference external" href="http://en.wikipedia.org/wiki/C_News"&gt;C-News&lt;/a&gt;, a news server package meant
+to handle &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Usenet"&gt;Usenet News&lt;/a&gt;
+articles in &lt;a class="reference external" href="http://www.uji.es"&gt;our university&lt;/a&gt;.  For younger
+audiences, Usenet News was a very popular way to discuss about all
+kind of topics, but at the same time it was pretty difficult to cope
+with the huge amount of articles, specially because spam practices
+started to appear by that time.  As Gene Spafford put it in 1992:&lt;/p&gt;
+&lt;blockquote&gt;
+"Usenet is like a herd of performing elephants with
+diarrhea. Massive, difficult to redirect, awe-inspiring,
+entertaining, and a source of mind-boggling amounts of excrement
+when you least expect it."&lt;/blockquote&gt;
+&lt;p&gt;But one thing was clear: Usenet brought &lt;strong&gt;massive&lt;/strong&gt; amounts of data
+that had to be transmitted through the typical low-bandwidth data
+lines of that time: 64 Kbps shared for everyone at our university.&lt;/p&gt;
+&lt;p&gt;My mission then was to bring the Usenet News feed by making use of as
+low of resources as possible.  Of course, one of the first things that
+I did was to start news transmission during the night, when everyone
+was warm at bed and nobody was going to complain about others stealing
+the precious and scarce Internet bandwidth.  Another measure was to
+subscribe to just a selection of groups so that the transmission would
+end before the new day would start.  And of course, I started
+experimenting with compression for maximizing the number of groups
+that we could bring to our community.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="compressing-usenet-news"&gt;
+&lt;h2&gt;Compressing Usenet News&lt;/h2&gt;
+&lt;p&gt;The most used compressor by 1992 was &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Compress"&gt;compress&lt;/a&gt;, a Unix program based on the
+&lt;a class="reference external" href="http://en.wikipedia.org/wiki/LZW"&gt;LZW&lt;/a&gt; compression algorithm.  But
+LZW had patents issues, so by that time Jean-Loup Gailly and Mark
+Adler started the work with &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Gzip"&gt;gzip&lt;/a&gt;.  At the beginning of 1993 gzip
+1.0 was ready for consumption and I find it exciting not only because
+it was not patent-encumbered, but also because it compressed way
+better than the previous &lt;tt class="docutils literal"&gt;compress&lt;/tt&gt; program, allowed different
+compression levels, and it was pretty fast too (although &lt;tt class="docutils literal"&gt;compress&lt;/tt&gt;
+still had an advantage here, IIRC).&lt;/p&gt;
+&lt;p&gt;So I talked with &lt;a class="reference external" href="http://www.uv.es"&gt;the university&lt;/a&gt; that was
+providing us with the News feed and we manage to start compressing it,
+first with &lt;tt class="docutils literal"&gt;compress&lt;/tt&gt; and then with &lt;tt class="docutils literal"&gt;gzip&lt;/tt&gt;.  Shortly after that,
+while making measurements on the new gzip improvements, I discovered
+that the bottleneck was in our News workstation (an HP 9000-730 with a
+speedy &lt;a class="reference external" href="http://en.wikipedia.org/wiki/PA-RISC"&gt;PA-7000 RISC microprocessor&lt;/a&gt; @ 66 MHz) being unable to
+decompress all the gzipped stream of subscribed news on-time.  The
+bottleneck suddenly changed from the communication line to the CPU!&lt;/p&gt;
+&lt;p&gt;I remember spending large hours playing with different combinations of
+data chunk sizes and gzip compression levels, plotting the results
+(with the fine &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Gnuplot"&gt;gnuplot&lt;/a&gt;)
+before finally coming with a combination that stroked a fair balance
+between available bandwidth and CPU speed, maximizing the amount of
+news articles hitting our university.  I think this was my first
+realization of how compression could help bringing data faster to the
+system, making some processes more effective.  In fact, that actually
+blew-up my mind and made me passionate about compression technologies
+for the years to come.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="lzo-and-the-explosion-of-compression-technology"&gt;
+&lt;h2&gt;LZO and the explosion of compression technology&lt;/h2&gt;
+&lt;p&gt;During 1996, Markus F.X.J. Oberhumer started to announce the
+availability of his own set of LZO compressors.  These consisted in
+many different compressors, all of them being variations of his own
+compression algorithm (LZO), but tweaked to achieve either better
+compression ratios or compression speed.  The suite was claimed to
+being able to achieve speeds reaching &lt;strong&gt;1/3 of the memory speed&lt;/strong&gt; of
+the typical Pentium-class computers available at that time.  An entire
+set of compressors being able to approach memory speed? boy, that was
+a very exciting news for me.&lt;/p&gt;
+&lt;p&gt;LZO was in the back of my mind when I started my work on &lt;a class="reference external" href="http://www.pytables.org"&gt;PyTables&lt;/a&gt; in August 2002 and shortly after, in &lt;a class="reference external" href="http://pytables.org/svn/pytables/tags/std-0.5/README.txt"&gt;May
+2003&lt;/a&gt;,
+PyTables gained support for LZO.  My goal was indeed to accelerate
+data transmission from disk to the CPU (and back), and &lt;a class="reference external" href="http://pytables.github.io/usersguide/optimization.html#understanding-chunking"&gt;these plots&lt;/a&gt;
+are testimonial of how beneficial LZO was for achieving that goal.
+Again, compression was demonstrating that it could effectively
+increase disk bandwidth, and not only slow internet lines.&lt;/p&gt;
+&lt;p&gt;However, although LZO was free of patent issues and fast as hell,
+it had a big limitation for a project like PyTables: the licensing.
+LZO was using the GPL license, and that prevented the inclusion of its
+sources in distributions without re-licensing PyTables itself as GPL,
+a thing that I was not willing to do (PyTables has a BSD license, as
+it is usual in the NumPy ecosystem).  Because of that, LZO was a nice
+compressor to be included in GPL projects like the Linux kernel
+itself, but not a good fit for PyTables (although support for LZO still
+exists, as long as it is downloaded and installed separately).&lt;/p&gt;
+&lt;p&gt;By that time (mid 2000's) it started to appear a plethora of fast
+compressors with the same spirit than LZO, but with more permissive
+licenses (typically BSD/MIT), many of them being a nice fit for PyTables.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="a-new-compressor-for-pytables-hdf5"&gt;
+&lt;h2&gt;A new compressor for PyTables/HDF5&lt;/h2&gt;
+&lt;p&gt;By 2008 it was clear that PyTables needed a compressor whose sources
+could be included in the PyTables tarball, so minimizing the
+installation requirements.  For this I started considering a series of
+libraries and immediately devised &lt;a class="reference external" href="http://fastlz.org/"&gt;FastLZ&lt;/a&gt; as a
+nice candidate because of its simplicity and performance.  Also,
+FastLZ had a permissive MIT license, which was what I was looking for.&lt;/p&gt;
+&lt;p&gt;But pure FastLZ was not completely satisfactory because it was not
+simple enough.  It had 2 compression levels that
+complicated the implementation quite a bit, so I decided to keep just the
+highest level, and then optimize certain parts of it so that speed
+would be acceptable.  These modifications gave birth to BloscLZ, which
+is still being default compressor in Blosc.&lt;/p&gt;
+&lt;p&gt;But I had more ideas on what other features the new Blosc compressor
+should have, namely, multi-threading and an integrated shuffle filter.
+Multi-threading made a lot of sense by 2008 because both Intel and AMD
+already had a wide range of multi-core processors by then, and it was
+clear that the race for throwing more and more cores into systems was
+going to intensify.  A fast compressor had to be able to use all these
+cores dancing around, &lt;strong&gt;period&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Shuffle (see slide 71 of this &lt;a class="reference external" href="http://blosc.org/docs/StarvingCPUs.pdf"&gt;presentation&lt;/a&gt;) was the other important
+component of the new compressor.  This algorithm relies on
+neighboring elements of a dataset being highly correlated to improve
+data compression.  A shuffle filter already came as part of the &lt;a class="reference external" href="http://www.hdfgroup.org/HDF5/"&gt;HDF5
+library&lt;/a&gt; but it was implemented in
+pure C, and as it had an important overhead in terms of computation, I
+decided to do an &lt;a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/blosc/shuffle.c"&gt;SIMD version&lt;/a&gt; using
+the powerful &lt;a class="reference external" href="http://en.wikipedia.org/wiki/SSE2"&gt;SSE2 instructions&lt;/a&gt;
+present in all Intel and AMD processors since 2003.  The result is
+that this new shuffle implementation adds almost zero overhead
+compared with the compression/decompression stages.&lt;/p&gt;
+&lt;p&gt;Once all of these features were implemented, I designed a pretty
+comprehensive &lt;a class="reference external" href="http://blosc.org/synthetic-benchmarks.html"&gt;suite of tests&lt;/a&gt; and asked the PyTables
+community to help me testing the new compressor in as much systems as
+possible.  After some iterations, we were happy when the new
+compressor worked flawlessly compressing and decompressing &lt;strong&gt;hundreds
+of terabytes&lt;/strong&gt; on many different Windows and Unix boxes, both in
+32-bit and 64-bit.  The new beast was ready to ship.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="blosc-was-born"&gt;
+&lt;h2&gt;Blosc was born&lt;/h2&gt;
+&lt;p&gt;I then grabbed BloscLZ, the multi-threading support and the
+SSE2-powered shuffle and put it all in the same package.  That also became a
+&lt;strong&gt;standalone, pure C library&lt;/strong&gt;, with no attachments to PyTables or HDF5,
+so any application could make
+use of it.  I have got the first stable version (1.0) of Blosc
+released by &lt;a class="reference external" href="http://www.groupsrv.com/science/about538609.html"&gt;July 2010&lt;/a&gt;.
+Before this, I already introduced Blosc publicly in my &lt;a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs.pdf"&gt;EuroSciPy 2009 keynote&lt;/a&gt; and also made a small
+reference to it in an article about &lt;a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf"&gt;Starving CPUs&lt;/a&gt; where I
+stated:&lt;/p&gt;
+&lt;blockquote&gt;
+"As the gap between CPU and memory speed continues to widen, I
+expect Blosc to improve memory-to-CPU data transmission rates over
+an increasing range of datasets."&lt;/blockquote&gt;
+&lt;p&gt;And that is the thing.  As CPUs are getting faster, the chances for
+using compression for an advantage can be applied to more and more
+scenarios, to the point that improving the bandwidth of main memory
+(RAM) is becoming possible now.  And surprisingly enough, the methodology
+for achieving that is the same than back in the C-news ages: strike a good
+balance between data block sizes and compression speed, and let
+compression make your applications handle data faster and not only
+making it more compact.&lt;/p&gt;
+&lt;p&gt;When seen in perspective, it has been a long quest over the last
+decades.  During the 90's, compression was useful to improve the
+bandwidth of slow internet connections.  In the 2000's, it made
+possible accelerating disk I/O operation.  In the 2010's Blosc goal is
+making the memory subsystem faster and whether it is able to
+achieve this or not will be the subject of future blogs (hint: data
+arrangement is critical too).  But one
+thing is clear, achieving this (by Blosc or any other compressor out
+there) is just a matter of time.  Such is the fate of the ever
+increasing gap in CPU versus memory speeds.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>blosc</category><category>blosclz</category><category>hdf5</category><category>history</category><category>pytables</category><guid>http://blosc.org/posts/compress-me-stupid/</guid><pubDate>Thu, 28 Aug 2014 17:01:20 GMT</pubDate></item></channel></rss>
