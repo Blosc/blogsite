@@ -14,7 +14,7 @@ I am an independent consultant and developer with `more than 15 years
 of experience in Python and C programming languages
 <http://www.blosc.org/francesc-alted-resume.html>`_, and almost 25
 years `leveraging compression techniques for accelerating I/O
-<http://blosc.org/blog/compress-me-stupid.html>`_.  With customer
+<http://blosc.org/posts/compress-me-stupid.html>`_.  With customer
 needs in mind I can apply my experience to help determining the best
 options for handling and analyzing big datasets in the most efficient
 way.
