@@ -31,7 +31,7 @@ After the calibration was done the results of the new codec are really surprisin
 
 The interesting part of Lizard can be seen when large compression levels for Blosc are used, specially 8 and 9.  Those are mapped to compression level 41 in Lizard, which means that the LIZv1 + Huffman compression method is used.  Following the documentation, this matches the compression levels of Zlib and Zstd/Brotli, and it shows.
 
-Just for reference, here it is the performance of the LZ4 codec, from which it inherits a good part of its code:
+Just for reference, here it is the performance of the LZ4 codec, from which Lizard inherits a good part of its code:
 
 .. |lz4-c| image:: /images/codecs-pgo/lz4-comp-gcc-6.3.png
 .. |lz4-d| image:: /images/codecs-pgo/lz4-decomp-gcc-6.3.png
@@ -40,7 +40,7 @@ Just for reference, here it is the performance of the LZ4 codec, from which it i
 | |lz4-c| | |lz4-d| |
 +---------+---------+
 
-And here the performance of Zstd, which also uses Huffman compression:
+And here the performance of Zstd, which also uses Huffman coding:
 
 .. |zstd-c| image:: /images/codecs-pgo/zstd-comp-gcc-6.3.png
 .. |zstd-d| image:: /images/codecs-pgo/zstd-decomp-gcc-6.3.png
@@ -49,14 +49,14 @@ And here the performance of Zstd, which also uses Huffman compression:
 | |zstd-c| | |zstd-d| |
 +----------+----------+
 
-So, while Lizard (or at least, the current mapping that I did for it inside Blosc) in low compression levels cannot beat the speed of LZ4 or the compression ratio of Zstd, for high compression levels, it clearly beats LZ4 and Zstd speed both for compression and decompression.  Most specially, it works extremely well for achieving pretty reasonable compression ratios (typically better than Zlib, albeit not as good as Zstd) at very good decompression speed and exceptional compression speed (compressing at more than 2x the memcpy() speed, oh really?).
+So, while Lizard (or at least, the current mapping that I did for it inside Blosc) in low compression levels cannot beat the speed of LZ4 or the compression ratios of Zstd, for high compression levels it clearly beats LZ4 and Zstd speed both for compression and decompression.  Most specially, it works extremely well for achieving pretty reasonable compression ratios (typically better than Zlib, albeit not as good as Zstd) at very good decompression speed and exceptional compression speed (compressing at more than the memcpy() speed, at very good ratios, oh really?).
 
-Finally, for those wondering why I have not used the LIZv1 + Huffman compression method for all the compression levels in Blosc, the answer is that I obviously tried that, but for some reason, this method only performs well for large buffers, whereas for small buffers (like the ones created by low compression levels in Blosc) its performance is rather poor.  I was kind of getting a similar behaviour with Zstd, where performance shines for decompressing large buffers (the difference is that Lizard can compress at tremendous speed when compared with Zstd in this scenario), so I suppose this is typical when Huffman methods are used.
+Finally, for those wondering why I have not used the LIZv1 + Huffman compression method also for the lower compression levels in Blosc, the answer is that I obviously tried that, but for some reason, this method only performs well for large buffers, whereas for small buffers (like the ones created by low compression levels in Blosc) its performance is rather poor.  I was kind of getting a similar behaviour with Zstd, where performance shines for decompressing large buffers (the difference is that Lizard can compress at tremendous speed when compared with Zstd in this scenario), so I suppose this is typical when Huffman methods are used.
 
 Finding its place among Blosc codecs
 ------------------------------------
 
-In my previous blog, I was saying that Zstd has virtually no competitor in Write Once Read Multiple scenarios.  However, I think there is still a niche for codecs that, without providing the extreme compression ratios of Zstd, they still show big enough compression muscle without loosing too much compression speed.  IMO, this is a good description of how Lizard performs.  However, in Blosc1 we only have slots for a couple of codecs more (but that will not be a problem for Blosc2, where much more codecs will be supported), and before deciding whether Lizard should fill one of them I'd like to gather users feedback.  So in case you are a Blosc user, please use the `lizard branch <https://github.com/Blosc/c-blosc/tree/lizard>`_ of the C-Blosc repo (`check here for the Lizard branch of C-Blosc2 <https://github.com/Blosc/c-blosc2/tree/lizard>`_) and report back your results.
+In my previous blog, I was saying that Zstd has virtually no competitor in Write Once Read Multiple scenarios.  However, I think there is still a niche for codecs that, without providing the extreme compression ratios of Zstd, they still show big enough compression muscle without loosing too much compression speed.  IMO, this is a good description of how Lizard performs.  However, in Blosc1 we only have slots for a couple of codecs more (but that will not be a problem for Blosc2, where much more codecs will be supported), and although I am pretty enthusiastic on adding Lizard it would be nice to gather users feedback before than that.  So in case you are a Blosc user, please use the `lizard branch <https://github.com/Blosc/c-blosc/tree/lizard>`_ of the C-Blosc repo (`UPDATE: Lizard has been merged into the C-Blosc2 repo recently <https://github.com/Blosc/c-blosc2/pull/21>`_) and report back your results.
 
 
 Appendix: Hardware and software used

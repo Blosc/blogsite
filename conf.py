@@ -898,10 +898,12 @@ IMAGE_FOLDERS = {'images': 'images'}
 # FAVICONS contains (name, file, size) tuples.
 # Used to create favicon link like this:
 # <link rel="name" href="file" sizes="size"/>
-# FAVICONS = (
-#     ("icon", "/favicon.ico", "16x16"),
-#     ("icon", "/icon_128x128.png", "128x128"),
-# )
+FAVICONS = (
+    ("icon", "/blosc-favicon_16x16.png", "16x16"),
+    ("icon", "/blosc-favicon_32x32.png", "32x32"),
+    ("icon", "/blosc-favicon_64x64.png", "64x64"),
+    ("icon", "/blosc-favicon_128x128.png", "128x128"),
+)
 
 # Show teasers (instead of full posts) in indexes? Defaults to False.
 # INDEX_TEASERS = False

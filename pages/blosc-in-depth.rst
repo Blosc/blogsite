@@ -66,9 +66,10 @@ pre-conditioner, so that it can work in a standalone fashion.
 Currently, Blosc uses **BloscLZ** by default, a compressor heavily
 based on `FastLZ <http://fastlz.org/>`_. From version 1.3 onwards,
 Blosc also includes support for `LZ4 and LZ4HC
-<https://code.google.com/p/lz4>`_, `Snappy
-<https://code.google.com/p/snappy>`_ and `Zlib
-<http://www.zlib.net>`_.  Also, it comes with a highly optimized (it
+<http://www.lz4.org>`_, `Snappy
+<https://github.com/google/snappy>`_ , `Zlib
+<http://www.zlib.net>`_ and `Zstd <http://www.zstd.net>`_.  Also,
+it comes with a highly optimized (it
 can use SSE2 instructions, if available) **shuffle** pre-conditioner.
 Different compressors or pre-conditioners may be added in the future.
 

@@ -17,7 +17,11 @@
 
   - [University of Oslo](http://www.mn.uio.no/geo/english/): Consultant --- September 2016 - Today
 
+    Collaborating on performing large scale simulations of air pollutants via [FLEXPART](https://www.flexpart.eu/wiki).
+
   - [The HDF Group](https://www.hdfgroup.org): Consultant -- August 2016 - Today
+
+    Working on support for filters for HDF5 and other [projects](https://www.hdfgroup.org/2017/08/handling-ingesting-data-streams-500k-messs/).
 
   - [University of Oslo](http://www.mn.uio.no/geo/english/): Data Consultant --- September 2014 - January 2016
 
@@ -116,6 +120,8 @@
 
     + [C-Blosc](https://github.com/Blosc/c-blosc): The core library in C --- May 2009 - Today
 
+    + [C-Blosc2](https://github.com/Blosc/c-blosc2): Next generation of Blosc --- July 2015 - Today
+
     + [python-blosc](https://github.com/Blosc/python-blosc): High-performance wrappers for Python --- September 2010 - Today
 
     + [bcolz](https://github.com/Blosc/bcolz): A columnar data container that can be compressed
@@ -153,9 +159,17 @@
 
 ## Presentations
 
-  * ["Handling Big Data On Modern Computers"](http://pydata.org/madrid2016/schedule/presentation/19/index.html). Keynote presented at [PyData Madrid 2016](http://pydata.org/madrid2016/index.html), Madrid, Spain (April 2016).  
+  * ["Squeeze (gently) your data"](https://speakerdeck.com/francescalted/squeeze-gently-your-big-data). Keynote presented at [PyData Barcelona 2017](https://pydata.org/barcelona2017/schedule/presentation/34/), Barcelona, Spain (May 2017).  
 
-  * ["Usando contenedores para Big Data"](http://pydata.org/madrid2016/schedule/presentation/16/index.html). Tutorial presented at the [PyData Madrid 2016](http://pydata.org/madrid2016/index.html), Madrid, Spain (April 2016).  
+  * ["HDF5 and pandas"](https://github.com/FrancescAlted/PyData-BCN). Tutorial presented at the [PyData Barcelona 2017](https://pydata.org/barcelona2017/schedule/presentation/6/), Barcelona, Spain (May 2017).  
+
+  * ["Handling Big Data on Modern Computers: A Developer's View"](https://speakerdeck.com/francescalted/handling-big-data-on-modern-computers). Seminar given at Curtin University, Perth, Australia (August 2016).
+
+  * ["New Computer Trends And How This Affect Us"](https://speakerdeck.com/francescalted/new-computer-trends). Keynote presented at [PyData Madrid 2016](http://pydata.org/madrid2016/schedule/presentation/19/index.html), Madrid, Spain (April 2016).  
+  
+  * ["Usando contenedores para Big Data"](). Tutorial presented at the [PyData Madrid 2016](http://pydata.org/madrid2016/schedule/presentation/16/index.html), Madrid, Spain (April 2016).  
+  
+  * ["Blosc/bcolz: Comprimiendo datos más allá de los límites de la memoria"](https://speakerdeck.com/francescalted/bcolz-comprimiendo-mas-alla-de-los-limites-de-la-memoria).  Talk presented at PyConES 2015 conference (November 2015).
 
   * ["Making Use of Big Data Containers"](https://github.com/FrancescAlted/PyConES2015). Tutorial presented at the [PyConES 2015](http://2015.es.pycon.org/en/schedule/), Valencia, Spain (November 2015).  
 
