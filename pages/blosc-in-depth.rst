@@ -36,23 +36,6 @@ To whet your appetite look at the kind of speed that Blosc can reach:
 
 You can see more benchmarks in :doc:`synthetic-benchmarks`.
 
-Git repository, downloads and ticketing
----------------------------------------
-
-The home of the git repository for all Blosc-related libraries is
-located at:
-
-https://github.com/Blosc
-
-You can download the sources and file tickets there too.
-
-Mailing list
-------------
-
-There is an official Blosc blosc mailing list at:
-
-http://groups.google.com/group/blosc
-
 Meta-Compression And Other Advantages Over Existing Compressors
 ---------------------------------------------------------------
 
@@ -141,6 +124,23 @@ Moreover, with the introduction of Blosc 1.0, it has been declared
 stable, and both the **API and the format have been frozen**, so you
 should expect a large degree of stability for your Blosc-powered
 applications.
+
+Git repository, downloads and ticketing
+---------------------------------------
+
+The home of the git repository for all Blosc-related libraries is
+located at:
+
+https://github.com/Blosc
+
+You can download the sources and file tickets there too.
+
+Mailing list
+------------
+
+There is an official Blosc blosc mailing list at:
+
+http://groups.google.com/group/blosc
 
 Python wrapping
 ---------------
