@@ -20,7 +20,7 @@ In fact, this prize comes very timely because it is giving me more stamina towar
 * New filters, like delta and truncation of floating point precision.
 * A new filter pipeline that will allow to run more than one filter before the compression step.
 * Support for variable length objects (i.e. not limited to fixed-length datasets).
-* Support for dictionaries between different blocks in the same chunk.  That will be important for allowing smaller chunks (and hence improving decompression latency) while keeping compression ratio and performance relatively untouched.
+* Support for dictionaries between different blocks in the same chunk.  That will be important for allowing smaller chunks (and hence improving decompression latency) while keeping compression ratio and performance mostly untouched.
 * Support for more codecs (`lizard <http://blosc.org/posts/new-lizard-codec/>`_ support is already in).
 * New serialisation format which is meant to allow self-discovery via magic numbers and introspection.
 * New super-chunk object that will allow to work seamlessly with arbitrarily large sets of chunks, both in-memory and on-disk.
