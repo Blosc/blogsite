@@ -1,4 +1,4 @@
-.. title: Blosc Has Won The Open Source Peer Bonus
+.. title: Blosc Has Won Google's Open Source Peer Bonus Program
 .. author: Francesc Alted
 .. slug: prize-push-Blosc2
 .. date: 2017-11-17 17:32:20 UTC
@@ -9,12 +9,14 @@
 .. type: text
 
 
-Blosc Has Won The Open Source Peer Bonus
-========================================
+Blosc Has Won Google's Open Source Peer Bonus Program
+=====================================================
 
 Past month `Google announced the winners for the 2017’s second round of their Open Source Peer Bonus program <https://opensource.googleblog.com/2017/10/more-open-source-peer-bonus-winners.html>`_ and I was among them for my commitment to the Blosc project.  It took a bit, but I wanted to express my thoughts on this nice event.  Needless to say, I am proud and honored for this recognition, most specially when this is the first completely uninterested donation that someone made to me after 15 years of doing open source (in many occasions doing that as a full-time work), so thank you very much Google!  The assumption is that people does open source because 1) they believe in the concept and 2) they can earn a public consideration that allows them to get contracts (so allowing many of us to have a life!).  However, this time the unexpected happened, and that an important corporation like Google decided to publicly recognize this work makes me very happy (would that pave the way for others to follow? :-).
 
-In fact, this prize comes very timely because it is giving me more stamina towards the release of `Blosc2 <https://github.com/Blosc/c-blosc2>`_.  Blosc2 is the next generation of Blosc, and will add features like:
+Having said this, and as it happens with any open source project that has seen some success, the contributions for other people have been instrumental in making Blosc such a featured and stable library.  People like Jack Pappas, Valentin Hänel, Christohper Speller, Antonio Valentino and up to 30 contributors made important contributions to the project.  This award goes indeed to them too.
+
+This push comes very timely because it is giving me more stamina towards the release of `Blosc2 <https://github.com/Blosc/c-blosc2>`_.  Blosc2 is the next generation of Blosc, and will add features like:
 
 * Full 64-bit support for chunks (i.e. not anymore limited to 2 GB). 
 * New filters, like delta and truncation of floating point precision.
