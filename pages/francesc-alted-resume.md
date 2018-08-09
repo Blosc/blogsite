@@ -1,7 +1,7 @@
 <!-- 
 .. title: Francesc Alted Resumé
 .. slug: francesc-alted-resume
-.. date: 2015-12-14 19:08:24 UTC
+.. date: 2018-08-09 07:08:24 UTC
 .. tags: 
 .. category: 
 .. link: 
@@ -13,13 +13,13 @@
 
  - [Freelance consultant](http://www.blosc.org): May 2014 - Today
 
-    Designing and coding libraries for extremley fast compression ([C-Blosc](https://github.com/Blosc/c-blosc), [Python-Blosc](https://github.com/Blosc/python-blosc)) and for coping with large tabular datasets ([bcolz](https://github.com/Blosc/bcolz)).  Also providing consulting services about handling big data for customers.
+    Designing and coding libraries for extremley fast compression ([C-Blosc](https://github.com/Blosc) and for coping with large tabular datasets ([bcolz](https://github.com/Blosc/bcolz)).  Also providing consulting services about compression and big data handling for customers.
 
-  - [University of Oslo](http://www.mn.uio.no/geo/english/): Consultant --- September 2016 - Today
+  - [University of Oslo](http://www.mn.uio.no/geo/english/): Consultant --- September 2016 - June 2018
 
     Collaborating on performing large scale simulations of air pollutants via [FLEXPART](https://www.flexpart.eu/wiki).
 
-  - [The HDF Group](https://www.hdfgroup.org): Consultant -- August 2016 - Today
+  - [The HDF Group](https://www.hdfgroup.org): Consultant -- August 2016 - September 2017
 
     Working on support for filters for HDF5 and other [projects](https://www.hdfgroup.org/2017/08/handling-ingesting-data-streams-500k-messs/).
 
