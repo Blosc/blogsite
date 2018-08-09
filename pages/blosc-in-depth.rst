@@ -34,7 +34,7 @@ To whet your appetite look at the kind of speed that Blosc can reach:
 | |blosclz-c|  | |blosclz-d|  |
 +--------------+--------------+
 
-Also, you may want to check out this article on `Breaking Down Memory Walls <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>` with Blosc2, the next generation of Blosc.
+Also, you may want to check out this article on `Breaking Down Memory Walls <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_ with Blosc2, the next generation of Blosc.
 
 You can see more benchmarks in :doc:`synthetic-benchmarks`.
 
