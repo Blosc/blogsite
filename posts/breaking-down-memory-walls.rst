@@ -12,7 +12,7 @@
 Breaking Down Memory Walls
 ==========================
 
-**Update** (2018-08-09): An extended version of this blog post can be found in this `article <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_.  On it, you will find an study with synthetic data (mainly for finding ultimate performance limits), as well as a more comphensive set of CPUs.  The results and corresponding plots are quite a lot, and this is why I decided to publish them as an independent article format.
+**Update** (2018-08-09): An extended version of this blog post can be found in this `article <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, and more discussion about the results.
 
 Nowadays CPUs struggle to get data at enough speed to feed their cores.  The reason for this is that memory speed is `growing at a slower pace than CPUs increase their speed at crunching numbers <http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf>`_.   This memory slowness compared with CPUs is generally known as the `Memory Wall <https://en.wikipedia.org/wiki/Random-access_memory#Memory_wall>`_.
 
