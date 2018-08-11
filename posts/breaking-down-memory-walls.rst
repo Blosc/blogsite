@@ -59,7 +59,7 @@ As for the data container, we are going to use the *super-chunk* object that com
 
 * **Support for contexts**: useful when we have different threads and we want to decompress data simultaneously.  Assigning a context per each thread is enough to allow the simultaneous use of the different cores without badly interfering with each other.
 
-* **Easy access to chunks**: an integer is assigned to the different chunks so that requesting a specific chunk is just a matter of specifying its number and a decompressed chunk is returned.  So pointer arithmetic is replaced by indexing operations, making the code less prone to get severe errors (i.e. if a chunk does not exist, an error code is returned instead of creating a segmentation fault).
+* **Easy access to chunks**: an integer is assigned to the different chunks so that requesting a specific chunk is just a matter of specifying its number and then it gets decompressed and returned in one shot.  So pointer arithmetic is replaced by indexing operations, making the code less prone to get severe errors (e.g. if a chunk does not exist, an error code is returned instead of creating a segmentation fault).
 
 If you are curious on how the super-chunk can be created and used, just check the `sources for the benchmark <https://github.com/Blosc/c-blosc2/blob/master/bench/sum_openmp.c#L144-L157>`_ used for this blog.
 
@@ -179,7 +179,12 @@ To conclude, it is interesting to remember here what Linus Torvalds said back in
   [...] git actually has a simple  design, with stable and reasonably well-documented data structures.  In fact, I'm a huge proponent of designing your code around the data, rather than the other way around, and I think it's one of the reasons git has been fairly successful.
   [...] I will, in fact, claim that the difference between a bad programmer and a good one is whether he considers his code or his data structures more important. Bad programmers worry about the code. Good programmers worry about data structures and their relationships.
 
-Of course, we all know how drastic Linus can be in his statements, but I cannot agree more on how important is to adopt a data-driven view when designing our applications.  But I'd go further and say that, when trying to squeeze the last drop of performance out of modern CPUs, data containers need to be structured in a way that leverages the characteristics of the underlying CPU, as well as facilitating the application of the blocking technique.  And very important, compressing the chunks of these data containers allows for better storage utilization without penalizing performance too much (and, sometimes, actually accelerating computations).  Hopefully, installments like this can help us explore new possibilities to break down the memory wall that bedevils modern computing.
+Of course, we all know how drastic Linus can be in his statements, but I cannot agree more on how important is to adopt a data-driven view when designing our applications.  But I'd go further and say that, when trying to squeeze the last drop of performance out of modern CPUs, data containers need to be structured in a way that leverages the characteristics of the underlying CPU, as well as to facilitate the application of the blocking technique (and thereby allowing compression to run efficiently).  Hopefully, installments like this can help us explore new possibilities to break down the memory wall that bedevils modern computing.
+
+Acknowledgements
+----------------
+
+Thanks to my friend Scott Prater for his great advices on improving my writing style, Dirk Schwanenberg for pointing out to the precipitation dataset and for providing the script for reading it, and Robert McLeod, J. David Ibáñez and Javier Sancho for suggesting general improvements (even though some of their suggestions required such a big amount of work that made me ponder about their actual friendship :).
 
 
 Appendix: Software used
