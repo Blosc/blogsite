@@ -35,7 +35,7 @@
 
     Designing and coding libraries to cope with extremely large datasets ([Blaze](http://blaze.pydata.org)), specially in the I/O to memory and disk backends.  Also involved in providing consulting services about handling big data for our customers.
 
-  - [BMAT](http://www.bmat.com): Software Engineer ---	February 2011 - Today
+  - [BMAT](http://www.bmat.com): Software Engineer ---	February 2011 - December 2011
 
     My duties were to work in the database backend for music recognition software.  Also, I was leading the participation of BMAT in the [H4H](http://www.h4h-itea2.org/) project.
 
