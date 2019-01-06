@@ -27,12 +27,12 @@ Also, the fact that ARM is not just providing licenses to use its IP cores, but 
 Now, the legitimate question is: is ARM (and its licensees) fulfilling its promise, or this announcement was just bare marketing?  For answering this, I decided to use two recent (2018) implementations of the ARMv8-A architecture and replicate the benchmarks in my previous `Breaking Down Memory Walls <http://blosc.org/posts/breaking-memory-walls/>_` blog entry.
 
 
-The Kirin 980 SoC
------------------
+The ARM A76 Core
+----------------
 
-Here we are going to analyze Huawei's Kirin 980, a SoC (System On a Chip) that uses the ARM A76 core internally. This is an example of an internal IP core design of ARM that is licensed to be used in a CPU chipset by another vendor (Huawei in this case).  The Kirin 980 wears 4 A76 cores plus 4 A55 cores, but the more powerful ones are the A76 (the A55 is more headed to do light tasks with very little energy consumption, which is critical specially for phones).  The A76 core is designed to be implemented with a 7nm technology (as it is the case here), and supports ARM's DynamIQ technology which allows scalability to target the specific requirements of a SoC.  The case that we are analyzing here is Kirin 980 in a phone (Humawei's Mate 20), and in this scenario the power dissipation (TDP) cannot exceed the 4 W figure, so DynamIQ should avoid to make too many cores active at the same time, as we will see that it is the case for our benchmark below.
+Here we are going to analyze Huawei's Kirin 980, a SoC (System On a Chip) that uses the ARM A76 core internally. This is an example of an internal IP core design of ARM that is licensed to be used in a CPU chipset (or SoC) by another vendor (Huawei in this case).  The Kirin 980 wears 4 A76 cores plus 4 A55 cores, but the more powerful ones are the A76 (the A55 are more headed to do light tasks with very little energy consumption, which is critical for phones).  The A76 core is designed to be implemented with a 7nm technology (as it is the case here), and supports ARM's DynamIQ technology which allows scalability to target the specific requirements of a SoC.  The case that we are analyzing here is Kirin 980 in a phone (Humawei's Mate 20), and in this scenario the power dissipation (TDP) cannot exceed the 4 W figure, so DynamIQ should avoid to make too many cores active at the same time, as we will see that it is the case for our benchmark below.
 
-ARM is saying that they designed the `A76 to be a competitor of the Intel Skylake Core i5 <https://arstechnica.com/gadgets/2018/06/arm-promises-laptop-level-performance-in-2019/>`_, so this is what we are going to check here.  For this, we are going to compare a Kirin 980 in a Mate 20 against a Core i5 included in a MacBook Pro (late 2016).  Here it is the side-by-side performance for the `precipitation dataset <http://blosc.org/posts/breaking-memory-walls/>_` (i.e. a real dataset):
+ARM is saying that they designed the `A76 to be a competitor of the Intel Skylake Core i5 <https://arstechnica.com/gadgets/2018/06/arm-promises-laptop-level-performance-in-2019/>`_, so this is what we are going to check here.  For this, we are going to compare a Kirin 980 in a Huawei Mate 20 phone against a Core i5 included in a MacBook Pro (late 2016).  Here it is the side-by-side performance for the `precipitation dataset <http://blosc.org/posts/breaking-memory-walls/>_` (i.e. a real dataset):
 
 .. |rainfall-kirin980| image:: /images/arm-memory-walls-followup/kirin980-rainfall.png
    :scale: 70 %
@@ -40,19 +40,36 @@ ARM is saying that they designed the `A76 to be a competitor of the Intel Skylak
 .. |rainfall-i5| image:: /images/arm-memory-walls-followup/i5-rainfall.png
    :scale: 70 %
 
-+---------------------+-----------------+
-| |rainfall-kirin980| | |rainfall-i5|   |
-+---------------------+-----------------+
++---------------------+---------------+
+| |rainfall-kirin980| | |rainfall-i5| |
++---------------------+---------------+
 
 Here we can already see a couple of things.  First, the speed of the calculation of the reduction when there is no reduction is similar for both CPUs.  This is interesting because, although the bottleneck for this benchmark is in the memory access, the fact that the Kirin 980 performance is almost the same than the Core i5 is a testimony of how well ARM performed in the design of a memory prefetcher, clearly allowing for a good memory-level parallelism.
 
-Second, for the compressed case, although the Core i5 is still a 50% faster than the Kirin 980, the big news here is that the Core i5 has a TDP of 28 W, whereas for the Kirin 980 is just 4 W (and probably less than that).  It is also true that we are comparing an Intel CPU from 2016 against an ARM CPU from 2018; nowadays probably we can find Intel exemplars showing a similar performance than this i5 for probably no more than 10 W (e.g. an `i5-8265U with configurable TDP-down <https://ark.intel.com/products/149088/Intel-Core-i5-8265U-Processor-6M-Cache-up-to-3-90-GHz->_`).  On its part, and still having the same amount of high performance cores (4), the Kirin 980 still consumes less than half of the power than its Intel counterpart --and its price would probably be a fraction of it too.
+Second, for the compressed case, the Core i5 is still a 50% faster than the Kirin 980, and the performance scales similarly (up to 4 threads) for both CPUs.  The big news here is that the Core i5 has a TDP of 28 W, whereas for the Kirin 980 is just 4 W (and probably less than that), so that means that ARM's DynamIQ works beautifully so as to allow 4 (powerful) cores to run simultaneously in such a restrictive scenario (remember that we are running this benchmark *inside* a phone).  It is also true that we are comparing an Intel CPU from 2016 against an ARM CPU from 2018; nowadays probably we can find Intel exemplars showing a similar performance than this i5 for probably no more than 10 W (e.g. an `i5-8265U with configurable TDP-down <https://ark.intel.com/products/149088/Intel-Core-i5-8265U-Processor-6M-Cache-up-to-3-90-GHz->_`), although I am not really sure how an Intel CPU will perform with such a strict power constraint.  At any rate, the Kirin 980 still consumes less than half of the power than its Intel counterpart --and its price would probably be a fraction of it too.
 
-I believe that these facts are really a good testimony of how serious ARM was on their claim that they were going to catch Intel in the performance side of the things for client devices, and probably with an edge in consuming less energy (nothing surprising, given the focus of ARM in that area for decades).  Keep this in mind when you are going to buy your next laptop and do not blindly assume that Intel is the only reasonable option anymore ;-)
+I believe that these facts are really a good testimony of how serious ARM was on their claim that they were going to catch Intel in the performance side of the things for client devices, and probably with an edge in consuming less energy.  The fact that ARM CPUs are more energy efficient should not be surprising given the focus of ARM in that area for decades, but another reason for that is the manufacturing technology that ARM has achieved on their new designs (7nm node for ARM vs 14nm node for Intel); undoubtedly, ARM advantage in this area is going to be important for their world-domination plans .  Keep this in mind when you are going to buy your next laptop and do not blindly assume that Intel is the only reasonable option anymore ;-)
 
 
-The ThunderX2 core
-------------------
+The ThunderX2 CPU
+-----------------
+
+The second way in which ARM sell licenses is the so-called *architectural license* allowing companies to design their own CPU cores using the ARM instruction sets.  Cavium (now bought by Marvell) was one of this companies, and they produced different CPU designs that culminated with Vulcan, the microarchitecture that powers the ThunderX2 CPU, which was made available in May 2018.  `Vulcan is a 16 nm high-performance 64-bit ARM microarchitecture <https://en.wikichip.org/wiki/cavium/microarchitectures/vulcan>_` that is specifically meant to compete in compute/data server facilities (think of it as a  a Xeon-class ARM-based server microprocessor).  ThunderX2 can pack up to 32 Vulcan cores, and as every Vulcan core supports up to 4 threads, the whole CPU can run up to 128 threads.  `Marvell is trying to position the ThunderX2 specially in the data server scenario <https://www.marvell.com/documents/8ru3g25b5f77f5pbjwl9/>_`, but with its capability to handle so many threads simultaneously, its raw compute power should be nothing to sneeze at.
+
+So as to check how powerful a ThunderX2 can be, we are going to compare it against one of its natural competitor, the Intel Scalable Gold 5120 (actually a machine with 2 instances of it, each containing 14 cores):
+
+.. |rainfall-thunderx2| image:: /images/arm-memory-walls-followup/thunderx2-rainfall-lz4-9.png
+   :scale: 70 %
+
+.. |rainfall-scalable| image:: /images/arm-memory-walls-followup/scalable-rainfall-lz4-9.png
+
+   :scale: 70 %
+
++----------------------+---------------------+
+| |rainfall-thunderx2| | |rainfall-scalable| |
++----------------------+---------------------+
+
+Here we see that, when no compression is used, the ThunderX2 is able to reach a similar performance than the Intel Scalable when enough threads are thrown at the computing task; however, it is true that the Intel scales much faster and more predictably.  Regarding the compressed scenario...
 
 
 Acknowledgements
