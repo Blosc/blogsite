@@ -69,11 +69,23 @@ So as to check how powerful a ThunderX2 can be, we are going to compare it again
 | |rainfall-thunderx2| | |rainfall-scalable| |
 +----------------------+---------------------+
 
-Here we see that, when no compression is used, the ThunderX2 is able to reach a similar performance than the Intel Scalable when enough threads are thrown at the computing task; however, it is true that the Intel scales much faster and more predictably.  Regarding the compressed scenario...
+Here we see that, when no compression is used, while it is true that the Intel scales much faster and more predictably, the ThunderX2 is able to reach a similar performance than the Intel Scalable when enough threads are thrown at the computing task.  This is a really interesting fact, because it is showing that, for first time ever, an ARM CPU can match the memory bandwidth of a latest generation Intel CPU (which BTW, was pretty good at that already).
+
+ Regarding the compressed scenario, Intel Scalable performs more than 2x faster and besides, it continues to show a really nice scalability.  In this case, the ThunderX2, although it performs quite good, it is still quite far from being able to reach Intel computing performance.
+
+I was not able to find the exact power consumption of the ThunderX2 CN9975 model that has been used in the benchmarks above, but it is probably more than 150 W per CPU, which is quite larger than the Intel Scalable 5120 counterpart which is around 100 W.  That means that Intel is using quite far less power in this CPU, which gives it an edge in server computing for now.
+
+
+Final Thoughts
+--------------
+
+From these results, it is clear that ARM is making large strides in catching Intel performance, specially in the client side of the things (laptops, and small desktops), with an important reduction in power consumption.  On the server side, Intel still has an important advantage though, and it will not be easy to take the performance crown away from them.  However, the fact that ARM is allowing different vendors to produce their own implementations means that there will be more competition and different approaches, so it is not difficult to realize that in the next few years there will appear many new ARM exemplars that will be meant not only for pure compute tasks, but specialized in different tasks (serving and filtering data, accelerating compression or artificial intelligence, to say a few) that are going to put Intel in difficulties to maintain their current dominance in the data centers.
 
 
 Acknowledgements
 ----------------
+
+I would like to thank `Packet <https://www.packet.com/>_` a provider of bare metal servers in the cloud for allowing me not only to use their machines for free, but also answering different questions about the configuration of the machines.  In particular, Ed Vielmetti has been really helpful in providing me early access to a ThunderX2 server, and making sure that everything was stable enough for the benchmark needs.
 
 
 Appendix: Software used
