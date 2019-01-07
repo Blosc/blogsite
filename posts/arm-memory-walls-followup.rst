@@ -1,4 +1,4 @@
-.. title: ARM and Memory Walls
+.. title: Is ARM Hungry Enough to Eat Intel's Favorite Pie?
 .. author: Francesc Alted
 .. slug: arm-memory-walls-followup
 .. date: 2019-01-07 10:12:20 UTC
@@ -9,8 +9,10 @@
 .. type: text
 
 
-ARM CPUs and Memory Walls
-=========================
+Is ARM Hungry Enough to Eat Intel's Favorite Pie?
+=================================================
+
+**Note**: This entry is a follow-up of the `Breaking Down Memory Walls <http://blosc.org/posts/breaking-memory-walls/>`_ blog.  Please make sure that you have read it if you want to fully understand all the benchmarks performed here.
 
 At the beginning of the 1990s the computing world was mainly using RISC (Reduced Instruction Set Computer) architectures, namely SPARC, Alpha, Power and MIPS CPUs for performing serious calculations and Intel CPUs were seen as something that was appropriate just to run essentially personal applications on PCs, but almost nobody was thinking about them as a serious contender for the High Performance Computing (HPC) arena.  But Intel had an argument that almost nobody was ready to recognize how important it could become; with its dominance of the PC market it quickly ranked to be the largest CPU maker in the world and, with such an enormous revenue, Intel played its cards well and, by the beginning of 2000s, they were able to make of its CISC architecture (Complex Instruction Set Computer) the one with the best compute/price ratio, clearly beating the RISC offerings at that time.  That amazing achievement shout the mouths of CISC critics (to the point that nowadays almost everybody recognizes that performance has very little to do with using RISC or CISC) and lead to Intel to dominate not only the PC world, but also the world of HPC for the next 20 years.
 
@@ -80,7 +82,7 @@ Final Thoughts
 
 From these results, it is quite evident that ARM is making large strides in catching Intel performance, specially in the client side of the things (laptops, and small desktops), with an important reduction in power consumption, which is important specially for laptops.  Keep these facts in mind when you are going to buy your next laptop or desktop PC and do not blindly assume that Intel is the only reasonable option anymore ;-)
 
-On the server side, Intel still holds an important advantage though, and it will not be easy to take the performance crown away from them.  However, the fact that ARM is allowing different vendors to produce their own implementations means that the competition will be more aggressive in that each vendor will be free to tackle different aspects of server computing.  So it is not difficult to realize that in the next few years there will appear new ARM exemplars that will be meant not only for crunching numbers, but that will also specialize in different tasks, like serving and filtering data, accelerating compression or artificial intelligence, to say a few (e.g. `Marvell is trying to position the ThunderX2 specially in the data server scenario <https://www.marvell.com/documents/8ru3g25b5f77f5pbjwl9/>`_) that are going to put Intel architectures in difficulties to maintain its current dominance in the data centers.
+On the server side, Intel still holds an important advantage though, and it will not be easy to take the performance crown away from them.  However, the fact that ARM is allowing different vendors to produce their own implementations means that the competition will be more aggressive in that each vendor will be free to tackle different aspects of server computing.  So it is not difficult to realize that in the next few years there will appear new ARM exemplars that will be meant not only for crunching numbers, but that will also specialize in different tasks, like serving and filtering data, accelerating compression or artificial intelligence, to say a few (for example, `Marvell is trying to position the ThunderX2 more specifically for the data server scenario <https://www.marvell.com/documents/8ru3g25b5f77f5pbjwl9/>`_) that are going to put Intel architectures in difficulties to maintain its current dominance in the data centers.
 
 Finally, we should not forget the fact that software developers have been building high performance libraries using Intel boxes for decades, so making them extremely efficient for Intel architectures.  If, as all the signs seem pointing to, ARM architectures are going to be an alternative in the high performance scenario, then we, as software developers, will have to increasingly adopt ARM boxes as part of our tooling so as to continue being competitive in a world that would not necessarily be ruled by Intel anymore.
 
