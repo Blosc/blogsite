@@ -34,18 +34,16 @@ To whet your appetite look at the kind of speed that Blosc can reach:
 | |blosclz-c|  | |blosclz-d|  |
 +--------------+--------------+
 
-Also, you may want to check out this article on `Breaking Down Memory Walls <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_ with Blosc2, the next generation of Blosc.
+You can see more benchmarks in :doc:`synthetic-benchmarks`.  Also, you may want to check out this article on `Breaking Down Memory Walls <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_ with `Blosc2 <https://github.com/Blosc/c-blosc2>`_, the next generation of Blosc.
 
-You can see more benchmarks in :doc:`synthetic-benchmarks`.
+.. raw:: html
 
-.. |blosc-logo| image::   /images/blosc-logo.png
-.. |numfocus-logo| image::   /images/numfocus-logo.png
+   <hr width=50 size=10>
 
-+---------------+------------------+
-| |blosc-logo|  | |numfocus-logo|  |
-+---------------+------------------+
+.. figure:: /images/numfocus-logo.png
+    :align: center
 
-Blosc is a fiscally sponsored project of NumFOCUS, a nonprofit dedicated to supporting the open source scientific computing community. If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/pytables>_` to support our efforts.
+    Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_, a nonprofit dedicated to supporting the open source scientific computing community. If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
 
 
 Meta-Compression And Other Advantages Over Existing Compressors
