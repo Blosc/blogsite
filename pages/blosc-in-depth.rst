@@ -38,6 +38,16 @@ Also, you may want to check out this article on `Breaking Down Memory Walls <htt
 
 You can see more benchmarks in :doc:`synthetic-benchmarks`.
 
+.. |blosc-logo| image::   /images/blosc-logo.png
+.. |numfocus-logo| image::   /images/numfocus-logo.png
+
++---------------+------------------+
+| |blosc-logo|  | |numfocus-logo|  |
++---------------+------------------+
+
+Blosc is a fiscally sponsored project of NumFOCUS, a nonprofit dedicated to supporting the open source scientific computing community. If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/pytables>_` to support our efforts.
+
+
 Meta-Compression And Other Advantages Over Existing Compressors
 ---------------------------------------------------------------
 
