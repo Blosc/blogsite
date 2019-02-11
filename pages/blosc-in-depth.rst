@@ -40,7 +40,7 @@ You can see more benchmarks in :doc:`synthetic-benchmarks`.  Also, you may want 
 
    <hr width=50 size=10>
 
-.. figure:: /images/numfocus-logo.png
+.. figure:: /images/numfocus-sponsored-project.png
     :align: center
 
     Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_, a nonprofit dedicated to supporting the open source scientific computing community. If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
