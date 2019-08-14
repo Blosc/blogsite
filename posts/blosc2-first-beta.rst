@@ -65,6 +65,21 @@ ___________________________________
 
 We are currently using a combination of Sphinx + Doxygen + Breathe for documenting the `C API for C-Blosc2 <https://blosc-doc.readthedocs.io>`_.  This is a huge step further compared with the documentation of C-Blosc1, where the developer needed to go the    `blosc.h <https://github.com/Blosc/c-blosc/blob/master/blosc/blosc.h>`_ header for reading the docstrings there.  Thanks to Alberto Sabater for contributing the support for this.
 
+Support for Intel IPP (Integrated Performance Primitives)
+_________________________________________________________
+
+Intel is producing a series of optimizations in their `IPP library <https://software.intel.com/en-us/ipp>`_ and among them, and `accelerated version of the LZ4 codec <https://software.intel.com/en-us/ipp-dev-reference-lz4-compression-functions>`_.  Due to its excellent compression capabilities and speed, LZ4 is probably the most used codec in Blosc, so enabling even a bit more of optimization on LZ4 is always a good news.  And judging by the plots below, the Intel guys seem to have done an excellent job:
+
+.. |lz4-no-ipp| image:: /images/blosc2-first-beta/Blosc2-4MB-LZ4-NO-IPP-Shuffle.png
+.. |lz4-ipp| image:: /images/blosc2-first-beta/Blosc2-4MB-LZ4-IPP-Shuffle.png
+
++--------------+--------------+
+| |lz4-no-ipp| | |lz4-ipp|    |
++--------------+--------------+
+
+In the plots above we see a couple of things: 1) the IPP/LZ4 functions can compress *more* than regular LZ4, and 2) they are quite a bit *faster* than regular LZ4.  As alwways, take these plots with a grain of salt, as actual datasets will see more similar compression ratios and speed (but still, the difference can be significant).  Of course, IPP/LZ4 should generate LZ4 chunks that are completely compatible with the opriginal LZ4 library (but in case you detect any incompatibility, please shout!).
+
+C-Blosc2 beta.1 comes with support for LZ4/IPP out-of-the-box, that is, if IPP is detected in the system, its optimized LZ4 functions are automatically linked and used with the Blosc2 library.  If, for portability or other reasons, you don't want to create a Blosc2 library that is linked with Intel IPP, you can disable support for it passing the `-DDEACTIVATE_IPP=ON` to cmake.  In the future, we surely may give support for other optimized codecs in IPP too (Zstd would be an excellent candidate).
 
 Roadmap
 -------
