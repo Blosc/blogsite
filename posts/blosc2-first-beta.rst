@@ -39,7 +39,7 @@ Besides `shuffle` and `bitshuffle` already present in C-Blosc1, C-Blosc2 already
 
 * `delta`: the stored blocks inside a chunk are diff'ed with respect to first block in the chunk.  The basic idea here is that, in some situations, the diff will have more zeros than the original data, leading to better compression.
 
-* `trun_prec`: it zeroes the least significant bits of the mantissa of float32 and float64 types.  When combined with the `shuffle` or `bitshuffle` filter, this leads to more contiguous zeros, which are compressed better and faster.
+* `trunc_prec`: it zeroes the least significant bits of the mantissa of float32 and float64 types.  When combined with the `shuffle` or `bitshuffle` filter, this leads to more contiguous zeros, which are compressed better and faster.
 
 Also, a new filter pipeline has been implemented.  With it, the different filters can be pipelined so that the output of one filter can be the input for the next; this happens at the block level, so minimizing the size of temporary buffers, and hence, accelerating the process.  Possible examples of pipelines are a `delta` filter followed by `shuffle`, or a `trunc_prec` followed by `bitshuffle`.  Up to 6 filters can be pipelined, so there is plenty of space for upcoming new filters to collaborate among them.
 
@@ -58,7 +58,7 @@ There is a new `Lizard codec <https://github.com/inikep/lizard>`_, which is an e
 New dictionary support for better compression ratio
 ___________________________________________________
 
-Dictionaries allow for better discovery of data duplicities among different blocks: when a block is going to be compressed, C-Blosc2 can use a previously made dictionary (stored in the header of the super-chunk) for compressing all the blocks that are part of the chunks.  This usually improves the compression ratio, as well as the decompression speed, at the expense of a (small) overhead in compression speed.  Currently, this is only supported in the `zstd` codec, but would be nice to extend it to `lz4` and `blosclz` at least.
+Dictionaries allow for better discovery of data duplicates among different blocks: when a block is going to be compressed, C-Blosc2 can use a previously made dictionary (stored in the header of the super-chunk) for compressing all the blocks that are part of the chunks.  This usually improves the compression ratio, as well as the decompression speed, at the expense of a (small) overhead in compression speed.  Currently, this is only supported in the `zstd` codec, but would be nice to extend it to `lz4` and `blosclz` at least.
 
 Much improved documentation mark-up
 ___________________________________
@@ -77,7 +77,7 @@ Intel is producing a series of optimizations in their `IPP library <https://soft
 | |lz4-no-ipp| | |lz4-ipp|    |
 +--------------+--------------+
 
-In the plots above we see a couple of things: 1) the IPP/LZ4 functions can compress *more* than regular LZ4, and 2) they are quite a bit *faster* than regular LZ4.  As alwways, take these plots with a grain of salt, as actual datasets will see more similar compression ratios and speed (but still, the difference can be significant).  Of course, IPP/LZ4 should generate LZ4 chunks that are completely compatible with the opriginal LZ4 library (but in case you detect any incompatibility, please shout!).
+In the plots above we see a couple of things: 1) the IPP/LZ4 functions can compress *more* than regular LZ4, and 2) they are quite a bit *faster* than regular LZ4.  As always, take these plots with a grain of salt, as actual datasets will see more similar compression ratios and speed (but still, the difference can be significant).  Of course, IPP/LZ4 should generate LZ4 chunks that are completely compatible with the original LZ4 library (but in case you detect any incompatibility, please shout!).
 
 C-Blosc2 beta.1 comes with support for LZ4/IPP out-of-the-box, that is, if IPP is detected in the system, its optimized LZ4 functions are automatically linked and used with the Blosc2 library.  If, for portability or other reasons, you don't want to create a Blosc2 library that is linked with Intel IPP, you can disable support for it passing the `-DDEACTIVATE_IPP=ON` to cmake.  In the future, we surely may give support for other optimized codecs in IPP too (Zstd would be an excellent candidate).
 
@@ -102,11 +102,11 @@ Of course, C-Blosc2 is not done yet, and there are many interesting enhancements
 
 * Add support for `buildkite <https://buildkite.com>`_ as another CI would be handy because it allows to use on-premise machines, potentially speeding-up the time to do the builds, but also to setup pipelines with more complex dependencies and analyzers.
 
-The implementation of these features will require the help of people, either by contributing code (see  `our developing guidelines <https://github.com/Blosc/c-blosc2/blob/master/DEVELOPING-GUIDE.rst>`_) or, as it turns out that `Blosc is a project sponsorized by NumFOCUS <https://numfocus.org/project/blosc>`_, you may want to  `make a donation to the project <https://numfocus.org/donate-to-blosc>`_.  If you plan to contribute in any way, thanks so much in the name of the community!
+The implementation of these features will require the help of people, either by contributing code (see  `our developing guidelines <https://github.com/Blosc/c-blosc2/blob/master/DEVELOPING-GUIDE.rst>`_) or, as it turns out that `Blosc is a project sponsored by NumFOCUS <https://numfocus.org/project/blosc>`_, you may want to  `make a donation to the project <https://numfocus.org/donate-to-blosc>`_.  If you plan to contribute in any way, thanks so much in the name of the community!
 
 
-Addedum: Special thanks to developers
--------------------------------------
+Addendum: Special thanks to developers
+--------------------------------------
 
 C-Blosc2 is the outcome of the work of `many developers <https://github.com/Blosc/c-blosc2/graphs/contributors>`_ that worked not only on C-Blosc2 itself, but also on C-Blosc1, from which C-Blosc2 inherits a lot of features.  I am very grateful to Jack Pappas, who contributed important portability enhancements, specially runtime and cross-platform detection of SSE2/AVX2 (with the help of Julian Taylor) as well as high precision timers (HPET) which are essential for benchmarking purposes.  Lucian Marc also contributed the support for ARM/NEON for the shuffle filter.  Jerome Kieffer contributed support for PowerPC/ALTIVEC.  And last but not least, to Valentin Haenel for general support, bug fixes and other enhancements through the years.
 
