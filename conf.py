@@ -17,7 +17,7 @@ import time
 
 
 # Data about this site
-BLOG_AUTHOR = "Francesc Alted"  # (translatable)
+BLOG_AUTHOR = "The Blosc Developers"  # (translatable)
 BLOG_TITLE = "Blosc Main Blog Page "  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
@@ -25,7 +25,7 @@ SITE_URL = "http://blosc.org/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
 # BASE_URL = "http://blosc.org/"
-BLOG_EMAIL = "francesc@blosc.org"
+BLOG_EMAIL = "blosc@blosc.org"
 BLOG_DESCRIPTION = "Blosc, an extremely fast, multi-threaded, meta-compressor library"  # (translatable)
 
 # Nikola is multilingual!
@@ -139,7 +139,8 @@ NAVIGATION_LINKS = {
       #  ("/rss.xml", "RSS feed"),
         ("/pages/blosc-in-depth/", "Blosc In Depth"),
         ("/pages/synthetic-benchmarks/", "Benchmarks"),
-        ("/pages/professional-services/", "Professional Services"),
+        # ("/pages/professional-services/", "Professional Services"),
+        ("/pages/donate/", "Donate to Blosc"),
         # ("/blog/", "Blog"),
     ),
 }
