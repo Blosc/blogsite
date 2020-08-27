@@ -1,7 +1,7 @@
 <!-- 
 .. title: Francesc Alted Resumé
 .. slug: francesc-alted-resume
-.. date: 2018-08-09 07:08:24 UTC
+.. date: 2020-08-04 07:08:24 UTC
 .. tags: 
 .. category: 
 .. link: 
@@ -13,13 +13,13 @@
 
  - [Freelance consultant](http://www.blosc.org): May 2014 - Today
 
-    Designing and coding libraries for extremley fast compression ([C-Blosc](https://github.com/Blosc) and for coping with large tabular datasets ([bcolz](https://github.com/Blosc/bcolz)).  Also providing consulting services about compression and big data handling for customers.
+     Designing and coding libraries for extremley fast compression ([C-Blosc](https://github.com/Blosc/c-blosc), [Python-Blosc](https://github.com/Blosc/python-blosc)) and for coping with large tabular datasets ([Caterva](https://github.com/Blosc/caterva), [cat4py](https://github.com/Blosc/cat4py), [bcolz](https://github.com/Blosc/bcolz)).  Also providing consulting services about handling big data for customers.
 
-  - [University of Oslo](http://www.mn.uio.no/geo/english/): Consultant --- September 2016 - June 2018
+  - [University of Oslo](http://www.mn.uio.no/geo/english/): Consultant --- September 2016 - September 2018
 
     Collaborating on performing large scale simulations of air pollutants via [FLEXPART](https://www.flexpart.eu/wiki).
 
-  - [The HDF Group](https://www.hdfgroup.org): Consultant -- August 2016 - September 2017
+  - [The HDF Group](https://www.hdfgroup.org): Consultant -- August 2016 - December 2018
 
     Working on support for filters for HDF5 and other [projects](https://www.hdfgroup.org/2017/08/handling-ingesting-data-streams-500k-messs/).
 
@@ -124,7 +124,11 @@
 
     + [python-blosc](https://github.com/Blosc/python-blosc): High-performance wrappers for Python --- September 2010 - Today
 
-    + [bcolz](https://github.com/Blosc/bcolz): A columnar data container that can be compressed
+    + [bcolz](https://github.com/Blosc/bcolz): A columnar data container that can be compressed --- August 2010 - Today
+
+    + [Caterva](https://github.com/Blosc/caterva): A multidimensional data container that can be compressed --- October 2018 - Today
+
+    + [cat4py](https://github.com/Blosc/cat4py): A Pythonic wrapper for Caterva --- April 2019 - Today
 
   - [PyTables](http://www.pytables.org): Hierarchical datasets in HDF5 --- May 2002 - Today
 
@@ -232,7 +236,7 @@ Mountain trekking, basketball, cinema, literature.
 
 -------
 
-Copyright © 2006-2016 Francesc Alted
+Copyright © 2006-2020 Francesc Alted
 
 Republication without permission is forbidden.
 

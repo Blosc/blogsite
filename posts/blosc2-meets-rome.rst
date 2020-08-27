@@ -18,7 +18,7 @@ On August 7, 2019, AMD released a new generation of its series of EPYC processor
    :scale: 33 %
    :align: center
 
-Such a separation of dies for I/O and computing has quite large consequences in terms of scalability when accessing memory, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous `Breaking Down Memory Walls <https://blosc.org/posts/breaking-memory-walls/>`_.  This essentially boils down to compute an aggregation with a simple loop like:
+Such a separation of dies for I/O and computing has quite `large consequences in terms of scalability when accessing memory <https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm/3>`_, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous `Breaking Down Memory Walls <https://blosc.org/posts/breaking-memory-walls/>`_.  This essentially boils down to compute an aggregation with a simple loop like:
 
 .. code:: c
 
