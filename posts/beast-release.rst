@@ -34,7 +34,7 @@ Let's start by looking at how the new fine tuning affected *compression* perform
 | |lz4-c-before| | |lz4-c-after| |
 +----------------+---------------+
 
-Look at how much compression ratio has improved.  This is mainly a consequence of using compression streams of up to 256 KB, instead of the previous 64 KB --incidentally, this is just for this synthetic data, but it is clear that real data is going to be benefited as well; besides, synthetic data is something that frequently appears in data science (e.g. a uniformly spaced array of values).  One can also see that compression speed has not dropped in general and for high compression levels (i.e. those that activate the large 256 KB streams) the new stream size allow for much better compression ratios.
+Look at how much compression ratio has improved.  This is mainly a consequence of using compression streams of up to 256 KB, instead of the previous 64 KB --incidentally, this is just for this synthetic data, but it is clear that real data is going to be benefited as well; besides, synthetic data is something that frequently appears in data science (e.g. a uniformly spaced array of values).  One can also see that compression speed has not dropped in general which is great considering that we allow for much better compression ratios now.
 
 Regarding decompression we can see a similar pattern:
 
@@ -45,7 +45,7 @@ Regarding decompression we can see a similar pattern:
 | |lz4-d-before| | |lz4-d-after| |
 +----------------+---------------+
 
-So the decompression speed is generally the same, even for data compressed with higher compression ratios.
+So the decompression speed is generally the same, even for data that can be compressed with high compression ratios.
 
 Effects in BloscLZ
 ------------------
