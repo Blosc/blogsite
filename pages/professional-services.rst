@@ -1,8 +1,8 @@
-.. title: Professional Services
+.. title: Professional Services by Francesc Alted
 .. author: Francesc Alted
 .. slug: professional-services
 .. date: 2016-04-08 08:41:20 UTC
-.. tags: blosc,bcolz,sponsorship
+.. tags: blosc,sponsorship
 .. link: 
 .. description: 
 .. type: text
