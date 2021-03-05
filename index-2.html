@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Blosc, an extremely fast, multi-threaded, meta-compressor library">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blosc Main Blog Page  (old posts, page 2) | Blosc Main Blog Page </title>
+<link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
+<link rel="canonical" href="http://blosc.org/index-2.html">
+<link rel="icon" href="blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="blosc-favicon_128x128.png" sizes="128x128">
+<link rel="prev" href="." type="text/html">
+<link rel="next" href="index-1.html" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script>
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="pages/synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+
+    
+
+
+    
+<div class="postindex">
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/new-forward-compat-policy/" class="u-url">New Forward Compatibility Policy</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/francesc-alted/">Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/new-forward-compat-policy/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-02-21T15:32:20Z" itemprop="datePublished" title="2018-02-21 15:32">2018-02-21 15:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="posts/new-forward-compat-policy/#disqus_thread" data-disqus-identifier="cache/posts/new-forward-compat-policy.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<div class="section" id="the-215-issue">
+<h2>The #215 issue</h2>
+<p>Recently, a C-Blosc user filed an <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">issue</a> describing how buffers created with a modern version of C-Blosc (starting from 1.11.0) were not able to be decompressed with an older version of the library (1.7.0), i.e. C-Blosc was effectively breaking the so-called <em>forward-compatibility</em>.  After some investigation, it turned out that the culprit was an optimization that was introduced in 1.11.0 in order to allow better compression ratios and in some cases, better speed too.</p>
+<p>Not all the codecs inside C-Blosc were equally affected; the ones that are experiencing the issue are LZ4, LZ4HC and Zlib (quite luckily, BloscLZ, the default codec, is not bitten by this and should be forward compatible probably til 1.0.0); that is, when a user is using a modern C-Blosc library (&gt; 1.11.0) <em>and</em> is using any of the affected codecs, there are situations (namely when the shuffle or bitshuffle filter are active and the buffers to be compressed are larger than 32 KB) that the result cannot be decompressed with older versions (&lt; 1.11.0).</p>
+</div>
+<div class="section" id="why-this-occurred">
+<h2>Why this occurred?</h2>
+<p>Prior to 1.11.0, Blosc has traditionally split the internal blocks (the different pieces in which the buffer to be compressed is divided) into smaller pieces composed by the <em>same significant</em> bytes that the shuffle filter has put together.  The rational for doing this is that these pieces are, in many cases, hosting values that are either zeros or very close byte values (this is why shuffle works well in general for binary data), and asking the codec to compress these split-blocks separately was quite less effort than compressing a complete block hence providing more speed).</p>
+<p>However, I realized that the so-called High Compression Ration codecs (the HCR codecs inside BLosc are LZ4HC, Zlib and Zstd) generally benefited from this split not happening (the reason is clear: more data means more opportunities for finding more duplicates) and in some cases, the speed was better too.  So, in C-Blosc 1.11.0, I decided that the split was not going to happen <em>by default</em> for HCR codecs (in the last minute I decided to include LZ4 too, for which the experiments showed a noticeable performance bump too, see below). Fortunately, the Zstd codec was introduced (in an out-of-beta way) at the very same 1.11.0 release than this split-block change, so in practice data compressed with the Zstd codec is not affected by this.</p>
+</div>
+<div class="section" id="new-forward-compatibility-enforcement-policy">
+<h2>New forward compatibility enforcement policy</h2>
+<p>Although this change was deliberate and every measure was put in making it <em>backward compatible</em> (i.e. new library versions could read buffers compressed with older versions), I was not really aware of the inconveniences that the change was putting for people creating data files using newer versions of the library and expecting these to be read with older versions.</p>
+<p>So in order to prevent something like this to happen again, I decided that <em>forward compatibility</em> is going to be <em>enforced</em> for future releases of C-Blosc (just for 1.x series; C-Blosc 2.x should be just backward compatible with 1.x).  By the way, this new <em>forward compatibility</em> policy will require a significantly more costly <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/RELEASING.rst#forward-compatibility-testing">release procedure</a>, as different libraries for a specific set of versions have to be manually re-created; if you know a more automatic way to test forward compatibility with old versions of a library, I'd love to hear your comments.</p>
+</div>
+<div class="section" id="measures-taken-and-new-split-mode">
+<h2>Measures taken and new split mode</h2>
+<p>In order to alleviate this forward incompatibility issue, I decided to revert the split change introduced in 1.11.0 in forthcoming 1.14.0 release.  That means that, <em>by default</em>, compressed buffers created with C-Blosc 1.14.0 and on will be forward compatible with all the previous C-Blosc libraries (till 1.3.0, which was when support for different codecs was introduced).  That is, the only buffers that will pose problems to be decompressed with old versions are those created with a C-Blosc library with versions between 1.11.0 and 1.14.0 <em>and</em> using the shuffle/bitshuffle filter in combination with the LZ4, LZ4HC or Zlib codecs.</p>
+<p>For fine-tuning how the block-split would happen or not, I have introduced a new API function, <cite>void blosc_set_splitmode(int mode)</cite>, that allows to select the split mode that is going to be used during the compression.  The split modes that can take the new function are:</p>
+<ul class="simple">
+<li><p>BLOSC_FORWARD_COMPAT_SPLIT</p></li>
+<li><p>BLOSC_AUTO_SPLIT</p></li>
+<li><p>BLOSC_NEVER_SPLIT</p></li>
+<li><p>BLOSC_ALWAYS_SPLIT</p></li>
+</ul>
+<p><cite>BLOSC_FORWARD_COMPAT_SPLIT</cite> offers reasonably forward compatibility (i.e. Zstd still will not split, but this is safe because it was introduced at the same time than the split change in 1.11.0), <cite>BLOSC_AUTO_SPLIT</cite> is for nearly optimal results (based on heuristics; this is the same approach than the one introduced in 1.11.0), <cite>BLOSC_NEVER_SPLIT</cite> and <cite>BLOSC_ALWAYS_SPLIT</cite> are for the user interested in experimenting for getting best compression ratios and/or speed.  If <cite>blosc_set_splitmode()</cite> is not called, the default mode will be BLOSC_FORWARD_COMPAT_SPLIT.</p>
+<p>Also, the user will be able to specify the split mode by using the <cite>BLOSC_SPLITMODE</cite> variable environment.  If that variable exists in the environment, and has any value among:</p>
+<ul class="simple">
+<li><p>'BLOSC_FORWARD_COMPAT_SPLIT'</p></li>
+<li><p>'BLOSC_AUTO_SPLIT'</p></li>
+<li><p>'BLOSC_NEVER_SPLIT'</p></li>
+<li><p>'BLOSC_ALWAYS_SPLIT'</p></li>
+</ul>
+<p>this will select the corresponding split mode.</p>
+</div>
+<div class="section" id="how-this-change-affects-performance">
+<h2>How this change affects performance</h2>
+<p>So as to allow to visualize at a glance the differences in performance that the new release is introducing, let's have a look at the impact on two of the most used codecs inside C-Blosc: LZ4 and LZ4HC.  In the plots below the left side is the pre-1.14.0 version (non-split blocks) and on the right, the forthcoming 1.14.0 (split blocks).  Note that I am using here the typical synthetic benchmarks for C-Blosc, so expect a different outcome for your own data.</p>
+<p>Let's start by LZ4HC, a High Compression Ratio codec (and the one that triggered the initial report of the <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">forward compatibility issue</a>).  When compressing, we have this change in behavior:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4hc-c" src="images/new-forward-compat-policy/suite-lz4hc-pre-1.14-compr.png"></p></td>
+<td><p><img alt="lz4hc-compat-c" src="images/new-forward-compat-policy/suite-lz4hc-compat-compr.png"></p></td>
+</tr></tbody>
+</table>
+<p>For LZ4HC decompression:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4hc-d" src="images/new-forward-compat-policy/suite-lz4hc-pre-1.14-decompr.png"></p></td>
+<td><p><img alt="lz4hc-compat-d" src="images/new-forward-compat-policy/suite-lz4hc-compat-decompr.png"></p></td>
+</tr></tbody>
+</table>
+<p>For LZ4HC one can see that, when using non-split blocks, it can achieve better compression ratios (this is expected, as the block sizes are larger).  Speed-wise the performance is quite similar, with maybe some advantage for split blocks (expected as well).  As the raison d'être for HCR codecs is maximize the compression ration, that was the reason why I did the split change for LZ4HC in 1.11.0.</p>
+<p>And now for LZ4, a codec meant for speed (although it normally gives pretty decent results in compression ratio).  When compressing, here it is the change:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-c" src="images/new-forward-compat-policy/suite-lz4-pre-1.14-compr.png"></p></td>
+<td><p><img alt="lz4-compat-c" src="images/new-forward-compat-policy/suite-lz4-compat-compr.png"></p></td>
+</tr></tbody>
+</table>
+<p>For LZ4 decompression:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-d" src="images/new-forward-compat-policy/suite-lz4-pre-1.14-decompr.png"></p></td>
+<td><p><img alt="lz4-compat-d" src="images/new-forward-compat-policy/suite-lz4-compat-decompr.png"></p></td>
+</tr></tbody>
+</table>
+<p>So, here one can see that when using Blosc pre-1.14 (i.e. non-split blocks) we are getting a bit less compression ratio than for the forthcoming 1.14, which even if counter-intutive, it matches my experience with non-HCR codecs.  Speed-wise the difference is not that much during compression; however, decompression is significantly faster with non-split blocks.  As LZ4 is meant for speed, this was possibly the reason that pushed me towards making non-split blocks by default for LZ4 in addition to HCR codecs in 1.11.0.</p>
+</div>
+<div class="section" id="feedback">
+<h2>Feedback</h2>
+<p>If you have suggestions on this forward compatibility issue or the solution that has been implemented, please shout!</p>
+</div>
+<div class="section" id="appendix-hardware-and-software-used">
+<h2>Appendix: Hardware and software used</h2>
+<p>For reference, here it is the configuration that I used for producing the plots in this blog entry.</p>
+<ul class="simple">
+<li><p>CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)</p></li>
+<li><p>OS:  Ubuntu 16.04</p></li>
+<li><p>Compiler: GCC 6.3.0</p></li>
+<li><p>C-Blosc: 1.13.7 and 1.14.0 (release candidate)</p></li>
+<li><p>LZ4: 1.8.1</p></li>
+</ul>
+</div>
+</div>
+    </div>
+    </article>
+</div>
+
+        <nav class="postindexpager"><ul class="pager">
+<li class="previous">
+                <a href="." rel="prev">Newer posts</a>
+            </li>
+            <li class="next">
+                <a href="index-1.html" rel="next">Older posts</a>
+            </li>
+        </ul></nav><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>
