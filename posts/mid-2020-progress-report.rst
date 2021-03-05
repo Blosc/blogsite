@@ -8,8 +8,6 @@
 .. description:
 .. type: text
 
-Mid 2020 Report for Status of Work on Blosc projects
-====================================================
 
 2020 has been a year where the Blosc projects have received important donations, totalling an amount of $55,000 USD so far.  In the present report we list the most important tasks that have been carried out during the period that goes from January 2020 to August 2020.  Most of these tasks are related to the most fast-paced projects under development: C-Blosc2 and Caterva (including its cat4py wrapper).  Having said that, the Blosc development team has been active in other projects too (C-Blosc, python-blosc), although mainly for maintenance purposes.
 

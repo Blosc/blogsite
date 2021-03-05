@@ -6,8 +6,6 @@
 .. description: 
 .. type: text
 
-Contributed outputs for **Snappy** compressor
----------------------------------------------
 
 * Processor model: Intel Core i5 i5-3380M (2 x 2.9 GHZ) 3 MB Cache
 * Compiler: GCC version 4.8.2-19ubuntu1

@@ -9,9 +9,6 @@
 .. type: text
 
 
-A New Forward Compatibility Policy
-==================================
-
 The #215 issue
 --------------
 

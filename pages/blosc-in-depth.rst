@@ -7,6 +7,7 @@
 .. type: text
 .. .. template: story.tmpl
 
+
 Blosc is a **high performance compressor optimized for binary
 data**. It has been designed to transmit data to the processor cache
 faster than the traditional, non-compressed, direct memory fetch

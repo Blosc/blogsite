@@ -9,9 +9,6 @@
 .. type: text
 
 
-Introducing Sparse Frames
-=========================
-
 Overview
 --------
 

@@ -8,9 +8,6 @@
 .. type: text
 
 
-Compress Me, Stupid!
-====================
-
 How it all started
 ------------------
 

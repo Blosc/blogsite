@@ -9,8 +9,6 @@
 .. description:
 .. type: text
 
-Blosc metalayers, where the user metainformation is stored
-==========================================================
 
 Blosc2 format introduces two different spaces to store user-defined information.
 In this post, we are going to describe what these spaces are and where they are

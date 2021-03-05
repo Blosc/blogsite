@@ -8,8 +8,6 @@
 .. description:
 .. type: text
 
-Fine tuning the BloscLZ codec
-=============================
 
 Yesterday I was reading about the exciting new CPU architectures that both `AMD and Intel are introducing <http://www.anandtech.com/show/11544/intel-skylake-ep-vs-amd-epyc-7000-cpu-battle-of-the-decade>`_ and I was wondering how the improved architecture of the new cores and most specially, its caches, could apply to Blosc.  It turns out that I have access to a server with a relatively modern CPU (Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores) and I decided to have a go at fine-tune the included BloscLZ codec (the one that I know the best) inside C-Blosc2.  Of course, I already spent some time tuning BloscLZ, but that was some years ago and provided the fast pace at which CPUs are evolving I thought that this was excellent timing for another round of fine-tuning, most specially in preparation for users adopting the forthcoming  RYZEN, Threadripper, EPYC and Skylake-SP architectures.
 
