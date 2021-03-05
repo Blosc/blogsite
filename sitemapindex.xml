@@ -6,159 +6,167 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
+  <loc>http://blosc.org/authors/aleix-alcacer-francesc-alted.xml</loc>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://blosc.org/authors/francesc-alted.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/authors/marta-iborra-francesc-alted.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/authors/oscar-guinon.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/authors/valentin-haenel.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/amd.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/arm.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/blosc-performance-tuning.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/blosc-progress-report-grants.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/blosc.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/blosc2-beta.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://blosc.org/categories/blosc2-metalayers.xml</loc>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/blosc2-sparse-frame-format.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/blosc2.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/blosclz.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/caches.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/cat_posts.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/compilers.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/donation-blosc2-caterva.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/filters.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/forward-compatibility-policy-splitmode.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/google.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/hdf5.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/history.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/lizard.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/lz4.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/memory-wall.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/neon.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/optimization.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/pgo.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/prize.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/pytables.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/rome.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/sponsorhip.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/tuning.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/wheels.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/windows.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/zstandard.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/zstd.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/rss.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/sitemap.xml</loc>
-  <lastmod>2021-03-05T12:15:00Z</lastmod>
+  <lastmod>2021-03-05T13:22:00Z</lastmod>
  </sitemap>
 </sitemapindex>

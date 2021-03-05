@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts by Aleix Alcacer, Francesc Alted)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/authors/aleix-alcacer-francesc-alted.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 13:22:09 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Blosc metalayers, where the user metainformation is stored</title><link>http://blosc.org/posts/blosc-metalayers/</link><dc:creator>Aleix Alcacer, Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;The C-Blosc2 library has two different spaces to store user-defined information.
+In this post, we are going to describe what these spaces are and where they are
+stored inside a Blosc2 frame (a persistent super-chunk).&lt;/p&gt;
+&lt;p&gt;As its name suggests, a metalayer is a space that allows users to store custom information.
+For example, &lt;a class="reference external" href="https://github.com/Blosc/Caterva"&gt;Caterva&lt;/a&gt;, a project based on C-Blosc2 that handles
+compressed and chunked arrays, uses these metalayers to store the dimensions and
+the shape, chunkshape and blockshape of the arrays.&lt;/p&gt;
+&lt;div class="section" id="fixed-length-metalayers"&gt;
+&lt;h2&gt;Fixed-length metalayers&lt;/h2&gt;
+&lt;p&gt;The first kind of metalayers in Blosc2 are the fixed-length metalayers.
+These metalayers are stored in the header of the frame.
+This decision allows adding chunks to the frame without the need to
+rewrite the whole meta information and data coming after it.&lt;/p&gt;
+&lt;p&gt;But this implementation has some drawbacks. The most important one is that
+fixed-length metalayers cannot be resized.  Furthermore, once the first chunk of data is added
+to the super-chunk, no more fixed-length metalayers can be added either.&lt;/p&gt;
+&lt;p&gt;Let's see with an example the reason for these restrictions. Supose that we
+have a frame that stores 10 GB of data with a metalayer containing a "cat".
+If we update the meta information with a "dog" we can do that because they
+have exactly the same size.&lt;/p&gt;
+&lt;p&gt;However, if we were to update the meta information with a "giraffe", the
+metalayer would need to be resized and therefore we would have to rewrite
+the 10GB of data plus the trailer.
+This would obviously be very inefficient and hence, not supported.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="/images/metalayers/metalayers.png" src="http://blosc.org/images/metalayers/metalayers.png"&gt;
+&lt;p class="caption"&gt;Data that would need to be rewritten are ploted in red.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="variable-length-metalayers"&gt;
+&lt;h2&gt;Variable-length metalayers&lt;/h2&gt;
+&lt;p&gt;To fix the above issue, we have introduced variable-length metalayers.
+Unlike fixed-length metalayers, these are stored in the trailer
+section of the frame.&lt;/p&gt;
+&lt;p&gt;As their name suggests, these metalayers can be resized. Blosc can do that because,
+whenever the metalayers content are modified, Blosc rewrites the trailer completely,
+using more space if necessary.  Furthermore, and since these metalayers are stored in the trailer,
+they will also be rewritten each time a chunk is added.&lt;/p&gt;
+&lt;p&gt;Another feature of variable-length metalayers is that their content is
+compressed by default (in contrast to fixed-length metalayers).
+This will minimize the size of the trailer, a very important feature
+because since the trailer is rewritten every time new data is added, we
+want to keep it as small as possible so as to optimize data written.&lt;/p&gt;
+&lt;p&gt;Let's continue with the previous example, but storing the meta
+information in a variable-length metalayer now:&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img alt="/images/metalayers/metalayers-vl.png" src="http://blosc.org/images/metalayers/metalayers-vl.png"&gt;
+&lt;/div&gt;
+&lt;p&gt;In this case the trailer is rewritten each time that we update the metalayer,
+but it is a much more efficient operation than rewriting all the data (as a fixed-length metalayer would require).
+So the variable-length metalayers complement the fixed-length metalayers by bringing different capabilities on the table.
+Depending on her needs, it is up to the user to choose one or another metalayer storage.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="fixed-length-vs-variable-length-metalayers-comparsion"&gt;
+&lt;h2&gt;Fixed-length vs variable-length metalayers comparsion&lt;/h2&gt;
+&lt;p&gt;To summarize, and to better see what kind of metalayer is more suitable
+for each situation, the following table contains a comparison between fixed-length
+metalayers and variable-length metalayers:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col style="width: 42%"&gt;
+&lt;col style="width: 27%"&gt;
+&lt;col style="width: 30%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;Fixed-length metalayers&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;Variable-length metalayers&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;p&gt;Where are stored?&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;Header&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;Trailer&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;p&gt;Can be resized?&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;No&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;Yes&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;p&gt;Can be added after adding chunks?&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;No&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;Yes&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;p&gt;Are they rewritten when adding chunks?&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;No&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;Yes&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class="section" id="metalayers-api"&gt;
+&lt;h2&gt;Metalayers API&lt;/h2&gt;
+&lt;p&gt;Currently, C-Blosc2 has the following functions implemented:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;p&gt;&lt;code class="docutils literal"&gt;blosc2_meta_add()&lt;/code&gt; / &lt;code class="docutils literal"&gt;blosc2_vlmeta_add()&lt;/code&gt;: Add a new metalayer.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code class="docutils literal"&gt;blosc2_meta_get()&lt;/code&gt; / &lt;code class="docutils literal"&gt;blosc2_vlmeta_get()&lt;/code&gt;: Get the metalayer content.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code class="docutils literal"&gt;blosc2_meta_has()&lt;/code&gt; / &lt;code class="docutils literal"&gt;blosc2_vlmeta_has()&lt;/code&gt;: Check if a metalayer exists or not.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code class="docutils literal"&gt;blosc2_meta_update()&lt;/code&gt; / &lt;code class="docutils literal"&gt;blosc2_vlmeta_update()&lt;/code&gt;: Update the metalayer content.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="section" id="conclusions"&gt;
+&lt;h2&gt;Conclusions&lt;/h2&gt;
+&lt;p&gt;As we have seen, Blosc2 supports two different spaces where users can store
+their meta information.  The user can choose one or another depending on her needs.&lt;/p&gt;
+&lt;p&gt;On the one hand, the fixed-length metalayers are meant to store user meta
+information that does not change size over time.
+They are stored in the header and can be updated without having to rewrite any
+other part of the frame, but they can no longer be added once the first chunk
+of data is added.&lt;/p&gt;
+&lt;p&gt;On the other hand, for users storing meta information that is going to change in size over time,
+they can store their meta information into variable-length metalayers.  These
+are stored in the trailer section of a frame and are more flexible
+than its fixed-length counterparts.  However, each time that a metalayer content is
+updated, the whole trailer has to be rewritten.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>blosc2 metalayers</category><guid>http://blosc.org/posts/blosc-metalayers/</guid><pubDate>Fri, 05 Mar 2021 07:32:20 GMT</pubDate></item></channel></rss>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blosc metalayers, where the user metainformation is stored | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/blosc-metalayers/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Aleix Alcacer, Francesc Alted">
+<link rel="prev" href="../introducing-sparse-frames/" title="Introducing Sparse Frames" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="Blosc metalayers, where the user metainformation is stored">
+<meta property="og:url" content="http://blosc.org/posts/blosc-metalayers/">
+<meta property="og:description" content="The C-Blosc2 library has two different spaces to store user-defined information.
+In this post, we are going to describe what these spaces are and where they are
+stored inside a Blosc2 frame (a persist">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-03-05T07:32:20Z">
+<meta property="article:tag" content="blosc2 metalayers">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="../../pages/synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Blosc metalayers, where the user metainformation is stored</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/aleix-alcacer-francesc-alted/">Aleix Alcacer, Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2021-03-05T07:32:20Z" itemprop="datePublished" title="2021-03-05 07:32">2021-03-05 07:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/metalayers.html">Comments</a>
+
+
+            
+
+        </p>
+</div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>The C-Blosc2 library has two different spaces to store user-defined information.
+In this post, we are going to describe what these spaces are and where they are
+stored inside a Blosc2 frame (a persistent super-chunk).</p>
+<p>As its name suggests, a metalayer is a space that allows users to store custom information.
+For example, <a class="reference external" href="https://github.com/Blosc/Caterva">Caterva</a>, a project based on C-Blosc2 that handles
+compressed and chunked arrays, uses these metalayers to store the dimensions and
+the shape, chunkshape and blockshape of the arrays.</p>
+<div class="section" id="fixed-length-metalayers">
+<h2>Fixed-length metalayers</h2>
+<p>The first kind of metalayers in Blosc2 are the fixed-length metalayers.
+These metalayers are stored in the header of the frame.
+This decision allows adding chunks to the frame without the need to
+rewrite the whole meta information and data coming after it.</p>
+<p>But this implementation has some drawbacks. The most important one is that
+fixed-length metalayers cannot be resized.  Furthermore, once the first chunk of data is added
+to the super-chunk, no more fixed-length metalayers can be added either.</p>
+<p>Let's see with an example the reason for these restrictions. Supose that we
+have a frame that stores 10 GB of data with a metalayer containing a "cat".
+If we update the meta information with a "dog" we can do that because they
+have exactly the same size.</p>
+<p>However, if we were to update the meta information with a "giraffe", the
+metalayer would need to be resized and therefore we would have to rewrite
+the 10GB of data plus the trailer.
+This would obviously be very inefficient and hence, not supported.</p>
+<div class="figure">
+<img alt="/images/metalayers/metalayers.png" src="../../images/metalayers/metalayers.png"><p class="caption">Data that would need to be rewritten are ploted in red.</p>
+</div>
+</div>
+<div class="section" id="variable-length-metalayers">
+<h2>Variable-length metalayers</h2>
+<p>To fix the above issue, we have introduced variable-length metalayers.
+Unlike fixed-length metalayers, these are stored in the trailer
+section of the frame.</p>
+<p>As their name suggests, these metalayers can be resized. Blosc can do that because,
+whenever the metalayers content are modified, Blosc rewrites the trailer completely,
+using more space if necessary.  Furthermore, and since these metalayers are stored in the trailer,
+they will also be rewritten each time a chunk is added.</p>
+<p>Another feature of variable-length metalayers is that their content is
+compressed by default (in contrast to fixed-length metalayers).
+This will minimize the size of the trailer, a very important feature
+because since the trailer is rewritten every time new data is added, we
+want to keep it as small as possible so as to optimize data written.</p>
+<p>Let's continue with the previous example, but storing the meta
+information in a variable-length metalayer now:</p>
+<div class="figure">
+<img alt="/images/metalayers/metalayers-vl.png" src="../../images/metalayers/metalayers-vl.png">
+</div>
+<p>In this case the trailer is rewritten each time that we update the metalayer,
+but it is a much more efficient operation than rewriting all the data (as a fixed-length metalayer would require).
+So the variable-length metalayers complement the fixed-length metalayers by bringing different capabilities on the table.
+Depending on her needs, it is up to the user to choose one or another metalayer storage.</p>
+</div>
+<div class="section" id="fixed-length-vs-variable-length-metalayers-comparsion">
+<h2>Fixed-length vs variable-length metalayers comparsion</h2>
+<p>To summarize, and to better see what kind of metalayer is more suitable
+for each situation, the following table contains a comparison between fixed-length
+metalayers and variable-length metalayers:</p>
+<table>
+<colgroup>
+<col style="width: 42%">
+<col style="width: 27%">
+<col style="width: 30%">
+</colgroup>
+<tbody>
+<tr>
+<td></td>
+<td><p>Fixed-length metalayers</p></td>
+<td><p>Variable-length metalayers</p></td>
+</tr>
+<tr>
+<td><p>Where are stored?</p></td>
+<td><p>Header</p></td>
+<td><p>Trailer</p></td>
+</tr>
+<tr>
+<td><p>Can be resized?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr>
+<td><p>Can be added after adding chunks?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr>
+<td><p>Are they rewritten when adding chunks?</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="metalayers-api">
+<h2>Metalayers API</h2>
+<p>Currently, C-Blosc2 has the following functions implemented:</p>
+<ul class="simple">
+<li><p><code class="docutils literal">blosc2_meta_add()</code> / <code class="docutils literal">blosc2_vlmeta_add()</code>: Add a new metalayer.</p></li>
+<li><p><code class="docutils literal">blosc2_meta_get()</code> / <code class="docutils literal">blosc2_vlmeta_get()</code>: Get the metalayer content.</p></li>
+<li><p><code class="docutils literal">blosc2_meta_has()</code> / <code class="docutils literal">blosc2_vlmeta_has()</code>: Check if a metalayer exists or not.</p></li>
+<li><p><code class="docutils literal">blosc2_meta_update()</code> / <code class="docutils literal">blosc2_vlmeta_update()</code>: Update the metalayer content.</p></li>
+</ul>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions</h2>
+<p>As we have seen, Blosc2 supports two different spaces where users can store
+their meta information.  The user can choose one or another depending on her needs.</p>
+<p>On the one hand, the fixed-length metalayers are meant to store user meta
+information that does not change size over time.
+They are stored in the header and can be updated without having to rewrite any
+other part of the frame, but they can no longer be added once the first chunk
+of data is added.</p>
+<p>On the other hand, for users storing meta information that is going to change in size over time,
+they can store their meta information into variable-length metalayers.  These
+are stored in the trailer section of a frame and are more flexible
+than its fixed-length counterparts.  However, each time that a metalayer content is
+updated, the whole trailer has to be rewritten.</p>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosc2-metalayers/" rel="tag">blosc2 metalayers</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../introducing-sparse-frames/" rel="prev" title="Introducing Sparse Frames">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/blosc-metalayers/",
+        disqus_title="Blosc metalayers, where the user metainformation is stored",
+        disqus_identifier="cache/posts/metalayers.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>
