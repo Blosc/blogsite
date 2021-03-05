@@ -858,3 +858,17 @@ article.post-micro {
     }
 }
 
+.container {
+    margin: 0 auto;
+    max-width: 90rem;
+    width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+body {
+    font-size: 16px;
+}
+
+
+
