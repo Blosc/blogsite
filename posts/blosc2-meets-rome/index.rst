@@ -9,9 +9,6 @@
 .. type: text
 
 
-Blosc2 Meets Rome
-=================
-
 On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new `Zen 2 <https://en.wikipedia.org/wiki/Zen_2>`_ micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:
 
 .. image:: /images/blosc2-meets-rome/amd-rome-arch-multi-die.png

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about ARM)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/arm.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:06:21 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Is ARM Hungry Enough to Eat Intel's Favorite Pie?</title><link>http://blosc.org/posts/arm-memory-walls-followup/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div class="section" id="is-arm-hungry-enough-to-eat-intel-s-favorite-pie"&gt;
-&lt;h2&gt;Is ARM Hungry Enough to Eat Intel's Favorite Pie?&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: This entry is a follow-up of the &lt;a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/"&gt;Breaking Down Memory Walls&lt;/a&gt; blog.  Please make sure that you have read it if you want to fully understand all the benchmarks performed here.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about ARM)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/arm.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:15:28 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Is ARM Hungry Enough to Eat Intel's Favorite Pie?</title><link>http://blosc.org/posts/arm-memory-walls-followup/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: This entry is a follow-up of the &lt;a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/"&gt;Breaking Down Memory Walls&lt;/a&gt; blog.  Please make sure that you have read it if you want to fully understand all the benchmarks performed here.&lt;/p&gt;
 &lt;p&gt;At the beginning of the 1990s the computing world was mainly using RISC (Reduced Instruction Set Computer) architectures, namely SPARC, Alpha, Power and MIPS CPUs for performing serious calculations and Intel CPUs were seen as something that was appropriate just to run essentially personal applications on PCs, but almost nobody was thinking about them as a serious contender for server environments.  But Intel had an argument that almost nobody was ready to recognize how important it could become; with its dominance of the PC market it quickly ranked to be the largest CPU maker in the world and, with such an enormous revenue, Intel played its cards well and, by the beginning of 2000s, they were able to make of its CISC architecture (Complex Instruction Set Computer) the one with the best compute/price ratio, clearly beating the RISC offerings at that time.  That amazing achievement shut the mouths of CISC critics (to the point that nowadays almost everybody recognizes that performance has very little to do with using RISC or CISC) and cleared the path for Intel to dominate not only the PC world, but also the world of server computing for the next 20 years.&lt;/p&gt;
 &lt;p&gt;Fast forward to the beginning of 2010s, with Intel clearly dominating the market of CPUs for servers.  However, at the same time something potentially disruptive happened: the market for mobile and embedded systems exploded making &lt;a class="reference external" href="https://cacm.acm.org/magazines/2011/5/107684-an-interview-with-steve-furber/fulltext"&gt;the ARM architecture the most widely used architecture in this area&lt;/a&gt;.  By 2017, with over 100 billion ARM processors produced, ARM was already the most widely used architecture in the world.  Now, the smart reader will have noted here a clear parallelism between the situation of Intel at the end of 1990s and ARM at the end of 2010s: both companies were responsible of the design of the most used CPUs in the world.  There was an important difference though: while Intel was able to implement its own designs, ARM was leaving the implementation job to third party vendors.  Of course, this fact will have consequences on the way ARM will be competing with Intel (see below).&lt;/p&gt;
 &lt;div class="section" id="arm-plans-for-improving-cpu-performance"&gt;
-&lt;h3&gt;ARM Plans for Improving CPU Performance&lt;/h3&gt;
+&lt;h2&gt;ARM Plans for Improving CPU Performance&lt;/h2&gt;
 &lt;p&gt;So with ARM CPUs dominating the world of mobile and embedded, the question is whether ARM would be interested in having a stab at the client market (laptops and PC desktops) and, by extension, to the server computing market during the 2020s decade or they would renounce to that because they comfortable enough with the current situation?  In 2018 ARM provided an important hint to answer this question: they really want to push hard for the client market with the &lt;a class="reference external" href="https://www.anandtech.com/show/13226/arm-unveils-client-cpu-performance-roadmap"&gt;introduction of the Cortex A76 CPU&lt;/a&gt; which aspires to redefine the capability of ARM to compete with Intel at its own game:&lt;/p&gt;
 &lt;img alt="/images/arm-memory-walls-followup/arm-compute-plans.png" class="align-center" src="http://blosc.org/images/arm-memory-walls-followup/arm-compute-plans.png"&gt;
 &lt;p&gt;On the other hand, the fact that ARM is not just providing licenses to use its IP cores, but also the possibility to buy an architectural licence for vendors to design their own CPU cores using the ARM instruction sets makes possible that other players like Apple, AppliedMicro, Broadcom, Cavium (now Marvell), Nvidia, Qualcomm, and Samsung Electronics can produce ARM CPUs that can be adapted to be used in different scenarios.  One example that is interesting for this discussion is Marvell who, with its ThunderX2 CPU, is already entering into the computing servers market --actually, a new super-computer with more than 100,000 ThunderX2 cores has recently entered into the &lt;a class="reference external" href="https://t.co/LM2wXQrXm8"&gt;TOP500 ranking&lt;/a&gt;; this is the first time that an ARM-based computer enters that list, overwhelmingly dominated by Intel architectures for almost two decades now.&lt;/p&gt;
 &lt;p&gt;In the next sections we are trying to bring more hints (experimentally tested) on whether ARM (and its licensees) are fulfilling their promise, or their claims were just bare marketing.  For checking this, I was able to use two recent (2018) implementations of the ARMv8-A architecture, one meant for the client market and the other for servers, replicated the benchmarks of my previous &lt;a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/"&gt;Breaking Down Memory Walls&lt;/a&gt; blog entry and extracted some interesting results.  Keep reading.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="the-kirin-980-cpu"&gt;
-&lt;h3&gt;The Kirin 980 CPU&lt;/h3&gt;
+&lt;h2&gt;The Kirin 980 CPU&lt;/h2&gt;
 &lt;p&gt;Here we are going to analyze &lt;a class="reference external" href="https://www.anandtech.com/show/13503/the-mate-20-mate-20-pro-review"&gt;Huawei's Kirin 980 CPU&lt;/a&gt; , a SoC (System On a Chip) that uses the ARM A76 core internally.  This is a fine example of an internal IP core design of ARM that is licensed to be used in a CPU chipset (or SoC) by another vendor (Huawei in this case).  The Kirin 980 wears 4 A76 cores plus 4 A55 cores, but the more powerful ones are the A76 (the A55 are more headed to do light tasks with very little energy consumption, which is critical for phones).  The A76 core is designed to be implemented using a 7nm technology (as it is the case for the Kirin 980, the second SoC in the world to use a 7 nm node, after Apple A12), and supports ARM's DynamIQ technology which allows scalability to target the specific requirements of a SoC.  In our case the Kirin 980 is running in a phone (Humawei's Mate 20), and in this scenario the power dissipation (TDP) cannot exceed the 4 W figure, so DynamIQ should try to be very conservative here and avoid putting too many cores active at the same time.&lt;/p&gt;
 &lt;p&gt;ARM is saying that they designed the &lt;a class="reference external" href="https://arstechnica.com/gadgets/2018/06/arm-promises-laptop-level-performance-in-2019/"&gt;A76 to be a competitor of the Intel Skylake Core i5&lt;/a&gt;, so this is what we are going to check here.  For this, we are going to compare a Kirin 980 in a Huawei Mate 20 phone against a Core i5 included in a MacBook Pro (late 2016).  Here it is the side-by-side performance for the precipitation dataset that I used in the &lt;a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/"&gt;previous blog&lt;/a&gt;:&lt;/p&gt;
 &lt;table&gt;
@@ -31,7 +29,7 @@
 &lt;p&gt;I believe that these facts are really a good testimony of how serious ARM was on their claim that they were going to catch Intel in the performance side of the things for client devices, and probably with an important advantage in consuming less energy too.  The fact that ARM CPUs are more energy efficient should not be surprising given the experience of ARM in that area for decades.  But another reason for that is the important reduction in the manufacturing technology that ARM has achieved on their new designs (7nm node for ARM vs 14nm node for Intel); undoubtedly, ARM advantage in power consumption is going to be important for their world-domination plans.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="the-thunderx2-cpu"&gt;
-&lt;h3&gt;The ThunderX2 CPU&lt;/h3&gt;
+&lt;h2&gt;The ThunderX2 CPU&lt;/h2&gt;
 &lt;p&gt;The second way in which ARM sells licenses is the so-called &lt;em&gt;architectural license&lt;/em&gt; allowing companies to design their own CPU cores using the ARM instruction sets.  Cavium (now bought by Marvell) was one of these companies, and they produced different CPU designs that culminated with Vulcan, the micro-architecture that powers the ThunderX2 CPU, which was made available in May 2018.  &lt;a class="reference external" href="https://en.wikichip.org/wiki/cavium/microarchitectures/vulcan"&gt;Vulcan is a 16 nm high-performance 64-bit ARM micro-architecture&lt;/a&gt; that is specifically meant to compete in compute/data server facilities (think of it as a  a Xeon-class ARM-based server microprocessor).  ThunderX2 can pack up to 32 Vulcan cores, and as every Vulcan core supports up to 4 threads, the whole CPU can run up to 128 threads.  With its capability to handle so many threads simultaneously, I expected that its raw compute power should be nothing to sneeze at.&lt;/p&gt;
 &lt;p&gt;So as to check how powerful a ThunderX2 can be, we are going to compare &lt;a class="reference external" href="https://en.wikichip.org/wiki/cavium/thunderx2/cn9975"&gt;ThunderX2 CN9975&lt;/a&gt; (actually a box with 2 instances of it, each containing 28 cores) against one of its natural competitor, the Intel Scalable Gold 5120 (actually a box with 2 instances of it, each containing 14 cores):&lt;/p&gt;
 &lt;table&gt;
@@ -50,17 +48,17 @@
 &lt;p&gt;When we look at power consumption, although I was not able to find the exact figure for the ThunderX2 CN9975 model that has been used in the benchmarks above, it is probably in the range of 150 W per CPU, which is quite larger than its Intel Scalable 5120 counterpart which is around 100 W per CPU.  That means that Intel is using quite far less power in their CPU, giving them a clear advantage in server computing at this time.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="final-thoughts"&gt;
-&lt;h3&gt;Final Thoughts&lt;/h3&gt;
+&lt;h2&gt;Final Thoughts&lt;/h2&gt;
 &lt;p&gt;From these results, it is quite evident that ARM is making large strides in catching Intel performance, specially in the client side of the things (laptops, and PC desktops), with an important reduction in power consumption, which is specially important for laptops.  Keep these facts in mind when you are going to buy your next laptop or desktop PC and do not blindly assume that Intel is the only reasonable option anymore ;-)&lt;/p&gt;
 &lt;p&gt;On the server side, Intel still holds an important advantage though, and it will not be easy to take the performance crown away from them.  However, the fact that ARM is allowing different vendors to produce their own implementations means that the competition can be more specific and each vendor is free to tackle different aspects of server computing.  So it is not difficult to realize that in the next few years we are going to see new ARM exemplars that would be meant not only for crunching numbers, but that will also specialize in different tasks, like storing and serving big data, routing data or performing artificial intelligence, to just mention a few cases (for example, &lt;a class="reference external" href="https://www.marvell.com/documents/8ru3g25b5f77f5pbjwl9/"&gt;Marvell is trying to position the ThunderX2 more specifically for the data server scenario&lt;/a&gt;) that are going to put Intel architectures in difficulties to maintain its current dominance in the data centers.&lt;/p&gt;
 &lt;p&gt;Finally, we should not forget the fact that software developers (including myself) have been building high performance libraries using exclusively Intel boxes for &lt;em&gt;decades&lt;/em&gt;, so making them extremely efficient for Intel architectures.  If, as we have seen here, ARM architectures are going to be an alternative in the performance client and server scenarios, then software developers will have to increasingly adopt ARM boxes as part of their tooling so as to continue being competitive in a world that is quite likely it won't necessarily be ruled by Intel anymore.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="acknowledgements"&gt;
-&lt;h3&gt;Acknowledgements&lt;/h3&gt;
+&lt;h2&gt;Acknowledgements&lt;/h2&gt;
 &lt;p&gt;I would like to thank &lt;a class="reference external" href="https://www.packet.com/"&gt;Packet&lt;/a&gt;, a provider of bare metal servers in the cloud (among other things) for allowing me not only to use their machines for free, but also helping me in different questions about the configuration of the machines.  In particular, Ed Vielmetti has been instrumental in providing me early access to a ThunderX2 server, and making sure that everything was stable enough for the benchmark needs.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="appendix-software-used"&gt;
-&lt;h3&gt;Appendix: Software used&lt;/h3&gt;
+&lt;h2&gt;Appendix: Software used&lt;/h2&gt;
 &lt;p&gt;For reference, here it is the software that has been used for this blog entry.&lt;/p&gt;
 &lt;p&gt;For the Kirin 980:&lt;/p&gt;
 &lt;ul class="simple"&gt;
@@ -74,10 +72,7 @@
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;Compiler&lt;/strong&gt;: GCC 7.3.0&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;C-Blosc2&lt;/strong&gt;: 2.0.0a6.dev (2018-05-18)&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description><category>ARM</category><category>memory wall</category><category>tuning</category><guid>http://blosc.org/posts/arm-memory-walls-followup/</guid><pubDate>Mon, 07 Jan 2019 10:12:20 GMT</pubDate></item><item><title>ARM is becoming a first-class citizen for Blosc</title><link>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div class="section" id="arm-is-becoming-a-first-class-citizen-for-blosc"&gt;
-&lt;h2&gt;ARM is becoming a first-class citizen for Blosc&lt;/h2&gt;
-&lt;p&gt;We are happy to announce that Blosc is receiving official support for
+&lt;/div&gt;&lt;/div&gt;</description><category>ARM</category><category>memory wall</category><category>tuning</category><guid>http://blosc.org/posts/arm-memory-walls-followup/</guid><pubDate>Mon, 07 Jan 2019 10:12:20 GMT</pubDate></item><item><title>ARM is becoming a first-class citizen for Blosc</title><link>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;We are happy to announce that Blosc is receiving official support for
 ARM processors.  Blosc has always been meant to support all platforms
 where a C89 compliant C compiler can be found, but until now the only
 hardware platforms that we were testing on a regular basis has been
@@ -87,7 +82,7 @@ candidate to become a fully supported platform besides Intel/AMD.  You
 may be wondering that we could have chosen any other architecture like
 MIPS or PowerPC, so why ARM?&lt;/p&gt;
 &lt;div class="section" id="arm-is-eating-the-world"&gt;
-&lt;h3&gt;ARM is eating the world&lt;/h3&gt;
+&lt;h2&gt;ARM is eating the world&lt;/h2&gt;
 &lt;p&gt;ARM is an increasingly popular architecture and we can find
 implementation exemplars of it not only in the phones, tablets or
 ChromeBooks, but also acting as embedded processors, as well as in
@@ -116,7 +111,7 @@ specially where compression ratio equals 1 (i.e. no compression is
 active, so Blosc is only doing a &lt;em&gt;memory copy&lt;/em&gt; in this case).&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="blosc-is-getting-ready-for-arm"&gt;
-&lt;h3&gt;Blosc is getting ready for ARM&lt;/h3&gt;
+&lt;h2&gt;Blosc is getting ready for ARM&lt;/h2&gt;
 &lt;p&gt;So ARM is cool indeed, but what we are doing for making it a
 first-class citizen?  For starters, we have created a new &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2"&gt;C-Blosc2&lt;/a&gt; repository that is going to act
 as a playground for some time and where we are going to experiment
@@ -141,7 +136,7 @@ time to do a preliminary version of the bitshuffle filter as well (not
 completely functional yet, but as time allows, he plans to finish that).&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="some-hints-on-the-measured-increase-in-performance"&gt;
-&lt;h3&gt;Some hints on the measured increase in performance&lt;/h3&gt;
+&lt;h2&gt;Some hints on the measured increase in performance&lt;/h2&gt;
 &lt;p&gt;So you might be asking, how fast can perform Blosc on an ARM with
 NEON?  Well, let's start first by showing how fast it works on a
 Raspberry Pi 2 (Broadcom BCM2836 ARMv7 Quad Core Processor) having
@@ -206,7 +201,7 @@ on how computations will be made in the short future (as the &lt;a class="refere
 Blanc initiative is trying to demonstrate&lt;/a&gt;).&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="what-to-expect-from-arm-blosc-in-the-forthcoming-months"&gt;
-&lt;h3&gt;What to expect from ARM/Blosc in the forthcoming months&lt;/h3&gt;
+&lt;h2&gt;What to expect from ARM/Blosc in the forthcoming months&lt;/h2&gt;
 &lt;p&gt;This work on supporting ARM platforms is just the beginning.  As ARM
 processors get more spread, and most specially, &lt;a class="reference external" href="http://www.arm.com/products/processors/cortex-a/cortex-a72-processor.php"&gt;faster&lt;/a&gt;,
 we will need to refine the support for ARM in Blosc.&lt;/p&gt;
@@ -218,5 +213,4 @@ truly first-citizen for the Blosc ecosystem.&lt;/p&gt;
 we want to learn from you :) If you want to contribute code to the
 project, your pull requests are very welcome too!  If you like what we
 are doing and want to see more of this, you can also &lt;a class="reference external" href="http://blosc.org/blog/seeking-sponsoship.html"&gt;sponsor us&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description><category>ARM</category><category>Blosc2</category><category>NEON</category><guid>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</guid><pubDate>Wed, 09 Sep 2015 11:32:20 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;&lt;/div&gt;</description><category>ARM</category><category>Blosc2</category><category>NEON</category><guid>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</guid><pubDate>Wed, 09 Sep 2015 11:32:20 GMT</pubDate></item></channel></rss>

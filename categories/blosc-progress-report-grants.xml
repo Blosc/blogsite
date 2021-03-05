@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about blosc progress report grants)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/blosc-progress-report-grants.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:06:22 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Mid 2020 Progress Report</title><link>http://blosc.org/posts/mid-2020-progress-report/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div class="section" id="mid-2020-report-for-status-of-work-on-blosc-projects"&gt;
-&lt;h2&gt;Mid 2020 Report for Status of Work on Blosc projects&lt;/h2&gt;
-&lt;p&gt;2020 has been a year where the Blosc projects have received important donations, totalling an amount of $55,000 USD so far.  In the present report we list the most important tasks that have been carried out during the period that goes from January 2020 to August 2020.  Most of these tasks are related to the most fast-paced projects under development: C-Blosc2 and Caterva (including its cat4py wrapper).  Having said that, the Blosc development team has been active in other projects too (C-Blosc, python-blosc), although mainly for maintenance purposes.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about blosc progress report grants)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/blosc-progress-report-grants.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:15:28 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Mid 2020 Progress Report</title><link>http://blosc.org/posts/mid-2020-progress-report/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;2020 has been a year where the Blosc projects have received important donations, totalling an amount of $55,000 USD so far.  In the present report we list the most important tasks that have been carried out during the period that goes from January 2020 to August 2020.  Most of these tasks are related to the most fast-paced projects under development: C-Blosc2 and Caterva (including its cat4py wrapper).  Having said that, the Blosc development team has been active in other projects too (C-Blosc, python-blosc), although mainly for maintenance purposes.&lt;/p&gt;
 &lt;p&gt;Besides, we also list the roadmap for the C-Blosc2, Caterva and cat4py projects that we plan to tackle during the next few months.&lt;/p&gt;
 &lt;div class="section" id="c-blosc2"&gt;
-&lt;h3&gt;C-Blosc2&lt;/h3&gt;
+&lt;h2&gt;C-Blosc2&lt;/h2&gt;
 &lt;p&gt;C-Blosc2 adds new data containers, called superchunks, that are essentially a set of compressed chunks in memory that can be accessed randomly and enlarged during its lifetime.  Also, a new frame serialization layer has been added, so that superchunks can be persisted on disk, while keeping the same properties of superchunks in memory.  Finally, a metalayer capability allow for higher level containers to be created on top of superchunks/frames.&lt;/p&gt;
 &lt;div class="section" id="highligths"&gt;
-&lt;h4&gt;Highligths&lt;/h4&gt;
+&lt;h3&gt;Highligths&lt;/h3&gt;
 &lt;ul class="simple"&gt;
 &lt;li&gt;&lt;p&gt;Maskout functionality.  This allows for selectively choose the blocks of a chunk that are going to be decompressed.  This paves the road for faster multidimensional slicing in Caterva (see below in the Caterva section).&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Prefilters introduced and declared stable.  Prefilters allow for the user to pass C functions for performing arbitrary computations on a chunk prior to the filter/codec pipeline.  In addition, the C function can even have access to more chunks than just the one that is being compressed.  This opens the door to a way to operate with different super-chunks and produce a new one very efficiently. See &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/tests/test_prefilter.c"&gt;https://github.com/Blosc/c-blosc2/blob/master/tests/test_prefilter.c&lt;/a&gt; for some examples of use.&lt;/p&gt;&lt;/li&gt;
@@ -17,7 +15,7 @@
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;div class="section" id="roadmap-for-c-blosc2"&gt;
-&lt;h4&gt;Roadmap for C-Blosc2&lt;/h4&gt;
+&lt;h3&gt;Roadmap for C-Blosc2&lt;/h3&gt;
 &lt;p&gt;During the next few months, we plan to tackle the next tasks:&lt;/p&gt;
 &lt;ul class="simple"&gt;
 &lt;li&gt;&lt;p&gt;Postfilters.  The same way that prefilters allows to do user-defined computations prior to the compression pipeline, the postfilter would allow to do the same &lt;em&gt;after&lt;/em&gt; the decompression pipeline.  This could be useful in e.g. creating superchunks out of functions taking simple data as input (for example, a [min, max] range of values).&lt;/p&gt;&lt;/li&gt;
@@ -29,10 +27,10 @@
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="section" id="caterva-cat4py"&gt;
-&lt;h3&gt;Caterva/cat4py&lt;/h3&gt;
+&lt;h2&gt;Caterva/cat4py&lt;/h2&gt;
 &lt;p&gt;Caterva is a multidimensional container on top of C-Blosc2 containers.  It uses the metalayer capabilities present in superchunks/frames in order to store the multidimensionality information necessary to define arrays up to 8 dimensions and up to 2^63 elements.  Besides being able to create such arrays, Caterva provides functionality to get (multidimensional) slices of the arrays easyly and efficiently.  cat4py is the Python wrapper for Caterva.&lt;/p&gt;
 &lt;div class="section" id="id1"&gt;
-&lt;h4&gt;Highligths&lt;/h4&gt;
+&lt;h3&gt;Highligths&lt;/h3&gt;
 &lt;ul class="simple"&gt;
 &lt;li&gt;&lt;p&gt;Multidimensional blocks.  Chunks inside superchunk containers are endowed with a multidimensional structure so as to enable efficient slicing.  However, in many cases there is a tension between defining large chunks so as to reduce the amount of indexing to find chunks or smaller ones in order to avoid reading data that falls outside of a slice.  In order to reduce such a tension, we endowed the blocks inside chunks with a multidimensional structure too, so that the user has two parameters (chunkshape and blockshape) to play with in order to optimize I/O for their use case.  For an example of the kind of performance enhancements you can expect, see &lt;a class="reference external" href="https://htmlpreview.github.io/?https://github.com/Blosc/cat4py/blob/269270695d7f6e27e6796541709e98e2f67434fd/notebooks/slicing-performance.html"&gt;https://htmlpreview.github.io/?https://github.com/Blosc/cat4py/blob/269270695d7f6e27e6796541709e98e2f67434fd/notebooks/slicing-performance.html&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;API refactoring.  Caterva is a relatively young project, and its API grew up organically and hence, in a quite disorganized manner.  We recognized that and proceeded with a big API refactoring, trying to put more sense in the naming schema of the functions, as well as in providing a minimal set of C structs that allows for a simpler and better API.&lt;/p&gt;&lt;/li&gt;
@@ -41,7 +39,7 @@
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;div class="section" id="roadmap-for-caterva-cat4py"&gt;
-&lt;h4&gt;Roadmap for Caterva / cat4py&lt;/h4&gt;
+&lt;h3&gt;Roadmap for Caterva / cat4py&lt;/h3&gt;
 &lt;p&gt;During the next months, we plan to tackle the next tasks:&lt;/p&gt;
 &lt;ul class="simple"&gt;
 &lt;li&gt;&lt;p&gt;Append chunks in any order. This will make it easier for the user to create arrays, since they will not be forced to use a row-wise order.&lt;/p&gt;&lt;/li&gt;
@@ -52,9 +50,8 @@
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="section" id="final-thoughts"&gt;
-&lt;h3&gt;Final thoughts&lt;/h3&gt;
+&lt;h2&gt;Final thoughts&lt;/h2&gt;
 &lt;p&gt;We are very grateful to our sponsors in 2020; they allowed us to implement what we think would be nice features for the whole Blosc ecosystem.  However, and although we did a lot of progress towards making C-Blosc2 and Caterva as featured and stable as possible, we still need to finalize our efforts so as to see both projects stable enough to allow them to be used in production.  Our expectation is to release a 2.0.0 (final) release for C-Blosc2 by the end of the year, whereas Caterva (and cat4py) should be declared stable during 2021.&lt;/p&gt;
 &lt;p&gt;Also, we are happy to have enrolled new members on Blosc crew: Óscar Griñón, who proved to be instrumental in implementing the multidimensional blocks in Caterva and Nathan Moinvaziri, who is making great strides in making C-Blosc and C-Blosc2 more secure.  Thanks guys!&lt;/p&gt;
 &lt;p&gt;Hopefully 2021 will also be a good year for seeing the Blosc ecosystem to evolve.  If you are interested on what we are building and want to help, we are open to any kind of contribution, including &lt;a class="reference external" href="https://blosc.org/pages/donate/"&gt;donations&lt;/a&gt;.  Thank you for your interest!&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description><category>blosc progress report grants</category><guid>http://blosc.org/posts/mid-2020-progress-report/</guid><pubDate>Thu, 27 Aug 2020 12:32:20 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;&lt;/div&gt;</description><category>blosc progress report grants</category><guid>http://blosc.org/posts/mid-2020-progress-report/</guid><pubDate>Thu, 27 Aug 2020 12:32:20 GMT</pubDate></item></channel></rss>

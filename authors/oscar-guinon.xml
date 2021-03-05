@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts by Oscar Guiñón)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/authors/oscar-guinon.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:06:21 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Announcing Blosc Wheels</title><link>http://blosc.org/posts/new-blosc-wheels/</link><dc:creator>Oscar Guiñón</dc:creator><description>&lt;div class="section" id="announcing-blosc-wheels"&gt;
-&lt;h2&gt;Announcing Blosc Wheels&lt;/h2&gt;
-&lt;p&gt;We are happy to announce that wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are being produced on regular basis for python-blosc.  Such wheels also contain development files for the C-Blosc library.  If you are interested in knowing more how to use them, keep reading.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts by Oscar Guiñón)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/authors/oscar-guinon.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:15:28 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Announcing Blosc Wheels</title><link>http://blosc.org/posts/new-blosc-wheels/</link><dc:creator>Oscar Guiñón</dc:creator><description>&lt;div&gt;&lt;p&gt;We are happy to announce that wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are being produced on regular basis for python-blosc.  Such wheels also contain development files for the C-Blosc library.  If you are interested in knowing more how to use them, keep reading.&lt;/p&gt;
 &lt;p&gt;A Python wheel (.whl file) is a ZIP archive used to make easier the installation process of packages.  The new wheels make Blosc library installation faster by avoiding compiling, and they are now available at PyPI. See: &lt;a class="reference external" href="https://pypi.org/project/blosc/"&gt;https://pypi.org/project/blosc/&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Moreover, wheels for Blosc have support for AVX2 &lt;em&gt;runtime&lt;/em&gt; detection, so it will be automatically leveraged in case the local host has AVX2. On the other hand, if the host does not have AVX2, SSE2 is used instead, which, even if it is slower than AVX2, it is still faster than regular x86 instructions.&lt;/p&gt;
 &lt;div class="section" id="small-intro-to-wheels"&gt;
-&lt;h3&gt;Small intro to wheels&lt;/h3&gt;
+&lt;h2&gt;Small intro to wheels&lt;/h2&gt;
 &lt;p&gt;Wheels are an advantageous alternative to distribute Python (but also pure C) packages which contain C (or Cython) source code, and hence, need a compiler.  For those that are not familiar to wheels, here it comes a small tutorial on how to create and use wheels.&lt;/p&gt;
 &lt;p&gt;First, let's recall the traditional way to build a source distribution:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_02caee5339a44016a12aee8b19e8eef4-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python setup.py sdist
+&lt;pre class="code console"&gt;&lt;a name="rest_code_d2b45202d6334270b3e20f03158c0a1a-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python setup.py sdist
 &lt;/pre&gt;&lt;p&gt;To build a wheel, the process is quite similar:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_9a68514850964bf09afa557bd700a28d-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python setup.py bdist_wheel
+&lt;pre class="code console"&gt;&lt;a name="rest_code_b865549b93b74311aab1a797113aa0e9-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python setup.py bdist_wheel
 &lt;/pre&gt;&lt;p&gt;To install a package via pip (pip decides whether install a from wheel or compile from the source package; wheels have obviously more priority):&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_539427e68bbd4d1eafd8149f03bd95c1-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a name="rest_code_a0cfc0495f9745fb8dbe7f869b626a42-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;To install a package forcing to use source distribution:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_6221c6d7f48c4e449e3cccaacb48f617-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install --no-binary &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a name="rest_code_2550b788da314c0aaf751ee2d5be741a-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install --no-binary &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;To install a package forcing to use wheels:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_0aa56931c4e248469ed9cfdc3ae035da-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install --only-binary &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a name="rest_code_c9edbed6ca91418f8fe6ed29126e3a58-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install --only-binary &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;div class="section" id="different-types-of-wheels"&gt;
-&lt;h3&gt;Different types of wheels&lt;/h3&gt;
+&lt;h2&gt;Different types of wheels&lt;/h2&gt;
 &lt;p&gt;There are different kind of wheels, depending on the goals and the build process:&lt;/p&gt;
 &lt;ul class="simple"&gt;
 &lt;li&gt;&lt;p&gt;Universal Wheels are wheels that are pure Python (i.e. contain no compiled extensions) and support Python 2 and 3.&lt;/p&gt;&lt;/li&gt;
@@ -35,34 +33,33 @@
 &lt;p&gt;Specifically, Blosc wheels are platform wheels that support Python3 (3.7 and up) on Windows, Linux and Mac, for both 32 and 64 bits systems.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="binaries-for-c-blosc-libraries-are-included"&gt;
-&lt;h3&gt;Binaries for C-Blosc libraries are included&lt;/h3&gt;
+&lt;h2&gt;Binaries for C-Blosc libraries are included&lt;/h2&gt;
 &lt;p&gt;Although wheels were meant for Python packages, nothing prevents adding more stuff to them.  In particular, we are not only distributing python-blosc binary extensions in our wheels, but also binaries for the C-Blosc library.  This way, people willing to use the C-Blosc library can make use of these wheels to install the necessary development files.&lt;/p&gt;
 &lt;p&gt;First, install the binary wheel via PyPI without the need to manually compile the thing:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_6afecf4d82ce4fd0bb829cc3a343be27-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;pip install --only-binary blosc
+&lt;pre class="code console"&gt;&lt;a name="rest_code_5e01b30cf4504f8aa03564f4f80300b9-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;pip install --only-binary blosc
 &lt;/pre&gt;&lt;p&gt;Now, let's suppose that we want to compile the &lt;cite&gt;c-blosc/examples/many_compressors.c&lt;/cite&gt; on Linux:&lt;/p&gt;
 &lt;p&gt;First, you have to look where the wheels directory is located.  In our case:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_ada1eb1b7a1b4b48b93ddfd9ee92d883-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nv"&gt;WHEEL_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/soscar/miniconda3
-&lt;a name="rest_code_ada1eb1b7a1b4b48b93ddfd9ee92d883-2"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/lib   &lt;span class="c1"&gt;# note that you need the LD_LIBRARY_PATH env variable&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a name="rest_code_11f3543ee25a4cbda16c13c6901d6aa1-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nv"&gt;WHEEL_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/soscar/miniconda3
+&lt;a name="rest_code_11f3543ee25a4cbda16c13c6901d6aa1-2"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/lib   &lt;span class="c1"&gt;# note that you need the LD_LIBRARY_PATH env variable&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;For the actual compilation, you need to pass the directory for the include and lib directories:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_47c6deb19370469f9264513700d1f3a2-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;gcc many_compressors.c -I&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/include -o many_compressors -L&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/lib -lblosc
+&lt;pre class="code console"&gt;&lt;a name="rest_code_c53a3e5f5bb14fad82042a7495372ccf-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;gcc many_compressors.c -I&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/include -o many_compressors -L&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/lib -lblosc
 &lt;/pre&gt;&lt;p&gt;Finally, run the resulting binary and hopefully you will see something like:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;./many_compressors
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using 4 threads (previously using 1)&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-4"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using blosclz compressor&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-5"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 37816 (105.8x)&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-6"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-7"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using lz4 compressor&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-8"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 37938 (105.4x)&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-9"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-10"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using lz4hc compressor&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-11"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 27165 (147.2x)&lt;/span&gt;
-&lt;a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-12"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;./many_compressors
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using 4 threads (previously using 1)&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-4"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using blosclz compressor&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-5"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 37816 (105.8x)&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-6"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-7"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using lz4 compressor&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-8"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 37938 (105.4x)&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-9"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-10"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using lz4hc compressor&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-11"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 27165 (147.2x)&lt;/span&gt;
+&lt;a name="rest_code_a8d2839ab5284b7db9898f43f758a193-12"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;For more details, including compiling with binary wheels on other platforms than Linux, see: &lt;a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst"&gt;https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="final-remarks"&gt;
-&lt;h3&gt;Final remarks&lt;/h3&gt;
+&lt;h2&gt;Final remarks&lt;/h2&gt;
 &lt;p&gt;Producing Python wheels for a project can be somewhat involved for regular users. However, the advantages of binary wheels really make them worth the effort, since they make the installation process easier and faster for users.  This is why we are so happy to finally provide wheels that can benefit, not only python-blosc users, but users of the C-Blosc library as well.&lt;/p&gt;
 &lt;p&gt;Last but not least, a big thank you to the Zarr team, specially to Jeff Hammerbacher, who provided a grant to the Blosc team for making the wheels support official.  Hopefully this new development will make life easier for Zarr developers and users (by the way, we are really glad to see Zarr quickly spreading as a data container for big multidimensional data, and Blosc helping on the compression part).&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description><category>wheels</category><guid>http://blosc.org/posts/new-blosc-wheels/</guid><pubDate>Mon, 18 Jan 2021 12:32:20 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;&lt;/div&gt;</description><category>wheels</category><guid>http://blosc.org/posts/new-blosc-wheels/</guid><pubDate>Mon, 18 Jan 2021 12:32:20 GMT</pubDate></item></channel></rss>

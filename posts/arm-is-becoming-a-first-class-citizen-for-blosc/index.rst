@@ -8,9 +8,6 @@
 .. description: 
 .. type: text
 
-ARM is becoming a first-class citizen for Blosc
-================================================
-
 We are happy to announce that Blosc is receiving official support for
 ARM processors.  Blosc has always been meant to support all platforms
 where a C89 compliant C compiler can be found, but until now the only

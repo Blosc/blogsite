@@ -6,8 +6,6 @@
 .. description: 
 .. type: text
 
-Contributed outputs for **BloscLZ** compressor
-----------------------------------------------
 
 * Processor model: IBM Blue Gene Q embedded "A2" processor
 * Compiler: bgclang, version r209570-20140527 based on clang-3.5.0

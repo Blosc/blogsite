@@ -25,10 +25,9 @@
 <meta property="og:site_name" content="Blosc Main Blog Page ">
 <meta property="og:title" content="ARM is becoming a first-class citizen for Blosc">
 <meta property="og:url" content="http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/">
-<meta property="og:description" content="ARM is becoming a first-class citizen for Blosc
-We are happy to announce that Blosc is receiving official support for
+<meta property="og:description" content="We are happy to announce that Blosc is receiving official support for
 ARM processors.  Blosc has always been meant to support all platforms
-where a C89 ">
+where a C89 compliant C compiler can be found, but until now">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2015-09-09T11:32:20Z">
 <meta property="article:tag" content="ARM">
@@ -107,8 +106,7 @@ where a C89 ">
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div class="section" id="arm-is-becoming-a-first-class-citizen-for-blosc">
-<h2>ARM is becoming a first-class citizen for Blosc</h2>
+    <div>
 <p>We are happy to announce that Blosc is receiving official support for
 ARM processors.  Blosc has always been meant to support all platforms
 where a C89 compliant C compiler can be found, but until now the only
@@ -119,7 +117,7 @@ candidate to become a fully supported platform besides Intel/AMD.  You
 may be wondering that we could have chosen any other architecture like
 MIPS or PowerPC, so why ARM?</p>
 <div class="section" id="arm-is-eating-the-world">
-<h3>ARM is eating the world</h3>
+<h2>ARM is eating the world</h2>
 <p>ARM is an increasingly popular architecture and we can find
 implementation exemplars of it not only in the phones, tablets or
 ChromeBooks, but also acting as embedded processors, as well as in
@@ -148,7 +146,7 @@ specially where compression ratio equals 1 (i.e. no compression is
 active, so Blosc is only doing a <em>memory copy</em> in this case).</p>
 </div>
 <div class="section" id="blosc-is-getting-ready-for-arm">
-<h3>Blosc is getting ready for ARM</h3>
+<h2>Blosc is getting ready for ARM</h2>
 <p>So ARM is cool indeed, but what we are doing for making it a
 first-class citizen?  For starters, we have created a new <a class="reference external" href="https://github.com/Blosc/c-blosc2">C-Blosc2</a> repository that is going to act
 as a playground for some time and where we are going to experiment
@@ -173,7 +171,7 @@ time to do a preliminary version of the bitshuffle filter as well (not
 completely functional yet, but as time allows, he plans to finish that).</p>
 </div>
 <div class="section" id="some-hints-on-the-measured-increase-in-performance">
-<h3>Some hints on the measured increase in performance</h3>
+<h2>Some hints on the measured increase in performance</h2>
 <p>So you might be asking, how fast can perform Blosc on an ARM with
 NEON?  Well, let's start first by showing how fast it works on a
 Raspberry Pi 2 (Broadcom BCM2836 ARMv7 Quad Core Processor) having
@@ -234,7 +232,7 @@ on how computations will be made in the short future (as the <a class="reference
 Blanc initiative is trying to demonstrate</a>).</p>
 </div>
 <div class="section" id="what-to-expect-from-arm-blosc-in-the-forthcoming-months">
-<h3>What to expect from ARM/Blosc in the forthcoming months</h3>
+<h2>What to expect from ARM/Blosc in the forthcoming months</h2>
 <p>This work on supporting ARM platforms is just the beginning.  As ARM
 processors get more spread, and most specially, <a class="reference external" href="http://www.arm.com/products/processors/cortex-a/cortex-a72-processor.php">faster</a>,
 we will need to refine the support for ARM in Blosc.</p>

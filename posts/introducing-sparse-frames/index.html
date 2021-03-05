@@ -24,12 +24,10 @@
 <meta property="og:site_name" content="Blosc Main Blog Page ">
 <meta property="og:title" content="Introducing Sparse Frames">
 <meta property="og:url" content="http://blosc.org/posts/introducing-sparse-frames/">
-<meta property="og:description" content="Introducing Sparse Frames
-
-Overview
+<meta property="og:description" content="Overview
 The new sparse frame implementation
 allows the storage of Blosc2 super-chunk data chunks sparsely on-disk, using the filesystem as a key/value storage.
-This mimics ">
+This mimics existing formats like bcolz">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2021-02-08T07:32:20Z">
 <meta property="article:tag" content="blosc2 sparse frame format">
@@ -106,10 +104,9 @@ This mimics ">
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div class="section" id="introducing-sparse-frames">
-<h2>Introducing Sparse Frames</h2>
+    <div>
 <div class="section" id="overview">
-<h3>Overview</h3>
+<h2>Overview</h2>
 <p>The <a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/176">new sparse frame implementation</a>
 allows the storage of Blosc2 super-chunk data chunks sparsely on-disk, using the filesystem as a key/value storage.
 This mimics existing formats like <a class="reference external" href="https://github.com/Blosc/bcolz/blob/master/DISK_FORMAT_v1.rst">bcolz</a>
@@ -135,7 +132,7 @@ For example, if the index chunk is 46 (2E in hexadecimal) the chunk file name wo
 be <cite>0000002E.chunk</cite>.</p>
 </div>
 <div class="section" id="advantages">
-<h3>Advantages</h3>
+<h2>Advantages</h2>
 <p>The big advantage of the sparse frame compared with the contiguous one is
 avoiding empty spaces resulting when updating a chunk.</p>
 <p>To better illustrate this, let's imagine that the set of the data chunks in
@@ -162,7 +159,7 @@ As there is no limit in the height of the books, the yellow book can be replaced
 larger book without creating empty spaces, and making a better use of space.</p>
 </div>
 <div class="section" id="example-of-use">
-<h3>Example of use</h3>
+<h2>Example of use</h2>
 <p>Creating a sparse frame in C-Blosc2 is easy; just specifify the name of the directory where
 you want to store your chunks and you are done:</p>
 <pre class="literal-block">blosc2_storage storage = {.urlpath="dir1.b2frame"};
@@ -180,7 +177,7 @@ for (nchunk = 0; nchunk &lt; NCHUNKS; nchunk++) {
 <p>You can have a look at a <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/examples/sframe_simple.c">more complete example here</a>.</p>
 </div>
 <div class="section" id="future-work">
-<h3>Future work</h3>
+<h2>Future work</h2>
 <p>We think that this implementation opens the door to several interesting possibilities.</p>
 <p>For example, by introducing networking code in Blosc2,
 the chunks could be stored in another machine and accessed remotely.

@@ -25,8 +25,7 @@
 <meta property="og:site_name" content="Blosc Main Blog Page ">
 <meta property="og:title" content="Blosc Received a $50,000 USD donation">
 <meta property="og:url" content="http://blosc.org/posts/blosc-donation/">
-<meta property="og:description" content="Blosc Received a $50,000 USD donation
-I am happy to announce that the Blosc project recently received a donation of $50,000 USD via NumFOCUS.  Now that we have such an important amount available, our ">
+<meta property="og:description" content="I am happy to announce that the Blosc project recently received a donation of $50,000 USD via NumFOCUS.  Now that we have such an important amount available, our plan is to use it in order to continue">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2020-02-20T01:32:20Z">
 <meta property="article:tag" content="donation blosc2 caterva">
@@ -103,17 +102,16 @@ I am happy to announce that the Blosc project recently received a donation of $5
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div class="section" id="blosc-received-a-50-000-usd-donation">
-<h2>Blosc Received a $50,000 USD donation</h2>
+    <div>
 <p>I am happy to announce that the Blosc project recently received a donation of $50,000 USD via NumFOCUS.  Now that we have such an important amount available, our plan is to use it in order to continue making Blosc and its ecosystem more useful for the community.  In order to do so, it is important to stress out that our priorities are going to be on the fundamentals of the stack: getting <a class="reference external" href="https://github.com/Blosc/c-blosc2">C-Blosc2</a> out of beta and pushing for making <a class="reference external" href="https://github.com/Blosc/Caterva">Caterva</a> (the multi-dimensional container on top of C-Blosc2) actually usable.</p>
 <div class="section" id="critical-tasks-pushing-c-blosc2-and-caterva">
-<h3>Critical Tasks: Pushing C-Blosc2 and Caterva</h3>
+<h2>Critical Tasks: Pushing C-Blosc2 and Caterva</h2>
 <p><a class="reference external" href="https://github.com/Blosc/c-blosc2">C-Blosc2</a> has been kind of a laboratory that we used for testing new ideas, like new 64-bit containers, new filters, a new serialization system, the concept of pre-filters and others, for the past 5 years.  Although the fork from C-Blosc happened such a long time ago, we tried hard to keep the API backwards compatible so that C-Blosc2 can be used as a drop-in replacement of C-Blosc1 --but beware, the C-Blosc2 format will not be forward-compatible with C-Blosc1, but will be backward-compatible, that is, it will be able to read C-Blosc1 compressed chunks.</p>
 <p>On its hand, <a class="reference external" href="https://github.com/Blosc/Caterva">Caterva</a> is our attempt to build a multidimensional container that is tightly built on top of C-Blosc2, so leveraging its unique features.  Caterva is a C99 library (the same than C-Blosc2) that will allow an easy adoption by many different libraries that are about matrix manipulation.  The fact that it supports on-the-flight compression and persistency will open new possibilities in that the size of matrices will not be limited to the available memory anymore: data may span through available memory <em>or</em> disk in <em>compressed</em> state.</p>
 <p>Provided how fundamental C-Blosc2 and Caterva packages are meant to be, we think that the usefulness of the Blosc project as a whole will be largely benefited from putting most of our efforts here for the next months/years.  For this, we already established a series of priorities for working in these projects, as specified in the roadmaps below</p>
 </div>
 <div class="section" id="roadmap-for-c-blosc2">
-<h3>Roadmap for C-Blosc2</h3>
+<h2>Roadmap for C-Blosc2</h2>
 <p>C-Blosc2 is already in beta stage, and in the next few months we should see it in production stage.  Here are some of the more important the things that we want to tackle in order to make this happen:</p>
 <ul class="simple">
 <li><p>Plugin capabilities for allowing users to add more filters and codecs. There should also be a plugin register capability so that the info about the new filters and codecs can be persistent and propagated to different machines.</p></li>
@@ -130,7 +128,7 @@ I am happy to announce that the Blosc project recently received a donation of $5
 <p>For a more detailed discussion see: <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/ROADMAP.md">https://github.com/Blosc/c-blosc2/blob/master/ROADMAP.md</a></p>
 </div>
 <div class="section" id="roadmap-for-caterva">
-<h3>Roadmap for Caterva</h3>
+<h2>Roadmap for Caterva</h2>
 <p>Caterva is a much more young project and as such, one may say that it is still in alpha stage, although the basic functionality like creating multidimensional containers, getting items or multidimensional slices or accessing persistent data without a previous load is already there.  However, we still miss important things like:</p>
 <ul class="simple">
 <li><p>A complete refactorization of the Caterva C code to facilitate its usability.</p></li>
@@ -142,11 +140,11 @@ I am happy to announce that the Blosc project recently received a donation of $5
 <p>For a more detailed discussion see: <a class="reference external" href="https://github.com/Blosc/Caterva/blob/master/ROADMAP.md">https://github.com/Blosc/Caterva/blob/master/ROADMAP.md</a></p>
 </div>
 <div class="section" id="how-we-are-spending-resources">
-<h3>How we are spending resources</h3>
+<h2>How we are spending resources</h2>
 <p>Money is important, but not everything: you need people to work on a project.  We are slowly starting to put consistent human resources in the Blosc project.  To start with, I (Francesc Alted) and Aleix Alcacer will be putting 25% of our time in the project for the next months, and hopefully others will join too.  We will also be using funds to invest in our main tool, that is laptops and desktop computers, but also some furniture like proper seats and tables; the office space is important for creating a happy team.  Finally, our plan is to use a part of the donation in facilitating meeting among the Blosc development team.</p>
 </div>
 <div class="section" id="your-input-is-important-for-us">
-<h3>Your input is important for us</h3>
+<h2>Your input is important for us</h2>
 <p>Although during the next year or so, we plan to organize some meetings of the board of directors and the Blosc development team, we think that our ideas cannot grow isolated from the community of users.  So in case you want to convey ideas or better, contribute with <em>implementation</em> of ideas, we will be happy to hear and discuss.  You can get in touch with us via the Blosc mailing list (<a class="reference external" href="https://groups.google.com/forum/#!forum/blosc">https://groups.google.com/forum/#!forum/blosc</a>), and the @Blosc2 twitter account.  We are thinking that having other tools like Discourse may help in driving discussions more to the point, but so far we have little experience with it; if you have other suggestions please tell us.</p>
 <p>All in all, the Blosc development team is very excited about this new development, and we are putting all our enthusiasm for delivering a new set of tools that we sincerely hope will of of help for the data community out there.</p>
 <p>Finally, let me thank our main sponsor for their generous donation, NumFOCUS for accepting our project inside its umbrella, and to all the users and contributors that made Blosc and its ecosystem to help people through the past years (a bit more than 10 since the first C-Blosc 1.0 release).</p>

@@ -8,8 +8,6 @@
 .. description:
 .. type: text
 
-Zstd has just landed in Blosc
-=============================
 
 `Zstd <http://www.zstd.net>`_, aka Zstandard, is a new breed of compression
 library that promises to achieve better compression ratios than `Zlib

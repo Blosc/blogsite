@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about blosc2 sparse frame format)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/blosc2-sparse-frame-format.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:06:21 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Introducing Sparse Frames</title><link>http://blosc.org/posts/introducing-sparse-frames/</link><dc:creator>Marta Iborra, Francesc Alted</dc:creator><description>&lt;div class="section" id="introducing-sparse-frames"&gt;
-&lt;h2&gt;Introducing Sparse Frames&lt;/h2&gt;
-&lt;div class="section" id="overview"&gt;
-&lt;h3&gt;Overview&lt;/h3&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about blosc2 sparse frame format)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/blosc2-sparse-frame-format.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:15:28 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Introducing Sparse Frames</title><link>http://blosc.org/posts/introducing-sparse-frames/</link><dc:creator>Marta Iborra, Francesc Alted</dc:creator><description>&lt;div&gt;&lt;div class="section" id="overview"&gt;
+&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;The &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/176"&gt;new sparse frame implementation&lt;/a&gt;
 allows the storage of Blosc2 super-chunk data chunks sparsely on-disk, using the filesystem as a key/value storage.
 This mimics existing formats like &lt;a class="reference external" href="https://github.com/Blosc/bcolz/blob/master/DISK_FORMAT_v1.rst"&gt;bcolz&lt;/a&gt;
@@ -29,7 +27,7 @@ For example, if the index chunk is 46 (2E in hexadecimal) the chunk file name wo
 be &lt;cite&gt;0000002E.chunk&lt;/cite&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="advantages"&gt;
-&lt;h3&gt;Advantages&lt;/h3&gt;
+&lt;h2&gt;Advantages&lt;/h2&gt;
 &lt;p&gt;The big advantage of the sparse frame compared with the contiguous one is
 avoiding empty spaces resulting when updating a chunk.&lt;/p&gt;
 &lt;p&gt;To better illustrate this, let's imagine that the set of the data chunks in
@@ -57,7 +55,7 @@ As there is no limit in the height of the books, the yellow book can be replaced
 larger book without creating empty spaces, and making a better use of space.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="example-of-use"&gt;
-&lt;h3&gt;Example of use&lt;/h3&gt;
+&lt;h2&gt;Example of use&lt;/h2&gt;
 &lt;p&gt;Creating a sparse frame in C-Blosc2 is easy; just specifify the name of the directory where
 you want to store your chunks and you are done:&lt;/p&gt;
 &lt;pre class="literal-block"&gt;blosc2_storage storage = {.urlpath="dir1.b2frame"};
@@ -75,7 +73,7 @@ for (nchunk = 0; nchunk &amp;lt; NCHUNKS; nchunk++) {
 &lt;p&gt;You can have a look at a &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/examples/sframe_simple.c"&gt;more complete example here&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="future-work"&gt;
-&lt;h3&gt;Future work&lt;/h3&gt;
+&lt;h2&gt;Future work&lt;/h2&gt;
 &lt;p&gt;We think that this implementation opens the door to several interesting possibilities.&lt;/p&gt;
 &lt;p&gt;For example, by introducing networking code in Blosc2,
 the chunks could be stored in another machine and accessed remotely.
@@ -100,5 +98,4 @@ and the whole team is very pleased with the quality of her contribution; we woul
 to continue having her among us for the next months (but this requires some budget indeed).
 If you like where we are headed, please consider making a donation
 to the Blosc project via the NumFOCUS Foundation: &lt;a class="reference external" href="https://blosc.org/pages/donate"&gt;https://blosc.org/pages/donate&lt;/a&gt;.  Thank you!&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description><category>blosc2 sparse frame format</category><guid>http://blosc.org/posts/introducing-sparse-frames/</guid><pubDate>Mon, 08 Feb 2021 07:32:20 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;&lt;/div&gt;</description><category>blosc2 sparse frame format</category><guid>http://blosc.org/posts/introducing-sparse-frames/</guid><pubDate>Mon, 08 Feb 2021 07:32:20 GMT</pubDate></item></channel></rss>

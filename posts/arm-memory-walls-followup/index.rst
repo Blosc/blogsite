@@ -9,9 +9,6 @@
 .. type: text
 
 
-Is ARM Hungry Enough to Eat Intel's Favorite Pie?
-=================================================
-
 **Note**: This entry is a follow-up of the `Breaking Down Memory Walls <http://blosc.org/posts/breaking-memory-walls/>`_ blog.  Please make sure that you have read it if you want to fully understand all the benchmarks performed here.
 
 At the beginning of the 1990s the computing world was mainly using RISC (Reduced Instruction Set Computer) architectures, namely SPARC, Alpha, Power and MIPS CPUs for performing serious calculations and Intel CPUs were seen as something that was appropriate just to run essentially personal applications on PCs, but almost nobody was thinking about them as a serious contender for server environments.  But Intel had an argument that almost nobody was ready to recognize how important it could become; with its dominance of the PC market it quickly ranked to be the largest CPU maker in the world and, with such an enormous revenue, Intel played its cards well and, by the beginning of 2000s, they were able to make of its CISC architecture (Complex Instruction Set Computer) the one with the best compute/price ratio, clearly beating the RISC offerings at that time.  That amazing achievement shut the mouths of CISC critics (to the point that nowadays almost everybody recognizes that performance has very little to do with using RISC or CISC) and cleared the path for Intel to dominate not only the PC world, but also the world of server computing for the next 20 years.

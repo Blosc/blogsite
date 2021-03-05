@@ -7,8 +7,6 @@
 .. description: 
 .. type: text
 
-The Hairy Situation of Microsoft Windows Compilers
-==================================================
 
 Recently -- and to the requirement of a customer who recently
 `sponsorized us <http://blosc.org/blog/seeking-sponsoship.html>`_ -- I

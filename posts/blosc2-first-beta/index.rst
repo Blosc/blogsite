@@ -9,9 +9,6 @@
 .. type: text
 
 
-C-Blosc2 Enters Beta Stage
-==========================
-
 The first beta version of C-Blosc2 has been released today.  C-Blosc2 is the new iteration of C-Blosc 1.x series, adding more features and better documentation and is the outcome of more than 4 years of slow, but steady development.  This blog entry describes the main features that you may see in next generation of C-Blosc, as well as an overview of what is in our roadmap.
 
 **Note 1**: C-Blosc2 is currently in beta stage, so not ready to be used in production yet.  Having said this, being in beta means that the API has been declared frozen, so there is guarantee that your programs will continue to work with future versions of the library.  If you want to collaborate in this development, you are welcome: have a look at our roadmap below and contribute PR's or just go to the `open issues <https://github.com/Blosc/c-blosc2/issues>`_ and help us with them.

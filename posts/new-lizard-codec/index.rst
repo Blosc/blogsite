@@ -8,8 +8,6 @@
 .. description:
 .. type: text
 
-The Lizard codec
-================
 
 The past weekend I was putting some time in integrating one of the codecs that I was lately more curious about (specially since the release of its 1.0 version some months ago).  I am talking about `Lizard <https://github.com/inikep/lizard>`_, a direct derivative of the LZ4 codec and whose author is Przemyslaw Skibinski.  One should remark that Przemyslaw is not new in the compression arena as he has helped Yann Collet quite a lot during the `Zstandard <https://github.com/facebook/zstd>`_ development, and also he is the author of `lzbench <https://github.com/inikep/lzbench>`_, a nice and comprehensive in-memory benchmark of a series of open-source LZ77/LZSS/LZMA compressors.
 

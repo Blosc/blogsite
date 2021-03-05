@@ -7,9 +7,6 @@
 .. description: 
 .. type: text
 
-Seeking Sponsorship for Bcolz/Blosc
-===================================
-
 
 Dear Everyone,
 

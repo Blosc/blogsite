@@ -6,8 +6,6 @@
 .. description:
 .. type: text
 
-Synthetic Benchmarks (And How You Can Contribute Yours)
-=======================================================
 
 In order to assess the performance of Blosc in a variety of scenarios, a
 benchmark program is provided. This should enable a fair comparison between

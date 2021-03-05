@@ -25,8 +25,7 @@
 <meta property="og:site_name" content="Blosc Main Blog Page ">
 <meta property="og:title" content="Breaking Down Memory Walls">
 <meta property="og:url" content="http://blosc.org/posts/breaking-memory-walls/">
-<meta property="og:description" content="Breaking Down Memory Walls
-Update (2018-08-09): An extended version of this blog post can be found in this article.  On it, you will find a complementary study with synthetic data (mainly for finding ">
+<meta property="og:description" content="Update (2018-08-09): An extended version of this blog post can be found in this article.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2018-06-25T18:32:20Z">
 <meta property="article:tag" content="caches">
@@ -105,21 +104,20 @@ Update (2018-08-09): An extended version of this blog post can be found in this 
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div class="section" id="breaking-down-memory-walls">
-<h2>Breaking Down Memory Walls</h2>
+    <div>
 <p><strong>Update (2018-08-09)</strong>: An extended version of this blog post can be found in this <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">article</a>.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, as well as more discussion about the results.</p>
 <p>Nowadays CPUs struggle to get data at enough speed to feed their cores.  The reason for this is that memory speed is <a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf">growing at a slower pace than CPUs increase their speed at crunching numbers</a>.   This memory slowness compared with CPUs is generally known as the <a class="reference external" href="https://en.wikipedia.org/wiki/Random-access_memory#Memory_wall">Memory Wall</a>.</p>
 <p>For example, let's suppose that we want to compute the aggregation of a some large array; here it is how to do that using OpenMP for leveraging all cores in a CPU:</p>
-<pre class="code c"><a name="rest_code_ec272494b677435cb191c709abc918f3-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_ec272494b677435cb191c709abc918f3-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_ec272494b677435cb191c709abc918f3-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a name="rest_code_ec272494b677435cb191c709abc918f3-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_3ed93535cc15498f96796bd9f253b850-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_3ed93535cc15498f96796bd9f253b850-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_3ed93535cc15498f96796bd9f253b850-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a name="rest_code_3ed93535cc15498f96796bd9f253b850-4"></a><span class="p">}</span>
 </pre>
 <p>With this, some server (an Intel Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores and hyperthreading) takes about 14 ms for doing the aggregation of an array with 100 million of float32 values when using 8 OpenMP threads (optimal number for this CPU).  However, if instead of bringing the whole 100 million elements from memory to the CPU we generate the data inside the loop, we are avoiding the data transmission between memory and CPU, like in:</p>
-<pre class="code c"><a name="rest_code_6f0423416aee412da14d12e4f4a96a34-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_6f0423416aee412da14d12e4f4a96a34-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_6f0423416aee412da14d12e4f4a96a34-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
-<a name="rest_code_6f0423416aee412da14d12e4f4a96a34-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_2450246dfd7e4cafb2bd2557efbafa0f-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_2450246dfd7e4cafb2bd2557efbafa0f-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_2450246dfd7e4cafb2bd2557efbafa0f-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
+<a name="rest_code_2450246dfd7e4cafb2bd2557efbafa0f-4"></a><span class="p">}</span>
 </pre>
 <p>This loop takes just 3.5 ms, that is, 4x less than the original one.  That means that our CPU could compute the aggregation at a speed that is 4x faster than the speed at which the memory subsystem can provide data elements to the CPU; or put in another words, the CPU is idle, doing nothing during the 75% of the time, waiting for data to arrive (for this example, but there could be other, more extreme cases).  Here we have the memory wall in action indeed.</p>
 <p>That the memory wall exists is an excellent reason to think about ways to workaround it.  One of the most promising venues is to use compression: what if we could store data in compressed state in-memory and use the spare clock cycles of the CPU for decompressing it just when it is needed?  In this blog entry we will see how to implement such a computational kernel on top of data structures that are cache- and compression-friendly and we will examine how they perform on a range of modern CPU architectures.  Some surprises are in store.</p>
@@ -129,7 +127,7 @@ Update (2018-08-09): An extended version of this blog post can be found in this 
 <li><p>It is representative of many aggregation/reduction algorithms that are routinely used out in the wild.</p></li>
 </ol>
 <div class="section" id="operating-with-compressed-datasets">
-<h3>Operating with Compressed Datasets</h3>
+<h2>Operating with Compressed Datasets</h2>
 <p>Now let's see how to run our aggregation efficiently when using compressed data.  For this, we need:</p>
 <ol class="arabic simple">
 <li><p>A data container that supports on-the-flight compression.</p></li>
@@ -149,12 +147,12 @@ Update (2018-08-09): An extended version of this blog post can be found in this 
 <p>For our experiments below, we are going to choose a chunksize of 4,000 elements because Blosc2 needs 2 internal buffers for performing the decompression besides the source and destination buffer.  Also, we are using 32-bit (4 bytes) float values for our exercise, so the final size used in caches will be 4,000 * (2 + 2) * 4 = 64,000 bytes, which should fit comfortably in L2 caches in most modern CPU architectures (which normally sports 256 KB or even higher).  Please note that finding an optimal value for this size might require some fine-tuning, not only for different architectures, but also for different datasets.</p>
 </div>
 <div class="section" id="the-precipitation-dataset">
-<h3>The Precipitation Dataset</h3>
+<h2>The Precipitation Dataset</h2>
 <p>There are plenty of datasets out there exposing different data distributions so, depending on your scenario, your mileage may vary.  The dataset chosen here is the result of a <a class="reference external" href="http://reanalysis.meteo.uni-bonn.de">regional reanalysis covering the European continent</a>, and in particular, the precipitation data in a certain region of Europe.  Computing the aggregation of this data is representative of a catchment average of precipitation over a drainage area.</p>
 <p><em>Caveat</em>: For the sake of easy reproducibility, for building the 100 million dataset I have chosen a small <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/read-grid-150x150.py">geographical area with a size of 150x150</a> and reused it repeatedly so as to fill the final dataset completely.  As the size of the chunks is lesser than this area, and the super-chunk (as configured here) does not use data redundancies from other chunks, the results obtained here can be safely extrapolated to the actual dataset made from real data (bar some small differences).</p>
 </div>
 <div class="section" id="choosing-the-compression-codec">
-<h3>Choosing the Compression Codec</h3>
+<h2>Choosing the Compression Codec</h2>
 <p>When determining the best codec to use inside Blosc2 (it has support for BloscLZ, LZ4, LZ4HC, Zstd, Zlib and Lizard), it turns out that they behave quite differently, both in terms of compression and speed, with the dataset they have to compress <em>and</em> with the CPU architecture in which they run.  This is quite usual, and the reason why you should always try to find the best codec for your use case.  Here we have how the different codecs behaves for our precipitation dataset in terms of decompression speed for our reference platform (Intel Xeon E3-1245):</p>
 <table>
 <colgroup>
@@ -170,31 +168,31 @@ Update (2018-08-09): An extended version of this blog post can be found in this 
 <p>For completeness, I am also showing the compression ratios achieved by the different codecs for the precipitation dataset.  Although there are significant differences for them, these usually come at the cost of compression/decompression time.  At any rate, even though compression ratio is important, in this blog we are mainly interested in the best decompression speed, so we will use this latter as the only important parameter for codec selection.</p>
 </div>
 <div class="section" id="results-on-different-cpus">
-<h3>Results on Different CPUs</h3>
+<h2>Results on Different CPUs</h2>
 <p>Now it is time to see how our compressed sum algorithm performs compared with the original uncompressed one.  However, as not all the CPUs are created equal, we are going to see how different CPUs perform doing exactly the same computation.</p>
 <div class="section" id="reference-cpu-intel-xeon-e3-1245-v5-4-core-processor-3-50ghz">
-<h4>Reference CPU: Intel Xeon E3-1245 v5 4-Core processor @ 3.50GHz</h4>
+<h3>Reference CPU: Intel Xeon E3-1245 v5 4-Core processor @ 3.50GHz</h3>
 <p>This is a mainstream, somewhat 'small' processor for servers that has an excellent price/performance ratio.  Its main virtue is that, due to its small core count, the CPU can be run at considerably high clock speeds which, combined with a high IPC (Instructions Per Clock) count, delivers considerable computational power.  These results are a good baseline reference point for comparing other CPUs packing a larger number of cores (and hence, lower clock speeds).  Here it is how it performs:</p>
 <img alt="/images/breaking-down-memory-walls/i7server-rainfall-lz4hc-9.png" class="align-center" src="../../images/breaking-down-memory-walls/i7server-rainfall-lz4hc-9.png"><p>We see here that, even though the uncompressed dataset does not scale too well, the compressed dataset shows a nice scalability even when using using hyperthreading (&gt; 4 threads); this is a remarkable fact for a feature (hyperthreading) that, despite marketing promises, does not always deliver 2x the performance of the physical cores.  With that, the performance peak for the compressed precipitation dataset (22 GB/s, using LZ4HC) is really close to the uncompressed one (27 GB/s); quite an achievement for a CPU with just 4 physical cores.</p>
 </div>
 <div class="section" id="amd-epyc-7401p-24-core-processor-2-0ghz">
-<h4>AMD EPYC 7401P 24-Core Processor @ 2.0GHz</h4>
+<h3>AMD EPYC 7401P 24-Core Processor @ 2.0GHz</h3>
 <p>This CPU implements EPYC, one of the most powerful architectures ever created by AMD.  It packs 24 physical cores, although internally they are split into 2 blocks with 12 cores each.  Here is how it behaves:</p>
 <img alt="/images/breaking-down-memory-walls/epyc-rainfall-lz4-9.png" class="align-center" src="../../images/breaking-down-memory-walls/epyc-rainfall-lz4-9.png"><p>Stalling at 4/8 threads, the EPYC scalability for the uncompressed dataset is definitely not good.  On its hand, the compressed dataset behaves quite differently: it shows a nice scalability through the whole range of cores in the CPU (again, even when using hyperthreading), achieving the best performance (45 GB/s, using LZ4) at precisely 48 threads, well above the maximum performance reached by the uncompressed dataset (30 GB/s).</p>
 </div>
 <div class="section" id="intel-scalable-gold-5120-2x-14-core-processor-2-2ghz">
-<h4>Intel Scalable Gold 5120 2x 14-Core Processor @ 2.2GHz</h4>
+<h3>Intel Scalable Gold 5120 2x 14-Core Processor @ 2.2GHz</h3>
 <p>Here we have one of the latest and most powerful CPU architectures developed by Intel.  We are testing it here within a machine with 2 CPUs, each containing 14 cores.  Here’s it how it performed:</p>
 <img alt="/images/breaking-down-memory-walls/scalable-rainfall-lz4-9.png" class="align-center" src="../../images/breaking-down-memory-walls/scalable-rainfall-lz4-9.png"><p>In this case, and stalling at 24/28 threads, the Intel Scalable shows a quite remarkable scalability for the uncompressed dataset (apparently, Intel has finally chosen a good name for an architecture; well done guys!).  More importantly, it also reveals an even nicer scalability on the compressed dataset, all the way up to 56 threads (which is expected provided the 2x 14-core CPUs with hyperthreading); this is a remarkable feat for such a memory bandwidth beast.  In absolute terms, the compressed dataset achieves a performance (68 GB/s, using LZ4) that is very close to the uncompressed one (72 GB/s).</p>
 </div>
 <div class="section" id="cavium-armv8-2x-48-core">
-<h4>Cavium ARMv8 2x 48-Core</h4>
+<h3>Cavium ARMv8 2x 48-Core</h3>
 <p>We are used to seeing ARM architectures powering most of our phones and tablets, but seeing them performing computational duties is far more uncommon.  This does not mean that there are not ARM implementations that cannot power big servers.  Cavium, with its 48-core in a single CPU, is an example of a server-grade chip.  In this case we are looking at a machine with two of these CPUs:</p>
 <img alt="/images/breaking-down-memory-walls/cavium-rainfall-blosclz-9.png" class="align-center" src="../../images/breaking-down-memory-walls/cavium-rainfall-blosclz-9.png"><p>Again, we see a nice scalability (while a bit bumpy) for the uncompressed dataset, reaching its maximum (35 GB/s) at 40 threads.  Regarding the compressed dataset, it scales much more smoothly, and we see how the performance peaks at 64 threads (15 GB/s, using BloscLZ) and then drops significantly after that point (even if the CPU still has enough cores to continue the scaling; I am not sure why is that).  Incidentally, the BloscLZ codec being the best performer here is not a coincidence as it recently received a lot of fine-tuning for ARM.</p>
 </div>
 </div>
 <div class="section" id="what-we-learned">
-<h3>What We Learned</h3>
+<h2>What We Learned</h2>
 <p>We have explored how to use compression in an nearly optimal way to perform a very simple task: compute an aggregation out of a large dataset.  With a basic understanding of the cache and memory subsystem, and by using appropriate compressed data structures (the super-chunk), we have seen how we can easily produce code that enables modern CPUs to perform operations on compressed data at a speed that approaches the speed of the same operations on uncompressed data (and sometimes exceeding it).  More in particular:</p>
 <ol class="arabic simple">
 <li><p>Performance for the compressed dataset scales very well on the number of threads for all the CPUs (even hyperthreading seems very beneficial at that, which is a welcome surprise).</p></li>
@@ -204,7 +202,7 @@ Update (2018-08-09): An extended version of this blog post can be found in this 
 </ol>
 </div>
 <div class="section" id="final-thoughts">
-<h3>Final Thoughts</h3>
+<h2>Final Thoughts</h2>
 <p>To conclude, it is interesting to remember here what Linus Torvalds said back in 2006 (talking about the git system that he created the year before):</p>
 <blockquote>
 <p>[...] git actually has a simple  design, with stable and reasonably well-documented data structures.  In fact, I'm a huge proponent of designing your code around the data, rather than the other way around, and I think it's one of the reasons git has been fairly successful.
@@ -213,11 +211,11 @@ Update (2018-08-09): An extended version of this blog post can be found in this 
 <p>Of course, we all know how drastic Linus can be in his statements, but I cannot agree more on how important is to adopt a data-driven view when designing our applications.  But I'd go further and say that, when trying to squeeze the last drop of performance out of modern CPUs, data containers need to be structured in a way that leverages the characteristics of the underlying CPU, as well as to facilitate the application of the blocking technique (and thereby allowing compression to run efficiently).  Hopefully, installments like this can help us explore new possibilities to break down the memory wall that bedevils modern computing.</p>
 </div>
 <div class="section" id="acknowledgements">
-<h3>Acknowledgements</h3>
+<h2>Acknowledgements</h2>
 <p>Thanks to my friend Scott Prater for his great advices on improving my writing style, Dirk Schwanenberg for pointing out to the precipitation dataset and for providing the script for reading it, and Robert McLeod, J. David Ibáñez and Javier Sancho for suggesting general improvements (even though some of their suggestions required such a big amount of work that made me ponder about their actual friendship :).</p>
 </div>
 <div class="section" id="appendix-software-used">
-<h3>Appendix: Software used</h3>
+<h2>Appendix: Software used</h2>
 <p>For reference, here it is the software that has been used for this blog entry:</p>
 <ul class="simple">
 <li><p><strong>OS</strong>: Ubuntu 18.04</p></li>

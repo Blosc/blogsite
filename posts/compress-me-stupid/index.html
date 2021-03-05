@@ -24,13 +24,11 @@
 <meta property="og:site_name" content="Blosc Main Blog Page ">
 <meta property="og:title" content="Compress Me, Stupid!">
 <meta property="og:url" content="http://blosc.org/posts/compress-me-stupid/">
-<meta property="og:description" content="Compress Me, Stupid!
-
-How it all started
+<meta property="og:description" content="How it all started
 I think I began to become truly interested in compression when, back
 in 1992, I was installing C-News, a news server package meant
 to handle Usenet News
-articl">
+articles in our university. ">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2014-08-28T17:01:20Z">
 <meta property="article:tag" content="blosc">
@@ -111,10 +109,9 @@ articl">
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div class="section" id="compress-me-stupid">
-<h2>Compress Me, Stupid!</h2>
+    <div>
 <div class="section" id="how-it-all-started">
-<h3>How it all started</h3>
+<h2>How it all started</h2>
 <p>I think I began to become truly interested in compression when, back
 in 1992, I was installing <a class="reference external" href="http://en.wikipedia.org/wiki/C_News">C-News</a>, a news server package meant
 to handle <a class="reference external" href="http://en.wikipedia.org/wiki/Usenet">Usenet News</a>
@@ -143,7 +140,7 @@ experimenting with compression for maximizing the number of groups
 that we could bring to our community.</p>
 </div>
 <div class="section" id="compressing-usenet-news">
-<h3>Compressing Usenet News</h3>
+<h2>Compressing Usenet News</h2>
 <p>The most used compressor by 1992 was <a class="reference external" href="http://en.wikipedia.org/wiki/Compress">compress</a>, a Unix program based on the
 <a class="reference external" href="http://en.wikipedia.org/wiki/LZW">LZW</a> compression algorithm.  But
 LZW had patents issues, so by that time Jean-Loup Gailly and Mark
@@ -173,7 +170,7 @@ blew-up my mind and made me passionate about compression technologies
 for the years to come.</p>
 </div>
 <div class="section" id="lzo-and-the-explosion-of-compression-technology">
-<h3>LZO and the explosion of compression technology</h3>
+<h2>LZO and the explosion of compression technology</h2>
 <p>During 1996, Markus F.X.J. Oberhumer started to announce the
 availability of his own set of LZO compressors.  These consisted in
 many different compressors, all of them being variations of his own
@@ -204,7 +201,7 @@ compressors with the same spirit than LZO, but with more permissive
 licenses (typically BSD/MIT), many of them being a nice fit for PyTables.</p>
 </div>
 <div class="section" id="a-new-compressor-for-pytables-hdf5">
-<h3>A new compressor for PyTables/HDF5</h3>
+<h2>A new compressor for PyTables/HDF5</h2>
 <p>By 2008 it was clear that PyTables needed a compressor whose sources
 could be included in the PyTables tarball, so minimizing the
 installation requirements.  For this I started considering a series of
@@ -244,7 +241,7 @@ of terabytes</strong> on many different Windows and Unix boxes, both in
 32-bit and 64-bit.  The new beast was ready to ship.</p>
 </div>
 <div class="section" id="blosc-was-born">
-<h3>Blosc was born</h3>
+<h2>Blosc was born</h2>
 <p>I then grabbed BloscLZ, the multi-threading support and the
 SSE2-powered shuffle and put it all in the same package.  That also became a
 <strong>standalone, pure C library</strong>, with no attachments to PyTables or HDF5,

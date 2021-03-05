@@ -9,9 +9,6 @@
 .. type: text
 
 
-Announcing Blosc Wheels
-=======================
-
 We are happy to announce that wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are being produced on regular basis for python-blosc.  Such wheels also contain development files for the C-Blosc library.  If you are interested in knowing more how to use them, keep reading.
 
 A Python wheel (.whl file) is a ZIP archive used to make easier the installation process of packages.  The new wheels make Blosc library installation faster by avoiding compiling, and they are now available at PyPI. See: https://pypi.org/project/blosc/.

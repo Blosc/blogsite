@@ -89,10 +89,9 @@
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="introducing-sparse-frames">
-<h2>Introducing Sparse Frames</h2>
+    <div>
 <div class="section" id="overview">
-<h3>Overview</h3>
+<h2>Overview</h2>
 <p>The <a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/176">new sparse frame implementation</a>
 allows the storage of Blosc2 super-chunk data chunks sparsely on-disk, using the filesystem as a key/value storage.
 This mimics existing formats like <a class="reference external" href="https://github.com/Blosc/bcolz/blob/master/DISK_FORMAT_v1.rst">bcolz</a>
@@ -118,7 +117,7 @@ For example, if the index chunk is 46 (2E in hexadecimal) the chunk file name wo
 be <cite>0000002E.chunk</cite>.</p>
 </div>
 <div class="section" id="advantages">
-<h3>Advantages</h3>
+<h2>Advantages</h2>
 <p>The big advantage of the sparse frame compared with the contiguous one is
 avoiding empty spaces resulting when updating a chunk.</p>
 <p>To better illustrate this, let's imagine that the set of the data chunks in
@@ -145,7 +144,7 @@ As there is no limit in the height of the books, the yellow book can be replaced
 larger book without creating empty spaces, and making a better use of space.</p>
 </div>
 <div class="section" id="example-of-use">
-<h3>Example of use</h3>
+<h2>Example of use</h2>
 <p>Creating a sparse frame in C-Blosc2 is easy; just specifify the name of the directory where
 you want to store your chunks and you are done:</p>
 <pre class="literal-block">blosc2_storage storage = {.urlpath="dir1.b2frame"};
@@ -163,7 +162,7 @@ for (nchunk = 0; nchunk &lt; NCHUNKS; nchunk++) {
 <p>You can have a look at a <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/examples/sframe_simple.c">more complete example here</a>.</p>
 </div>
 <div class="section" id="future-work">
-<h3>Future work</h3>
+<h2>Future work</h2>
 <p>We think that this implementation opens the door to several interesting possibilities.</p>
 <p>For example, by introducing networking code in Blosc2,
 the chunks could be stored in another machine and accessed remotely.
@@ -208,32 +207,31 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="announcing-blosc-wheels">
-<h2>Announcing Blosc Wheels</h2>
+    <div>
 <p>We are happy to announce that wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are being produced on regular basis for python-blosc.  Such wheels also contain development files for the C-Blosc library.  If you are interested in knowing more how to use them, keep reading.</p>
 <p>A Python wheel (.whl file) is a ZIP archive used to make easier the installation process of packages.  The new wheels make Blosc library installation faster by avoiding compiling, and they are now available at PyPI. See: <a class="reference external" href="https://pypi.org/project/blosc/">https://pypi.org/project/blosc/</a>.</p>
 <p>Moreover, wheels for Blosc have support for AVX2 <em>runtime</em> detection, so it will be automatically leveraged in case the local host has AVX2. On the other hand, if the host does not have AVX2, SSE2 is used instead, which, even if it is slower than AVX2, it is still faster than regular x86 instructions.</p>
 <div class="section" id="small-intro-to-wheels">
-<h3>Small intro to wheels</h3>
+<h2>Small intro to wheels</h2>
 <p>Wheels are an advantageous alternative to distribute Python (but also pure C) packages which contain C (or Cython) source code, and hence, need a compiler.  For those that are not familiar to wheels, here it comes a small tutorial on how to create and use wheels.</p>
 <p>First, let's recall the traditional way to build a source distribution:</p>
-<pre class="code console"><a name="rest_code_02caee5339a44016a12aee8b19e8eef4-1"></a><span class="gp">$ </span>python setup.py sdist
+<pre class="code console"><a name="rest_code_d2b45202d6334270b3e20f03158c0a1a-1"></a><span class="gp">$ </span>python setup.py sdist
 </pre>
 <p>To build a wheel, the process is quite similar:</p>
-<pre class="code console"><a name="rest_code_9a68514850964bf09afa557bd700a28d-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
+<pre class="code console"><a name="rest_code_b865549b93b74311aab1a797113aa0e9-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
 </pre>
 <p>To install a package via pip (pip decides whether install a from wheel or compile from the source package; wheels have obviously more priority):</p>
-<pre class="code console"><a name="rest_code_539427e68bbd4d1eafd8149f03bd95c1-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_a0cfc0495f9745fb8dbe7f869b626a42-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use source distribution:</p>
-<pre class="code console"><a name="rest_code_6221c6d7f48c4e449e3cccaacb48f617-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_2550b788da314c0aaf751ee2d5be741a-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use wheels:</p>
-<pre class="code console"><a name="rest_code_0aa56931c4e248469ed9cfdc3ae035da-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_c9edbed6ca91418f8fe6ed29126e3a58-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
 </pre>
 </div>
 <div class="section" id="different-types-of-wheels">
-<h3>Different types of wheels</h3>
+<h2>Different types of wheels</h2>
 <p>There are different kind of wheels, depending on the goals and the build process:</p>
 <ul class="simple">
 <li><p>Universal Wheels are wheels that are pure Python (i.e. contain no compiled extensions) and support Python 2 and 3.</p></li>
@@ -249,37 +247,37 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>Specifically, Blosc wheels are platform wheels that support Python3 (3.7 and up) on Windows, Linux and Mac, for both 32 and 64 bits systems.</p>
 </div>
 <div class="section" id="binaries-for-c-blosc-libraries-are-included">
-<h3>Binaries for C-Blosc libraries are included</h3>
+<h2>Binaries for C-Blosc libraries are included</h2>
 <p>Although wheels were meant for Python packages, nothing prevents adding more stuff to them.  In particular, we are not only distributing python-blosc binary extensions in our wheels, but also binaries for the C-Blosc library.  This way, people willing to use the C-Blosc library can make use of these wheels to install the necessary development files.</p>
 <p>First, install the binary wheel via PyPI without the need to manually compile the thing:</p>
-<pre class="code console"><a name="rest_code_6afecf4d82ce4fd0bb829cc3a343be27-1"></a><span class="gp">$ </span>pip install --only-binary blosc
+<pre class="code console"><a name="rest_code_5e01b30cf4504f8aa03564f4f80300b9-1"></a><span class="gp">$ </span>pip install --only-binary blosc
 </pre>
 <p>Now, let's suppose that we want to compile the <cite>c-blosc/examples/many_compressors.c</cite> on Linux:</p>
 <p>First, you have to look where the wheels directory is located.  In our case:</p>
-<pre class="code console"><a name="rest_code_ada1eb1b7a1b4b48b93ddfd9ee92d883-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
-<a name="rest_code_ada1eb1b7a1b4b48b93ddfd9ee92d883-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
+<pre class="code console"><a name="rest_code_11f3543ee25a4cbda16c13c6901d6aa1-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
+<a name="rest_code_11f3543ee25a4cbda16c13c6901d6aa1-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
 </pre>
 <p>For the actual compilation, you need to pass the directory for the include and lib directories:</p>
-<pre class="code console"><a name="rest_code_47c6deb19370469f9264513700d1f3a2-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
+<pre class="code console"><a name="rest_code_c53a3e5f5bb14fad82042a7495372ccf-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
 </pre>
 <p>Finally, run the resulting binary and hopefully you will see something like:</p>
-<pre class="code console"><a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-1"></a><span class="gp">$ </span>./many_compressors
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-3"></a><span class="go">Using 4 threads (previously using 1)</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-4"></a><span class="go">Using blosclz compressor</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-6"></a><span class="go">Succesful roundtrip!</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-7"></a><span class="go">Using lz4 compressor</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-9"></a><span class="go">Succesful roundtrip!</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-10"></a><span class="go">Using lz4hc compressor</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
-<a name="rest_code_3459a851bace4e46ba19cef0efb0f7c5-12"></a><span class="go">Succesful roundtrip!</span>
+<pre class="code console"><a name="rest_code_a8d2839ab5284b7db9898f43f758a193-1"></a><span class="gp">$ </span>./many_compressors
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-3"></a><span class="go">Using 4 threads (previously using 1)</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-4"></a><span class="go">Using blosclz compressor</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-6"></a><span class="go">Succesful roundtrip!</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-7"></a><span class="go">Using lz4 compressor</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-9"></a><span class="go">Succesful roundtrip!</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-10"></a><span class="go">Using lz4hc compressor</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
+<a name="rest_code_a8d2839ab5284b7db9898f43f758a193-12"></a><span class="go">Succesful roundtrip!</span>
 </pre>
 <p>For more details, including compiling with binary wheels on other platforms than Linux, see: <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst">https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst</a>.</p>
 </div>
 <div class="section" id="final-remarks">
-<h3>Final remarks</h3>
+<h2>Final remarks</h2>
 <p>Producing Python wheels for a project can be somewhat involved for regular users. However, the advantages of binary wheels really make them worth the effort, since they make the installation process easier and faster for users.  This is why we are so happy to finally provide wheels that can benefit, not only python-blosc users, but users of the C-Blosc library as well.</p>
 <p>Last but not least, a big thank you to the Zarr team, specially to Jeff Hammerbacher, who provided a grant to the Blosc team for making the wheels support official.  Hopefully this new development will make life easier for Zarr developers and users (by the way, we are really glad to see Zarr quickly spreading as a data container for big multidimensional data, and Blosc helping on the compression part).</p>
 </div>
@@ -302,15 +300,14 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="mid-2020-report-for-status-of-work-on-blosc-projects">
-<h2>Mid 2020 Report for Status of Work on Blosc projects</h2>
+    <div>
 <p>2020 has been a year where the Blosc projects have received important donations, totalling an amount of $55,000 USD so far.  In the present report we list the most important tasks that have been carried out during the period that goes from January 2020 to August 2020.  Most of these tasks are related to the most fast-paced projects under development: C-Blosc2 and Caterva (including its cat4py wrapper).  Having said that, the Blosc development team has been active in other projects too (C-Blosc, python-blosc), although mainly for maintenance purposes.</p>
 <p>Besides, we also list the roadmap for the C-Blosc2, Caterva and cat4py projects that we plan to tackle during the next few months.</p>
 <div class="section" id="c-blosc2">
-<h3>C-Blosc2</h3>
+<h2>C-Blosc2</h2>
 <p>C-Blosc2 adds new data containers, called superchunks, that are essentially a set of compressed chunks in memory that can be accessed randomly and enlarged during its lifetime.  Also, a new frame serialization layer has been added, so that superchunks can be persisted on disk, while keeping the same properties of superchunks in memory.  Finally, a metalayer capability allow for higher level containers to be created on top of superchunks/frames.</p>
 <div class="section" id="highligths">
-<h4>Highligths</h4>
+<h3>Highligths</h3>
 <ul class="simple">
 <li><p>Maskout functionality.  This allows for selectively choose the blocks of a chunk that are going to be decompressed.  This paves the road for faster multidimensional slicing in Caterva (see below in the Caterva section).</p></li>
 <li><p>Prefilters introduced and declared stable.  Prefilters allow for the user to pass C functions for performing arbitrary computations on a chunk prior to the filter/codec pipeline.  In addition, the C function can even have access to more chunks than just the one that is being compressed.  This opens the door to a way to operate with different super-chunks and produce a new one very efficiently. See <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/tests/test_prefilter.c">https://github.com/Blosc/c-blosc2/blob/master/tests/test_prefilter.c</a> for some examples of use.</p></li>
@@ -320,7 +317,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </ul>
 </div>
 <div class="section" id="roadmap-for-c-blosc2">
-<h4>Roadmap for C-Blosc2</h4>
+<h3>Roadmap for C-Blosc2</h3>
 <p>During the next few months, we plan to tackle the next tasks:</p>
 <ul class="simple">
 <li><p>Postfilters.  The same way that prefilters allows to do user-defined computations prior to the compression pipeline, the postfilter would allow to do the same <em>after</em> the decompression pipeline.  This could be useful in e.g. creating superchunks out of functions taking simple data as input (for example, a [min, max] range of values).</p></li>
@@ -332,10 +329,10 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </div>
 </div>
 <div class="section" id="caterva-cat4py">
-<h3>Caterva/cat4py</h3>
+<h2>Caterva/cat4py</h2>
 <p>Caterva is a multidimensional container on top of C-Blosc2 containers.  It uses the metalayer capabilities present in superchunks/frames in order to store the multidimensionality information necessary to define arrays up to 8 dimensions and up to 2^63 elements.  Besides being able to create such arrays, Caterva provides functionality to get (multidimensional) slices of the arrays easyly and efficiently.  cat4py is the Python wrapper for Caterva.</p>
 <div class="section" id="id1">
-<h4>Highligths</h4>
+<h3>Highligths</h3>
 <ul class="simple">
 <li><p>Multidimensional blocks.  Chunks inside superchunk containers are endowed with a multidimensional structure so as to enable efficient slicing.  However, in many cases there is a tension between defining large chunks so as to reduce the amount of indexing to find chunks or smaller ones in order to avoid reading data that falls outside of a slice.  In order to reduce such a tension, we endowed the blocks inside chunks with a multidimensional structure too, so that the user has two parameters (chunkshape and blockshape) to play with in order to optimize I/O for their use case.  For an example of the kind of performance enhancements you can expect, see <a class="reference external" href="https://htmlpreview.github.io/?https://github.com/Blosc/cat4py/blob/269270695d7f6e27e6796541709e98e2f67434fd/notebooks/slicing-performance.html">https://htmlpreview.github.io/?https://github.com/Blosc/cat4py/blob/269270695d7f6e27e6796541709e98e2f67434fd/notebooks/slicing-performance.html</a>.</p></li>
 <li><p>API refactoring.  Caterva is a relatively young project, and its API grew up organically and hence, in a quite disorganized manner.  We recognized that and proceeded with a big API refactoring, trying to put more sense in the naming schema of the functions, as well as in providing a minimal set of C structs that allows for a simpler and better API.</p></li>
@@ -344,7 +341,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </ul>
 </div>
 <div class="section" id="roadmap-for-caterva-cat4py">
-<h4>Roadmap for Caterva / cat4py</h4>
+<h3>Roadmap for Caterva / cat4py</h3>
 <p>During the next months, we plan to tackle the next tasks:</p>
 <ul class="simple">
 <li><p>Append chunks in any order. This will make it easier for the user to create arrays, since they will not be forced to use a row-wise order.</p></li>
@@ -355,7 +352,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </div>
 </div>
 <div class="section" id="final-thoughts">
-<h3>Final thoughts</h3>
+<h2>Final thoughts</h2>
 <p>We are very grateful to our sponsors in 2020; they allowed us to implement what we think would be nice features for the whole Blosc ecosystem.  However, and although we did a lot of progress towards making C-Blosc2 and Caterva as featured and stable as possible, we still need to finalize our efforts so as to see both projects stable enough to allow them to be used in production.  Our expectation is to release a 2.0.0 (final) release for C-Blosc2 by the end of the year, whereas Caterva (and cat4py) should be declared stable during 2021.</p>
 <p>Also, we are happy to have enrolled new members on Blosc crew: Óscar Griñón, who proved to be instrumental in implementing the multidimensional blocks in Caterva and Nathan Moinvaziri, who is making great strides in making C-Blosc and C-Blosc2 more secure.  Thanks guys!</p>
 <p>Hopefully 2021 will also be a good year for seeing the Blosc ecosystem to evolve.  If you are interested on what we are building and want to help, we are open to any kind of contribution, including <a class="reference external" href="https://blosc.org/pages/donate/">donations</a>.  Thank you for your interest!</p>
@@ -379,15 +376,14 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="c-blosc-beast-release">
-<h2>C-Blosc Beast Release</h2>
+    <div>
 <p><strong>TL;DR;</strong> The improvements in new CPUs allow for more cores and (much) larger caches. Latest C-Blosc release leverages these facts so as to allow better compression ratios, while keeping the speed on par with previous releases.</p>
 <p>During the past two months we have been working hard at increasing the efficiency of Blosc for the new processors that are coming with more cores than ever before (8 can be considered quite normal, even for laptops, and 16 is not that unusual for rigs).  Furthermore, their caches are increasing beyond limits that we thought unthinkable just a few years ago (for example, AMD is putting 64 MB in L3 for their mid-range Ryzen2 39x0 processors).  This is mainly a consequence of the recent introduction of the 7nm process for both ARM and AMD64 architectures.  It turns out that compression ratios are quite dependent on the sizes of the streams to compress, so having access to more cores and significantly larger caches, it was clear that Blosc was in a pressing need to catch-up and fine-tune its performance for such a new 'beasts'.</p>
 <p>So, the version released today (<a class="reference external" href="https://github.com/Blosc/c-blosc/releases/tag/v1.20.0">C-Blosc 1.20.0</a>) has been carefully fine-tuned to take the most of recent CPUs, specially for fast codecs, where even if speed is more important than compression ratio, the latter is still a very important parameter.  With that, we decided to increase the amount of every compressed stream in a block from 64 KB to 256 KB (most of CPUs nowadays have this amount of private L2 cache or even larger).   Also, it is important to allow a minimum of shared L3 cache to every thread so that they do not have to compete for resources, so a new restriction has been added so that no thread has to deal with streams larger than 1 MB (both old and modern CPUs seem to guarantee that they provide at least this amount of L3 per thread).</p>
 <p>Below you will find the net effects of this new fine-tuning of fast codecs like LZ4 and BloscLZ on our AMD 3900X box (12 physical cores, 64 MB L3).  Here we will be comparing results from C-Blosc 1.18.1 and C-Blosc 1.20.0 (we will skip the comparison against 1.19.x because this can be considered an intermediate release in our pursuit).  Spoiler: you will be seeing an important boost of compression ratios, while the high speed of LZ4 and BloscLZ codecs is largely kept.</p>
 <p>On the plots below, on the left is the performance of 1.18.1 release, whereas on the right is the performance of the new 1.20.0 release.</p>
 <div class="section" id="effects-in-lz4">
-<h3>Effects in LZ4</h3>
+<h2>Effects in LZ4</h2>
 <p>Let's start by looking at how the new fine tuning affected <em>compression</em> performance:</p>
 <table>
 <colgroup>
@@ -414,7 +410,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>So the decompression speed is generally the same, even for data that can be compressed with high compression ratios.</p>
 </div>
 <div class="section" id="effects-in-blosclz">
-<h3>Effects in BloscLZ</h3>
+<h2>Effects in BloscLZ</h2>
 <p>Now it is the turn for BloscLZ.  Similarly to LZ4, this codec is also meant for speed, but another reason for its existence is that it usually provides better compression ratios than LZ4 when using synthetic data.  In that sense, BloscLZ complements well LZ4 because the latter can be used for real data, whereas BloscLZ is usually a better bet for highly repetitive synthetic data.  In new C-Blosc we have introduced BloscLZ 2.3.0 which brings a brand new entropy detector which will disable compression early when entropy is high, allowing to selectively put CPU cycles where there are more low-hanging data compression opportunities.</p>
 <p>Here it is how performance changes for <em>compression</em>:</p>
 <table>
@@ -442,11 +438,11 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>As usual for the new release, the decompression speed is generally the same, and performance can still exceed 80 GB/s for the whole range of compression levels.  Also noticeable is that fact that single-thread speed is pretty competitive with a regular <cite>memcpy()</cite>.  Again, Ryzen2 architecture is showing its muscle here.</p>
 </div>
 <div class="section" id="final-thoughts">
-<h3>Final Thoughts</h3>
+<h2>Final Thoughts</h2>
 <p>Due to technological reasons, CPUs are evolving towards having more cores and larger caches.  Hence, compressors and specially Blosc, has to adapt to the new status quo.  With the new parametrization and new algorithms (early entropy detector) introduced today, we can achieve much better results.  In new Blosc you can expect a good bump in compression ratios with fast codecs (LZ4, BloscLZ) while keeping speed as good as always.</p>
 </div>
 <div class="section" id="appendix-hardware-and-software-used">
-<h3>Appendix: Hardware and Software Used</h3>
+<h2>Appendix: Hardware and Software Used</h2>
 <p>For reference, here it is the software that has been used for this blog entry:</p>
 <ul>
 <li><p><strong>Hardware</strong>: AMD Ryzen2 3900X, 12 physical cores, 64 MB L3, 32 GB RAM.</p></li>
@@ -477,17 +473,16 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="blosc-received-a-50-000-usd-donation">
-<h2>Blosc Received a $50,000 USD donation</h2>
+    <div>
 <p>I am happy to announce that the Blosc project recently received a donation of $50,000 USD via NumFOCUS.  Now that we have such an important amount available, our plan is to use it in order to continue making Blosc and its ecosystem more useful for the community.  In order to do so, it is important to stress out that our priorities are going to be on the fundamentals of the stack: getting <a class="reference external" href="https://github.com/Blosc/c-blosc2">C-Blosc2</a> out of beta and pushing for making <a class="reference external" href="https://github.com/Blosc/Caterva">Caterva</a> (the multi-dimensional container on top of C-Blosc2) actually usable.</p>
 <div class="section" id="critical-tasks-pushing-c-blosc2-and-caterva">
-<h3>Critical Tasks: Pushing C-Blosc2 and Caterva</h3>
+<h2>Critical Tasks: Pushing C-Blosc2 and Caterva</h2>
 <p><a class="reference external" href="https://github.com/Blosc/c-blosc2">C-Blosc2</a> has been kind of a laboratory that we used for testing new ideas, like new 64-bit containers, new filters, a new serialization system, the concept of pre-filters and others, for the past 5 years.  Although the fork from C-Blosc happened such a long time ago, we tried hard to keep the API backwards compatible so that C-Blosc2 can be used as a drop-in replacement of C-Blosc1 --but beware, the C-Blosc2 format will not be forward-compatible with C-Blosc1, but will be backward-compatible, that is, it will be able to read C-Blosc1 compressed chunks.</p>
 <p>On its hand, <a class="reference external" href="https://github.com/Blosc/Caterva">Caterva</a> is our attempt to build a multidimensional container that is tightly built on top of C-Blosc2, so leveraging its unique features.  Caterva is a C99 library (the same than C-Blosc2) that will allow an easy adoption by many different libraries that are about matrix manipulation.  The fact that it supports on-the-flight compression and persistency will open new possibilities in that the size of matrices will not be limited to the available memory anymore: data may span through available memory <em>or</em> disk in <em>compressed</em> state.</p>
 <p>Provided how fundamental C-Blosc2 and Caterva packages are meant to be, we think that the usefulness of the Blosc project as a whole will be largely benefited from putting most of our efforts here for the next months/years.  For this, we already established a series of priorities for working in these projects, as specified in the roadmaps below</p>
 </div>
 <div class="section" id="roadmap-for-c-blosc2">
-<h3>Roadmap for C-Blosc2</h3>
+<h2>Roadmap for C-Blosc2</h2>
 <p>C-Blosc2 is already in beta stage, and in the next few months we should see it in production stage.  Here are some of the more important the things that we want to tackle in order to make this happen:</p>
 <ul class="simple">
 <li><p>Plugin capabilities for allowing users to add more filters and codecs. There should also be a plugin register capability so that the info about the new filters and codecs can be persistent and propagated to different machines.</p></li>
@@ -504,7 +499,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>For a more detailed discussion see: <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/ROADMAP.md">https://github.com/Blosc/c-blosc2/blob/master/ROADMAP.md</a></p>
 </div>
 <div class="section" id="roadmap-for-caterva">
-<h3>Roadmap for Caterva</h3>
+<h2>Roadmap for Caterva</h2>
 <p>Caterva is a much more young project and as such, one may say that it is still in alpha stage, although the basic functionality like creating multidimensional containers, getting items or multidimensional slices or accessing persistent data without a previous load is already there.  However, we still miss important things like:</p>
 <ul class="simple">
 <li><p>A complete refactorization of the Caterva C code to facilitate its usability.</p></li>
@@ -516,11 +511,11 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>For a more detailed discussion see: <a class="reference external" href="https://github.com/Blosc/Caterva/blob/master/ROADMAP.md">https://github.com/Blosc/Caterva/blob/master/ROADMAP.md</a></p>
 </div>
 <div class="section" id="how-we-are-spending-resources">
-<h3>How we are spending resources</h3>
+<h2>How we are spending resources</h2>
 <p>Money is important, but not everything: you need people to work on a project.  We are slowly starting to put consistent human resources in the Blosc project.  To start with, I (Francesc Alted) and Aleix Alcacer will be putting 25% of our time in the project for the next months, and hopefully others will join too.  We will also be using funds to invest in our main tool, that is laptops and desktop computers, but also some furniture like proper seats and tables; the office space is important for creating a happy team.  Finally, our plan is to use a part of the donation in facilitating meeting among the Blosc development team.</p>
 </div>
 <div class="section" id="your-input-is-important-for-us">
-<h3>Your input is important for us</h3>
+<h2>Your input is important for us</h2>
 <p>Although during the next year or so, we plan to organize some meetings of the board of directors and the Blosc development team, we think that our ideas cannot grow isolated from the community of users.  So in case you want to convey ideas or better, contribute with <em>implementation</em> of ideas, we will be happy to hear and discuss.  You can get in touch with us via the Blosc mailing list (<a class="reference external" href="https://groups.google.com/forum/#!forum/blosc">https://groups.google.com/forum/#!forum/blosc</a>), and the @Blosc2 twitter account.  We are thinking that having other tools like Discourse may help in driving discussions more to the point, but so far we have little experience with it; if you have other suggestions please tell us.</p>
 <p>All in all, the Blosc development team is very excited about this new development, and we are putting all our enthusiasm for delivering a new set of tools that we sincerely hope will of of help for the data community out there.</p>
 <p>Finally, let me thank our main sponsor for their generous donation, NumFOCUS for accepting our project inside its umbrella, and to all the users and contributors that made Blosc and its ecosystem to help people through the past years (a bit more than 10 since the first C-Blosc 1.0 release).</p>
@@ -547,37 +542,36 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="blosc2-meets-rome">
-<h2>Blosc2 Meets Rome</h2>
+    <div>
 <p>On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new <a class="reference external" href="https://en.wikipedia.org/wiki/Zen_2">Zen 2</a> micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:</p>
 <img alt="/images/blosc2-meets-rome/amd-rome-arch-multi-die.png" class="align-center" src="images/blosc2-meets-rome/amd-rome-arch-multi-die.png"><p>Such a separation of dies for I/O and computing has quite <a class="reference external" href="https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm/3">large consequences in terms of scalability when accessing memory</a>, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous <a class="reference external" href="https://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a>.  This essentially boils down to compute an aggregation with a simple loop like:</p>
-<pre class="code c"><a name="rest_code_4fefd7648a10493fb52b96e1b066baf5-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_4fefd7648a10493fb52b96e1b066baf5-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_4fefd7648a10493fb52b96e1b066baf5-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a name="rest_code_4fefd7648a10493fb52b96e1b066baf5-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_9622a6be320541e0b424558226e26f50-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_9622a6be320541e0b424558226e26f50-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_9622a6be320541e0b424558226e26f50-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a name="rest_code_9622a6be320541e0b424558226e26f50-4"></a><span class="p">}</span>
 </pre>
 <p>As described in the original blog post, the different <cite>udata</cite> arrays are just chunks of the original dataset that are decompressed just in time for performing the partial aggregation operation; the final result is indeed the sum of all the partial aggregations.  Also we have seen that the time to execute the aggregation is going to depend quite a lot on the kind of data that is decompressed: carefully chosen synthetic data can be decompressed much more quickly than real data.  But syntehtic data is nevertheless interesting as it allows for a roof analysis of where the performance can grow up to.</p>
 <p>In this blog, we are going to see how the AMD EPYC 7402 (Rome), a 24-core processor performs on both synthetic and real data.</p>
 <div class="section" id="aggregating-the-synthetic-dataset-on-amd-epyc-7402-24-core">
-<h3>Aggregating the Synthetic Dataset on AMD EPYC 7402 24-Core</h3>
+<h2>Aggregating the Synthetic Dataset on AMD EPYC 7402 24-Core</h2>
 <p>The synthetic data chosen for this benchmark allows to be compressed/decompressed very easily with applying the shuffle filter before the actual compression codec.  Interestingly, and as good example of how filters can benefit the compression process, if we would not apply the shuffle filter first, synthetic data was going to take much more time to compress/decompress (test it by yourself if you don't believe this).</p>
 <p>After some experiments, and as usual for synthetic datasets, the codec inside Blosc2 that has shown the best speed while keeping a decent compression ratio (54.6x), has been BloscLZ with compression level 3.  Here are the results:</p>
 <img alt="/images/blosc2-meets-rome/sum_openmp_synthetic-blosclz-3.png" class="align-center" src="images/blosc2-meets-rome/sum_openmp_synthetic-blosclz-3.png"><p>As we can see, the uncompressed dataset scales pretty well until 8 threads, where it hits the memory wall for this machine (around 74 GB/s).  On its hand, even if data compressed with Blosc2 (in combination with BloscLZ codec) shows less performance initially, it scales quite smoothly up to 12 threads, where it reaches a higher performance than its uncompressed counterpart (and reaching the 90 GB/s mark).</p>
 <p>After that, the compressed dataset can perform aggregations at speeds that are typically faster than uncompressed ones, reaching important peaks at some magical number of threads (up to 210 GB/s at 48 threads).  Why these peaks exist at all is probably related with the architecture of the AMD Rome processor, but provided that we are using a 24-core CPU there is little wonder that numbers like 12, 24 (28 is an exception here) and 48 are reaching the highest figures.</p>
 </div>
 <div class="section" id="aggregating-the-precipitation-dataset-on-amd-epyc-7402-24-core">
-<h3>Aggregating the Precipitation Dataset on AMD EPYC 7402 24-Core</h3>
+<h2>Aggregating the Precipitation Dataset on AMD EPYC 7402 24-Core</h2>
 <p>Now it is time to check the performance of the aggregation with the 100 million values dataset coming from a <a class="reference external" href="http://reanalysis.meteo.uni-bonn.de/">precipitation dataset from Central Europe</a>.  Computing the aggregation of this data is representative of a catchment average of precipitation over a drainage area.  This time, the best codec inside Blosc2 was determined to be LZ4 with compression level 9:</p>
 <img alt="/images/blosc2-meets-rome/sum_openmp_rainfall-lz4-9-lz4-9-ipp.png" class="align-center" src="images/blosc2-meets-rome/sum_openmp_rainfall-lz4-9-lz4-9-ipp.png"><p>As expected, the uncompressed aggregation scales pretty much the same than for the synthetic dataset (in the end, the Arithmetic and Logical Unit in the CPU is completely agnostic on what kind of data it operates with).  But on its hand, the compressed dataset scales more slowly, but more steadily towards hitting a maximum at 48 threads, where it reaches almost the same speed than the uncompressed dataset, which is quite a feat, provided the high memory bandwidth of this machine (~74 GB/s).</p>
 <p>Also, as Blosc2 recently gained support for the  <a class="reference external" href="https://blosc.org/posts/blosc2-first-beta/">accelerated LZ4 codec inside Intel IPP</a>, figures for it have been added to the plot above.  There one can see that Intel's accelerated LZ4 can get an up to 10% boost in speed compared with regular LZ4; this additional 10% actually allows Blosc2/LZ4 to be clearly faster than the uncompressed dataset at 48 threads.</p>
 </div>
 <div class="section" id="final-thoughts">
-<h3>Final Thoughts</h3>
+<h2>Final Thoughts</h2>
 <p>AMD EPYC Rome represents a significant leap forward in adding a high number of cores to CPUs in a way that scales really well, allowing to put more computational resources to our problems at hand.  Here we have shown how nicely a 24-core AMD Rome CPU performs when performing tasks with in-memory compressed datasets; first, by allowing competitive speed when using compression with real data and second, allowing speeds of more than 200 GB/s (with synthetic datasets).</p>
 <p>Finally, the 24-core CPU that we have exercised here is just for whetting your appetite, as CPUs of 32 or even 64 cores are going to happen more and more often in the next future.  Although I should have better said in <em>present times</em>, as <a class="reference external" href="https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm">AMD announced today the availability of 32-core CPUs for the workstation market</a>, with 64-core ones coming next year.  Definitely, compression is going to play an increasingly important role in getting the most out of these beasts.</p>
 </div>
 <div class="section" id="appendix-software-used">
-<h3>Appendix: Software used</h3>
+<h2>Appendix: Software used</h2>
 <p>For reference, here it is the software that has been used for this blog entry:</p>
 <ul class="simple">
 <li><p><strong>OS</strong>: Ubuntu 19.10</p></li>
@@ -586,7 +580,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </ul>
 </div>
 <div class="section" id="acknowledgments">
-<h3>Acknowledgments</h3>
+<h2>Acknowledgments</h2>
 <p>Thanks to <a class="reference external" href="https://www.packet.com">packet.com</a> for kindly providing the hardware for the purposes of this benchmark.  Packet guys have been really collaborative through the time in allowing me testing new, bare-metal hardware, and I must say that I am quite impressed on how easy is to start using their services with almost no effort on user's side.</p>
 </div>
 </div>
@@ -608,22 +602,21 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="c-blosc2-enters-beta-stage">
-<h2>C-Blosc2 Enters Beta Stage</h2>
+    <div>
 <p>The first beta version of C-Blosc2 has been released today.  C-Blosc2 is the new iteration of C-Blosc 1.x series, adding more features and better documentation and is the outcome of more than 4 years of slow, but steady development.  This blog entry describes the main features that you may see in next generation of C-Blosc, as well as an overview of what is in our roadmap.</p>
 <p><strong>Note 1</strong>: C-Blosc2 is currently in beta stage, so not ready to be used in production yet.  Having said this, being in beta means that the API has been declared frozen, so there is guarantee that your programs will continue to work with future versions of the library.  If you want to collaborate in this development, you are welcome: have a look at our roadmap below and contribute PR's or just go to the <a class="reference external" href="https://github.com/Blosc/c-blosc2/issues">open issues</a> and help us with them.</p>
 <p><strong>Note 2</strong>: the term <cite>C-Blosc1</cite> will be used instead of the official <cite>C-Blosc</cite> name for referring to the 1.x series of the library.  This is to make the distinction between the C-Blosc 2.x series and C-Blosc 1.x series more explicit.</p>
 <div class="section" id="main-features-in-c-blosc2">
-<h3>Main features in C-Blosc2</h3>
+<h2>Main features in C-Blosc2</h2>
 <div class="section" id="new-64-bit-containers">
-<h4>New 64-bit containers</h4>
+<h3>New 64-bit containers</h3>
 <p>The main container in C-Blosc2 is the <cite>super-chunk</cite> or, for brevity, <cite>schunk</cite>, that is made by smaller containers which are essentially C-Blosc1 32-bit containers.  The <cite>super-chunk</cite> can be backed (or not) by another container which is called a <cite>frame</cite>.  If a <cite>schunk</cite> is not backed by a <cite>frame</cite> (the default), the different chunks will be stored sparsely in-memory.</p>
 <p>The <cite>frame</cite> object allows to store super-chunks contiguously, either on-disk or in-memory.  When a super-chunk is backed by a frame, instead of storing all the chunks sparsely in-memory, they are serialized inside the frame container.  The frame can be stored on-disk too, meaning that persistence of super-chunks is supported and that data can be accessed using the same API independently of where it is stored, memory or disk.</p>
 <p>Finally, the user can add meta-data to frames for different uses and in different layers.  For example, one may think on providing a meta-layer for <a class="reference external" href="http://www.numpy.org">NumPy</a> so that most of the meta-data for it is stored in a meta-layer; then, one can place another meta-layer on top of the latter can add more high-level info (e.g. geo-spatial, meteorological...), if desired.</p>
 <p>When taken together, these features represent a pretty powerful way to store and retrieve compressed data that goes well beyond of the previous contiguous compressed buffer, 32-bit limited, of C-Blosc1.</p>
 </div>
 <div class="section" id="new-filters-and-filters-pipeline">
-<h4>New filters and filters pipeline</h4>
+<h3>New filters and filters pipeline</h3>
 <p>Besides <cite>shuffle</cite> and <cite>bitshuffle</cite> already present in C-Blosc1, C-Blosc2 already implements:</p>
 <ul class="simple">
 <li><p><cite>delta</cite>: the stored blocks inside a chunk are diff'ed with respect to first block in the chunk.  The basic idea here is that, in some situations, the diff will have more zeros than the original data, leading to better compression.</p></li>
@@ -632,24 +625,24 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>Also, a new filter pipeline has been implemented.  With it, the different filters can be pipelined so that the output of one filter can be the input for the next; this happens at the block level, so minimizing the size of temporary buffers, and hence, accelerating the process.  Possible examples of pipelines are a <cite>delta</cite> filter followed by <cite>shuffle</cite>, or a <cite>trunc_prec</cite> followed by <cite>bitshuffle</cite>.  Up to 6 filters can be pipelined, so there is plenty of space for upcoming new filters to collaborate among them.</p>
 </div>
 <div class="section" id="more-simd-support-for-arm-and-powerpc">
-<h4>More SIMD support for ARM and PowerPC</h4>
+<h3>More SIMD support for ARM and PowerPC</h3>
 <p>New SIMD support for ARM (NEON), allowing for faster operation on ARM architectures.  Only <cite>shuffle</cite> is supported right now, but the idea is to implement <cite>bitshuffle</cite> for NEON too.</p>
 <p>Also, SIMD support for PowerPC (ALTIVEC) is here, and both <cite>shuffle</cite>  and <cite>bitshuffle</cite> are supported.  However, this has been done via a transparent mapping from SSE2 into ALTIVEC emulation in GCC 8, so performance could be better (but still, it is already a nice improvement over native C code; see PR <a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/59">https://github.com/Blosc/c-blosc2/pull/59</a> for details).  Thanks to Jerome Kieffer.</p>
 </div>
 <div class="section" id="new-codecs">
-<h4>New codecs</h4>
+<h3>New codecs</h3>
 <p>There is a new <a class="reference external" href="https://github.com/inikep/lizard">Lizard codec</a>, which is an efficient compressor with very fast decompression. It achieves compression ratio that is comparable to <cite>zip/zlib</cite> and <cite>zstd/brotli</cite> (at low and medium compression levels) that is able to attain decompression speeds of 1 GB/s or more.</p>
 </div>
 <div class="section" id="new-dictionary-support-for-better-compression-ratio">
-<h4>New dictionary support for better compression ratio</h4>
+<h3>New dictionary support for better compression ratio</h3>
 <p>Dictionaries allow for better discovery of data duplicates among different blocks: when a block is going to be compressed, C-Blosc2 can use a previously made dictionary (stored in the header of the super-chunk) for compressing all the blocks that are part of the chunks.  This usually improves the compression ratio, as well as the decompression speed, at the expense of a (small) overhead in compression speed.  Currently, this is only supported in the <cite>zstd</cite> codec, but would be nice to extend it to <cite>lz4</cite> and <cite>blosclz</cite> at least.</p>
 </div>
 <div class="section" id="much-improved-documentation-mark-up">
-<h4>Much improved documentation mark-up</h4>
+<h3>Much improved documentation mark-up</h3>
 <p>We are currently using a combination of Sphinx + Doxygen + Breathe for documenting the <a class="reference external" href="https://blosc-doc.readthedocs.io">C API for C-Blosc2</a>.  This is a huge step further compared with the documentation of C-Blosc1, where the developer needed to go the    <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/blosc/blosc.h">blosc.h</a> header for reading the docstrings there.  Thanks to Alberto Sabater for contributing the support for this.</p>
 </div>
 <div class="section" id="support-for-intel-ipp-integrated-performance-primitives">
-<h4>Support for Intel IPP (Integrated Performance Primitives)</h4>
+<h3>Support for Intel IPP (Integrated Performance Primitives)</h3>
 <p>Intel is producing a series of optimizations in their <a class="reference external" href="https://software.intel.com/en-us/ipp">IPP library</a> and among them, and <a class="reference external" href="https://software.intel.com/en-us/ipp-dev-reference-lz4-compression-functions">accelerated version of the LZ4 codec</a>.  Due to its excellent compression capabilities and speed, LZ4 is probably the most used codec in Blosc, so enabling even a bit more of optimization on LZ4 is always a good news.  And judging by the plots below, the Intel guys seem to have done an excellent job:</p>
 <table>
 <colgroup>
@@ -666,7 +659,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </div>
 </div>
 <div class="section" id="roadmap">
-<h3>Roadmap</h3>
+<h2>Roadmap</h2>
 <p>Of course, C-Blosc2 is not done yet, and there are many interesting enhancements that we would like to tackle sooner or later.  Here it is a more or less comprehensive list of our roadmap:</p>
 <ul class="simple">
 <li><p>Lock support for <cite>super-chunks</cite>: when different processes are accessing concurrently to super-chunks, make them to sync properly by using locks, either on-disk (frame-backed super-chunks), or in-memory.</p></li>
@@ -685,7 +678,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>The implementation of these features will require the help of people, either by contributing code (see  <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/DEVELOPING-GUIDE.rst">our developing guidelines</a>) or, as it turns out that <a class="reference external" href="https://numfocus.org/project/blosc">Blosc is a project sponsored by NumFOCUS</a>, you may want to  <a class="reference external" href="https://numfocus.org/donate-to-blosc">make a donation to the project</a>.  If you plan to contribute in any way, thanks so much in the name of the community!</p>
 </div>
 <div class="section" id="addendum-special-thanks-to-developers">
-<h3>Addendum: Special thanks to developers</h3>
+<h2>Addendum: Special thanks to developers</h2>
 <p>C-Blosc2 is the outcome of the work of <a class="reference external" href="https://github.com/Blosc/c-blosc2/graphs/contributors">many developers</a> that worked not only on C-Blosc2 itself, but also on C-Blosc1, from which C-Blosc2 inherits a lot of features.  I am very grateful to Jack Pappas, who contributed important portability enhancements, specially runtime and cross-platform detection of SSE2/AVX2 (with the help of Julian Taylor) as well as high precision timers (HPET) which are essential for benchmarking purposes.  Lucian Marc also contributed the support for ARM/NEON for the shuffle filter.  Jerome Kieffer contributed support for PowerPC/ALTIVEC.  Alberto Sabater, for his great efforts on producing really nice Blosc2 docs, among other aspects. And last but not least, to Valentin Haenel for general support, bug fixes and other enhancements through the years.</p>
 <blockquote>
 <p>** Enjoy Data!**</p>
@@ -710,19 +703,18 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="is-arm-hungry-enough-to-eat-intel-s-favorite-pie">
-<h2>Is ARM Hungry Enough to Eat Intel's Favorite Pie?</h2>
+    <div>
 <p><strong>Note</strong>: This entry is a follow-up of the <a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a> blog.  Please make sure that you have read it if you want to fully understand all the benchmarks performed here.</p>
 <p>At the beginning of the 1990s the computing world was mainly using RISC (Reduced Instruction Set Computer) architectures, namely SPARC, Alpha, Power and MIPS CPUs for performing serious calculations and Intel CPUs were seen as something that was appropriate just to run essentially personal applications on PCs, but almost nobody was thinking about them as a serious contender for server environments.  But Intel had an argument that almost nobody was ready to recognize how important it could become; with its dominance of the PC market it quickly ranked to be the largest CPU maker in the world and, with such an enormous revenue, Intel played its cards well and, by the beginning of 2000s, they were able to make of its CISC architecture (Complex Instruction Set Computer) the one with the best compute/price ratio, clearly beating the RISC offerings at that time.  That amazing achievement shut the mouths of CISC critics (to the point that nowadays almost everybody recognizes that performance has very little to do with using RISC or CISC) and cleared the path for Intel to dominate not only the PC world, but also the world of server computing for the next 20 years.</p>
 <p>Fast forward to the beginning of 2010s, with Intel clearly dominating the market of CPUs for servers.  However, at the same time something potentially disruptive happened: the market for mobile and embedded systems exploded making <a class="reference external" href="https://cacm.acm.org/magazines/2011/5/107684-an-interview-with-steve-furber/fulltext">the ARM architecture the most widely used architecture in this area</a>.  By 2017, with over 100 billion ARM processors produced, ARM was already the most widely used architecture in the world.  Now, the smart reader will have noted here a clear parallelism between the situation of Intel at the end of 1990s and ARM at the end of 2010s: both companies were responsible of the design of the most used CPUs in the world.  There was an important difference though: while Intel was able to implement its own designs, ARM was leaving the implementation job to third party vendors.  Of course, this fact will have consequences on the way ARM will be competing with Intel (see below).</p>
 <div class="section" id="arm-plans-for-improving-cpu-performance">
-<h3>ARM Plans for Improving CPU Performance</h3>
+<h2>ARM Plans for Improving CPU Performance</h2>
 <p>So with ARM CPUs dominating the world of mobile and embedded, the question is whether ARM would be interested in having a stab at the client market (laptops and PC desktops) and, by extension, to the server computing market during the 2020s decade or they would renounce to that because they comfortable enough with the current situation?  In 2018 ARM provided an important hint to answer this question: they really want to push hard for the client market with the <a class="reference external" href="https://www.anandtech.com/show/13226/arm-unveils-client-cpu-performance-roadmap">introduction of the Cortex A76 CPU</a> which aspires to redefine the capability of ARM to compete with Intel at its own game:</p>
 <img alt="/images/arm-memory-walls-followup/arm-compute-plans.png" class="align-center" src="images/arm-memory-walls-followup/arm-compute-plans.png"><p>On the other hand, the fact that ARM is not just providing licenses to use its IP cores, but also the possibility to buy an architectural licence for vendors to design their own CPU cores using the ARM instruction sets makes possible that other players like Apple, AppliedMicro, Broadcom, Cavium (now Marvell), Nvidia, Qualcomm, and Samsung Electronics can produce ARM CPUs that can be adapted to be used in different scenarios.  One example that is interesting for this discussion is Marvell who, with its ThunderX2 CPU, is already entering into the computing servers market --actually, a new super-computer with more than 100,000 ThunderX2 cores has recently entered into the <a class="reference external" href="https://t.co/LM2wXQrXm8">TOP500 ranking</a>; this is the first time that an ARM-based computer enters that list, overwhelmingly dominated by Intel architectures for almost two decades now.</p>
 <p>In the next sections we are trying to bring more hints (experimentally tested) on whether ARM (and its licensees) are fulfilling their promise, or their claims were just bare marketing.  For checking this, I was able to use two recent (2018) implementations of the ARMv8-A architecture, one meant for the client market and the other for servers, replicated the benchmarks of my previous <a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a> blog entry and extracted some interesting results.  Keep reading.</p>
 </div>
 <div class="section" id="the-kirin-980-cpu">
-<h3>The Kirin 980 CPU</h3>
+<h2>The Kirin 980 CPU</h2>
 <p>Here we are going to analyze <a class="reference external" href="https://www.anandtech.com/show/13503/the-mate-20-mate-20-pro-review">Huawei's Kirin 980 CPU</a> , a SoC (System On a Chip) that uses the ARM A76 core internally.  This is a fine example of an internal IP core design of ARM that is licensed to be used in a CPU chipset (or SoC) by another vendor (Huawei in this case).  The Kirin 980 wears 4 A76 cores plus 4 A55 cores, but the more powerful ones are the A76 (the A55 are more headed to do light tasks with very little energy consumption, which is critical for phones).  The A76 core is designed to be implemented using a 7nm technology (as it is the case for the Kirin 980, the second SoC in the world to use a 7 nm node, after Apple A12), and supports ARM's DynamIQ technology which allows scalability to target the specific requirements of a SoC.  In our case the Kirin 980 is running in a phone (Humawei's Mate 20), and in this scenario the power dissipation (TDP) cannot exceed the 4 W figure, so DynamIQ should try to be very conservative here and avoid putting too many cores active at the same time.</p>
 <p>ARM is saying that they designed the <a class="reference external" href="https://arstechnica.com/gadgets/2018/06/arm-promises-laptop-level-performance-in-2019/">A76 to be a competitor of the Intel Skylake Core i5</a>, so this is what we are going to check here.  For this, we are going to compare a Kirin 980 in a Huawei Mate 20 phone against a Core i5 included in a MacBook Pro (late 2016).  Here it is the side-by-side performance for the precipitation dataset that I used in the <a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/">previous blog</a>:</p>
 <table>
@@ -740,7 +732,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>I believe that these facts are really a good testimony of how serious ARM was on their claim that they were going to catch Intel in the performance side of the things for client devices, and probably with an important advantage in consuming less energy too.  The fact that ARM CPUs are more energy efficient should not be surprising given the experience of ARM in that area for decades.  But another reason for that is the important reduction in the manufacturing technology that ARM has achieved on their new designs (7nm node for ARM vs 14nm node for Intel); undoubtedly, ARM advantage in power consumption is going to be important for their world-domination plans.</p>
 </div>
 <div class="section" id="the-thunderx2-cpu">
-<h3>The ThunderX2 CPU</h3>
+<h2>The ThunderX2 CPU</h2>
 <p>The second way in which ARM sells licenses is the so-called <em>architectural license</em> allowing companies to design their own CPU cores using the ARM instruction sets.  Cavium (now bought by Marvell) was one of these companies, and they produced different CPU designs that culminated with Vulcan, the micro-architecture that powers the ThunderX2 CPU, which was made available in May 2018.  <a class="reference external" href="https://en.wikichip.org/wiki/cavium/microarchitectures/vulcan">Vulcan is a 16 nm high-performance 64-bit ARM micro-architecture</a> that is specifically meant to compete in compute/data server facilities (think of it as a  a Xeon-class ARM-based server microprocessor).  ThunderX2 can pack up to 32 Vulcan cores, and as every Vulcan core supports up to 4 threads, the whole CPU can run up to 128 threads.  With its capability to handle so many threads simultaneously, I expected that its raw compute power should be nothing to sneeze at.</p>
 <p>So as to check how powerful a ThunderX2 can be, we are going to compare <a class="reference external" href="https://en.wikichip.org/wiki/cavium/thunderx2/cn9975">ThunderX2 CN9975</a> (actually a box with 2 instances of it, each containing 28 cores) against one of its natural competitor, the Intel Scalable Gold 5120 (actually a box with 2 instances of it, each containing 14 cores):</p>
 <table>
@@ -758,17 +750,17 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>When we look at power consumption, although I was not able to find the exact figure for the ThunderX2 CN9975 model that has been used in the benchmarks above, it is probably in the range of 150 W per CPU, which is quite larger than its Intel Scalable 5120 counterpart which is around 100 W per CPU.  That means that Intel is using quite far less power in their CPU, giving them a clear advantage in server computing at this time.</p>
 </div>
 <div class="section" id="final-thoughts">
-<h3>Final Thoughts</h3>
+<h2>Final Thoughts</h2>
 <p>From these results, it is quite evident that ARM is making large strides in catching Intel performance, specially in the client side of the things (laptops, and PC desktops), with an important reduction in power consumption, which is specially important for laptops.  Keep these facts in mind when you are going to buy your next laptop or desktop PC and do not blindly assume that Intel is the only reasonable option anymore ;-)</p>
 <p>On the server side, Intel still holds an important advantage though, and it will not be easy to take the performance crown away from them.  However, the fact that ARM is allowing different vendors to produce their own implementations means that the competition can be more specific and each vendor is free to tackle different aspects of server computing.  So it is not difficult to realize that in the next few years we are going to see new ARM exemplars that would be meant not only for crunching numbers, but that will also specialize in different tasks, like storing and serving big data, routing data or performing artificial intelligence, to just mention a few cases (for example, <a class="reference external" href="https://www.marvell.com/documents/8ru3g25b5f77f5pbjwl9/">Marvell is trying to position the ThunderX2 more specifically for the data server scenario</a>) that are going to put Intel architectures in difficulties to maintain its current dominance in the data centers.</p>
 <p>Finally, we should not forget the fact that software developers (including myself) have been building high performance libraries using exclusively Intel boxes for <em>decades</em>, so making them extremely efficient for Intel architectures.  If, as we have seen here, ARM architectures are going to be an alternative in the performance client and server scenarios, then software developers will have to increasingly adopt ARM boxes as part of their tooling so as to continue being competitive in a world that is quite likely it won't necessarily be ruled by Intel anymore.</p>
 </div>
 <div class="section" id="acknowledgements">
-<h3>Acknowledgements</h3>
+<h2>Acknowledgements</h2>
 <p>I would like to thank <a class="reference external" href="https://www.packet.com/">Packet</a>, a provider of bare metal servers in the cloud (among other things) for allowing me not only to use their machines for free, but also helping me in different questions about the configuration of the machines.  In particular, Ed Vielmetti has been instrumental in providing me early access to a ThunderX2 server, and making sure that everything was stable enough for the benchmark needs.</p>
 </div>
 <div class="section" id="appendix-software-used">
-<h3>Appendix: Software used</h3>
+<h2>Appendix: Software used</h2>
 <p>For reference, here it is the software that has been used for this blog entry.</p>
 <p>For the Kirin 980:</p>
 <ul class="simple">
@@ -802,21 +794,20 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="breaking-down-memory-walls">
-<h2>Breaking Down Memory Walls</h2>
+    <div>
 <p><strong>Update (2018-08-09)</strong>: An extended version of this blog post can be found in this <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">article</a>.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, as well as more discussion about the results.</p>
 <p>Nowadays CPUs struggle to get data at enough speed to feed their cores.  The reason for this is that memory speed is <a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf">growing at a slower pace than CPUs increase their speed at crunching numbers</a>.   This memory slowness compared with CPUs is generally known as the <a class="reference external" href="https://en.wikipedia.org/wiki/Random-access_memory#Memory_wall">Memory Wall</a>.</p>
 <p>For example, let's suppose that we want to compute the aggregation of a some large array; here it is how to do that using OpenMP for leveraging all cores in a CPU:</p>
-<pre class="code c"><a name="rest_code_ec272494b677435cb191c709abc918f3-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_ec272494b677435cb191c709abc918f3-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_ec272494b677435cb191c709abc918f3-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a name="rest_code_ec272494b677435cb191c709abc918f3-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_3ed93535cc15498f96796bd9f253b850-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_3ed93535cc15498f96796bd9f253b850-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_3ed93535cc15498f96796bd9f253b850-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a name="rest_code_3ed93535cc15498f96796bd9f253b850-4"></a><span class="p">}</span>
 </pre>
 <p>With this, some server (an Intel Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores and hyperthreading) takes about 14 ms for doing the aggregation of an array with 100 million of float32 values when using 8 OpenMP threads (optimal number for this CPU).  However, if instead of bringing the whole 100 million elements from memory to the CPU we generate the data inside the loop, we are avoiding the data transmission between memory and CPU, like in:</p>
-<pre class="code c"><a name="rest_code_6f0423416aee412da14d12e4f4a96a34-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_6f0423416aee412da14d12e4f4a96a34-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_6f0423416aee412da14d12e4f4a96a34-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
-<a name="rest_code_6f0423416aee412da14d12e4f4a96a34-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_2450246dfd7e4cafb2bd2557efbafa0f-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_2450246dfd7e4cafb2bd2557efbafa0f-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_2450246dfd7e4cafb2bd2557efbafa0f-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
+<a name="rest_code_2450246dfd7e4cafb2bd2557efbafa0f-4"></a><span class="p">}</span>
 </pre>
 <p>This loop takes just 3.5 ms, that is, 4x less than the original one.  That means that our CPU could compute the aggregation at a speed that is 4x faster than the speed at which the memory subsystem can provide data elements to the CPU; or put in another words, the CPU is idle, doing nothing during the 75% of the time, waiting for data to arrive (for this example, but there could be other, more extreme cases).  Here we have the memory wall in action indeed.</p>
 <p>That the memory wall exists is an excellent reason to think about ways to workaround it.  One of the most promising venues is to use compression: what if we could store data in compressed state in-memory and use the spare clock cycles of the CPU for decompressing it just when it is needed?  In this blog entry we will see how to implement such a computational kernel on top of data structures that are cache- and compression-friendly and we will examine how they perform on a range of modern CPU architectures.  Some surprises are in store.</p>
@@ -826,7 +817,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <li><p>It is representative of many aggregation/reduction algorithms that are routinely used out in the wild.</p></li>
 </ol>
 <div class="section" id="operating-with-compressed-datasets">
-<h3>Operating with Compressed Datasets</h3>
+<h2>Operating with Compressed Datasets</h2>
 <p>Now let's see how to run our aggregation efficiently when using compressed data.  For this, we need:</p>
 <ol class="arabic simple">
 <li><p>A data container that supports on-the-flight compression.</p></li>
@@ -846,12 +837,12 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>For our experiments below, we are going to choose a chunksize of 4,000 elements because Blosc2 needs 2 internal buffers for performing the decompression besides the source and destination buffer.  Also, we are using 32-bit (4 bytes) float values for our exercise, so the final size used in caches will be 4,000 * (2 + 2) * 4 = 64,000 bytes, which should fit comfortably in L2 caches in most modern CPU architectures (which normally sports 256 KB or even higher).  Please note that finding an optimal value for this size might require some fine-tuning, not only for different architectures, but also for different datasets.</p>
 </div>
 <div class="section" id="the-precipitation-dataset">
-<h3>The Precipitation Dataset</h3>
+<h2>The Precipitation Dataset</h2>
 <p>There are plenty of datasets out there exposing different data distributions so, depending on your scenario, your mileage may vary.  The dataset chosen here is the result of a <a class="reference external" href="http://reanalysis.meteo.uni-bonn.de">regional reanalysis covering the European continent</a>, and in particular, the precipitation data in a certain region of Europe.  Computing the aggregation of this data is representative of a catchment average of precipitation over a drainage area.</p>
 <p><em>Caveat</em>: For the sake of easy reproducibility, for building the 100 million dataset I have chosen a small <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/read-grid-150x150.py">geographical area with a size of 150x150</a> and reused it repeatedly so as to fill the final dataset completely.  As the size of the chunks is lesser than this area, and the super-chunk (as configured here) does not use data redundancies from other chunks, the results obtained here can be safely extrapolated to the actual dataset made from real data (bar some small differences).</p>
 </div>
 <div class="section" id="choosing-the-compression-codec">
-<h3>Choosing the Compression Codec</h3>
+<h2>Choosing the Compression Codec</h2>
 <p>When determining the best codec to use inside Blosc2 (it has support for BloscLZ, LZ4, LZ4HC, Zstd, Zlib and Lizard), it turns out that they behave quite differently, both in terms of compression and speed, with the dataset they have to compress <em>and</em> with the CPU architecture in which they run.  This is quite usual, and the reason why you should always try to find the best codec for your use case.  Here we have how the different codecs behaves for our precipitation dataset in terms of decompression speed for our reference platform (Intel Xeon E3-1245):</p>
 <table>
 <colgroup>
@@ -867,31 +858,31 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>For completeness, I am also showing the compression ratios achieved by the different codecs for the precipitation dataset.  Although there are significant differences for them, these usually come at the cost of compression/decompression time.  At any rate, even though compression ratio is important, in this blog we are mainly interested in the best decompression speed, so we will use this latter as the only important parameter for codec selection.</p>
 </div>
 <div class="section" id="results-on-different-cpus">
-<h3>Results on Different CPUs</h3>
+<h2>Results on Different CPUs</h2>
 <p>Now it is time to see how our compressed sum algorithm performs compared with the original uncompressed one.  However, as not all the CPUs are created equal, we are going to see how different CPUs perform doing exactly the same computation.</p>
 <div class="section" id="reference-cpu-intel-xeon-e3-1245-v5-4-core-processor-3-50ghz">
-<h4>Reference CPU: Intel Xeon E3-1245 v5 4-Core processor @ 3.50GHz</h4>
+<h3>Reference CPU: Intel Xeon E3-1245 v5 4-Core processor @ 3.50GHz</h3>
 <p>This is a mainstream, somewhat 'small' processor for servers that has an excellent price/performance ratio.  Its main virtue is that, due to its small core count, the CPU can be run at considerably high clock speeds which, combined with a high IPC (Instructions Per Clock) count, delivers considerable computational power.  These results are a good baseline reference point for comparing other CPUs packing a larger number of cores (and hence, lower clock speeds).  Here it is how it performs:</p>
 <img alt="/images/breaking-down-memory-walls/i7server-rainfall-lz4hc-9.png" class="align-center" src="images/breaking-down-memory-walls/i7server-rainfall-lz4hc-9.png"><p>We see here that, even though the uncompressed dataset does not scale too well, the compressed dataset shows a nice scalability even when using using hyperthreading (&gt; 4 threads); this is a remarkable fact for a feature (hyperthreading) that, despite marketing promises, does not always deliver 2x the performance of the physical cores.  With that, the performance peak for the compressed precipitation dataset (22 GB/s, using LZ4HC) is really close to the uncompressed one (27 GB/s); quite an achievement for a CPU with just 4 physical cores.</p>
 </div>
 <div class="section" id="amd-epyc-7401p-24-core-processor-2-0ghz">
-<h4>AMD EPYC 7401P 24-Core Processor @ 2.0GHz</h4>
+<h3>AMD EPYC 7401P 24-Core Processor @ 2.0GHz</h3>
 <p>This CPU implements EPYC, one of the most powerful architectures ever created by AMD.  It packs 24 physical cores, although internally they are split into 2 blocks with 12 cores each.  Here is how it behaves:</p>
 <img alt="/images/breaking-down-memory-walls/epyc-rainfall-lz4-9.png" class="align-center" src="images/breaking-down-memory-walls/epyc-rainfall-lz4-9.png"><p>Stalling at 4/8 threads, the EPYC scalability for the uncompressed dataset is definitely not good.  On its hand, the compressed dataset behaves quite differently: it shows a nice scalability through the whole range of cores in the CPU (again, even when using hyperthreading), achieving the best performance (45 GB/s, using LZ4) at precisely 48 threads, well above the maximum performance reached by the uncompressed dataset (30 GB/s).</p>
 </div>
 <div class="section" id="intel-scalable-gold-5120-2x-14-core-processor-2-2ghz">
-<h4>Intel Scalable Gold 5120 2x 14-Core Processor @ 2.2GHz</h4>
+<h3>Intel Scalable Gold 5120 2x 14-Core Processor @ 2.2GHz</h3>
 <p>Here we have one of the latest and most powerful CPU architectures developed by Intel.  We are testing it here within a machine with 2 CPUs, each containing 14 cores.  Here’s it how it performed:</p>
 <img alt="/images/breaking-down-memory-walls/scalable-rainfall-lz4-9.png" class="align-center" src="images/breaking-down-memory-walls/scalable-rainfall-lz4-9.png"><p>In this case, and stalling at 24/28 threads, the Intel Scalable shows a quite remarkable scalability for the uncompressed dataset (apparently, Intel has finally chosen a good name for an architecture; well done guys!).  More importantly, it also reveals an even nicer scalability on the compressed dataset, all the way up to 56 threads (which is expected provided the 2x 14-core CPUs with hyperthreading); this is a remarkable feat for such a memory bandwidth beast.  In absolute terms, the compressed dataset achieves a performance (68 GB/s, using LZ4) that is very close to the uncompressed one (72 GB/s).</p>
 </div>
 <div class="section" id="cavium-armv8-2x-48-core">
-<h4>Cavium ARMv8 2x 48-Core</h4>
+<h3>Cavium ARMv8 2x 48-Core</h3>
 <p>We are used to seeing ARM architectures powering most of our phones and tablets, but seeing them performing computational duties is far more uncommon.  This does not mean that there are not ARM implementations that cannot power big servers.  Cavium, with its 48-core in a single CPU, is an example of a server-grade chip.  In this case we are looking at a machine with two of these CPUs:</p>
 <img alt="/images/breaking-down-memory-walls/cavium-rainfall-blosclz-9.png" class="align-center" src="images/breaking-down-memory-walls/cavium-rainfall-blosclz-9.png"><p>Again, we see a nice scalability (while a bit bumpy) for the uncompressed dataset, reaching its maximum (35 GB/s) at 40 threads.  Regarding the compressed dataset, it scales much more smoothly, and we see how the performance peaks at 64 threads (15 GB/s, using BloscLZ) and then drops significantly after that point (even if the CPU still has enough cores to continue the scaling; I am not sure why is that).  Incidentally, the BloscLZ codec being the best performer here is not a coincidence as it recently received a lot of fine-tuning for ARM.</p>
 </div>
 </div>
 <div class="section" id="what-we-learned">
-<h3>What We Learned</h3>
+<h2>What We Learned</h2>
 <p>We have explored how to use compression in an nearly optimal way to perform a very simple task: compute an aggregation out of a large dataset.  With a basic understanding of the cache and memory subsystem, and by using appropriate compressed data structures (the super-chunk), we have seen how we can easily produce code that enables modern CPUs to perform operations on compressed data at a speed that approaches the speed of the same operations on uncompressed data (and sometimes exceeding it).  More in particular:</p>
 <ol class="arabic simple">
 <li><p>Performance for the compressed dataset scales very well on the number of threads for all the CPUs (even hyperthreading seems very beneficial at that, which is a welcome surprise).</p></li>
@@ -901,7 +892,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </ol>
 </div>
 <div class="section" id="final-thoughts">
-<h3>Final Thoughts</h3>
+<h2>Final Thoughts</h2>
 <p>To conclude, it is interesting to remember here what Linus Torvalds said back in 2006 (talking about the git system that he created the year before):</p>
 <blockquote>
 <p>[...] git actually has a simple  design, with stable and reasonably well-documented data structures.  In fact, I'm a huge proponent of designing your code around the data, rather than the other way around, and I think it's one of the reasons git has been fairly successful.
@@ -910,11 +901,11 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>Of course, we all know how drastic Linus can be in his statements, but I cannot agree more on how important is to adopt a data-driven view when designing our applications.  But I'd go further and say that, when trying to squeeze the last drop of performance out of modern CPUs, data containers need to be structured in a way that leverages the characteristics of the underlying CPU, as well as to facilitate the application of the blocking technique (and thereby allowing compression to run efficiently).  Hopefully, installments like this can help us explore new possibilities to break down the memory wall that bedevils modern computing.</p>
 </div>
 <div class="section" id="acknowledgements">
-<h3>Acknowledgements</h3>
+<h2>Acknowledgements</h2>
 <p>Thanks to my friend Scott Prater for his great advices on improving my writing style, Dirk Schwanenberg for pointing out to the precipitation dataset and for providing the script for reading it, and Robert McLeod, J. David Ibáñez and Javier Sancho for suggesting general improvements (even though some of their suggestions required such a big amount of work that made me ponder about their actual friendship :).</p>
 </div>
 <div class="section" id="appendix-software-used">
-<h3>Appendix: Software used</h3>
+<h2>Appendix: Software used</h2>
 <p>For reference, here it is the software that has been used for this blog entry:</p>
 <ul class="simple">
 <li><p><strong>OS</strong>: Ubuntu 18.04</p></li>
@@ -941,25 +932,24 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="a-new-forward-compatibility-policy">
-<h2>A New Forward Compatibility Policy</h2>
+    <div>
 <div class="section" id="the-215-issue">
-<h3>The #215 issue</h3>
+<h2>The #215 issue</h2>
 <p>Recently, a C-Blosc user filed an <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">issue</a> describing how buffers created with a modern version of C-Blosc (starting from 1.11.0) were not able to be decompressed with an older version of the library (1.7.0), i.e. C-Blosc was effectively breaking the so-called <em>forward-compatibility</em>.  After some investigation, it turned out that the culprit was an optimization that was introduced in 1.11.0 in order to allow better compression ratios and in some cases, better speed too.</p>
 <p>Not all the codecs inside C-Blosc were equally affected; the ones that are experiencing the issue are LZ4, LZ4HC and Zlib (quite luckily, BloscLZ, the default codec, is not bitten by this and should be forward compatible probably til 1.0.0); that is, when a user is using a modern C-Blosc library (&gt; 1.11.0) <em>and</em> is using any of the affected codecs, there are situations (namely when the shuffle or bitshuffle filter are active and the buffers to be compressed are larger than 32 KB) that the result cannot be decompressed with older versions (&lt; 1.11.0).</p>
 </div>
 <div class="section" id="why-this-occurred">
-<h3>Why this occurred?</h3>
+<h2>Why this occurred?</h2>
 <p>Prior to 1.11.0, Blosc has traditionally split the internal blocks (the different pieces in which the buffer to be compressed is divided) into smaller pieces composed by the <em>same significant</em> bytes that the shuffle filter has put together.  The rational for doing this is that these pieces are, in many cases, hosting values that are either zeros or very close byte values (this is why shuffle works well in general for binary data), and asking the codec to compress these split-blocks separately was quite less effort than compressing a complete block hence providing more speed).</p>
 <p>However, I realized that the so-called High Compression Ration codecs (the HCR codecs inside BLosc are LZ4HC, Zlib and Zstd) generally benefited from this split not happening (the reason is clear: more data means more opportunities for finding more duplicates) and in some cases, the speed was better too.  So, in C-Blosc 1.11.0, I decided that the split was not going to happen <em>by default</em> for HCR codecs (in the last minute I decided to include LZ4 too, for which the experiments showed a noticeable performance bump too, see below). Fortunately, the Zstd codec was introduced (in an out-of-beta way) at the very same 1.11.0 release than this split-block change, so in practice data compressed with the Zstd codec is not affected by this.</p>
 </div>
 <div class="section" id="new-forward-compatibility-enforcement-policy">
-<h3>New forward compatibility enforcement policy</h3>
+<h2>New forward compatibility enforcement policy</h2>
 <p>Although this change was deliberate and every measure was put in making it <em>backward compatible</em> (i.e. new library versions could read buffers compressed with older versions), I was not really aware of the inconveniences that the change was putting for people creating data files using newer versions of the library and expecting these to be read with older versions.</p>
 <p>So in order to prevent something like this to happen again, I decided that <em>forward compatibility</em> is going to be <em>enforced</em> for future releases of C-Blosc (just for 1.x series; C-Blosc 2.x should be just backward compatible with 1.x).  By the way, this new <em>forward compatibility</em> policy will require a significantly more costly <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/RELEASING.rst#forward-compatibility-testing">release procedure</a>, as different libraries for a specific set of versions have to be manually re-created; if you know a more automatic way to test forward compatibility with old versions of a library, I'd love to hear your comments.</p>
 </div>
 <div class="section" id="measures-taken-and-new-split-mode">
-<h3>Measures taken and new split mode</h3>
+<h2>Measures taken and new split mode</h2>
 <p>In order to alleviate this forward incompatibility issue, I decided to revert the split change introduced in 1.11.0 in forthcoming 1.14.0 release.  That means that, <em>by default</em>, compressed buffers created with C-Blosc 1.14.0 and on will be forward compatible with all the previous C-Blosc libraries (till 1.3.0, which was when support for different codecs was introduced).  That is, the only buffers that will pose problems to be decompressed with old versions are those created with a C-Blosc library with versions between 1.11.0 and 1.14.0 <em>and</em> using the shuffle/bitshuffle filter in combination with the LZ4, LZ4HC or Zlib codecs.</p>
 <p>For fine-tuning how the block-split would happen or not, I have introduced a new API function, <cite>void blosc_set_splitmode(int mode)</cite>, that allows to select the split mode that is going to be used during the compression.  The split modes that can take the new function are:</p>
 <ul class="simple">
@@ -979,7 +969,7 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>this will select the corresponding split mode.</p>
 </div>
 <div class="section" id="how-this-change-affects-performance">
-<h3>How this change affects performance</h3>
+<h2>How this change affects performance</h2>
 <p>So as to allow to visualize at a glance the differences in performance that the new release is introducing, let's have a look at the impact on two of the most used codecs inside C-Blosc: LZ4 and LZ4HC.  In the plots below the left side is the pre-1.14.0 version (non-split blocks) and on the right, the forthcoming 1.14.0 (split blocks).  Note that I am using here the typical synthetic benchmarks for C-Blosc, so expect a different outcome for your own data.</p>
 <p>Let's start by LZ4HC, a High Compression Ratio codec (and the one that triggered the initial report of the <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">forward compatibility issue</a>).  When compressing, we have this change in behavior:</p>
 <table>
@@ -1029,11 +1019,11 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p>So, here one can see that when using Blosc pre-1.14 (i.e. non-split blocks) we are getting a bit less compression ratio than for the forthcoming 1.14, which even if counter-intutive, it matches my experience with non-HCR codecs.  Speed-wise the difference is not that much during compression; however, decompression is significantly faster with non-split blocks.  As LZ4 is meant for speed, this was possibly the reason that pushed me towards making non-split blocks by default for LZ4 in addition to HCR codecs in 1.11.0.</p>
 </div>
 <div class="section" id="feedback">
-<h3>Feedback</h3>
+<h2>Feedback</h2>
 <p>If you have suggestions on this forward compatibility issue or the solution that has been implemented, please shout!</p>
 </div>
 <div class="section" id="appendix-hardware-and-software-used">
-<h3>Appendix: Hardware and software used</h3>
+<h2>Appendix: Hardware and software used</h2>
 <p>For reference, here it is the configuration that I used for producing the plots in this blog entry.</p>
 <ul class="simple">
 <li><p>CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)</p></li>

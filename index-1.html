@@ -89,8 +89,7 @@
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="blosc-has-won-google-s-open-source-peer-bonus-program">
-<h2>Blosc Has Won Google's Open Source Peer Bonus Program</h2>
+    <div>
 <p>Past month <a class="reference external" href="https://opensource.googleblog.com/2017/10/more-open-source-peer-bonus-winners.html">Google announced the winners for the 2017’s second round of their Open Source Peer Bonus program</a> and I was among them for my commitment to the Blosc project.  It took a bit, but I wanted to express my thoughts on this nice event.  Needless to say, I am proud and honored for this recognition, most specially when this is the first completely uninterested donation that someone made to me after 15 years of doing open source (in many occasions doing that as a full-time work), so thank you very much Google!  The assumption is that people does open source because 1) they believe in the concept and 2) they can earn a public consideration that allows them to get contracts (so allowing many of us to have a life!).  However, this time the unexpected happened, and that an important corporation like Google decided to publicly recognize this work makes me very happy (would that pave the way for others to follow? :-).</p>
 <p>Having said this, and as it happens with any open source project that has seen some success, the contributions for other people have been instrumental in making Blosc such a featured and stable library.  People like Jack Pappas, Valentin Hänel, Christohper Speller, Antonio Valentino and up to 30 contributors made important contributions to the project.  This award goes indeed to them too.</p>
 <p>This push comes very timely because it is giving me more stamina towards the release of <a class="reference external" href="https://github.com/Blosc/c-blosc2">Blosc2</a>.  Blosc2 is the next generation of Blosc, and will add features like:</p>
@@ -126,13 +125,12 @@
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="the-lizard-codec">
-<h2>The Lizard codec</h2>
+    <div>
 <p>The past weekend I was putting some time in integrating one of the codecs that I was lately more curious about (specially since the release of its 1.0 version some months ago).  I am talking about <a class="reference external" href="https://github.com/inikep/lizard">Lizard</a>, a direct derivative of the LZ4 codec and whose author is Przemyslaw Skibinski.  One should remark that Przemyslaw is not new in the compression arena as he has helped Yann Collet quite a lot during the <a class="reference external" href="https://github.com/facebook/zstd">Zstandard</a> development, and also he is the author of <a class="reference external" href="https://github.com/inikep/lzbench">lzbench</a>, a nice and comprehensive in-memory benchmark of a series of open-source LZ77/LZSS/LZMA compressors.</p>
 <p>The reason why I was thinking that Lizard was an interesting codec for Blosc is because it mixes some interesting optimizations of the LZ4 codec and, optionally, it can use them in combination with the <a class="reference external" href="http://www.geeksforgeeks.org/greedy-algorithms-set-3-huffman-coding/">Huffman coding</a> by selecting different compression levels (currently from 10 to 49).</p>
 <p>After the initial support for Lizard in Blosc, it took me some time to determine a decent map between the compression levels in Blosc (1-9) to the ones in Lizard (10-49), mainly for allowing fast compression and decompression (what Blosc is all about).  During the way, I discovered that the most interesting compression levels in Lizard have been  <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/lizard/blosc/blosc.c#L606-L625">10, 20 and 41</a>.  This was indeed determined using the <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/bench.c">synthetic benchamrk</a> that comes with Blosc, but that is the usual path that gaves me quite good estimates for a first calibration (we are working on a more complete tuner that can adapt to actual data in real time, but I'll blog about it in another occasion).</p>
 <div class="section" id="a-new-star-has-born">
-<h3>A new star has born</h3>
+<h2>A new star has born</h2>
 <p>After the calibration was done the results of the new codec are really surprising:</p>
 <table>
 <colgroup>
@@ -171,11 +169,11 @@
 <p>Finally, for those wondering why I have not used the LIZv1 + Huffman compression method also for the lower compression levels in Blosc, the answer is that I obviously tried that, but for some reason, this method only performs well for large buffers, whereas for small buffers (like the ones created by low compression levels in Blosc) its performance is rather poor.  I was kind of getting a similar behaviour with Zstd, where performance shines for decompressing large buffers (the difference is that Lizard can compress at tremendous speed when compared with Zstd in this scenario), so I suppose this is typical when Huffman methods are used.</p>
 </div>
 <div class="section" id="finding-its-place-among-blosc-codecs">
-<h3>Finding its place among Blosc codecs</h3>
+<h2>Finding its place among Blosc codecs</h2>
 <p>In my previous blog, I was saying that Zstd has virtually no competitor in Write Once Read Multiple scenarios.  However, I think there is still a niche for codecs that, without providing the extreme compression ratios of Zstd, they still show big enough compression muscle without loosing too much compression speed.  IMO, this is a good description of how Lizard performs.  However, in Blosc1 we only have slots for a couple of codecs more (but that will not be a problem for Blosc2, where much more codecs will be supported), and although I am pretty enthusiastic on adding Lizard it would be nice to gather users feedback before than that.  So in case you are a Blosc user, please use the <a class="reference external" href="https://github.com/Blosc/c-blosc/tree/lizard">lizard branch</a> of the C-Blosc repo (<a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/21">UPDATE: Lizard has been merged into the C-Blosc2 repo recently</a>) and report back your results.</p>
 </div>
 <div class="section" id="appendix-hardware-and-software-used">
-<h3>Appendix: Hardware and software used</h3>
+<h2>Appendix: Hardware and software used</h2>
 <p>For reference, here it is the configuration that I used for producing the plots in this blog entry.</p>
 <ul class="simple">
 <li><p>CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)</p></li>
@@ -204,11 +202,10 @@
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="testing-pgo-with-lz4-and-zstd-codecs">
-<h2>Testing PGO with LZ4 and Zstd codecs</h2>
+    <div>
 <p>In <a class="reference external" href="http://blosc.org/posts/blosclz-tuning/">past week's post</a> I was showing how the PGO (<a class="reference external" href="https://en.wikipedia.org/wiki/Profile-guided_optimization">Profile Guided Optimization</a>) capability in modern compilers allowed for a good increase in the performance of the BloscLZ codec.  Today I'd like to test how the PGO optimization affected the speed of the same <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/bench.c">synthetic benchmark</a> that comes with C-Blosc2 for the two other of the most used codecs in Blosc: <a class="reference external" href="http://lz4.github.io/lz4/">LZ4</a> and <a class="reference external" href="http://facebook.github.io/zstd/">Zstd</a>.</p>
 <div class="section" id="id1">
-<h3>LZ4</h3>
+<h2>LZ4</h2>
 <p>First, for GCC without PGO:</p>
 <table>
 <colgroup>
@@ -234,7 +231,7 @@
 <p>We can see here that, similarly to BloscLZ, although the compression speed has not improved significantly, the decompression is now reaching up to 30 GB/s, and for high compression levels, up to 20 GB/s, which is pretty good.</p>
 </div>
 <div class="section" id="id2">
-<h3>Zstd</h3>
+<h2>Zstd</h2>
 <p>First, for GCC without PGO:</p>
 <table>
 <colgroup>
@@ -261,7 +258,7 @@
 <p>This confirms that, once again, when performance is critical for your applications, PGO should be part of your daily weaponery.</p>
 </div>
 <div class="section" id="appendix-hardware-and-software-used">
-<h3>Appendix: Hardware and software used</h3>
+<h2>Appendix: Hardware and software used</h2>
 <p>For reference, here it is the configuration that I used for producing the plots in this blog entry.</p>
 <ul class="simple">
 <li><p>CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)</p></li>
@@ -291,12 +288,11 @@
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="fine-tuning-the-blosclz-codec">
-<h2>Fine tuning the BloscLZ codec</h2>
+    <div>
 <p>Yesterday I was reading about the exciting new CPU architectures that both <a class="reference external" href="http://www.anandtech.com/show/11544/intel-skylake-ep-vs-amd-epyc-7000-cpu-battle-of-the-decade">AMD and Intel are introducing</a> and I was wondering how the improved architecture of the new cores and most specially, its caches, could apply to Blosc.  It turns out that I have access to a server with a relatively modern CPU (Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores) and I decided to have a go at fine-tune the included BloscLZ codec (the one that I know the best) inside C-Blosc2.  Of course, I already spent some time tuning BloscLZ, but that was some years ago and provided the fast pace at which CPUs are evolving I thought that this was excellent timing for another round of fine-tuning, most specially in preparation for users adopting the forthcoming  RYZEN, Threadripper, EPYC and Skylake-SP architectures.</p>
 <p>Frankly speaking, I was expecting to get very little improvements in this front, but the results have been unexpectedly good.  Keep reading.</p>
 <div class="section" id="where-we-come-from">
-<h3>Where we come from</h3>
+<h2>Where we come from</h2>
 <p>Just for reference, here it is the performance of the BloscLZ codec in my server before the new tuning work:</p>
 <table>
 <colgroup>
@@ -312,7 +308,7 @@
 <p>As can be seen, performance is quite good, although compression ratios left something to be desired.  Furthermore, for the maximum compression level (9), the compression ratio has a regression with respect to the previous level (8).  This is not too bad, and sometimes happens in any codec, but the nice thing would be to avoid it if possible.</p>
 </div>
 <div class="section" id="the-new-blosclz-after-fine-tuning">
-<h3>The new BloscLZ after fine tuning</h3>
+<h2>The new BloscLZ after fine tuning</h2>
 <p>So, after a couple of hours playing with different parameters in BloscLZ and C-Blosc2, I started to realize that the new Intel CPU performed exceedingly well when asked to compress more, to the point that high compression settings were not performing that slow in comparision with low compression ones; rather the contrary: high compression settings were operating at almost the same speed than lower ones (which was a welcome surprise indeed).  Hence I tried to be set quite more aggressive parameters in BloscLZ, while trying to keep the size of internal blocks in Blosc2 below 256 KB (the typical size of L2 caches in modern CPUs).  This is the result:</p>
 <table>
 <colgroup>
@@ -328,7 +324,7 @@
 <p>Regarding decompression speed, we can see that the new tuning gave general speed-ups of between 10% and 20%, with no significant slowdowns in any case.  All in all, quite good results indeed!</p>
 </div>
 <div class="section" id="room-for-more-improvements-enter-pgo">
-<h3>Room for more improvements?  Enter PGO.</h3>
+<h2>Room for more improvements?  Enter PGO.</h2>
 <p>To temporary end (optimization is a never ending task) this quest for speed, I am curious about the speed that we can buy by using the PGO (<a class="reference external" href="https://en.wikipedia.org/wiki/Profile-guided_optimization">Profile Guided Optimization</a>) capability that is present in most of the modern compilers.  Here I am going to use the PGO of GCC in combination with our benchmark at hand so as to provide the profile for the compiler optimizer.  Here are the results when PGO is applied to the new parametrization:</p>
 <table>
 <colgroup>
@@ -344,7 +340,7 @@
 <p>I wonder what the PGO technique can bring to other codecs in Blosc, but that is stuff for other blog post.  At any rate, the reader is encouraged to try PGO on their own setups.  I am pretty sure that she will be pleased to see nice speed improvements.</p>
 </div>
 <div class="section" id="appendix-hardware-and-software-used">
-<h3>Appendix: Hardware and software used</h3>
+<h2>Appendix: Hardware and software used</h2>
 <p>For reference, here it is the configuration that I used for producing the plots in this blog entry.</p>
 <ul class="simple">
 <li><p>CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)</p></li>
@@ -373,8 +369,7 @@
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="zstd-has-just-landed-in-blosc">
-<h2>Zstd has just landed in Blosc</h2>
+    <div>
 <p><a class="reference external" href="http://www.zstd.net">Zstd</a>, aka Zstandard, is a new breed of compression
 library that promises to achieve better compression ratios than <a class="reference external" href="http://www.zlib.net/">Zlib</a>, and at better speeds too. The fact that Zstd is geared
 towards fast compression / decompression since the beginning was an indication
@@ -392,7 +387,7 @@ indeed recommended to start experimenting with it so as to see the kind of
 improvements that it can bring to your scenario, and specially report possible
 flaws back.</p>
 <div class="section" id="a-compression-beast-for-blosc-operation">
-<h3>A compression beast for Blosc operation</h3>
+<h2>A compression beast for Blosc operation</h2>
 <p>As said, Zstd is meant to achieve better compression ratios than Zlib, and this
 is indeed the <a class="reference external" href="http://www.zstd.net">case for many situations already</a>. But it
 turns out that Zstd shines specially when faced to the kind of data that is left
@@ -435,7 +430,7 @@ decompress data at the highest compression level, Zstd can do that about 6x
 faster than Zlib (~6 GB/s vs ~1 GB/s), which is a welcome surprise.</p>
 </div>
 <div class="section" id="not-the-fastest-but-a-nicely-balanced-one">
-<h3>Not the fastest, but a nicely balanced one</h3>
+<h2>Not the fastest, but a nicely balanced one</h2>
 <p>Of course, Zstd is still far from the fastest codecs in Blosc. See for example
 how the internal BloscLZ codec can perform in this machine:</p>
 <table>
@@ -462,7 +457,7 @@ service of the community by opening not only his code, but also his mind in his
 amazing series of blogs about compression: <a class="reference external" href="http://fastcompression.blogspot.com">http://fastcompression.blogspot.com</a></p>
 </div>
 <div class="section" id="appendix-what-can-be-expected-in-blosc2">
-<h3>Appendix: What can be expected in Blosc2</h3>
+<h2>Appendix: What can be expected in Blosc2</h2>
 <p>Blosc2 has support for Zstd contexts and
 a new way to split chunks into blocks that makes codecs go faster in general.
 Below you have a couple of plots on how the Blosc2/Zstd couple behaves:</p>
@@ -504,8 +499,7 @@ is a bit less (25%) than in Blosc1 but still quite competitive (and on par with 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="arm-is-becoming-a-first-class-citizen-for-blosc">
-<h2>ARM is becoming a first-class citizen for Blosc</h2>
+    <div>
 <p>We are happy to announce that Blosc is receiving official support for
 ARM processors.  Blosc has always been meant to support all platforms
 where a C89 compliant C compiler can be found, but until now the only
@@ -516,7 +510,7 @@ candidate to become a fully supported platform besides Intel/AMD.  You
 may be wondering that we could have chosen any other architecture like
 MIPS or PowerPC, so why ARM?</p>
 <div class="section" id="arm-is-eating-the-world">
-<h3>ARM is eating the world</h3>
+<h2>ARM is eating the world</h2>
 <p>ARM is an increasingly popular architecture and we can find
 implementation exemplars of it not only in the phones, tablets or
 ChromeBooks, but also acting as embedded processors, as well as in
@@ -545,7 +539,7 @@ specially where compression ratio equals 1 (i.e. no compression is
 active, so Blosc is only doing a <em>memory copy</em> in this case).</p>
 </div>
 <div class="section" id="blosc-is-getting-ready-for-arm">
-<h3>Blosc is getting ready for ARM</h3>
+<h2>Blosc is getting ready for ARM</h2>
 <p>So ARM is cool indeed, but what we are doing for making it a
 first-class citizen?  For starters, we have created a new <a class="reference external" href="https://github.com/Blosc/c-blosc2">C-Blosc2</a> repository that is going to act
 as a playground for some time and where we are going to experiment
@@ -570,7 +564,7 @@ time to do a preliminary version of the bitshuffle filter as well (not
 completely functional yet, but as time allows, he plans to finish that).</p>
 </div>
 <div class="section" id="some-hints-on-the-measured-increase-in-performance">
-<h3>Some hints on the measured increase in performance</h3>
+<h2>Some hints on the measured increase in performance</h2>
 <p>So you might be asking, how fast can perform Blosc on an ARM with
 NEON?  Well, let's start first by showing how fast it works on a
 Raspberry Pi 2 (Broadcom BCM2836 ARMv7 Quad Core Processor) having
@@ -631,7 +625,7 @@ on how computations will be made in the short future (as the <a class="reference
 Blanc initiative is trying to demonstrate</a>).</p>
 </div>
 <div class="section" id="what-to-expect-from-arm-blosc-in-the-forthcoming-months">
-<h3>What to expect from ARM/Blosc in the forthcoming months</h3>
+<h2>What to expect from ARM/Blosc in the forthcoming months</h2>
 <p>This work on supporting ARM platforms is just the beginning.  As ARM
 processors get more spread, and most specially, <a class="reference external" href="http://www.arm.com/products/processors/cortex-a/cortex-a72-processor.php">faster</a>,
 we will need to refine the support for ARM in Blosc.</p>
@@ -663,8 +657,7 @@ are doing and want to see more of this, you can also <a class="reference externa
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="the-hairy-situation-of-microsoft-windows-compilers">
-<h2>The Hairy Situation of Microsoft Windows Compilers</h2>
+    <div>
 <p>Recently -- and to the requirement of a customer who recently
 <a class="reference external" href="http://blosc.org/blog/seeking-sponsoship.html">sponsorized us</a> -- I
 struggled a lot trying to get the maximum performance out of Visual
@@ -738,8 +731,7 @@ Windows, please tell us.</p>
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="new-bitshuffle-filter">
-<h2>New 'bitshuffle' filter</h2>
+    <div>
 <p>Although Blosc was meant for hosting more than one filter since day 0,
 it has traditionally came with just a single filter, known as
 'shuffle', meant for shuffling bytes in binary blocks.  Today this has
@@ -1018,8 +1010,7 @@ Anyone interested in contributing some real data benchmark?</p>
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="seeking-sponsorship-for-bcolz-blosc">
-<h2>Seeking Sponsorship for Bcolz/Blosc</h2>
+    <div>
 <p>Dear Everyone,</p>
 <p>as you may or may not know, the <a class="reference external" href="https://github.com/blosc/c-blosc">Blosc</a>
 compressor has become the basis for some novel, innovative technological
@@ -1090,10 +1081,9 @@ us about any additional models that may be interesting to us or for you.</p>
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div class="section" id="compress-me-stupid">
-<h2>Compress Me, Stupid!</h2>
+    <div>
 <div class="section" id="how-it-all-started">
-<h3>How it all started</h3>
+<h2>How it all started</h2>
 <p>I think I began to become truly interested in compression when, back
 in 1992, I was installing <a class="reference external" href="http://en.wikipedia.org/wiki/C_News">C-News</a>, a news server package meant
 to handle <a class="reference external" href="http://en.wikipedia.org/wiki/Usenet">Usenet News</a>
@@ -1122,7 +1112,7 @@ experimenting with compression for maximizing the number of groups
 that we could bring to our community.</p>
 </div>
 <div class="section" id="compressing-usenet-news">
-<h3>Compressing Usenet News</h3>
+<h2>Compressing Usenet News</h2>
 <p>The most used compressor by 1992 was <a class="reference external" href="http://en.wikipedia.org/wiki/Compress">compress</a>, a Unix program based on the
 <a class="reference external" href="http://en.wikipedia.org/wiki/LZW">LZW</a> compression algorithm.  But
 LZW had patents issues, so by that time Jean-Loup Gailly and Mark
@@ -1152,7 +1142,7 @@ blew-up my mind and made me passionate about compression technologies
 for the years to come.</p>
 </div>
 <div class="section" id="lzo-and-the-explosion-of-compression-technology">
-<h3>LZO and the explosion of compression technology</h3>
+<h2>LZO and the explosion of compression technology</h2>
 <p>During 1996, Markus F.X.J. Oberhumer started to announce the
 availability of his own set of LZO compressors.  These consisted in
 many different compressors, all of them being variations of his own
@@ -1183,7 +1173,7 @@ compressors with the same spirit than LZO, but with more permissive
 licenses (typically BSD/MIT), many of them being a nice fit for PyTables.</p>
 </div>
 <div class="section" id="a-new-compressor-for-pytables-hdf5">
-<h3>A new compressor for PyTables/HDF5</h3>
+<h2>A new compressor for PyTables/HDF5</h2>
 <p>By 2008 it was clear that PyTables needed a compressor whose sources
 could be included in the PyTables tarball, so minimizing the
 installation requirements.  For this I started considering a series of
@@ -1223,7 +1213,7 @@ of terabytes</strong> on many different Windows and Unix boxes, both in
 32-bit and 64-bit.  The new beast was ready to ship.</p>
 </div>
 <div class="section" id="blosc-was-born">
-<h3>Blosc was born</h3>
+<h2>Blosc was born</h2>
 <p>I then grabbed BloscLZ, the multi-threading support and the
 SSE2-powered shuffle and put it all in the same package.  That also became a
 <strong>standalone, pure C library</strong>, with no attachments to PyTables or HDF5,

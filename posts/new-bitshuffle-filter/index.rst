@@ -7,8 +7,6 @@
 .. description: 
 .. type: text
 
-New 'bitshuffle' filter
-=======================
 
 Although Blosc was meant for hosting more than one filter since day 0,
 it has traditionally came with just a single filter, known as

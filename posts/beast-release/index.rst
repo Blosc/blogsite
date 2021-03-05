@@ -9,9 +9,6 @@
 .. type: text
 
 
-C-Blosc Beast Release
-=====================
-
 **TL;DR;** The improvements in new CPUs allow for more cores and (much) larger caches. Latest C-Blosc release leverages these facts so as to allow better compression ratios, while keeping the speed on par with previous releases.
 
 During the past two months we have been working hard at increasing the efficiency of Blosc for the new processors that are coming with more cores than ever before (8 can be considered quite normal, even for laptops, and 16 is not that unusual for rigs).  Furthermore, their caches are increasing beyond limits that we thought unthinkable just a few years ago (for example, AMD is putting 64 MB in L3 for their mid-range Ryzen2 39x0 processors).  This is mainly a consequence of the recent introduction of the 7nm process for both ARM and AMD64 architectures.  It turns out that compression ratios are quite dependent on the sizes of the streams to compress, so having access to more cores and significantly larger caches, it was clear that Blosc was in a pressing need to catch-up and fine-tune its performance for such a new 'beasts'. 

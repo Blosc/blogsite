@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about Zstd)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/zstd.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:06:22 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Zstd has just landed in Blosc</title><link>http://blosc.org/posts/zstd-has-just-landed-in-blosc/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div class="section" id="zstd-has-just-landed-in-blosc"&gt;
-&lt;h2&gt;Zstd has just landed in Blosc&lt;/h2&gt;
-&lt;p&gt;&lt;a class="reference external" href="http://www.zstd.net"&gt;Zstd&lt;/a&gt;, aka Zstandard, is a new breed of compression
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about Zstd)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/zstd.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 09:15:29 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Zstd has just landed in Blosc</title><link>http://blosc.org/posts/zstd-has-just-landed-in-blosc/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;a class="reference external" href="http://www.zstd.net"&gt;Zstd&lt;/a&gt;, aka Zstandard, is a new breed of compression
 library that promises to achieve better compression ratios than &lt;a class="reference external" href="http://www.zlib.net/"&gt;Zlib&lt;/a&gt;, and at better speeds too. The fact that Zstd is geared
 towards fast compression / decompression since the beginning was an indication
 for me that it could be a good fit for Blosc. After some months of
@@ -18,7 +16,7 @@ indeed recommended to start experimenting with it so as to see the kind of
 improvements that it can bring to your scenario, and specially report possible
 flaws back.&lt;/p&gt;
 &lt;div class="section" id="a-compression-beast-for-blosc-operation"&gt;
-&lt;h3&gt;A compression beast for Blosc operation&lt;/h3&gt;
+&lt;h2&gt;A compression beast for Blosc operation&lt;/h2&gt;
 &lt;p&gt;As said, Zstd is meant to achieve better compression ratios than Zlib, and this
 is indeed the &lt;a class="reference external" href="http://www.zstd.net"&gt;case for many situations already&lt;/a&gt;. But it
 turns out that Zstd shines specially when faced to the kind of data that is left
@@ -63,7 +61,7 @@ decompress data at the highest compression level, Zstd can do that about 6x
 faster than Zlib (~6 GB/s vs ~1 GB/s), which is a welcome surprise.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="not-the-fastest-but-a-nicely-balanced-one"&gt;
-&lt;h3&gt;Not the fastest, but a nicely balanced one&lt;/h3&gt;
+&lt;h2&gt;Not the fastest, but a nicely balanced one&lt;/h2&gt;
 &lt;p&gt;Of course, Zstd is still far from the fastest codecs in Blosc. See for example
 how the internal BloscLZ codec can perform in this machine:&lt;/p&gt;
 &lt;table&gt;
@@ -91,7 +89,7 @@ service of the community by opening not only his code, but also his mind in his
 amazing series of blogs about compression: &lt;a class="reference external" href="http://fastcompression.blogspot.com"&gt;http://fastcompression.blogspot.com&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="appendix-what-can-be-expected-in-blosc2"&gt;
-&lt;h3&gt;Appendix: What can be expected in Blosc2&lt;/h3&gt;
+&lt;h2&gt;Appendix: What can be expected in Blosc2&lt;/h2&gt;
 &lt;p&gt;Blosc2 has support for Zstd contexts and
 a new way to split chunks into blocks that makes codecs go faster in general.
 Below you have a couple of plots on how the Blosc2/Zstd couple behaves:&lt;/p&gt;
@@ -114,5 +112,4 @@ that reaching such a high speed while decompressing a buffer with a really high
 compression ratio (~300x) is really impressing.  On his part, compression speed
 is a bit less (25%) than in Blosc1 but still quite competitive (and on par with Zlib).&lt;/p&gt;
 &lt;p&gt;This is really exciting news to be added on top of the new planned features for Blosc2.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description><category>Zstandard</category><category>Zstd</category><guid>http://blosc.org/posts/zstd-has-just-landed-in-blosc/</guid><pubDate>Wed, 20 Jul 2016 11:32:20 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;&lt;/div&gt;</description><category>Zstandard</category><category>Zstd</category><guid>http://blosc.org/posts/zstd-has-just-landed-in-blosc/</guid><pubDate>Wed, 20 Jul 2016 11:32:20 GMT</pubDate></item></channel></rss>

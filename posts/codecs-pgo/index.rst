@@ -9,9 +9,6 @@
 .. type: text
 
 
-Testing PGO with LZ4 and Zstd codecs
-=====================================
-
 In `past week's post <http://blosc.org/posts/blosclz-tuning/>`_ I was showing how the PGO (`Profile Guided Optimization <https://en.wikipedia.org/wiki/Profile-guided_optimization>`_) capability in modern compilers allowed for a good increase in the performance of the BloscLZ codec.  Today I'd like to test how the PGO optimization affected the speed of the same `synthetic benchmark <https://github.com/Blosc/c-blosc2/blob/master/bench/bench.c>`_ that comes with C-Blosc2 for the two other of the most used codecs in Blosc: `LZ4 <http://lz4.github.io/lz4/>`_ and `Zstd <http://facebook.github.io/zstd/>`_.
 
 LZ4

@@ -25,9 +25,9 @@
 <meta property="og:site_name" content="Blosc Main Blog Page ">
 <meta property="og:title" content="Zstd has just landed in Blosc">
 <meta property="og:url" content="http://blosc.org/posts/zstd-has-just-landed-in-blosc/">
-<meta property="og:description" content="Zstd has just landed in Blosc
-Zstd, aka Zstandard, is a new breed of compression
-library that promises to achieve better compression ratios than Zlib, and at better speeds too. The fact that Zstd is g">
+<meta property="og:description" content="Zstd, aka Zstandard, is a new breed of compression
+library that promises to achieve better compression ratios than Zlib, and at better speeds too. The fact that Zstd is geared
+towards fast compression">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2016-07-20T11:32:20Z">
 <meta property="article:tag" content="Zstandard">
@@ -105,8 +105,7 @@ library that promises to achieve better compression ratios than Zlib, and at bet
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div class="section" id="zstd-has-just-landed-in-blosc">
-<h2>Zstd has just landed in Blosc</h2>
+    <div>
 <p><a class="reference external" href="http://www.zstd.net">Zstd</a>, aka Zstandard, is a new breed of compression
 library that promises to achieve better compression ratios than <a class="reference external" href="http://www.zlib.net/">Zlib</a>, and at better speeds too. The fact that Zstd is geared
 towards fast compression / decompression since the beginning was an indication
@@ -124,7 +123,7 @@ indeed recommended to start experimenting with it so as to see the kind of
 improvements that it can bring to your scenario, and specially report possible
 flaws back.</p>
 <div class="section" id="a-compression-beast-for-blosc-operation">
-<h3>A compression beast for Blosc operation</h3>
+<h2>A compression beast for Blosc operation</h2>
 <p>As said, Zstd is meant to achieve better compression ratios than Zlib, and this
 is indeed the <a class="reference external" href="http://www.zstd.net">case for many situations already</a>. But it
 turns out that Zstd shines specially when faced to the kind of data that is left
@@ -167,7 +166,7 @@ decompress data at the highest compression level, Zstd can do that about 6x
 faster than Zlib (~6 GB/s vs ~1 GB/s), which is a welcome surprise.</p>
 </div>
 <div class="section" id="not-the-fastest-but-a-nicely-balanced-one">
-<h3>Not the fastest, but a nicely balanced one</h3>
+<h2>Not the fastest, but a nicely balanced one</h2>
 <p>Of course, Zstd is still far from the fastest codecs in Blosc. See for example
 how the internal BloscLZ codec can perform in this machine:</p>
 <table>
@@ -194,7 +193,7 @@ service of the community by opening not only his code, but also his mind in his
 amazing series of blogs about compression: <a class="reference external" href="http://fastcompression.blogspot.com">http://fastcompression.blogspot.com</a></p>
 </div>
 <div class="section" id="appendix-what-can-be-expected-in-blosc2">
-<h3>Appendix: What can be expected in Blosc2</h3>
+<h2>Appendix: What can be expected in Blosc2</h2>
 <p>Blosc2 has support for Zstd contexts and
 a new way to split chunks into blocks that makes codecs go faster in general.
 Below you have a couple of plots on how the Blosc2/Zstd couple behaves:</p>
