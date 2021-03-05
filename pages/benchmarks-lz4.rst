@@ -16,7 +16,9 @@
 `Suite output (64 threads) </images/bench/lz4/lz4-BGQ.txt>`__
 
 .. image:: /images/bench/lz4/lz4-BGQ-compr.png
+   :width: 50%
 .. image:: /images/bench/lz4/lz4-BGQ-decompr.png
+   :width: 50%
 
 ----
 
@@ -28,5 +30,7 @@
 `Suite output (4 threads) </images/bench/lz4/i5-3380M-4.txt>`__
 
 .. image:: /images/bench/lz4/i5-3380M-4-compr.png
+   :width: 50%
 .. image:: /images/bench/lz4/i5-3380M-4-decompr.png
+   :width: 50%
 

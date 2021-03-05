@@ -5,7 +5,7 @@
 .. tags: blosc2 metalayers
 .. category:
 .. link:
-.. status:
+.. status: draft
 .. description:
 .. type: text
 

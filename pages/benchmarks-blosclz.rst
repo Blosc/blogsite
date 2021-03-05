@@ -16,7 +16,9 @@
 `Suite output (4 threads) </images/bench/blosclz/blosclz-BGQ.txt>`__
 
 .. image:: /images/bench/blosclz/blosclz-BGQ-compr.png
+   :width: 50%
 .. image:: /images/bench/blosclz/blosclz-BGQ-decompr.png
+   :width: 50%
 
 ----
 
@@ -28,7 +30,9 @@
 `Suite output (4 threads) </images/bench/blosclz/i5-3380M-4.txt>`__
 
 .. image:: /images/bench/blosclz/i5-3380M-4-compr.png
+   :width: 50%
 .. image:: /images/bench/blosclz/i5-3380M-4-decompr.png
+   :width: 50%
 
 ----
 
@@ -40,7 +44,9 @@
 `Suite output (12 threads) </images/bench/blosclz/linux-3930K.txt>`__
 
 .. image:: /images/bench/blosclz/linux-3930K-compr-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/linux-3930K-decompr-small.png
+   :width: 50%
 
 ----
 
@@ -53,7 +59,9 @@
 `Suite output (12 threads) </images/bench/blosclz/viznode07.txt>`__
 
 .. image:: /images/bench/blosclz/viznode07-compression-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/viznode07-decompression-small.png
+   :width: 50%
 
 ----
 
@@ -65,7 +73,9 @@
 `Suite output (24 threads) </images/bench/blosclz/four-six-opteron-suite.txt>`__
 
 .. image:: /images/bench/blosclz/four-six-opteron-suite-compression-small.png
+   :width: 48%
 .. image:: /images/bench/blosclz/four-six-opteron-suite-decompression-small.png
+   :width: 52%
 
 ----
 
@@ -77,7 +87,9 @@
 `Suite output (6 threads) </images/bench/blosclz/linux-i7-980x-6.txt>`__
 
 .. image:: /images/bench/blosclz/linux-i7-980x-6-compr-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/linux-i7-980x-6-decompr-small.png
+   :width: 50%
 
 ----
 
@@ -89,7 +101,9 @@
 `Suite output (8 threads) </images/bench/blosclz/suite-nehalem-gcc45.txt>`__
 
 .. image:: /images/bench/blosclz/compr-8t-osx-nehalem-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-8t-osx-nehalem-small.png
+   :width: 50%
 
 ----
 
@@ -101,7 +115,9 @@
 `Suite output (6 threads) </images/bench/blosclz/suite-windows7-amdx6.txt>`__
 
 .. image:: /images/bench/blosclz/compr-6t-wingw64-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-6t-wingw64-small.png
+   :width: 50%
 
 ----
 
@@ -113,7 +129,9 @@
 `Suite output (4 threads) </images/bench/blosclz/suite-4t-win64-core2-quad.txt>`__
 
 .. image:: /images/bench/blosclz/compr-4t-win64-core2-quad-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-4t-win64-core2-quad-small.png
+   :width: 50%
 
 ----
 
@@ -125,7 +143,9 @@
 `Suite output (4 threads) </images/bench/blosclz/suite-linux-core2.txt>`__
 
 .. image:: /images/bench/blosclz/compr-4t-linux64-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-4t-linux64-small.png
+   :width: 50%
 
 ----
 
@@ -137,7 +157,9 @@
 `Suite output (2 threads) </images/bench/blosclz/suite-core2-opensuse-gcc44.txt>`__
 
 .. image:: /images/bench/blosclz/compr-2t-linux-core2-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-2t-linux-core2-small.png
+   :width: 50%
 
 ----
 
@@ -149,7 +171,9 @@
 `Suite output (2 threads) </images/bench/blosclz/mysuite-ubuntu-opteron-2t.txt>`__
 
 .. image:: /images/bench/blosclz/compr-ubuntu-opteron-2t-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-ubuntu-opteron-2t-small.png
+   :width: 50%
 
 ----
 
@@ -161,7 +185,9 @@
 `Suite output (2 threads) </images/bench/blosclz/suite-2t-linux32-pentium4-ht.txt>`__
 
 .. image:: /images/bench/blosclz/compr-2t-linux32-pentium4-ht-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-2t-linux32-pentium4-ht-small.png
+   :width: 50%
 
 ----
 
@@ -173,7 +199,9 @@
 `Suite output (4 threads) </images/bench/blosclz/intel-atom-330-suite.txt>`__
 
 .. image:: /images/bench/blosclz/intel-atom-330-suite-compression-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/intel-atom-330-suite-decompression-small.png
+   :width: 50%
 
 ----
 
@@ -185,7 +213,9 @@
 `Suite output (2 threads) </images/bench/blosclz/suite-2t-linux32-atom-ht.txt>`__
 
 .. image:: /images/bench/blosclz/compr-ubuntu-atom-2t-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-ubuntu-atom-2t-small.png
+   :width: 50%
 
 ----
 
@@ -197,5 +227,7 @@
 `Suite output (1 threads) </images/bench/blosclz/mysuite-powerpc-g4.txt>`__
 
 .. image:: /images/bench/blosclz/compr-1t-osx-powerpc-G4-small.png
+   :width: 50%
 .. image:: /images/bench/blosclz/decompr-1t-osx-powerpc-G4-small.png
+   :width: 50%
 
