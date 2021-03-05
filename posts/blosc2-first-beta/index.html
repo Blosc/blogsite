@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C-Blosc2 Enters Beta Stage | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/blosc2-first-beta/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Francesc Alted">
+<link rel="prev" href="../arm-memory-walls-followup/" title="Is ARM Hungry Enough to Eat Intel's Favorite Pie?" type="text/html">
+<link rel="next" href="../blosc2-meets-rome/" title="Blosc2-Meets-Rome" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="C-Blosc2 Enters Beta Stage">
+<meta property="og:url" content="http://blosc.org/posts/blosc2-first-beta/">
+<meta property="og:description" content="C-Blosc2 Enters Beta Stage
+The first beta version of C-Blosc2 has been released today.  C-Blosc2 is the new iteration of C-Blosc 1.x series, adding more features and better documentation and is the ou">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2019-08-14T01:32:20Z">
+<meta property="article:tag" content="blosc2 beta">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="../../pages/synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.rst" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">C-Blosc2 Enters Beta Stage</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/francesc-alted/">Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2019-08-14T01:32:20Z" itemprop="datePublished" title="2019-08-14 01:32">2019-08-14 01:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/blosc2-first-beta.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.rst" class="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="section" id="c-blosc2-enters-beta-stage">
+<h2>C-Blosc2 Enters Beta Stage</h2>
+<p>The first beta version of C-Blosc2 has been released today.  C-Blosc2 is the new iteration of C-Blosc 1.x series, adding more features and better documentation and is the outcome of more than 4 years of slow, but steady development.  This blog entry describes the main features that you may see in next generation of C-Blosc, as well as an overview of what is in our roadmap.</p>
+<p><strong>Note 1</strong>: C-Blosc2 is currently in beta stage, so not ready to be used in production yet.  Having said this, being in beta means that the API has been declared frozen, so there is guarantee that your programs will continue to work with future versions of the library.  If you want to collaborate in this development, you are welcome: have a look at our roadmap below and contribute PR's or just go to the <a class="reference external" href="https://github.com/Blosc/c-blosc2/issues">open issues</a> and help us with them.</p>
+<p><strong>Note 2</strong>: the term <cite>C-Blosc1</cite> will be used instead of the official <cite>C-Blosc</cite> name for referring to the 1.x series of the library.  This is to make the distinction between the C-Blosc 2.x series and C-Blosc 1.x series more explicit.</p>
+<div class="section" id="main-features-in-c-blosc2">
+<h3>Main features in C-Blosc2</h3>
+<div class="section" id="new-64-bit-containers">
+<h4>New 64-bit containers</h4>
+<p>The main container in C-Blosc2 is the <cite>super-chunk</cite> or, for brevity, <cite>schunk</cite>, that is made by smaller containers which are essentially C-Blosc1 32-bit containers.  The <cite>super-chunk</cite> can be backed (or not) by another container which is called a <cite>frame</cite>.  If a <cite>schunk</cite> is not backed by a <cite>frame</cite> (the default), the different chunks will be stored sparsely in-memory.</p>
+<p>The <cite>frame</cite> object allows to store super-chunks contiguously, either on-disk or in-memory.  When a super-chunk is backed by a frame, instead of storing all the chunks sparsely in-memory, they are serialized inside the frame container.  The frame can be stored on-disk too, meaning that persistence of super-chunks is supported and that data can be accessed using the same API independently of where it is stored, memory or disk.</p>
+<p>Finally, the user can add meta-data to frames for different uses and in different layers.  For example, one may think on providing a meta-layer for <a class="reference external" href="http://www.numpy.org">NumPy</a> so that most of the meta-data for it is stored in a meta-layer; then, one can place another meta-layer on top of the latter can add more high-level info (e.g. geo-spatial, meteorological...), if desired.</p>
+<p>When taken together, these features represent a pretty powerful way to store and retrieve compressed data that goes well beyond of the previous contiguous compressed buffer, 32-bit limited, of C-Blosc1.</p>
+</div>
+<div class="section" id="new-filters-and-filters-pipeline">
+<h4>New filters and filters pipeline</h4>
+<p>Besides <cite>shuffle</cite> and <cite>bitshuffle</cite> already present in C-Blosc1, C-Blosc2 already implements:</p>
+<ul class="simple">
+<li><p><cite>delta</cite>: the stored blocks inside a chunk are diff'ed with respect to first block in the chunk.  The basic idea here is that, in some situations, the diff will have more zeros than the original data, leading to better compression.</p></li>
+<li><p><cite>trunc_prec</cite>: it zeroes the least significant bits of the mantissa of float32 and float64 types.  When combined with the <cite>shuffle</cite> or <cite>bitshuffle</cite> filter, this leads to more contiguous zeros, which are compressed better and faster.</p></li>
+</ul>
+<p>Also, a new filter pipeline has been implemented.  With it, the different filters can be pipelined so that the output of one filter can be the input for the next; this happens at the block level, so minimizing the size of temporary buffers, and hence, accelerating the process.  Possible examples of pipelines are a <cite>delta</cite> filter followed by <cite>shuffle</cite>, or a <cite>trunc_prec</cite> followed by <cite>bitshuffle</cite>.  Up to 6 filters can be pipelined, so there is plenty of space for upcoming new filters to collaborate among them.</p>
+</div>
+<div class="section" id="more-simd-support-for-arm-and-powerpc">
+<h4>More SIMD support for ARM and PowerPC</h4>
+<p>New SIMD support for ARM (NEON), allowing for faster operation on ARM architectures.  Only <cite>shuffle</cite> is supported right now, but the idea is to implement <cite>bitshuffle</cite> for NEON too.</p>
+<p>Also, SIMD support for PowerPC (ALTIVEC) is here, and both <cite>shuffle</cite>  and <cite>bitshuffle</cite> are supported.  However, this has been done via a transparent mapping from SSE2 into ALTIVEC emulation in GCC 8, so performance could be better (but still, it is already a nice improvement over native C code; see PR <a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/59">https://github.com/Blosc/c-blosc2/pull/59</a> for details).  Thanks to Jerome Kieffer.</p>
+</div>
+<div class="section" id="new-codecs">
+<h4>New codecs</h4>
+<p>There is a new <a class="reference external" href="https://github.com/inikep/lizard">Lizard codec</a>, which is an efficient compressor with very fast decompression. It achieves compression ratio that is comparable to <cite>zip/zlib</cite> and <cite>zstd/brotli</cite> (at low and medium compression levels) that is able to attain decompression speeds of 1 GB/s or more.</p>
+</div>
+<div class="section" id="new-dictionary-support-for-better-compression-ratio">
+<h4>New dictionary support for better compression ratio</h4>
+<p>Dictionaries allow for better discovery of data duplicates among different blocks: when a block is going to be compressed, C-Blosc2 can use a previously made dictionary (stored in the header of the super-chunk) for compressing all the blocks that are part of the chunks.  This usually improves the compression ratio, as well as the decompression speed, at the expense of a (small) overhead in compression speed.  Currently, this is only supported in the <cite>zstd</cite> codec, but would be nice to extend it to <cite>lz4</cite> and <cite>blosclz</cite> at least.</p>
+</div>
+<div class="section" id="much-improved-documentation-mark-up">
+<h4>Much improved documentation mark-up</h4>
+<p>We are currently using a combination of Sphinx + Doxygen + Breathe for documenting the <a class="reference external" href="https://blosc-doc.readthedocs.io">C API for C-Blosc2</a>.  This is a huge step further compared with the documentation of C-Blosc1, where the developer needed to go the    <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/blosc/blosc.h">blosc.h</a> header for reading the docstrings there.  Thanks to Alberto Sabater for contributing the support for this.</p>
+</div>
+<div class="section" id="support-for-intel-ipp-integrated-performance-primitives">
+<h4>Support for Intel IPP (Integrated Performance Primitives)</h4>
+<p>Intel is producing a series of optimizations in their <a class="reference external" href="https://software.intel.com/en-us/ipp">IPP library</a> and among them, and <a class="reference external" href="https://software.intel.com/en-us/ipp-dev-reference-lz4-compression-functions">accelerated version of the LZ4 codec</a>.  Due to its excellent compression capabilities and speed, LZ4 is probably the most used codec in Blosc, so enabling even a bit more of optimization on LZ4 is always a good news.  And judging by the plots below, the Intel guys seem to have done an excellent job:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-no-ipp" src="../../images/blosc2-first-beta/Blosc2-4MB-LZ4-NO-IPP-Shuffle.png"></p></td>
+<td><p><img alt="lz4-ipp" src="../../images/blosc2-first-beta/Blosc2-4MB-LZ4-IPP-Shuffle.png"></p></td>
+</tr></tbody>
+</table>
+<p>In the plots above we see a couple of things: 1) the IPP/LZ4 functions can compress <em>more</em> than regular LZ4, and 2) they are quite a bit <em>faster</em> than regular LZ4.  As always, take these plots with a grain of salt, as actual datasets will see more similar compression ratios and speed (but still, the difference can be significant).  Of course, IPP/LZ4 should generate LZ4 chunks that are completely compatible with the original LZ4 library (but in case you detect any incompatibility, please shout!).</p>
+<p>C-Blosc2 beta.1 comes with support for LZ4/IPP out-of-the-box, that is, if IPP is detected in the system, its optimized LZ4 functions are automatically linked and used with the Blosc2 library.  If, for portability or other reasons, you don't want to create a Blosc2 library that is linked with Intel IPP, you can disable support for it passing the <cite>-DDEACTIVATE_IPP=ON</cite> to cmake.  In the future, we surely may give support for other optimized codecs in IPP too (Zstd would be an excellent candidate).</p>
+</div>
+</div>
+<div class="section" id="roadmap">
+<h3>Roadmap</h3>
+<p>Of course, C-Blosc2 is not done yet, and there are many interesting enhancements that we would like to tackle sooner or later.  Here it is a more or less comprehensive list of our roadmap:</p>
+<ul class="simple">
+<li><p>Lock support for <cite>super-chunks</cite>: when different processes are accessing concurrently to super-chunks, make them to sync properly by using locks, either on-disk (frame-backed super-chunks), or in-memory.</p></li>
+<li><p>Checksums: the frame can benefit from having a checksum per every chunk/index/metalayer.  This will provide more safety towards frames that are damaged for whatever reason.  Also, this would provide better feedback when trying to determine the parts of the frame that are corrupted.  Candidates for checksums can be the xxhash32 or xxhash64, depending on the gaols (to be decided).</p></li>
+<li>
+<p>Documentation: utterly important for attracting new users and making the life easier for existing ones.  Important points to have in mind here:</p>
+<ul>
+<li><p>Quality of API docstrings: is the mission of the functions or data structures clearly and succinctly explained? Are all the parameters explained?  Is the return value explained?  What are the possible errors that can be returned?</p></li>
+<li><p>Tutorials/book: besides the API docstrings, more documentation materials should be provided, like tutorials or a book about Blosc (or at least, the beginnings of it).  Due to its adoption in GitHub and Jupyter notebooks, one of the most extended and useful markup systems is MarkDown, so this should also be the first candidate to use here.</p></li>
+</ul>
+</li>
+<li><p>Wrappers for other languages: Python and Java are the most obvious candidates, but others like R or Julia would be nice to have.  Still not sure if these should be produced and maintained by the Blosc development team, or leave them for third-party players that would be interested.</p></li>
+<li><p>It would be nice to use <a class="reference external" href="https://lgtm.com">LGTM</a>, a CI-friendly analyzer for security.</p></li>
+<li><p>Add support for <a class="reference external" href="https://buildkite.com">buildkite</a> as another CI would be handy because it allows to use on-premise machines, potentially speeding-up the time to do the builds, but also to setup pipelines with more complex dependencies and analyzers.</p></li>
+</ul>
+<p>The implementation of these features will require the help of people, either by contributing code (see  <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/DEVELOPING-GUIDE.rst">our developing guidelines</a>) or, as it turns out that <a class="reference external" href="https://numfocus.org/project/blosc">Blosc is a project sponsored by NumFOCUS</a>, you may want to  <a class="reference external" href="https://numfocus.org/donate-to-blosc">make a donation to the project</a>.  If you plan to contribute in any way, thanks so much in the name of the community!</p>
+</div>
+<div class="section" id="addendum-special-thanks-to-developers">
+<h3>Addendum: Special thanks to developers</h3>
+<p>C-Blosc2 is the outcome of the work of <a class="reference external" href="https://github.com/Blosc/c-blosc2/graphs/contributors">many developers</a> that worked not only on C-Blosc2 itself, but also on C-Blosc1, from which C-Blosc2 inherits a lot of features.  I am very grateful to Jack Pappas, who contributed important portability enhancements, specially runtime and cross-platform detection of SSE2/AVX2 (with the help of Julian Taylor) as well as high precision timers (HPET) which are essential for benchmarking purposes.  Lucian Marc also contributed the support for ARM/NEON for the shuffle filter.  Jerome Kieffer contributed support for PowerPC/ALTIVEC.  Alberto Sabater, for his great efforts on producing really nice Blosc2 docs, among other aspects. And last but not least, to Valentin Haenel for general support, bug fixes and other enhancements through the years.</p>
+<blockquote>
+<p>** Enjoy Data!**</p>
+</blockquote>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosc2-beta/" rel="tag">blosc2 beta</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../arm-memory-walls-followup/" rel="prev" title="Is ARM Hungry Enough to Eat Intel's Favorite Pie?">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../blosc2-meets-rome/" rel="next" title="Blosc2-Meets-Rome">Next post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/blosc2-first-beta/",
+        disqus_title="C-Blosc2 Enters Beta Stage",
+        disqus_identifier="cache/posts/blosc2-first-beta.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

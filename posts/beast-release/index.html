@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C-Blosc Beast Release | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/beast-release/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Francesc Alted">
+<link rel="prev" href="../blosc-donation/" title="Blosc Received a $50,000 USD donation" type="text/html">
+<link rel="next" href="../mid-2020-progress-report/" title="Mid 2020 Progress Report" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="C-Blosc Beast Release">
+<meta property="og:url" content="http://blosc.org/posts/beast-release/">
+<meta property="og:description" content="C-Blosc Beast Release
+TL;DR; The improvements in new CPUs allow for more cores and (much) larger caches. Latest C-Blosc release leverages these facts so as to allow better compression ratios, while ke">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2020-07-25T14:32:20Z">
+<meta property="article:tag" content="blosc performance tuning">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="../../pages/synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.rst" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">C-Blosc Beast Release</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/francesc-alted/">Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2020-07-25T14:32:20Z" itemprop="datePublished" title="2020-07-25 14:32">2020-07-25 14:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/beast-release.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.rst" class="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="section" id="c-blosc-beast-release">
+<h2>C-Blosc Beast Release</h2>
+<p><strong>TL;DR;</strong> The improvements in new CPUs allow for more cores and (much) larger caches. Latest C-Blosc release leverages these facts so as to allow better compression ratios, while keeping the speed on par with previous releases.</p>
+<p>During the past two months we have been working hard at increasing the efficiency of Blosc for the new processors that are coming with more cores than ever before (8 can be considered quite normal, even for laptops, and 16 is not that unusual for rigs).  Furthermore, their caches are increasing beyond limits that we thought unthinkable just a few years ago (for example, AMD is putting 64 MB in L3 for their mid-range Ryzen2 39x0 processors).  This is mainly a consequence of the recent introduction of the 7nm process for both ARM and AMD64 architectures.  It turns out that compression ratios are quite dependent on the sizes of the streams to compress, so having access to more cores and significantly larger caches, it was clear that Blosc was in a pressing need to catch-up and fine-tune its performance for such a new 'beasts'.</p>
+<p>So, the version released today (<a class="reference external" href="https://github.com/Blosc/c-blosc/releases/tag/v1.20.0">C-Blosc 1.20.0</a>) has been carefully fine-tuned to take the most of recent CPUs, specially for fast codecs, where even if speed is more important than compression ratio, the latter is still a very important parameter.  With that, we decided to increase the amount of every compressed stream in a block from 64 KB to 256 KB (most of CPUs nowadays have this amount of private L2 cache or even larger).   Also, it is important to allow a minimum of shared L3 cache to every thread so that they do not have to compete for resources, so a new restriction has been added so that no thread has to deal with streams larger than 1 MB (both old and modern CPUs seem to guarantee that they provide at least this amount of L3 per thread).</p>
+<p>Below you will find the net effects of this new fine-tuning of fast codecs like LZ4 and BloscLZ on our AMD 3900X box (12 physical cores, 64 MB L3).  Here we will be comparing results from C-Blosc 1.18.1 and C-Blosc 1.20.0 (we will skip the comparison against 1.19.x because this can be considered an intermediate release in our pursuit).  Spoiler: you will be seeing an important boost of compression ratios, while the high speed of LZ4 and BloscLZ codecs is largely kept.</p>
+<p>On the plots below, on the left is the performance of 1.18.1 release, whereas on the right is the performance of the new 1.20.0 release.</p>
+<div class="section" id="effects-in-lz4">
+<h3>Effects in LZ4</h3>
+<p>Let's start by looking at how the new fine tuning affected <em>compression</em> performance:</p>
+<table>
+<colgroup>
+<col style="width: 52%">
+<col style="width: 48%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-c-before" src="../../images/beast-release/ryzen12-lz4-1.18.1-c.png"></p></td>
+<td><p><img alt="lz4-c-after" src="../../images/beast-release/ryzen12-lz4-1.20.0-c.png"></p></td>
+</tr></tbody>
+</table>
+<p>Look at how much compression ratio has improved.  This is mainly a consequence of using compression streams of up to 256 KB, instead of the previous 64 KB --incidentally, this is just for this synthetic data, but it is clear that real data is going to be benefited as well; besides, synthetic data is something that frequently appears in data science (e.g. a uniformly spaced array of values).  One can also see that compression speed has not dropped in general which is great considering that we allow for much better compression ratios now.</p>
+<p>Regarding decompression we can see a similar pattern:</p>
+<table>
+<colgroup>
+<col style="width: 52%">
+<col style="width: 48%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-d-before" src="../../images/beast-release/ryzen12-lz4-1.18.1-d.png"></p></td>
+<td><p><img alt="lz4-d-after" src="../../images/beast-release/ryzen12-lz4-1.20.0-d.png"></p></td>
+</tr></tbody>
+</table>
+<p>So the decompression speed is generally the same, even for data that can be compressed with high compression ratios.</p>
+</div>
+<div class="section" id="effects-in-blosclz">
+<h3>Effects in BloscLZ</h3>
+<p>Now it is the turn for BloscLZ.  Similarly to LZ4, this codec is also meant for speed, but another reason for its existence is that it usually provides better compression ratios than LZ4 when using synthetic data.  In that sense, BloscLZ complements well LZ4 because the latter can be used for real data, whereas BloscLZ is usually a better bet for highly repetitive synthetic data.  In new C-Blosc we have introduced BloscLZ 2.3.0 which brings a brand new entropy detector which will disable compression early when entropy is high, allowing to selectively put CPU cycles where there are more low-hanging data compression opportunities.</p>
+<p>Here it is how performance changes for <em>compression</em>:</p>
+<table>
+<colgroup>
+<col style="width: 51%">
+<col style="width: 49%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="blosclz-c-before" src="../../images/beast-release/ryzen12-blosclz-1.18.1-c.png"></p></td>
+<td><p><img alt="blosclz-c-after" src="../../images/beast-release/ryzen12-blosclz-1.20.0-c.png"></p></td>
+</tr></tbody>
+</table>
+<p>In this case, the compression ratio has improved a lot too, and even if compression speed suffers a bit for small compression levels, it is still on par to the original speed for higher compression levels (compressing at more than 30 GB/s while reaching large compression ratios is a big achievement indeed).</p>
+<p>Regarding decompression we have this:</p>
+<table>
+<colgroup>
+<col style="width: 51%">
+<col style="width: 49%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="blosclz-d-before" src="../../images/beast-release/ryzen12-blosclz-1.18.1-d.png"></p></td>
+<td><p><img alt="blosclz-d-after" src="../../images/beast-release/ryzen12-blosclz-1.20.0-d.png"></p></td>
+</tr></tbody>
+</table>
+<p>As usual for the new release, the decompression speed is generally the same, and performance can still exceed 80 GB/s for the whole range of compression levels.  Also noticeable is that fact that single-thread speed is pretty competitive with a regular <cite>memcpy()</cite>.  Again, Ryzen2 architecture is showing its muscle here.</p>
+</div>
+<div class="section" id="final-thoughts">
+<h3>Final Thoughts</h3>
+<p>Due to technological reasons, CPUs are evolving towards having more cores and larger caches.  Hence, compressors and specially Blosc, has to adapt to the new status quo.  With the new parametrization and new algorithms (early entropy detector) introduced today, we can achieve much better results.  In new Blosc you can expect a good bump in compression ratios with fast codecs (LZ4, BloscLZ) while keeping speed as good as always.</p>
+</div>
+<div class="section" id="appendix-hardware-and-software-used">
+<h3>Appendix: Hardware and Software Used</h3>
+<p>For reference, here it is the software that has been used for this blog entry:</p>
+<ul>
+<li><p><strong>Hardware</strong>: AMD Ryzen2 3900X, 12 physical cores, 64 MB L3, 32 GB RAM.</p></li>
+<li><p><strong>OS</strong>: Ubuntu 20.04</p></li>
+<li><p><strong>Compiler</strong>: Clang 10.0.0</p></li>
+<li>
+<p><strong>C-Blosc</strong>: 1.18.1 (2020-03-29) and 1.20.0 (2020-07-25)</p>
+<p>** Enjoy Data!**</p>
+</li>
+</ul>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosc-performance-tuning/" rel="tag">blosc performance tuning</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../blosc-donation/" rel="prev" title="Blosc Received a $50,000 USD donation">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../mid-2020-progress-report/" rel="next" title="Mid 2020 Progress Report">Next post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/beast-release/",
+        disqus_title="C-Blosc Beast Release",
+        disqus_identifier="cache/posts/beast-release.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

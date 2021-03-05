@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Sparse Frames | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/introducing-sparse-frames/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Marta Iborra, Francesc Alted">
+<link rel="prev" href="../new-blosc-wheels/" title="Announcing Blosc Wheels" type="text/html">
+<link rel="next" href="../blosc-metalayers/" title="Blosc metalayers, where the user metainformation is stored" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="Introducing Sparse Frames">
+<meta property="og:url" content="http://blosc.org/posts/introducing-sparse-frames/">
+<meta property="og:description" content="Introducing Sparse Frames
+
+Overview
+The new sparse frame implementation
+allows the storage of Blosc2 super-chunk data chunks sparsely on-disk, using the filesystem as a key/value storage.
+This mimics ">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-02-08T07:32:20Z">
+<meta property="article:tag" content="blosc2 sparse frame format">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="../../pages/synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.rst" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Introducing Sparse Frames</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/marta-iborra-francesc-alted/">Marta Iborra, Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2021-02-08T07:32:20Z" itemprop="datePublished" title="2021-02-08 07:32">2021-02-08 07:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/introducing-sparse-frames.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.rst" class="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="section" id="introducing-sparse-frames">
+<h2>Introducing Sparse Frames</h2>
+<div class="section" id="overview">
+<h3>Overview</h3>
+<p>The <a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/176">new sparse frame implementation</a>
+allows the storage of Blosc2 super-chunk data chunks sparsely on-disk, using the filesystem as a key/value storage.
+This mimics existing formats like <a class="reference external" href="https://github.com/Blosc/bcolz/blob/master/DISK_FORMAT_v1.rst">bcolz</a>
+or <a class="reference external" href="https://zarr.readthedocs.io/en/stable/spec/v2.html">Zarr</a>.</p>
+<p>For the sparse implementation we are making use of the existing <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/README_CFRAME_FORMAT.rst">contiguous frame</a>,
+in order to store the metadata and the index for accessing the different chunks.
+Here you can see the new sparse format compared with the existing contiguous frame:</p>
+<img alt="/images/sparse-frames/cframe-vs-sframe.png" class="align-center" src="../../images/sparse-frames/cframe-vs-sframe.png" style="width: 70%;"><p>As can be seen in the image above, the contiguous frame file is made of
+a header, a chunks section and a trailer.
+The header contains information needed to decompress the chunks and the
+trailer contains a user meta data chunk.
+The chunks section for a contiguous frame is made of all the data chunks plus the index chunk.
+The latter contains the offset where each chunk begins inside the contiguous frame.
+All these pieces are stored sequentially, without any empty spaces between them.</p>
+<p>However, in a sparse frame the chunks are stored somewhere as independent binary files.
+But there is still the need to store the information to decompress the chunks as well as
+a place to store the user meta data.  All this goes to the <cite>chunks.b2frame</cite>, which is
+actually a contiguous frame file with the difference that its chunks section contains only
+the index chunk.  This index chunk stores the ID of each chunk (an integer from 0 to 2^32-1).
+The name of the chunk file is built by expressing the chunk ID in hexadecimal,
+padded with zeros (until 8 characters) and adding the <cite>.chunk</cite> extension.
+For example, if the index chunk is 46 (2E in hexadecimal) the chunk file name would
+be <cite>0000002E.chunk</cite>.</p>
+</div>
+<div class="section" id="advantages">
+<h3>Advantages</h3>
+<p>The big advantage of the sparse frame compared with the contiguous one is
+avoiding empty spaces resulting when updating a chunk.</p>
+<p>To better illustrate this, let's imagine that the set of the data chunks in
+a contiguous frame is stored like in the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Jenga">Jenga board game tower</a>, a tower
+built with wood blocks.  But in constrast to the genuine
+<cite>Jenga board game</cite>, not all the blocks have the same size (the uncompressed
+size of a the chunks is the same, but not the compressed one):</p>
+<div class="figure align-center">
+<img alt="/images/sparse-frames/jenga3.png" src="../../images/sparse-frames/jenga3.png" style="width: 50%;">
+</div>
+<p>Above it is shown the initial structure of such a tower. If the yellow piece
+is updated (changed by another piece) there are two possibilities.
+The first one is that the new piece fits into the empty space left where
+the old piece was. In that case, the new piece is put in the previous space
+without any problem and we have no empty spaces left.  However, if the new piece
+does not fit into the empty space, the new piece has to be placed at the
+top of the tower (like in the game), leaving an empty space where the old piece was.</p>
+<p>On the other hand, the chunks of an sparse frame can be seen as books on a shelf, where
+each book is a different chunk:</p>
+<img alt="/images/sparse-frames/bookshelf.png" class="align-center" src="../../images/sparse-frames/bookshelf.png" style="width: 50%;"><p>If one needs to update one book with
+the new, taller edition, one only has to grab the old edition and replace it by the new one.
+As there is no limit in the height of the books, the yellow book can be replaced with a
+larger book without creating empty spaces, and making a better use of space.</p>
+</div>
+<div class="section" id="example-of-use">
+<h3>Example of use</h3>
+<p>Creating a sparse frame in C-Blosc2 is easy; just specifify the name of the directory where
+you want to store your chunks and you are done:</p>
+<pre class="literal-block">blosc2_storage storage = {.urlpath="dir1.b2frame"};
+schunk = blosc2_schunk_new(storage);
+for (nchunk = 0; nchunk &lt; NCHUNKS; nchunk++) {
+    blosc2_schunk_append_buffer(schunk, data, isize);
+}</pre>
+<p>The above will create NCHUNKS of chunks in the "dir.b2frame".  After that, you can open and read
+the frame with:</p>
+<pre class="literal-block">schunk = blosc2_schunk_open("dir1.b2frame");
+for (nchunk = 0; nchunk &lt; NCHUNKS; nchunk++) {
+    blosc2_schunk_decompress_chunk(schunk, nchunk, data_dest, isize);
+}</pre>
+<p>Simple and effective.</p>
+<p>You can have a look at a <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/examples/sframe_simple.c">more complete example here</a>.</p>
+</div>
+<div class="section" id="future-work">
+<h3>Future work</h3>
+<p>We think that this implementation opens the door to several interesting possibilities.</p>
+<p>For example, by introducing networking code in Blosc2,
+the chunks could be stored in another machine and accessed remotely.
+That way, with just the metadata (the contiguous frame) we could
+access all the data chunks in the sparse frame.</p>
+<p>For example, let's suppose that we have a sparse frame with 1 million chunks.
+The total size of the data chunks from this sparse frame is 10 TB, but the
+contiguous frame size can be as small as 10 KB.  So, with just sending an
+small object of 10 KB, any worker could access the whole 10 TB of data.</p>
+<p>The remote stores could be typical networked key/value databases. The key is the identifier
+for each element of the database, whereas the value is the information that is associated
+to each key (similar to a set of unique keys and a set of doors). In this case, the key would
+be built from the metadata (e.g. a URL) plus the index of the chunk, and the value would be
+the data chunk itself.</p>
+<p>This can lead to a whole new range of applications, where data can be spread in the
+cloud and workers can access to it by receiving small amounts of serialized buffers (the
+contiguous frame).  This way, arbitrarily large data silos could be created and accessed
+via the C-Blosc2 library (plus a key/value network store).</p>
+<p><em>Note by Francesc</em>: The implementation of sparse frames has been done by Marta Iborra, who
+is the main author of this blog too.  Marta joined the Blosc team a few months ago as a student,
+and the whole team is very pleased with the quality of her contribution; we would be thrilled
+to continue having her among us for the next months (but this requires some budget indeed).
+If you like where we are headed, please consider making a donation
+to the Blosc project via the NumFOCUS Foundation: <a class="reference external" href="https://blosc.org/pages/donate">https://blosc.org/pages/donate</a>.  Thank you!</p>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosc2-sparse-frame-format/" rel="tag">blosc2 sparse frame format</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../new-blosc-wheels/" rel="prev" title="Announcing Blosc Wheels">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../blosc-metalayers/" rel="next" title="Blosc metalayers, where the user metainformation is stored">Next post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/introducing-sparse-frames/",
+        disqus_title="Introducing Sparse Frames",
+        disqus_identifier="cache/posts/introducing-sparse-frames.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

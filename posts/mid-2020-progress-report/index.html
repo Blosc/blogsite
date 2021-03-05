@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mid 2020 Progress Report | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/mid-2020-progress-report/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Francesc Alted">
+<link rel="prev" href="../beast-release/" title="C-Blosc Beast Release" type="text/html">
+<link rel="next" href="../new-blosc-wheels/" title="Announcing Blosc Wheels" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="Mid 2020 Progress Report">
+<meta property="og:url" content="http://blosc.org/posts/mid-2020-progress-report/">
+<meta property="og:description" content="Mid 2020 Report for Status of Work on Blosc projects
+2020 has been a year where the Blosc projects have received important donations, totalling an amount of $55,000 USD so far.  In the present report ">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2020-08-27T12:32:20Z">
+<meta property="article:tag" content="blosc progress report grants">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="../../pages/synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.rst" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Mid 2020 Progress Report</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/francesc-alted/">Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2020-08-27T12:32:20Z" itemprop="datePublished" title="2020-08-27 12:32">2020-08-27 12:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/mid-2020-progress-report.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.rst" class="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="section" id="mid-2020-report-for-status-of-work-on-blosc-projects">
+<h2>Mid 2020 Report for Status of Work on Blosc projects</h2>
+<p>2020 has been a year where the Blosc projects have received important donations, totalling an amount of $55,000 USD so far.  In the present report we list the most important tasks that have been carried out during the period that goes from January 2020 to August 2020.  Most of these tasks are related to the most fast-paced projects under development: C-Blosc2 and Caterva (including its cat4py wrapper).  Having said that, the Blosc development team has been active in other projects too (C-Blosc, python-blosc), although mainly for maintenance purposes.</p>
+<p>Besides, we also list the roadmap for the C-Blosc2, Caterva and cat4py projects that we plan to tackle during the next few months.</p>
+<div class="section" id="c-blosc2">
+<h3>C-Blosc2</h3>
+<p>C-Blosc2 adds new data containers, called superchunks, that are essentially a set of compressed chunks in memory that can be accessed randomly and enlarged during its lifetime.  Also, a new frame serialization layer has been added, so that superchunks can be persisted on disk, while keeping the same properties of superchunks in memory.  Finally, a metalayer capability allow for higher level containers to be created on top of superchunks/frames.</p>
+<div class="section" id="highligths">
+<h4>Highligths</h4>
+<ul class="simple">
+<li><p>Maskout functionality.  This allows for selectively choose the blocks of a chunk that are going to be decompressed.  This paves the road for faster multidimensional slicing in Caterva (see below in the Caterva section).</p></li>
+<li><p>Prefilters introduced and declared stable.  Prefilters allow for the user to pass C functions for performing arbitrary computations on a chunk prior to the filter/codec pipeline.  In addition, the C function can even have access to more chunks than just the one that is being compressed.  This opens the door to a way to operate with different super-chunks and produce a new one very efficiently. See <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/tests/test_prefilter.c">https://github.com/Blosc/c-blosc2/blob/master/tests/test_prefilter.c</a> for some examples of use.</p></li>
+<li><p>Support for PowerPC/Altivec.  We added support for PowerPC SIMD (Altivec/VSX) instructions for faster operation of shuffle and bitshuffle filters.  For details, see <a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/98">https://github.com/Blosc/c-blosc2/pull/98</a>.</p></li>
+<li><p>Improvements in compression ratio for LZ4/BloscLZ.  New processors are continually increasing the amount of memory in their caches.  In recent C-Blosc and C-Blosc2 releases we increased the size of the internal blocks so that LZ4/BloscLZ codecs have better opportunities for finding duplicates and hence, increasing their compression ratios.  But due to the increased cache sizes, performance has kept close to the original, fast speeds.  For some benchmarks, see <a class="reference external" href="https://blosc.org/posts/beast-release/">https://blosc.org/posts/beast-release/</a>.</p></li>
+<li><p>New entropy probing method for BloscLZ.  BloscLZ is a native codec for Blosc whose mission is to be able to compress synthetic data efficiently.  Synthetic data can appear in multiple situations and having a codec that is meant to compress/decompress that with high compression ratios in a fast manner is important.  The new entropy probing method included in recent BloscLZ 2.3 (introduced in both C-Blosc and C-Blosc2) allows for even better compression ratios for highly compressible data, while giving up early when blocks are going to be difficult to compress at all.  For details see: <a class="reference external" href="https://blosc.org/posts/beast-release/">https://blosc.org/posts/beast-release/</a> too.</p></li>
+</ul>
+</div>
+<div class="section" id="roadmap-for-c-blosc2">
+<h4>Roadmap for C-Blosc2</h4>
+<p>During the next few months, we plan to tackle the next tasks:</p>
+<ul class="simple">
+<li><p>Postfilters.  The same way that prefilters allows to do user-defined computations prior to the compression pipeline, the postfilter would allow to do the same <em>after</em> the decompression pipeline.  This could be useful in e.g. creating superchunks out of functions taking simple data as input (for example, a [min, max] range of values).</p></li>
+<li><p>Finalize the frame implementation.  Although the frame specification is almost complete (bar small modifications/additions), we still miss some features that are included in the specification, but not implemented yet.  An example of this is the fingerprint support at the end of the frames.</p></li>
+<li><p>Chunk insertion.  Right now only chunk appends are supported.  It should be possible to support chunk insertion in any position, and not only at the end of a superchunk.</p></li>
+<li><p>Security.  Although we already started actions to improve the safety of the package using tools like OSS-Fuzz, this is an always work in progress task, and we plan indeed continuing improving it in the future.</p></li>
+<li><p>Wheels.  We would like to deliver wheels on every release soon.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="caterva-cat4py">
+<h3>Caterva/cat4py</h3>
+<p>Caterva is a multidimensional container on top of C-Blosc2 containers.  It uses the metalayer capabilities present in superchunks/frames in order to store the multidimensionality information necessary to define arrays up to 8 dimensions and up to 2^63 elements.  Besides being able to create such arrays, Caterva provides functionality to get (multidimensional) slices of the arrays easyly and efficiently.  cat4py is the Python wrapper for Caterva.</p>
+<div class="section" id="id1">
+<h4>Highligths</h4>
+<ul class="simple">
+<li><p>Multidimensional blocks.  Chunks inside superchunk containers are endowed with a multidimensional structure so as to enable efficient slicing.  However, in many cases there is a tension between defining large chunks so as to reduce the amount of indexing to find chunks or smaller ones in order to avoid reading data that falls outside of a slice.  In order to reduce such a tension, we endowed the blocks inside chunks with a multidimensional structure too, so that the user has two parameters (chunkshape and blockshape) to play with in order to optimize I/O for their use case.  For an example of the kind of performance enhancements you can expect, see <a class="reference external" href="https://htmlpreview.github.io/?https://github.com/Blosc/cat4py/blob/269270695d7f6e27e6796541709e98e2f67434fd/notebooks/slicing-performance.html">https://htmlpreview.github.io/?https://github.com/Blosc/cat4py/blob/269270695d7f6e27e6796541709e98e2f67434fd/notebooks/slicing-performance.html</a>.</p></li>
+<li><p>API refactoring.  Caterva is a relatively young project, and its API grew up organically and hence, in a quite disorganized manner.  We recognized that and proceeded with a big API refactoring, trying to put more sense in the naming schema of the functions, as well as in providing a minimal set of C structs that allows for a simpler and better API.</p></li>
+<li><p>Improved documentation.  A nice API is useless if it is not well documented, so we decided to put a significant amount of effort in creating high-quality documentation and examples so that the user can quickly figure out how to create and access Caterva containers with their own data.  Although this is still a work in progress, we are pretty happy with how docs are shaping up.  See <a class="reference external" href="https://caterva.readthedocs.io/">https://caterva.readthedocs.io/</a> and <a class="reference external" href="https://cat4py.readthedocs.io/">https://cat4py.readthedocs.io/</a>.</p></li>
+<li><p>Better Python integration (cat4py).  Python, specially thanks to the NumPy project, is a major player in handling multidimensional datasets, so have greatly bettered the integration of cat4py, our Python wrapper for Caterva, with NumPy.  In particular, we implemented support for the NumPy array protocol in cat4py containers, as well as an improved NumPy-esque API in cat4py package.</p></li>
+</ul>
+</div>
+<div class="section" id="roadmap-for-caterva-cat4py">
+<h4>Roadmap for Caterva / cat4py</h4>
+<p>During the next months, we plan to tackle the next tasks:</p>
+<ul class="simple">
+<li><p>Append chunks in any order. This will make it easier for the user to create arrays, since they will not be forced to use a row-wise order.</p></li>
+<li><p>Update array elements. With this, users will be able to update their arrays without having to make a copy.</p></li>
+<li><p>Resize array dimensions. This feature will allow Caterva to increase or decrease in size any dimension of the arrays.</p></li>
+<li><p>Wheels.  Once Caterva/cat4py would be in beta stage, we plan to deliver wheels on every release.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="final-thoughts">
+<h3>Final thoughts</h3>
+<p>We are very grateful to our sponsors in 2020; they allowed us to implement what we think would be nice features for the whole Blosc ecosystem.  However, and although we did a lot of progress towards making C-Blosc2 and Caterva as featured and stable as possible, we still need to finalize our efforts so as to see both projects stable enough to allow them to be used in production.  Our expectation is to release a 2.0.0 (final) release for C-Blosc2 by the end of the year, whereas Caterva (and cat4py) should be declared stable during 2021.</p>
+<p>Also, we are happy to have enrolled new members on Blosc crew: Óscar Griñón, who proved to be instrumental in implementing the multidimensional blocks in Caterva and Nathan Moinvaziri, who is making great strides in making C-Blosc and C-Blosc2 more secure.  Thanks guys!</p>
+<p>Hopefully 2021 will also be a good year for seeing the Blosc ecosystem to evolve.  If you are interested on what we are building and want to help, we are open to any kind of contribution, including <a class="reference external" href="https://blosc.org/pages/donate/">donations</a>.  Thank you for your interest!</p>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosc-progress-report-grants/" rel="tag">blosc progress report grants</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../beast-release/" rel="prev" title="C-Blosc Beast Release">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../new-blosc-wheels/" rel="next" title="Announcing Blosc Wheels">Next post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/mid-2020-progress-report/",
+        disqus_title="Mid 2020 Progress Report",
+        disqus_identifier="cache/posts/mid-2020-progress-report.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

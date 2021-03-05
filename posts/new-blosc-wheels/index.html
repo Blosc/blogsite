@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Announcing Blosc Wheels | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/new-blosc-wheels/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Oscar Guiñón">
+<link rel="prev" href="../mid-2020-progress-report/" title="Mid 2020 Progress Report" type="text/html">
+<link rel="next" href="../introducing-sparse-frames/" title="Introducing Sparse Frames" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="Announcing Blosc Wheels">
+<meta property="og:url" content="http://blosc.org/posts/new-blosc-wheels/">
+<meta property="og:description" content="Announcing Blosc Wheels
+We are happy to announce that wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are being produced on regular basis for python-blosc.  Such wheels also conta">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-01-18T12:32:20Z">
+<meta property="article:tag" content="wheels">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="../../pages/synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.rst" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Announcing Blosc Wheels</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/oscar-guinon/">Oscar Guiñón</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2021-01-18T12:32:20Z" itemprop="datePublished" title="2021-01-18 12:32">2021-01-18 12:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/new-blosc-wheels.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.rst" class="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="section" id="announcing-blosc-wheels">
+<h2>Announcing Blosc Wheels</h2>
+<p>We are happy to announce that wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are being produced on regular basis for python-blosc.  Such wheels also contain development files for the C-Blosc library.  If you are interested in knowing more how to use them, keep reading.</p>
+<p>A Python wheel (.whl file) is a ZIP archive used to make easier the installation process of packages.  The new wheels make Blosc library installation faster by avoiding compiling, and they are now available at PyPI. See: <a class="reference external" href="https://pypi.org/project/blosc/">https://pypi.org/project/blosc/</a>.</p>
+<p>Moreover, wheels for Blosc have support for AVX2 <em>runtime</em> detection, so it will be automatically leveraged in case the local host has AVX2. On the other hand, if the host does not have AVX2, SSE2 is used instead, which, even if it is slower than AVX2, it is still faster than regular x86 instructions.</p>
+<div class="section" id="small-intro-to-wheels">
+<h3>Small intro to wheels</h3>
+<p>Wheels are an advantageous alternative to distribute Python (but also pure C) packages which contain C (or Cython) source code, and hence, need a compiler.  For those that are not familiar to wheels, here it comes a small tutorial on how to create and use wheels.</p>
+<p>First, let's recall the traditional way to build a source distribution:</p>
+<pre class="code console"><a name="rest_code_e25be3fac87d48ba81509f82995ef6fb-1"></a><span class="gp">$</span> python setup.py sdist
+</pre>
+<p>To build a wheel, the process is quite similar:</p>
+<pre class="code console"><a name="rest_code_03cb1910c2f84cf2a99df43b7e7e6fa9-1"></a><span class="gp">$</span> python setup.py bdist_wheel
+</pre>
+<p>To install a package via pip (pip decides whether install a from wheel or compile from the source package; wheels have obviously more priority):</p>
+<pre class="code console"><a name="rest_code_c1995de6f3d84797812382da7db61dfa-1"></a><span class="gp">$</span> python -m pip install <span class="o">{</span>package<span class="o">}</span>
+</pre>
+<p>To install a package forcing to use source distribution:</p>
+<pre class="code console"><a name="rest_code_d0abd90a2f5244afb19d69c194ce4100-1"></a><span class="gp">$</span> python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
+</pre>
+<p>To install a package forcing to use wheels:</p>
+<pre class="code console"><a name="rest_code_4d79d7ead28148b2899a8a9eb20cb5e6-1"></a><span class="gp">$</span> python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
+</pre>
+</div>
+<div class="section" id="different-types-of-wheels">
+<h3>Different types of wheels</h3>
+<p>There are different kind of wheels, depending on the goals and the build process:</p>
+<ul class="simple">
+<li><p>Universal Wheels are wheels that are pure Python (i.e. contain no compiled extensions) and support Python 2 and 3.</p></li>
+<li><p>Pure Python Wheels that are not “universal” are wheels that are pure Python (i.e. contain no compiled extensions), but don’t natively support both Python 2 and 3.</p></li>
+<li><p>Platform Wheels are wheels that are specific to a certain platform like Linux, macOS, or Windows, usually due to containing compiled extensions.</p></li>
+</ul>
+<p>Platform wheels are built in one Linux variant and have no guarantee of working on another Linux variant.  However, the manylinux wheels are accepted by most Linux variants:</p>
+<ul class="simple">
+<li><p>manylinux1: based on Centos5.</p></li>
+<li><p>manylinux2010: based on Centos6.</p></li>
+<li><p>manylinux2014: based on Centos7.</p></li>
+</ul>
+<p>Specifically, Blosc wheels are platform wheels that support Python3 (3.7 and up) on Windows, Linux and Mac, for both 32 and 64 bits systems.</p>
+</div>
+<div class="section" id="binaries-for-c-blosc-libraries-are-included">
+<h3>Binaries for C-Blosc libraries are included</h3>
+<p>Although wheels were meant for Python packages, nothing prevents adding more stuff to them.  In particular, we are not only distributing python-blosc binary extensions in our wheels, but also binaries for the C-Blosc library.  This way, people willing to use the C-Blosc library can make use of these wheels to install the necessary development files.</p>
+<p>First, install the binary wheel via PyPI without the need to manually compile the thing:</p>
+<pre class="code console"><a name="rest_code_163322fd85f94295ae0f14c64b392cac-1"></a><span class="gp">$</span> pip install --only-binary blosc
+</pre>
+<p>Now, let's suppose that we want to compile the <cite>c-blosc/examples/many_compressors.c</cite> on Linux:</p>
+<p>First, you have to look where the wheels directory is located.  In our case:</p>
+<pre class="code console"><a name="rest_code_c5b618dbeb944b389cc1dfab64314074-1"></a><span class="gp">$</span> <span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
+<a name="rest_code_c5b618dbeb944b389cc1dfab64314074-2"></a><span class="gp">$</span> <span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
+</pre>
+<p>For the actual compilation, you need to pass the directory for the include and lib directories:</p>
+<pre class="code console"><a name="rest_code_18df8cf98d7640afac02f16782ccc1bb-1"></a><span class="gp">$</span> gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
+</pre>
+<p>Finally, run the resulting binary and hopefully you will see something like:</p>
+<pre class="code console"><a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-1"></a><span class="gp">$</span> ./many_compressors
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-3"></a><span class="go">Using 4 threads (previously using 1)</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-4"></a><span class="go">Using blosclz compressor</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-6"></a><span class="go">Succesful roundtrip!</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-7"></a><span class="go">Using lz4 compressor</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-9"></a><span class="go">Succesful roundtrip!</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-10"></a><span class="go">Using lz4hc compressor</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
+<a name="rest_code_cd72b26b8a4c4ec6ae24c381aa79ad4e-12"></a><span class="go">Succesful roundtrip!</span>
+</pre>
+<p>For more details, including compiling with binary wheels on other platforms than Linux, see: <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst">https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst</a>.</p>
+</div>
+<div class="section" id="final-remarks">
+<h3>Final remarks</h3>
+<p>Producing Python wheels for a project can be somewhat involved for regular users. However, the advantages of binary wheels really make them worth the effort, since they make the installation process easier and faster for users.  This is why we are so happy to finally provide wheels that can benefit, not only python-blosc users, but users of the C-Blosc library as well.</p>
+<p>Last but not least, a big thank you to the Zarr team, specially to Jeff Hammerbacher, who provided a grant to the Blosc team for making the wheels support official.  Hopefully this new development will make life easier for Zarr developers and users (by the way, we are really glad to see Zarr quickly spreading as a data container for big multidimensional data, and Blosc helping on the compression part).</p>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/wheels/" rel="tag">wheels</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../mid-2020-progress-report/" rel="prev" title="Mid 2020 Progress Report">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../introducing-sparse-frames/" rel="next" title="Introducing Sparse Frames">Next post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/new-blosc-wheels/",
+        disqus_title="Announcing Blosc Wheels",
+        disqus_identifier="cache/posts/new-blosc-wheels.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

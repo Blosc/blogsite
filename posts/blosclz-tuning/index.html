@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fine Tuning the BloscLZ codec | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/blosclz-tuning/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Francesc Alted">
+<link rel="prev" href="../zstd-has-just-landed-in-blosc/" title="Zstd has just landed in Blosc" type="text/html">
+<link rel="next" href="../codecs-pgo/" title="Testing PGO with LZ4 and Zstd codecs" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="Fine Tuning the BloscLZ codec">
+<meta property="og:url" content="http://blosc.org/posts/blosclz-tuning/">
+<meta property="og:description" content="Fine tuning the BloscLZ codec
+Yesterday I was reading about the exciting new CPU architectures that both AMD and Intel are introducing and I was wondering how the improved architecture of the new core">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2017-07-14T06:32:20Z">
+<meta property="article:tag" content="blosclz">
+<meta property="article:tag" content="optimization">
+<meta property="article:tag" content="tuning">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="../../pages/synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.rst" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Fine Tuning the BloscLZ codec</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/francesc-alted/">Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2017-07-14T06:32:20Z" itemprop="datePublished" title="2017-07-14 06:32">2017-07-14 06:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/blosclz-tuning.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.rst" class="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="section" id="fine-tuning-the-blosclz-codec">
+<h2>Fine tuning the BloscLZ codec</h2>
+<p>Yesterday I was reading about the exciting new CPU architectures that both <a class="reference external" href="http://www.anandtech.com/show/11544/intel-skylake-ep-vs-amd-epyc-7000-cpu-battle-of-the-decade">AMD and Intel are introducing</a> and I was wondering how the improved architecture of the new cores and most specially, its caches, could apply to Blosc.  It turns out that I have access to a server with a relatively modern CPU (Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores) and I decided to have a go at fine-tune the included BloscLZ codec (the one that I know the best) inside C-Blosc2.  Of course, I already spent some time tuning BloscLZ, but that was some years ago and provided the fast pace at which CPUs are evolving I thought that this was excellent timing for another round of fine-tuning, most specially in preparation for users adopting the forthcoming  RYZEN, Threadripper, EPYC and Skylake-SP architectures.</p>
+<p>Frankly speaking, I was expecting to get very little improvements in this front, but the results have been unexpectedly good.  Keep reading.</p>
+<div class="section" id="where-we-come-from">
+<h3>Where we come from</h3>
+<p>Just for reference, here it is the performance of the BloscLZ codec in my server before the new tuning work:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="blosclz-old-c" src="../../images/blosclz-tuning/blosclz-suite-8p-old-param-compr.png"></p></td>
+<td><p><img alt="blosclz-old-d" src="../../images/blosclz-tuning/blosclz-suite-8p-old-param-decompr.png"></p></td>
+</tr></tbody>
+</table>
+<p>That is the typical synthetic benchmark in Blosc, but for the plotting function in the C-Blosc2 project, the actual size of each compressed buffer is shown (and not the size of the whole dataset, as in C-Blosc1).  In this case, the dataset (256 MB) is split in chunks of 4 MB, and provided that our CPU has a LLC (Last Level Cache) of 8 MB, this is sort of an optimal size for achieving maximum performance (the buffers meant for Blosc usually do not exceed 4 MB for most of its common usages).</p>
+<p>As can be seen, performance is quite good, although compression ratios left something to be desired.  Furthermore, for the maximum compression level (9), the compression ratio has a regression with respect to the previous level (8).  This is not too bad, and sometimes happens in any codec, but the nice thing would be to avoid it if possible.</p>
+</div>
+<div class="section" id="the-new-blosclz-after-fine-tuning">
+<h3>The new BloscLZ after fine tuning</h3>
+<p>So, after a couple of hours playing with different parameters in BloscLZ and C-Blosc2, I started to realize that the new Intel CPU performed exceedingly well when asked to compress more, to the point that high compression settings were not performing that slow in comparision with low compression ones; rather the contrary: high compression settings were operating at almost the same speed than lower ones (which was a welcome surprise indeed).  Hence I tried to be set quite more aggressive parameters in BloscLZ, while trying to keep the size of internal blocks in Blosc2 below 256 KB (the typical size of L2 caches in modern CPUs).  This is the result:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="blosclz-new-c" src="../../images/blosclz-tuning/blosclz-suite-8p-new-param2-gcc6-compr.png"></p></td>
+<td><p><img alt="blosclz-new-d" src="../../images/blosclz-tuning/blosclz-suite-8p-new-param2-gcc6-decompr.png"></p></td>
+</tr></tbody>
+</table>
+<p>So the compression ratios have increased quite a bit, specially for the larger compression levels (going from  less than 10x to more than 20x for this benchmark).  This is courtesy of the new, more agressive compression parameters.  Strikingly enough, performance has also increased in general, but specially for these large compression levels.  I am not completely certain on why this is the case, but probably this new CPU architecture is much better at out-of-order execution and prefetching larger blocks of data, which benefits compressing both faster even in large buffers; similarly, I am pretty sure that improvements in compiler technology (I am using a recent GCC 6.3.0 here) is pretty important for getting faster binary code.  We can also see that when using 4 threads (i.e. using all the physical cores available in our CPU at hand), BloscLZ can compress <em>faster</em> than a memcpy() call for most of the cases, and most specially at large compression levels, as mentioned before.  Oh, and we can see that we also got rid of the regression in the compression ratio for compression level 9, which is cool.</p>
+<p>Regarding decompression speed, we can see that the new tuning gave general speed-ups of between 10% and 20%, with no significant slowdowns in any case.  All in all, quite good results indeed!</p>
+</div>
+<div class="section" id="room-for-more-improvements-enter-pgo">
+<h3>Room for more improvements?  Enter PGO.</h3>
+<p>To temporary end (optimization is a never ending task) this quest for speed, I am curious about the speed that we can buy by using the PGO (<a class="reference external" href="https://en.wikipedia.org/wiki/Profile-guided_optimization">Profile Guided Optimization</a>) capability that is present in most of the modern compilers.  Here I am going to use the PGO of GCC in combination with our benchmark at hand so as to provide the profile for the compiler optimizer.  Here are the results when PGO is applied to the new parametrization:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="blosclz-pgo-c" src="../../images/blosclz-tuning/blosclz-suite-8p-new-param2-gcc6.pgo-compr.png"></p></td>
+<td><p><img alt="blosclz-pgo-d" src="../../images/blosclz-tuning/blosclz-suite-8p-new-param2-gcc6.pgo-decompr.png"></p></td>
+</tr></tbody>
+</table>
+<p>So, while the speed improvement for compression is not significant (albeit a bit better), the big improvement comes in the decompression speed, where we see speeds almost reaching 50 GB/s and perhaps more interestingly, more than 35 GB/s for maximum compression level, and for first time in my life as Blosc developer, I can see the speed of decompressing with <em>one single thread</em> being faster than memcpy() for <em>all</em> the compression levels.</p>
+<p>I wonder what the PGO technique can bring to other codecs in Blosc, but that is stuff for other blog post.  At any rate, the reader is encouraged to try PGO on their own setups.  I am pretty sure that she will be pleased to see nice speed improvements.</p>
+</div>
+<div class="section" id="appendix-hardware-and-software-used">
+<h3>Appendix: Hardware and software used</h3>
+<p>For reference, here it is the configuration that I used for producing the plots in this blog entry.</p>
+<ul class="simple">
+<li><p>CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)</p></li>
+<li><p>OS:  Ubuntu 16.04</p></li>
+<li><p>Compiler: GCC 6.3.0</p></li>
+<li><p>C-Blosc2: 2.0.0a4.dev (2017-07-14)</p></li>
+<li><p>BloscLZ: 1.0.6 (2017-07-14)</p></li>
+</ul>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosclz/" rel="tag">blosclz</a></li>
+            <li><a class="tag p-category" href="../../categories/optimization/" rel="tag">optimization</a></li>
+            <li><a class="tag p-category" href="../../categories/tuning/" rel="tag">tuning</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../zstd-has-just-landed-in-blosc/" rel="prev" title="Zstd has just landed in Blosc">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../codecs-pgo/" rel="next" title="Testing PGO with LZ4 and Zstd codecs">Next post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/blosclz-tuning/",
+        disqus_title="Fine Tuning the BloscLZ codec",
+        disqus_identifier="cache/posts/blosclz-tuning.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

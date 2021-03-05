@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmarks for LZ4 | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/pages/benchmarks-lz4/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="The Blosc Developers">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="Benchmarks for LZ4">
+<meta property="og:url" content="http://blosc.org/pages/benchmarks-lz4/">
+<meta property="og:description" content='Contributed outputs for LZ4 compressor
+
+Processor model: IBM Blue Gene Q embedded "A2" processor
+Compiler: bgclang, version r209570-20140527 based on clang-3.5.0
+Optimizations: -O3, but as this is BGQ'>
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2014-06-26T10:41:42Z">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="../synthetic-benchmarks/">Benchmarks</a>
+                </li>
+<li>
+<a href="../donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.rst" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text storypage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Benchmarks for LZ4</a></h1>
+
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="section" id="contributed-outputs-for-lz4-compressor">
+<h2>Contributed outputs for <strong>LZ4</strong> compressor</h2>
+<ul class="simple">
+<li><p>Processor model: IBM Blue Gene Q embedded "A2" processor</p></li>
+<li><p>Compiler: bgclang, version r209570-20140527 based on clang-3.5.0</p></li>
+<li><p>Optimizations: -O3, but as this is BGQ, no sse instructions</p></li>
+<li><p>OS: IBM Blue Gene Q driver version V1R2M1</p></li>
+<li><p>Contributed by: Rob Latham</p></li>
+</ul>
+<p><a class="reference external" href="../../images/bench/lz4/lz4-BGQ.txt">Suite output (64 threads)</a></p>
+<img alt="/images/bench/lz4/lz4-BGQ-compr.png" src="../../images/bench/lz4/lz4-BGQ-compr.png"><img alt="/images/bench/lz4/lz4-BGQ-decompr.png" src="../../images/bench/lz4/lz4-BGQ-decompr.png"><hr class="docutils">
+<ul class="simple">
+<li><p>Processor model: Intel Core i5 i5-3380M (2 x 2.9 GHZ) 3 MB Cache</p></li>
+<li><p>Compiler: GCC version 4.8.2-19ubuntu1</p></li>
+<li><p>OS: Ubuntu 14.04 3.13.0-29-generic #53-Ubuntu SMP (64 bit)</p></li>
+<li><p>Contributed by: Francesc Alted</p></li>
+</ul>
+<p><a class="reference external" href="../../images/bench/lz4/i5-3380M-4.txt">Suite output (4 threads)</a></p>
+<img alt="/images/bench/lz4/i5-3380M-4-compr.png" src="../../images/bench/lz4/i5-3380M-4-compr.png"><img alt="/images/bench/lz4/i5-3380M-4-decompr.png" src="../../images/bench/lz4/i5-3380M-4-decompr.png">
+</div>
+    </div>
+    
+
+</article>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>
