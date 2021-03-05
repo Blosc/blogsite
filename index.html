@@ -75,7 +75,7 @@
     <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/blosc-metalayers/" class="u-url">Blosc metalayers, where the user metainformation is stored</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                <a href="authors/aleix-alcacer-francesc-alted/">Aleix Alcacer, Francesc Alted</a>
+                <a href="authors/francesc-alted/">Francesc Alted</a>
             </span></p>
             <p class="dateline">
             <a href="posts/blosc-metalayers/" rel="bookmark">
@@ -352,19 +352,19 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <h2>Small intro to wheels</h2>
 <p>Wheels are an advantageous alternative to distribute Python (but also pure C) packages which contain C (or Cython) source code, and hence, need a compiler.  For those that are not familiar to wheels, here it comes a small tutorial on how to create and use wheels.</p>
 <p>First, let's recall the traditional way to build a source distribution:</p>
-<pre class="code console"><a name="rest_code_8be4519288f5494b96e2ee0d7915fb1f-1"></a><span class="gp">$ </span>python setup.py sdist
+<pre class="code console"><a name="rest_code_f8d78f20ae6b4ca0bd59b5b9268aab22-1"></a><span class="gp">$ </span>python setup.py sdist
 </pre>
 <p>To build a wheel, the process is quite similar:</p>
-<pre class="code console"><a name="rest_code_1ae09bffa5224caeb35b4754ae287bed-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
+<pre class="code console"><a name="rest_code_883c671da5f544a9897b4502bc1578d5-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
 </pre>
 <p>To install a package via pip (pip decides whether install a from wheel or compile from the source package; wheels have obviously more priority):</p>
-<pre class="code console"><a name="rest_code_19133041fbca4b0298772df789918c1b-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_f7b61dcb9d2447a9b5abb17ffad9380d-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use source distribution:</p>
-<pre class="code console"><a name="rest_code_85e8323144894ba2aca773a2fdd5549e-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_63144a9d38384e72a4d053107d7d8896-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use wheels:</p>
-<pre class="code console"><a name="rest_code_31c5b4bfe79249459c66c8862c8cc3de-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_d76acf2bafd74771986cfd4c44ef4495-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
 </pre>
 </div>
 <div class="section" id="different-types-of-wheels">
@@ -387,29 +387,29 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <h2>Binaries for C-Blosc libraries are included</h2>
 <p>Although wheels were meant for Python packages, nothing prevents adding more stuff to them.  In particular, we are not only distributing python-blosc binary extensions in our wheels, but also binaries for the C-Blosc library.  This way, people willing to use the C-Blosc library can make use of these wheels to install the necessary development files.</p>
 <p>First, install the binary wheel via PyPI without the need to manually compile the thing:</p>
-<pre class="code console"><a name="rest_code_536430fa65724edc8208489f85c58925-1"></a><span class="gp">$ </span>pip install --only-binary blosc
+<pre class="code console"><a name="rest_code_6617c8f13855467f86fe812f1124eed7-1"></a><span class="gp">$ </span>pip install --only-binary blosc
 </pre>
 <p>Now, let's suppose that we want to compile the <cite>c-blosc/examples/many_compressors.c</cite> on Linux:</p>
 <p>First, you have to look where the wheels directory is located.  In our case:</p>
-<pre class="code console"><a name="rest_code_9616457fe6fc464b8072b173b6dbcff9-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
-<a name="rest_code_9616457fe6fc464b8072b173b6dbcff9-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
+<pre class="code console"><a name="rest_code_c476ddb48da74bf9b82d4d366ccdd443-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
+<a name="rest_code_c476ddb48da74bf9b82d4d366ccdd443-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
 </pre>
 <p>For the actual compilation, you need to pass the directory for the include and lib directories:</p>
-<pre class="code console"><a name="rest_code_8610626353d34b669c42e711ef703eac-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
+<pre class="code console"><a name="rest_code_854e214023e84844bc01a1eec7d7c0c8-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
 </pre>
 <p>Finally, run the resulting binary and hopefully you will see something like:</p>
-<pre class="code console"><a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-1"></a><span class="gp">$ </span>./many_compressors
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-3"></a><span class="go">Using 4 threads (previously using 1)</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-4"></a><span class="go">Using blosclz compressor</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-6"></a><span class="go">Succesful roundtrip!</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-7"></a><span class="go">Using lz4 compressor</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-9"></a><span class="go">Succesful roundtrip!</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-10"></a><span class="go">Using lz4hc compressor</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
-<a name="rest_code_b6f4f0587c1943769cc1a00fb86682db-12"></a><span class="go">Succesful roundtrip!</span>
+<pre class="code console"><a name="rest_code_349a0baa21474155a2dea150862273c6-1"></a><span class="gp">$ </span>./many_compressors
+<a name="rest_code_349a0baa21474155a2dea150862273c6-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-3"></a><span class="go">Using 4 threads (previously using 1)</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-4"></a><span class="go">Using blosclz compressor</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-6"></a><span class="go">Succesful roundtrip!</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-7"></a><span class="go">Using lz4 compressor</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-9"></a><span class="go">Succesful roundtrip!</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-10"></a><span class="go">Using lz4hc compressor</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
+<a name="rest_code_349a0baa21474155a2dea150862273c6-12"></a><span class="go">Succesful roundtrip!</span>
 </pre>
 <p>For more details, including compiling with binary wheels on other platforms than Linux, see: <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst">https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst</a>.</p>
 </div>
@@ -682,10 +682,10 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
     <div>
 <p>On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new <a class="reference external" href="https://en.wikipedia.org/wiki/Zen_2">Zen 2</a> micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:</p>
 <img alt="/images/blosc2-meets-rome/amd-rome-arch-multi-die.png" class="align-center" src="images/blosc2-meets-rome/amd-rome-arch-multi-die.png"><p>Such a separation of dies for I/O and computing has quite <a class="reference external" href="https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm/3">large consequences in terms of scalability when accessing memory</a>, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous <a class="reference external" href="https://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a>.  This essentially boils down to compute an aggregation with a simple loop like:</p>
-<pre class="code c"><a name="rest_code_cf0086029ad448e48fe3f571e3a488f7-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_cf0086029ad448e48fe3f571e3a488f7-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_cf0086029ad448e48fe3f571e3a488f7-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a name="rest_code_cf0086029ad448e48fe3f571e3a488f7-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_06589b86cb5a4b058c19c5b63d184079-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_06589b86cb5a4b058c19c5b63d184079-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_06589b86cb5a4b058c19c5b63d184079-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a name="rest_code_06589b86cb5a4b058c19c5b63d184079-4"></a><span class="p">}</span>
 </pre>
 <p>As described in the original blog post, the different <cite>udata</cite> arrays are just chunks of the original dataset that are decompressed just in time for performing the partial aggregation operation; the final result is indeed the sum of all the partial aggregations.  Also we have seen that the time to execute the aggregation is going to depend quite a lot on the kind of data that is decompressed: carefully chosen synthetic data can be decompressed much more quickly than real data.  But syntehtic data is nevertheless interesting as it allows for a roof analysis of where the performance can grow up to.</p>
 <p>In this blog, we are going to see how the AMD EPYC 7402 (Rome), a 24-core processor performs on both synthetic and real data.</p>
@@ -935,16 +935,16 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p><strong>Update (2018-08-09)</strong>: An extended version of this blog post can be found in this <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">article</a>.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, as well as more discussion about the results.</p>
 <p>Nowadays CPUs struggle to get data at enough speed to feed their cores.  The reason for this is that memory speed is <a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf">growing at a slower pace than CPUs increase their speed at crunching numbers</a>.   This memory slowness compared with CPUs is generally known as the <a class="reference external" href="https://en.wikipedia.org/wiki/Random-access_memory#Memory_wall">Memory Wall</a>.</p>
 <p>For example, let's suppose that we want to compute the aggregation of a some large array; here it is how to do that using OpenMP for leveraging all cores in a CPU:</p>
-<pre class="code c"><a name="rest_code_5b3a768822934f92a01b3a01fe5b51f3-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_5b3a768822934f92a01b3a01fe5b51f3-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_5b3a768822934f92a01b3a01fe5b51f3-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a name="rest_code_5b3a768822934f92a01b3a01fe5b51f3-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_1ebfd21b940646ba9d66ba7fde5b49a0-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_1ebfd21b940646ba9d66ba7fde5b49a0-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_1ebfd21b940646ba9d66ba7fde5b49a0-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a name="rest_code_1ebfd21b940646ba9d66ba7fde5b49a0-4"></a><span class="p">}</span>
 </pre>
 <p>With this, some server (an Intel Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores and hyperthreading) takes about 14 ms for doing the aggregation of an array with 100 million of float32 values when using 8 OpenMP threads (optimal number for this CPU).  However, if instead of bringing the whole 100 million elements from memory to the CPU we generate the data inside the loop, we are avoiding the data transmission between memory and CPU, like in:</p>
-<pre class="code c"><a name="rest_code_e5da830ae4d44fd8b4185caf4e1cb50b-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_e5da830ae4d44fd8b4185caf4e1cb50b-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_e5da830ae4d44fd8b4185caf4e1cb50b-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
-<a name="rest_code_e5da830ae4d44fd8b4185caf4e1cb50b-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_008419af2a684bc5b689d66e18865227-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_008419af2a684bc5b689d66e18865227-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_008419af2a684bc5b689d66e18865227-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
+<a name="rest_code_008419af2a684bc5b689d66e18865227-4"></a><span class="p">}</span>
 </pre>
 <p>This loop takes just 3.5 ms, that is, 4x less than the original one.  That means that our CPU could compute the aggregation at a speed that is 4x faster than the speed at which the memory subsystem can provide data elements to the CPU; or put in another words, the CPU is idle, doing nothing during the 75% of the time, waiting for data to arrive (for this example, but there could be other, more extreme cases).  Here we have the memory wall in action indeed.</p>
 <p>That the memory wall exists is an excellent reason to think about ways to workaround it.  One of the most promising venues is to use compression: what if we could store data in compressed state in-memory and use the spare clock cycles of the CPU for decompressing it just when it is needed?  In this blog entry we will see how to implement such a computational kernel on top of data structures that are cache- and compression-friendly and we will examine how they perform on a range of modern CPU architectures.  Some surprises are in store.</p>
