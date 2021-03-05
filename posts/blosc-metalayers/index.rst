@@ -105,7 +105,7 @@ Currently, C-Blosc2 has the following functions implemented:
 
 - ``blosc2_meta_add()`` / ``blosc2_vlmeta_add()``: Add a new metalayer.
 - ``blosc2_meta_get()`` / ``blosc2_vlmeta_get()``: Get the metalayer content.
-- ``blosc2_meta_has()`` / ``blosc2_vlmeta_has()``: Check if a metalayer exists or not.
+- ``blosc2_meta_exists()`` / ``blosc2_vlmeta_exists()``: Check if a metalayer exists or not.
 - ``blosc2_meta_update()`` / ``blosc2_vlmeta_update()``: Update the metalayer content.
 
 
