@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://blosc.org/</loc>
-  <lastmod>2021-03-05T07:33:00Z</lastmod>
+  <lastmod>2021-03-05T08:24:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2014/</loc>
@@ -43,15 +43,11 @@
  </url>
  <url>
   <loc>http://blosc.org/archive.html</loc>
-  <lastmod>2021-03-05T07:33:00Z</lastmod>
+  <lastmod>2021-03-05T08:24:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/</loc>
-  <lastmod>2021-03-05T07:33:00Z</lastmod>
- </url>
- <url>
-  <loc>http://blosc.org/authors/aleix-alcacer-francesc-alted/</loc>
-  <lastmod>2021-03-05T07:33:00Z</lastmod>
+  <lastmod>2021-03-05T08:24:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/francesc-alted/</loc>
@@ -71,7 +67,7 @@
  </url>
  <url>
   <loc>http://blosc.org/categories/</loc>
-  <lastmod>2021-03-05T07:52:00Z</lastmod>
+  <lastmod>2021-03-05T08:24:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/amd/</loc>
@@ -96,14 +92,6 @@
  <url>
   <loc>http://blosc.org/categories/blosc2-beta/</loc>
   <lastmod>2021-03-05T07:31:00Z</lastmod>
- </url>
- <url>
-  <loc>http://blosc.org/categories/blosc2-frame-format-metalayers/</loc>
-  <lastmod>2021-03-05T07:33:00Z</lastmod>
- </url>
- <url>
-  <loc>http://blosc.org/categories/blosc2-metalayers/</loc>
-  <lastmod>2021-03-05T07:52:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc2-sparse-frame-format/</loc>
@@ -215,11 +203,7 @@
  </url>
  <url>
   <loc>http://blosc.org/index-1.html</loc>
-  <lastmod>2021-03-05T07:33:00Z</lastmod>
- </url>
- <url>
-  <loc>http://blosc.org/index-2.html</loc>
-  <lastmod>2021-03-05T07:33:00Z</lastmod>
+  <lastmod>2021-03-05T08:24:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/</loc>
@@ -283,10 +267,6 @@
  </url>
  <url>
   <loc>http://blosc.org/posts/blosc-donation/</loc>
-  <lastmod>2021-03-05T07:31:00Z</lastmod>
- </url>
- <url>
-  <loc>http://blosc.org/posts/blosc-metalayers/</loc>
   <lastmod>2021-03-05T07:31:00Z</lastmod>
  </url>
  <url>

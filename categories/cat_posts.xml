@@ -1,122 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about posts)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/cat_posts.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 07:52:07 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Blosc metalayers, where the user metainformation is stored</title><link>http://blosc.org/posts/blosc-metalayers/</link><dc:creator>Aleix Alcacer, Francesc Alted</dc:creator><description>&lt;div class="section" id="blosc-metalayers-where-the-user-metainformation-is-stored"&gt;
-&lt;h2&gt;Blosc metalayers, where the user metainformation is stored&lt;/h2&gt;
-&lt;p&gt;Blosc2 format introduces two different spaces to store user-defined information.
-In this post, we are going to describe what these spaces are and where they are
-stored inside a Blosc persistent schunk.&lt;/p&gt;
-&lt;p&gt;The concept of metalayers has been introduced in the Blosc2 format. As its
-name suggests, a metalayer is a space in the Blosc2 format that allows users to
-store custom information.
-For example, &lt;a class="reference external" href="https://github.com/Blosc/Caterva"&gt;Caterva&lt;/a&gt;, a project based on c-blosc2 that manipulates
-compressed and chunked arrays, uses metalayers to store the dimension and
-the shape/chunkshape/blockshape of the arrays.&lt;/p&gt;
-&lt;div class="section" id="fixed-length-metalayers"&gt;
-&lt;h3&gt;Fixed-length metalayers&lt;/h3&gt;
-&lt;p&gt;The first metalayers defined in the Blosc2 format are the fixed-length metalayers.
-These metalayers are stored in the frame header.
-This decision allows adding Blosc chunks to the frame without the need to
-rewrite the meta information (if they were stored in the trailer, they would
-have to be rewritten each time).&lt;/p&gt;
-&lt;p&gt;But this implementation has some restrictions. The most important one is that
-fixed-length metalayers cannot be resized.
-Furthermore, once the first chunk of data is added, no more fixed-length
-metalayers can be added. With these limitations, we make sure that we are not going
-to rewrite the data each time we update the metalayers content.&lt;/p&gt;
-&lt;p&gt;Let's see with an example the reason for these restrictions. Supose that we
-have a frame that stores 10GB of data with one metalayer containing a "cat".&lt;/p&gt;
-&lt;p&gt;If we update the meta information with a "dog" nothing bad happens because they
-have the same size.&lt;/p&gt;
-&lt;p&gt;However, if we update the meta information with a "giraffe", the
-metalayer must be resized and therefore we have to rewrite the 10GB of
-data plus the trailer.
-This procedure is obviously very inefficient and is not supported.&lt;/p&gt;
-&lt;div class="figure"&gt;
-&lt;img alt="/images/metalayers/metalayers.png" src="http://blosc.org/images/metalayers/metalayers.png"&gt;
-&lt;p class="caption"&gt;Data that must be rewritten are ploted in red.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="section" id="variable-length-metalayers"&gt;
-&lt;h3&gt;Variable-length metalayers&lt;/h3&gt;
-&lt;p&gt;To fix the above issue, variable-length metalayers are introduced into the
-Blosc2 format.
-Unlike fixed-length metalayers, these are stored in the trailer
-section of a Blosc2 schunk.&lt;/p&gt;
-&lt;p&gt;As their name suggests, these metalayers can be resized. So whenever we
-modify the metalayers content, we will  have to rewrite the trailer.
-Furthermore, since they are stored in the trailer, they also will be rewritten
-each time a chunk is added.&lt;/p&gt;
-&lt;p&gt;Another characteristic feature of these metalayers is that their content is
-compressed.
-This will minimize the size of the trailer, a very important factor
-since the trailer is rewritten every time new data is added.&lt;/p&gt;
-&lt;p&gt;Let's continue with the previous example, but now we have the meta
-information in a variable-length metalayer.&lt;/p&gt;
-&lt;div class="figure"&gt;
-&lt;img alt="/images/metalayers/metalayers-vl.png" src="http://blosc.org/images/metalayers/metalayers-vl.png"&gt;
-&lt;/div&gt;
-&lt;p&gt;In this case, as we can see in the figure, the trailer is rewritten each time
-that we update the metalayer.
-But it is a much more efficient operation than rewriting all the data.
-So the variable-length metalayers fixed the fixed-length metalaters limitations.&lt;/p&gt;
-&lt;p&gt;To summarize these two concepts and see what type of metalayer is more suitable
-for each situation, the following table contains a comparison between fixed-length
-metalayers and variable-length metalayers:&lt;/p&gt;
-&lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 42%"&gt;
-&lt;col style="width: 27%"&gt;
-&lt;col style="width: 30%"&gt;
-&lt;/colgroup&gt;
-&lt;tbody&gt;
-&lt;tr&gt;&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;Fixed-length metalayers&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;Variable-length metalayers&lt;/p&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&lt;p&gt;Where are stored?&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;Header&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;Trailer&lt;/p&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&lt;p&gt;Can be resized?&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;False&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;True&lt;/p&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&lt;p&gt;Can be added after adding chunks?&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;False&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;True&lt;/p&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;&lt;p&gt;Are not rewritten when adding chunks?&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;True&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;False&lt;/p&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;/div&gt;
-&lt;div class="section" id="metalayers-api"&gt;
-&lt;h3&gt;Metalayers API&lt;/h3&gt;
-&lt;p&gt;For now, both metalayers have the following functions implemented:&lt;/p&gt;
-&lt;ul class="simple"&gt;
-&lt;li&gt;&lt;p&gt;&lt;code class="docutils literal"&gt;blosc2_meta_add()&lt;/code&gt; / &lt;code class="docutils literal"&gt;blosc2_vlmeta_add()&lt;/code&gt;: Add a new metalayer.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code class="docutils literal"&gt;blosc2_meta_get()&lt;/code&gt; / &lt;code class="docutils literal"&gt;blosc2_vlmeta_get()&lt;/code&gt;: Get the metalayer content.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code class="docutils literal"&gt;blosc2_meta_has()&lt;/code&gt; / &lt;code class="docutils literal"&gt;blosc2_vlmeta_has()&lt;/code&gt;: Check if a metalayer exists or not.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code class="docutils literal"&gt;blosc2_meta_update()&lt;/code&gt; / &lt;code class="docutils literal"&gt;blosc2_vlmeta_update()&lt;/code&gt;: Update the metalayer content.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;div class="section" id="conclusions"&gt;
-&lt;h3&gt;Conclusions&lt;/h3&gt;
-&lt;p&gt;As we have seen, Blosc2 format introduces two spaces where users can store
-their meta information.&lt;/p&gt;
-&lt;p&gt;On the one hand, the fixed-length metalayers are meant to store user meta
-information that not changes over time.
-They are stored in the header and can be updated without having to rewrite any
-other part of the frame, but they can no longer be added once the first chunk
-of data is added.&lt;/p&gt;
-&lt;p&gt;On the other hand, if users' meta information will change in size over time,
-they can store their meta information into variable-length metalayers. These
-metalayers are stored in the trailer section of a frame and are more flexible
-than fixed-length metalayers. However, each time that a metalayer content is
-updated, the trailer has to be rewritten.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description><category>blosc2 metalayers</category><guid>http://blosc.org/posts/blosc-metalayers/</guid><pubDate>Thu, 04 Mar 2021 07:32:20 GMT</pubDate></item><item><title>Introducing Sparse Frames</title><link>http://blosc.org/posts/introducing-sparse-frames/</link><dc:creator>Marta Iborra, Francesc Alted</dc:creator><description>&lt;div class="section" id="introducing-sparse-frames"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about posts)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/cat_posts.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 05 Mar 2021 08:24:56 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Introducing Sparse Frames</title><link>http://blosc.org/posts/introducing-sparse-frames/</link><dc:creator>Marta Iborra, Francesc Alted</dc:creator><description>&lt;div class="section" id="introducing-sparse-frames"&gt;
 &lt;h2&gt;Introducing Sparse Frames&lt;/h2&gt;
 &lt;div class="section" id="overview"&gt;
 &lt;h3&gt;Overview&lt;/h3&gt;
@@ -801,4 +684,110 @@ to the Blosc project via the NumFOCUS Foundation: &lt;a class="reference externa
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;C-Blosc2&lt;/strong&gt;: 2.0.0a6.dev (2018-05-18)&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description><category>caches</category><category>memory wall</category><category>tuning</category><guid>http://blosc.org/posts/breaking-memory-walls/</guid><pubDate>Mon, 25 Jun 2018 18:32:20 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;</description><category>caches</category><category>memory wall</category><category>tuning</category><guid>http://blosc.org/posts/breaking-memory-walls/</guid><pubDate>Mon, 25 Jun 2018 18:32:20 GMT</pubDate></item><item><title>New Forward Compatibility Policy</title><link>http://blosc.org/posts/new-forward-compat-policy/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div class="section" id="a-new-forward-compatibility-policy"&gt;
+&lt;h2&gt;A New Forward Compatibility Policy&lt;/h2&gt;
+&lt;div class="section" id="the-215-issue"&gt;
+&lt;h3&gt;The #215 issue&lt;/h3&gt;
+&lt;p&gt;Recently, a C-Blosc user filed an &lt;a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215"&gt;issue&lt;/a&gt; describing how buffers created with a modern version of C-Blosc (starting from 1.11.0) were not able to be decompressed with an older version of the library (1.7.0), i.e. C-Blosc was effectively breaking the so-called &lt;em&gt;forward-compatibility&lt;/em&gt;.  After some investigation, it turned out that the culprit was an optimization that was introduced in 1.11.0 in order to allow better compression ratios and in some cases, better speed too.&lt;/p&gt;
+&lt;p&gt;Not all the codecs inside C-Blosc were equally affected; the ones that are experiencing the issue are LZ4, LZ4HC and Zlib (quite luckily, BloscLZ, the default codec, is not bitten by this and should be forward compatible probably til 1.0.0); that is, when a user is using a modern C-Blosc library (&amp;gt; 1.11.0) &lt;em&gt;and&lt;/em&gt; is using any of the affected codecs, there are situations (namely when the shuffle or bitshuffle filter are active and the buffers to be compressed are larger than 32 KB) that the result cannot be decompressed with older versions (&amp;lt; 1.11.0).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="why-this-occurred"&gt;
+&lt;h3&gt;Why this occurred?&lt;/h3&gt;
+&lt;p&gt;Prior to 1.11.0, Blosc has traditionally split the internal blocks (the different pieces in which the buffer to be compressed is divided) into smaller pieces composed by the &lt;em&gt;same significant&lt;/em&gt; bytes that the shuffle filter has put together.  The rational for doing this is that these pieces are, in many cases, hosting values that are either zeros or very close byte values (this is why shuffle works well in general for binary data), and asking the codec to compress these split-blocks separately was quite less effort than compressing a complete block hence providing more speed).&lt;/p&gt;
+&lt;p&gt;However, I realized that the so-called High Compression Ration codecs (the HCR codecs inside BLosc are LZ4HC, Zlib and Zstd) generally benefited from this split not happening (the reason is clear: more data means more opportunities for finding more duplicates) and in some cases, the speed was better too.  So, in C-Blosc 1.11.0, I decided that the split was not going to happen &lt;em&gt;by default&lt;/em&gt; for HCR codecs (in the last minute I decided to include LZ4 too, for which the experiments showed a noticeable performance bump too, see below). Fortunately, the Zstd codec was introduced (in an out-of-beta way) at the very same 1.11.0 release than this split-block change, so in practice data compressed with the Zstd codec is not affected by this.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="new-forward-compatibility-enforcement-policy"&gt;
+&lt;h3&gt;New forward compatibility enforcement policy&lt;/h3&gt;
+&lt;p&gt;Although this change was deliberate and every measure was put in making it &lt;em&gt;backward compatible&lt;/em&gt; (i.e. new library versions could read buffers compressed with older versions), I was not really aware of the inconveniences that the change was putting for people creating data files using newer versions of the library and expecting these to be read with older versions.&lt;/p&gt;
+&lt;p&gt;So in order to prevent something like this to happen again, I decided that &lt;em&gt;forward compatibility&lt;/em&gt; is going to be &lt;em&gt;enforced&lt;/em&gt; for future releases of C-Blosc (just for 1.x series; C-Blosc 2.x should be just backward compatible with 1.x).  By the way, this new &lt;em&gt;forward compatibility&lt;/em&gt; policy will require a significantly more costly &lt;a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/RELEASING.rst#forward-compatibility-testing"&gt;release procedure&lt;/a&gt;, as different libraries for a specific set of versions have to be manually re-created; if you know a more automatic way to test forward compatibility with old versions of a library, I'd love to hear your comments.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="measures-taken-and-new-split-mode"&gt;
+&lt;h3&gt;Measures taken and new split mode&lt;/h3&gt;
+&lt;p&gt;In order to alleviate this forward incompatibility issue, I decided to revert the split change introduced in 1.11.0 in forthcoming 1.14.0 release.  That means that, &lt;em&gt;by default&lt;/em&gt;, compressed buffers created with C-Blosc 1.14.0 and on will be forward compatible with all the previous C-Blosc libraries (till 1.3.0, which was when support for different codecs was introduced).  That is, the only buffers that will pose problems to be decompressed with old versions are those created with a C-Blosc library with versions between 1.11.0 and 1.14.0 &lt;em&gt;and&lt;/em&gt; using the shuffle/bitshuffle filter in combination with the LZ4, LZ4HC or Zlib codecs.&lt;/p&gt;
+&lt;p&gt;For fine-tuning how the block-split would happen or not, I have introduced a new API function, &lt;cite&gt;void blosc_set_splitmode(int mode)&lt;/cite&gt;, that allows to select the split mode that is going to be used during the compression.  The split modes that can take the new function are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;p&gt;BLOSC_FORWARD_COMPAT_SPLIT&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;BLOSC_AUTO_SPLIT&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;BLOSC_NEVER_SPLIT&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;BLOSC_ALWAYS_SPLIT&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;cite&gt;BLOSC_FORWARD_COMPAT_SPLIT&lt;/cite&gt; offers reasonably forward compatibility (i.e. Zstd still will not split, but this is safe because it was introduced at the same time than the split change in 1.11.0), &lt;cite&gt;BLOSC_AUTO_SPLIT&lt;/cite&gt; is for nearly optimal results (based on heuristics; this is the same approach than the one introduced in 1.11.0), &lt;cite&gt;BLOSC_NEVER_SPLIT&lt;/cite&gt; and &lt;cite&gt;BLOSC_ALWAYS_SPLIT&lt;/cite&gt; are for the user interested in experimenting for getting best compression ratios and/or speed.  If &lt;cite&gt;blosc_set_splitmode()&lt;/cite&gt; is not called, the default mode will be BLOSC_FORWARD_COMPAT_SPLIT.&lt;/p&gt;
+&lt;p&gt;Also, the user will be able to specify the split mode by using the &lt;cite&gt;BLOSC_SPLITMODE&lt;/cite&gt; variable environment.  If that variable exists in the environment, and has any value among:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;p&gt;'BLOSC_FORWARD_COMPAT_SPLIT'&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;'BLOSC_AUTO_SPLIT'&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;'BLOSC_NEVER_SPLIT'&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;'BLOSC_ALWAYS_SPLIT'&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;this will select the corresponding split mode.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="how-this-change-affects-performance"&gt;
+&lt;h3&gt;How this change affects performance&lt;/h3&gt;
+&lt;p&gt;So as to allow to visualize at a glance the differences in performance that the new release is introducing, let's have a look at the impact on two of the most used codecs inside C-Blosc: LZ4 and LZ4HC.  In the plots below the left side is the pre-1.14.0 version (non-split blocks) and on the right, the forthcoming 1.14.0 (split blocks).  Note that I am using here the typical synthetic benchmarks for C-Blosc, so expect a different outcome for your own data.&lt;/p&gt;
+&lt;p&gt;Let's start by LZ4HC, a High Compression Ratio codec (and the one that triggered the initial report of the &lt;a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215"&gt;forward compatibility issue&lt;/a&gt;).  When compressing, we have this change in behavior:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col style="width: 50%"&gt;
+&lt;col style="width: 50%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="lz4hc-c" src="http://blosc.org/images/new-forward-compat-policy/suite-lz4hc-pre-1.14-compr.png"&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;&lt;img alt="lz4hc-compat-c" src="http://blosc.org/images/new-forward-compat-policy/suite-lz4hc-compat-compr.png"&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;For LZ4HC decompression:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col style="width: 50%"&gt;
+&lt;col style="width: 50%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="lz4hc-d" src="http://blosc.org/images/new-forward-compat-policy/suite-lz4hc-pre-1.14-decompr.png"&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;&lt;img alt="lz4hc-compat-d" src="http://blosc.org/images/new-forward-compat-policy/suite-lz4hc-compat-decompr.png"&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;For LZ4HC one can see that, when using non-split blocks, it can achieve better compression ratios (this is expected, as the block sizes are larger).  Speed-wise the performance is quite similar, with maybe some advantage for split blocks (expected as well).  As the raison d'être for HCR codecs is maximize the compression ration, that was the reason why I did the split change for LZ4HC in 1.11.0.&lt;/p&gt;
+&lt;p&gt;And now for LZ4, a codec meant for speed (although it normally gives pretty decent results in compression ratio).  When compressing, here it is the change:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col style="width: 50%"&gt;
+&lt;col style="width: 50%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="lz4-c" src="http://blosc.org/images/new-forward-compat-policy/suite-lz4-pre-1.14-compr.png"&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;&lt;img alt="lz4-compat-c" src="http://blosc.org/images/new-forward-compat-policy/suite-lz4-compat-compr.png"&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;For LZ4 decompression:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col style="width: 50%"&gt;
+&lt;col style="width: 50%"&gt;
+&lt;/colgroup&gt;
+&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="lz4-d" src="http://blosc.org/images/new-forward-compat-policy/suite-lz4-pre-1.14-decompr.png"&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;&lt;p&gt;&lt;img alt="lz4-compat-d" src="http://blosc.org/images/new-forward-compat-policy/suite-lz4-compat-decompr.png"&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;So, here one can see that when using Blosc pre-1.14 (i.e. non-split blocks) we are getting a bit less compression ratio than for the forthcoming 1.14, which even if counter-intutive, it matches my experience with non-HCR codecs.  Speed-wise the difference is not that much during compression; however, decompression is significantly faster with non-split blocks.  As LZ4 is meant for speed, this was possibly the reason that pushed me towards making non-split blocks by default for LZ4 in addition to HCR codecs in 1.11.0.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="feedback"&gt;
+&lt;h3&gt;Feedback&lt;/h3&gt;
+&lt;p&gt;If you have suggestions on this forward compatibility issue or the solution that has been implemented, please shout!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="appendix-hardware-and-software-used"&gt;
+&lt;h3&gt;Appendix: Hardware and software used&lt;/h3&gt;
+&lt;p&gt;For reference, here it is the configuration that I used for producing the plots in this blog entry.&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;p&gt;CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;OS:  Ubuntu 16.04&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Compiler: GCC 6.3.0&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;C-Blosc: 1.13.7 and 1.14.0 (release candidate)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;LZ4: 1.8.1&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description><category>forward compatibility policy splitmode</category><guid>http://blosc.org/posts/new-forward-compat-policy/</guid><pubDate>Wed, 21 Feb 2018 15:32:20 GMT</pubDate></item></channel></rss>

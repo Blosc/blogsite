@@ -6,10 +6,6 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
-  <loc>http://blosc.org/authors/aleix-alcacer-francesc-alted.xml</loc>
-  <lastmod>2021-03-05T07:52:00Z</lastmod>
- </sitemap>
- <sitemap>
   <loc>http://blosc.org/authors/francesc-alted.xml</loc>
   <lastmod>2021-03-05T07:31:00Z</lastmod>
  </sitemap>
@@ -50,14 +46,6 @@
   <lastmod>2021-03-05T07:31:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>http://blosc.org/categories/blosc2-frame-format-metalayers.xml</loc>
-  <lastmod>2021-03-05T07:33:00Z</lastmod>
- </sitemap>
- <sitemap>
-  <loc>http://blosc.org/categories/blosc2-metalayers.xml</loc>
-  <lastmod>2021-03-05T07:52:00Z</lastmod>
- </sitemap>
- <sitemap>
   <loc>http://blosc.org/categories/blosc2-sparse-frame-format.xml</loc>
   <lastmod>2021-03-05T07:31:00Z</lastmod>
  </sitemap>
@@ -75,7 +63,7 @@
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/cat_posts.xml</loc>
-  <lastmod>2021-03-05T07:52:00Z</lastmod>
+  <lastmod>2021-03-05T08:24:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/categories/compilers.xml</loc>
@@ -167,10 +155,10 @@
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/rss.xml</loc>
-  <lastmod>2021-03-05T07:52:00Z</lastmod>
+  <lastmod>2021-03-05T08:24:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://blosc.org/sitemap.xml</loc>
-  <lastmod>2021-03-05T07:52:00Z</lastmod>
+  <lastmod>2021-03-05T08:25:00Z</lastmod>
  </sitemap>
 </sitemapindex>
