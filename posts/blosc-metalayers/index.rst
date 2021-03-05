@@ -43,7 +43,7 @@ have exactly the same size.
 However, if we were to update the meta information with a "giraffe", the
 metalayer would need to be resized and therefore we would have to rewrite
 the 10GB of data plus the trailer.
-This would obviously be very inefficient and hence, not supported.
+This would obviously be very inefficient and hence, not allowed:
 
 .. figure:: /images/metalayers/metalayers.png
 
