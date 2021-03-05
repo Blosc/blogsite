@@ -1,6 +1,5 @@
 .. title: Blosc metalayers, where the user metainformation is stored
 .. author: Aleix Alcacer
-.. author: Francesc Alted
 .. slug: blosc-metalayers
 .. date: 2021-03-05 7:32:20 UTC
 .. tags: blosc2 metalayers
