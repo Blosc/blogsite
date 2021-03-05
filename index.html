@@ -14,14 +14,14 @@
 <link rel="icon" href="blosc-favicon_32x32.png" sizes="32x32">
 <link rel="icon" href="blosc-favicon_64x64.png" sizes="64x64">
 <link rel="icon" href="blosc-favicon_128x128.png" sizes="128x128">
-<link rel="next" href="index-2.html" type="text/html">
+<link rel="next" href="index-1.html" type="text/html">
 <!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', 'UA-111342564-2');
-</script><link rel="prefetch" href="posts/blosc-metalayers/" type="text/html">
+</script><link rel="prefetch" href="posts/introducing-sparse-frames/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -72,146 +72,7 @@
 
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/blosc-metalayers/" class="u-url">Blosc metalayers, where the user metainformation is stored</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                <a href="authors/aleix-alcacer-francesc-alted/">Aleix Alcacer, Francesc Alted</a>
-            </span></p>
-            <p class="dateline">
-            <a href="posts/blosc-metalayers/" rel="bookmark">
-            <time class="published dt-published" datetime="2021-03-04T07:32:20Z" itemprop="datePublished" title="2021-03-04 07:32">2021-03-04 07:32</time></a>
-            </p>
-                <p class="commentline">
-        
-    <a href="posts/blosc-metalayers/#disqus_thread" data-disqus-identifier="cache/posts/metalayers.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>Blosc2 format introduces two different spaces to store user-defined information.
-In this post, we are going to describe what these spaces are and where they are
-stored inside a Blosc persistent schunk.</p>
-<p>The concept of metalayers has been introduced in the Blosc2 format. As its
-name suggests, a metalayer is a space in the Blosc2 format that allows users to
-store custom information.
-For example, <a class="reference external" href="https://github.com/Blosc/Caterva">Caterva</a>, a project based on c-blosc2 that manipulates
-compressed and chunked arrays, uses metalayers to store the dimension and
-the shape/chunkshape/blockshape of the arrays.</p>
-<div class="section" id="fixed-length-metalayers">
-<h2>Fixed-length metalayers</h2>
-<p>The first metalayers defined in the Blosc2 format are the fixed-length metalayers.
-These metalayers are stored in the frame header.
-This decision allows adding Blosc chunks to the frame without the need to
-rewrite the meta information (if they were stored in the trailer, they would
-have to be rewritten each time).</p>
-<p>But this implementation has some restrictions. The most important one is that
-fixed-length metalayers cannot be resized.
-Furthermore, once the first chunk of data is added, no more fixed-length
-metalayers can be added. With these limitations, we make sure that we are not going
-to rewrite the data each time we update the metalayers content.</p>
-<p>Let's see with an example the reason for these restrictions. Supose that we
-have a frame that stores 10GB of data with one metalayer containing a "cat".</p>
-<p>If we update the meta information with a "dog" nothing bad happens because they
-have the same size.</p>
-<p>However, if we update the meta information with a "giraffe", the
-metalayer must be resized and therefore we have to rewrite the 10GB of
-data plus the trailer.
-This procedure is obviously very inefficient and is not supported.</p>
-<div class="figure">
-<img alt="/images/metalayers/metalayers.png" src="images/metalayers/metalayers.png"><p class="caption">Data that must be rewritten are ploted in red.</p>
-</div>
-</div>
-<div class="section" id="variable-length-metalayers">
-<h2>Variable-length metalayers</h2>
-<p>To fix the above issue, variable-length metalayers are introduced into the
-Blosc2 format.
-Unlike fixed-length metalayers, these are stored in the trailer
-section of a Blosc2 schunk.</p>
-<p>As their name suggests, these metalayers can be resized. So whenever we
-modify the metalayers content, we will  have to rewrite the trailer.
-Furthermore, since they are stored in the trailer, they also will be rewritten
-each time a chunk is added.</p>
-<p>Another characteristic feature of these metalayers is that their content is
-compressed.
-This will minimize the size of the trailer, a very important factor
-since the trailer is rewritten every time new data is added.</p>
-<p>Let's continue with the previous example, but now we have the meta
-information in a variable-length metalayer.</p>
-<div class="figure">
-<img alt="/images/metalayers/metalayers-vl.png" src="images/metalayers/metalayers-vl.png">
-</div>
-<p>In this case, as we can see in the figure, the trailer is rewritten each time
-that we update the metalayer.
-But it is a much more efficient operation than rewriting all the data.
-So the variable-length metalayers fixed the fixed-length metalaters limitations.</p>
-<p>To summarize these two concepts and see what type of metalayer is more suitable
-for each situation, the following table contains a comparison between fixed-length
-metalayers and variable-length metalayers:</p>
-<table>
-<colgroup>
-<col style="width: 42%">
-<col style="width: 27%">
-<col style="width: 30%">
-</colgroup>
-<tbody>
-<tr>
-<td></td>
-<td><p>Fixed-length metalayers</p></td>
-<td><p>Variable-length metalayers</p></td>
-</tr>
-<tr>
-<td><p>Where are stored?</p></td>
-<td><p>Header</p></td>
-<td><p>Trailer</p></td>
-</tr>
-<tr>
-<td><p>Can be resized?</p></td>
-<td><p>False</p></td>
-<td><p>True</p></td>
-</tr>
-<tr>
-<td><p>Can be added after adding chunks?</p></td>
-<td><p>False</p></td>
-<td><p>True</p></td>
-</tr>
-<tr>
-<td><p>Are not rewritten when adding chunks?</p></td>
-<td><p>True</p></td>
-<td><p>False</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="metalayers-api">
-<h2>Metalayers API</h2>
-<p>For now, both metalayers have the following functions implemented:</p>
-<ul class="simple">
-<li><p><code class="docutils literal">blosc2_meta_add()</code> / <code class="docutils literal">blosc2_vlmeta_add()</code>: Add a new metalayer.</p></li>
-<li><p><code class="docutils literal">blosc2_meta_get()</code> / <code class="docutils literal">blosc2_vlmeta_get()</code>: Get the metalayer content.</p></li>
-<li><p><code class="docutils literal">blosc2_meta_has()</code> / <code class="docutils literal">blosc2_vlmeta_has()</code>: Check if a metalayer exists or not.</p></li>
-<li><p><code class="docutils literal">blosc2_meta_update()</code> / <code class="docutils literal">blosc2_vlmeta_update()</code>: Update the metalayer content.</p></li>
-</ul>
-</div>
-<div class="section" id="conclusions">
-<h2>Conclusions</h2>
-<p>As we have seen, Blosc2 format introduces two spaces where users can store
-their meta information.</p>
-<p>On the one hand, the fixed-length metalayers are meant to store user meta
-information that not changes over time.
-They are stored in the header and can be updated without having to rewrite any
-other part of the frame, but they can no longer be added once the first chunk
-of data is added.</p>
-<p>On the other hand, if users' meta information will change in size over time,
-they can store their meta information into variable-length metalayers. These
-metalayers are stored in the trailer section of a frame and are more flexible
-than fixed-length metalayers. However, each time that a metalayer content is
-updated, the trailer has to be rewritten.</p>
-</div>
-</div>
-    </div>
-    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/introducing-sparse-frames/" class="u-url">Introducing Sparse Frames</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/introducing-sparse-frames/" class="u-url">Introducing Sparse Frames</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/marta-iborra-francesc-alted/">Marta Iborra, Francesc Alted</a>
@@ -354,19 +215,19 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <h2>Small intro to wheels</h2>
 <p>Wheels are an advantageous alternative to distribute Python (but also pure C) packages which contain C (or Cython) source code, and hence, need a compiler.  For those that are not familiar to wheels, here it comes a small tutorial on how to create and use wheels.</p>
 <p>First, let's recall the traditional way to build a source distribution:</p>
-<pre class="code console"><a name="rest_code_54e84eabd8a1418d813b306bbf0fd941-1"></a><span class="gp">$ </span>python setup.py sdist
+<pre class="code console"><a name="rest_code_29b446c376634dd1a81ae35a5ae4a8b7-1"></a><span class="gp">$ </span>python setup.py sdist
 </pre>
 <p>To build a wheel, the process is quite similar:</p>
-<pre class="code console"><a name="rest_code_fa4d5e08d4b043b891a0af296ca2db9d-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
+<pre class="code console"><a name="rest_code_b5eae2d681ff4a0fb63460bc9edf645a-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
 </pre>
 <p>To install a package via pip (pip decides whether install a from wheel or compile from the source package; wheels have obviously more priority):</p>
-<pre class="code console"><a name="rest_code_d6750c5503b142f5a7813f60c203466b-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_97fb039357b34160a0ce4b27d0d28bf4-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use source distribution:</p>
-<pre class="code console"><a name="rest_code_2c7fac6ddcad49d5ab3917fdb328fef1-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_2dfdbaa09afb439c9723486816c4c579-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use wheels:</p>
-<pre class="code console"><a name="rest_code_b99a6b21c4e946a08ff8f694ca238bdf-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a name="rest_code_0ca4cdd266ca471384c9ca77866edaae-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
 </pre>
 </div>
 <div class="section" id="different-types-of-wheels">
@@ -389,29 +250,29 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <h2>Binaries for C-Blosc libraries are included</h2>
 <p>Although wheels were meant for Python packages, nothing prevents adding more stuff to them.  In particular, we are not only distributing python-blosc binary extensions in our wheels, but also binaries for the C-Blosc library.  This way, people willing to use the C-Blosc library can make use of these wheels to install the necessary development files.</p>
 <p>First, install the binary wheel via PyPI without the need to manually compile the thing:</p>
-<pre class="code console"><a name="rest_code_0f6c18be491244efbc7990f1743a8aa2-1"></a><span class="gp">$ </span>pip install --only-binary blosc
+<pre class="code console"><a name="rest_code_48b78ca1dcd2467f817039863a67e656-1"></a><span class="gp">$ </span>pip install --only-binary blosc
 </pre>
 <p>Now, let's suppose that we want to compile the <cite>c-blosc/examples/many_compressors.c</cite> on Linux:</p>
 <p>First, you have to look where the wheels directory is located.  In our case:</p>
-<pre class="code console"><a name="rest_code_525a7511e68c464abef6dfd9875245f1-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
-<a name="rest_code_525a7511e68c464abef6dfd9875245f1-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
+<pre class="code console"><a name="rest_code_b84321b7be31441e92199fb46b01843d-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
+<a name="rest_code_b84321b7be31441e92199fb46b01843d-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
 </pre>
 <p>For the actual compilation, you need to pass the directory for the include and lib directories:</p>
-<pre class="code console"><a name="rest_code_54c6d772ae7945d6b6c01068ae5f26ed-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
+<pre class="code console"><a name="rest_code_3694541770284e0ea997e07388f3349b-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
 </pre>
 <p>Finally, run the resulting binary and hopefully you will see something like:</p>
-<pre class="code console"><a name="rest_code_822fe668629b4036ba7ea98dd5208707-1"></a><span class="gp">$ </span>./many_compressors
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-3"></a><span class="go">Using 4 threads (previously using 1)</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-4"></a><span class="go">Using blosclz compressor</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-6"></a><span class="go">Succesful roundtrip!</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-7"></a><span class="go">Using lz4 compressor</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-9"></a><span class="go">Succesful roundtrip!</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-10"></a><span class="go">Using lz4hc compressor</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
-<a name="rest_code_822fe668629b4036ba7ea98dd5208707-12"></a><span class="go">Succesful roundtrip!</span>
+<pre class="code console"><a name="rest_code_5d79c203bbf44d709bb66af320d3d456-1"></a><span class="gp">$ </span>./many_compressors
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-3"></a><span class="go">Using 4 threads (previously using 1)</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-4"></a><span class="go">Using blosclz compressor</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-6"></a><span class="go">Succesful roundtrip!</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-7"></a><span class="go">Using lz4 compressor</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-9"></a><span class="go">Succesful roundtrip!</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-10"></a><span class="go">Using lz4hc compressor</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
+<a name="rest_code_5d79c203bbf44d709bb66af320d3d456-12"></a><span class="go">Succesful roundtrip!</span>
 </pre>
 <p>For more details, including compiling with binary wheels on other platforms than Linux, see: <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst">https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst</a>.</p>
 </div>
@@ -684,10 +545,10 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
     <div>
 <p>On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new <a class="reference external" href="https://en.wikipedia.org/wiki/Zen_2">Zen 2</a> micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:</p>
 <img alt="/images/blosc2-meets-rome/amd-rome-arch-multi-die.png" class="align-center" src="images/blosc2-meets-rome/amd-rome-arch-multi-die.png"><p>Such a separation of dies for I/O and computing has quite <a class="reference external" href="https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm/3">large consequences in terms of scalability when accessing memory</a>, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous <a class="reference external" href="https://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a>.  This essentially boils down to compute an aggregation with a simple loop like:</p>
-<pre class="code c"><a name="rest_code_83ffd27d026145408f6e034ff85ca0dc-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_83ffd27d026145408f6e034ff85ca0dc-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_83ffd27d026145408f6e034ff85ca0dc-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a name="rest_code_83ffd27d026145408f6e034ff85ca0dc-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_dbe478126366454fa7f8d306d80fa451-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_dbe478126366454fa7f8d306d80fa451-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_dbe478126366454fa7f8d306d80fa451-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a name="rest_code_dbe478126366454fa7f8d306d80fa451-4"></a><span class="p">}</span>
 </pre>
 <p>As described in the original blog post, the different <cite>udata</cite> arrays are just chunks of the original dataset that are decompressed just in time for performing the partial aggregation operation; the final result is indeed the sum of all the partial aggregations.  Also we have seen that the time to execute the aggregation is going to depend quite a lot on the kind of data that is decompressed: carefully chosen synthetic data can be decompressed much more quickly than real data.  But syntehtic data is nevertheless interesting as it allows for a roof analysis of where the performance can grow up to.</p>
 <p>In this blog, we are going to see how the AMD EPYC 7402 (Rome), a 24-core processor performs on both synthetic and real data.</p>
@@ -937,16 +798,16 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <p><strong>Update (2018-08-09)</strong>: An extended version of this blog post can be found in this <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">article</a>.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, as well as more discussion about the results.</p>
 <p>Nowadays CPUs struggle to get data at enough speed to feed their cores.  The reason for this is that memory speed is <a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf">growing at a slower pace than CPUs increase their speed at crunching numbers</a>.   This memory slowness compared with CPUs is generally known as the <a class="reference external" href="https://en.wikipedia.org/wiki/Random-access_memory#Memory_wall">Memory Wall</a>.</p>
 <p>For example, let's suppose that we want to compute the aggregation of a some large array; here it is how to do that using OpenMP for leveraging all cores in a CPU:</p>
-<pre class="code c"><a name="rest_code_74cdbe4ebf35408d8dba006aa3254f35-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_74cdbe4ebf35408d8dba006aa3254f35-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_74cdbe4ebf35408d8dba006aa3254f35-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a name="rest_code_74cdbe4ebf35408d8dba006aa3254f35-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_70bfecfcf8b04fd38142c9d2138914e7-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_70bfecfcf8b04fd38142c9d2138914e7-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_70bfecfcf8b04fd38142c9d2138914e7-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a name="rest_code_70bfecfcf8b04fd38142c9d2138914e7-4"></a><span class="p">}</span>
 </pre>
 <p>With this, some server (an Intel Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores and hyperthreading) takes about 14 ms for doing the aggregation of an array with 100 million of float32 values when using 8 OpenMP threads (optimal number for this CPU).  However, if instead of bringing the whole 100 million elements from memory to the CPU we generate the data inside the loop, we are avoiding the data transmission between memory and CPU, like in:</p>
-<pre class="code c"><a name="rest_code_c388e33ec52e4901b0eb895ff8f38d17-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a name="rest_code_c388e33ec52e4901b0eb895ff8f38d17-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a name="rest_code_c388e33ec52e4901b0eb895ff8f38d17-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
-<a name="rest_code_c388e33ec52e4901b0eb895ff8f38d17-4"></a><span class="p">}</span>
+<pre class="code c"><a name="rest_code_040e6470a8e846579d9d2de00e9061de-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a name="rest_code_040e6470a8e846579d9d2de00e9061de-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="rest_code_040e6470a8e846579d9d2de00e9061de-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
+<a name="rest_code_040e6470a8e846579d9d2de00e9061de-4"></a><span class="p">}</span>
 </pre>
 <p>This loop takes just 3.5 ms, that is, 4x less than the original one.  That means that our CPU could compute the aggregation at a speed that is 4x faster than the speed at which the memory subsystem can provide data elements to the CPU; or put in another words, the CPU is idle, doing nothing during the 75% of the time, waiting for data to arrive (for this example, but there could be other, more extreme cases).  Here we have the memory wall in action indeed.</p>
 <p>That the memory wall exists is an excellent reason to think about ways to workaround it.  One of the most promising venues is to use compression: what if we could store data in compressed state in-memory and use the spare clock cycles of the CPU for decompressing it just when it is needed?  In this blog entry we will see how to implement such a computational kernel on top of data structures that are cache- and compression-friendly and we will examine how they perform on a range of modern CPU architectures.  Some surprises are in store.</p>
@@ -1054,12 +915,132 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </div>
 </div>
     </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/new-forward-compat-policy/" class="u-url">New Forward Compatibility Policy</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/francesc-alted/">Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/new-forward-compat-policy/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-02-21T15:32:20Z" itemprop="datePublished" title="2018-02-21 15:32">2018-02-21 15:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="posts/new-forward-compat-policy/#disqus_thread" data-disqus-identifier="cache/posts/new-forward-compat-policy.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<div class="section" id="the-215-issue">
+<h2>The #215 issue</h2>
+<p>Recently, a C-Blosc user filed an <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">issue</a> describing how buffers created with a modern version of C-Blosc (starting from 1.11.0) were not able to be decompressed with an older version of the library (1.7.0), i.e. C-Blosc was effectively breaking the so-called <em>forward-compatibility</em>.  After some investigation, it turned out that the culprit was an optimization that was introduced in 1.11.0 in order to allow better compression ratios and in some cases, better speed too.</p>
+<p>Not all the codecs inside C-Blosc were equally affected; the ones that are experiencing the issue are LZ4, LZ4HC and Zlib (quite luckily, BloscLZ, the default codec, is not bitten by this and should be forward compatible probably til 1.0.0); that is, when a user is using a modern C-Blosc library (&gt; 1.11.0) <em>and</em> is using any of the affected codecs, there are situations (namely when the shuffle or bitshuffle filter are active and the buffers to be compressed are larger than 32 KB) that the result cannot be decompressed with older versions (&lt; 1.11.0).</p>
+</div>
+<div class="section" id="why-this-occurred">
+<h2>Why this occurred?</h2>
+<p>Prior to 1.11.0, Blosc has traditionally split the internal blocks (the different pieces in which the buffer to be compressed is divided) into smaller pieces composed by the <em>same significant</em> bytes that the shuffle filter has put together.  The rational for doing this is that these pieces are, in many cases, hosting values that are either zeros or very close byte values (this is why shuffle works well in general for binary data), and asking the codec to compress these split-blocks separately was quite less effort than compressing a complete block hence providing more speed).</p>
+<p>However, I realized that the so-called High Compression Ration codecs (the HCR codecs inside BLosc are LZ4HC, Zlib and Zstd) generally benefited from this split not happening (the reason is clear: more data means more opportunities for finding more duplicates) and in some cases, the speed was better too.  So, in C-Blosc 1.11.0, I decided that the split was not going to happen <em>by default</em> for HCR codecs (in the last minute I decided to include LZ4 too, for which the experiments showed a noticeable performance bump too, see below). Fortunately, the Zstd codec was introduced (in an out-of-beta way) at the very same 1.11.0 release than this split-block change, so in practice data compressed with the Zstd codec is not affected by this.</p>
+</div>
+<div class="section" id="new-forward-compatibility-enforcement-policy">
+<h2>New forward compatibility enforcement policy</h2>
+<p>Although this change was deliberate and every measure was put in making it <em>backward compatible</em> (i.e. new library versions could read buffers compressed with older versions), I was not really aware of the inconveniences that the change was putting for people creating data files using newer versions of the library and expecting these to be read with older versions.</p>
+<p>So in order to prevent something like this to happen again, I decided that <em>forward compatibility</em> is going to be <em>enforced</em> for future releases of C-Blosc (just for 1.x series; C-Blosc 2.x should be just backward compatible with 1.x).  By the way, this new <em>forward compatibility</em> policy will require a significantly more costly <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/RELEASING.rst#forward-compatibility-testing">release procedure</a>, as different libraries for a specific set of versions have to be manually re-created; if you know a more automatic way to test forward compatibility with old versions of a library, I'd love to hear your comments.</p>
+</div>
+<div class="section" id="measures-taken-and-new-split-mode">
+<h2>Measures taken and new split mode</h2>
+<p>In order to alleviate this forward incompatibility issue, I decided to revert the split change introduced in 1.11.0 in forthcoming 1.14.0 release.  That means that, <em>by default</em>, compressed buffers created with C-Blosc 1.14.0 and on will be forward compatible with all the previous C-Blosc libraries (till 1.3.0, which was when support for different codecs was introduced).  That is, the only buffers that will pose problems to be decompressed with old versions are those created with a C-Blosc library with versions between 1.11.0 and 1.14.0 <em>and</em> using the shuffle/bitshuffle filter in combination with the LZ4, LZ4HC or Zlib codecs.</p>
+<p>For fine-tuning how the block-split would happen or not, I have introduced a new API function, <cite>void blosc_set_splitmode(int mode)</cite>, that allows to select the split mode that is going to be used during the compression.  The split modes that can take the new function are:</p>
+<ul class="simple">
+<li><p>BLOSC_FORWARD_COMPAT_SPLIT</p></li>
+<li><p>BLOSC_AUTO_SPLIT</p></li>
+<li><p>BLOSC_NEVER_SPLIT</p></li>
+<li><p>BLOSC_ALWAYS_SPLIT</p></li>
+</ul>
+<p><cite>BLOSC_FORWARD_COMPAT_SPLIT</cite> offers reasonably forward compatibility (i.e. Zstd still will not split, but this is safe because it was introduced at the same time than the split change in 1.11.0), <cite>BLOSC_AUTO_SPLIT</cite> is for nearly optimal results (based on heuristics; this is the same approach than the one introduced in 1.11.0), <cite>BLOSC_NEVER_SPLIT</cite> and <cite>BLOSC_ALWAYS_SPLIT</cite> are for the user interested in experimenting for getting best compression ratios and/or speed.  If <cite>blosc_set_splitmode()</cite> is not called, the default mode will be BLOSC_FORWARD_COMPAT_SPLIT.</p>
+<p>Also, the user will be able to specify the split mode by using the <cite>BLOSC_SPLITMODE</cite> variable environment.  If that variable exists in the environment, and has any value among:</p>
+<ul class="simple">
+<li><p>'BLOSC_FORWARD_COMPAT_SPLIT'</p></li>
+<li><p>'BLOSC_AUTO_SPLIT'</p></li>
+<li><p>'BLOSC_NEVER_SPLIT'</p></li>
+<li><p>'BLOSC_ALWAYS_SPLIT'</p></li>
+</ul>
+<p>this will select the corresponding split mode.</p>
+</div>
+<div class="section" id="how-this-change-affects-performance">
+<h2>How this change affects performance</h2>
+<p>So as to allow to visualize at a glance the differences in performance that the new release is introducing, let's have a look at the impact on two of the most used codecs inside C-Blosc: LZ4 and LZ4HC.  In the plots below the left side is the pre-1.14.0 version (non-split blocks) and on the right, the forthcoming 1.14.0 (split blocks).  Note that I am using here the typical synthetic benchmarks for C-Blosc, so expect a different outcome for your own data.</p>
+<p>Let's start by LZ4HC, a High Compression Ratio codec (and the one that triggered the initial report of the <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">forward compatibility issue</a>).  When compressing, we have this change in behavior:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4hc-c" src="images/new-forward-compat-policy/suite-lz4hc-pre-1.14-compr.png"></p></td>
+<td><p><img alt="lz4hc-compat-c" src="images/new-forward-compat-policy/suite-lz4hc-compat-compr.png"></p></td>
+</tr></tbody>
+</table>
+<p>For LZ4HC decompression:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4hc-d" src="images/new-forward-compat-policy/suite-lz4hc-pre-1.14-decompr.png"></p></td>
+<td><p><img alt="lz4hc-compat-d" src="images/new-forward-compat-policy/suite-lz4hc-compat-decompr.png"></p></td>
+</tr></tbody>
+</table>
+<p>For LZ4HC one can see that, when using non-split blocks, it can achieve better compression ratios (this is expected, as the block sizes are larger).  Speed-wise the performance is quite similar, with maybe some advantage for split blocks (expected as well).  As the raison d'être for HCR codecs is maximize the compression ration, that was the reason why I did the split change for LZ4HC in 1.11.0.</p>
+<p>And now for LZ4, a codec meant for speed (although it normally gives pretty decent results in compression ratio).  When compressing, here it is the change:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-c" src="images/new-forward-compat-policy/suite-lz4-pre-1.14-compr.png"></p></td>
+<td><p><img alt="lz4-compat-c" src="images/new-forward-compat-policy/suite-lz4-compat-compr.png"></p></td>
+</tr></tbody>
+</table>
+<p>For LZ4 decompression:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-d" src="images/new-forward-compat-policy/suite-lz4-pre-1.14-decompr.png"></p></td>
+<td><p><img alt="lz4-compat-d" src="images/new-forward-compat-policy/suite-lz4-compat-decompr.png"></p></td>
+</tr></tbody>
+</table>
+<p>So, here one can see that when using Blosc pre-1.14 (i.e. non-split blocks) we are getting a bit less compression ratio than for the forthcoming 1.14, which even if counter-intutive, it matches my experience with non-HCR codecs.  Speed-wise the difference is not that much during compression; however, decompression is significantly faster with non-split blocks.  As LZ4 is meant for speed, this was possibly the reason that pushed me towards making non-split blocks by default for LZ4 in addition to HCR codecs in 1.11.0.</p>
+</div>
+<div class="section" id="feedback">
+<h2>Feedback</h2>
+<p>If you have suggestions on this forward compatibility issue or the solution that has been implemented, please shout!</p>
+</div>
+<div class="section" id="appendix-hardware-and-software-used">
+<h2>Appendix: Hardware and software used</h2>
+<p>For reference, here it is the configuration that I used for producing the plots in this blog entry.</p>
+<ul class="simple">
+<li><p>CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)</p></li>
+<li><p>OS:  Ubuntu 16.04</p></li>
+<li><p>Compiler: GCC 6.3.0</p></li>
+<li><p>C-Blosc: 1.13.7 and 1.14.0 (release candidate)</p></li>
+<li><p>LZ4: 1.8.1</p></li>
+</ul>
+</div>
+</div>
+    </div>
     </article>
 </div>
 
         <nav class="postindexpager"><ul class="pager">
 <li class="next">
-                <a href="index-2.html" rel="next">Older posts</a>
+                <a href="index-1.html" rel="next">Older posts</a>
             </li>
         </ul></nav><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
 </div>

@@ -15,5 +15,7 @@
 `Suite output (4 threads) </images/bench/snappy/i5-3380M-4.txt>`__
 
 .. image:: /images/bench/snappy/i5-3380M-4-compr.png
+   :width: 50%
 .. image:: /images/bench/snappy/i5-3380M-4-decompr.png
+   :width: 50%
 
