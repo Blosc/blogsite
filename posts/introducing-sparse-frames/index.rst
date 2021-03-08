@@ -1,5 +1,5 @@
 .. title: Introducing Sparse Frames
-.. author: Marta Iborra, Francesc Alted
+.. author: Marta Iborra
 .. slug: introducing-sparse-frames
 .. date: 2021-02-08 7:32:20 UTC
 .. tags: blosc2 sparse frame format
