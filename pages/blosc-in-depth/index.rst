@@ -1,6 +1,6 @@
 .. title: What Is Blosc?
 .. slug: blosc-in-depth
-.. date: 2014-06-18 16:43:07 UTC
+.. date: 2021-05-05 06:43:07 UTC
 .. tags:
 .. link:
 .. description:
@@ -11,10 +11,10 @@
 Blosc is a **high performance compressor optimized for binary
 data**. It has been designed to transmit data to the processor cache
 faster than the traditional, non-compressed, direct memory fetch
-approach via a ``memcpy()`` OS call. Blosc is the first compressor (that
-I'm aware of) that is meant not only to reduce the size of large
-datasets on-disk or in-memory, but also to accelerate memory-bound
-computations (which is typical in vector-vector operations).
+approach via a ``memcpy()`` OS call.  This can be useful not only
+to reduce the size of large datasets on-disk or in-memory, but also to
+accelerate memory-bound computations (which is typical in vector-vector
+operations).
 
 It uses the **blocking technique** (as described in this `article
 <http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf>`_) to reduce
@@ -26,7 +26,8 @@ and *multi-threading* capabilities present in nowadays multi-core
 processors so as to accelerate the compression/decompression process
 to a maximum.
 
-To whet your appetite look at the kind of speed that Blosc can reach:
+To whet your appetite look at the kind of speed that Blosc can reach for BloscLZ,
+its default codec:
 
 .. |blosclz-c| image::   /images/blosclz-comp.png
 .. |blosclz-d| image::   /images/blosclz-decomp.png
@@ -35,7 +36,17 @@ To whet your appetite look at the kind of speed that Blosc can reach:
 | |blosclz-c|  | |blosclz-d|  |
 +--------------+--------------+
 
-You can see more benchmarks in :doc:`synthetic-benchmarks`.  Also, you may want to check out this article on `Breaking Down Memory Walls <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_ with `Blosc2 <https://github.com/Blosc/c-blosc2>`_, the next generation of Blosc.
+And here for LZ4, a well known and very fast codec that comes integrated
+(with other codecs too) with Blosc:
+
+.. |lz4-c| image::   /images/lz4-comp.png
+.. |lz4-d| image::   /images/lz4-decomp.png
+
++--------------+--------------+
+| |lz4-c|      | |lz4-d|      |
++--------------+--------------+
+
+You can see more benchmarks in [our blog](https://www.blosc.org).  Also, you may want to check out this article on `Breaking Down Memory Walls <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_. Also, check `Blosc2 <https://github.com/Blosc/c-blosc2>`_, the next generation of Blosc.
 
 .. raw:: html
 
@@ -61,20 +72,23 @@ pre-conditioner, so that it can work in a standalone fashion.
 Currently, Blosc uses **BloscLZ** by default, a compressor heavily
 based on `FastLZ <http://fastlz.org/>`_. From version 1.3 onwards,
 Blosc also includes support for `LZ4 and LZ4HC
-<http://www.lz4.org>`_, `Snappy
-<https://github.com/google/snappy>`_ , `Zlib
-<http://www.zlib.net>`_ and `Zstd <http://www.zstd.net>`_.  Also,
-it comes with a highly optimized (it
-can use SSE2 instructions, if available) **shuffle** pre-conditioner.
-Different compressors or pre-conditioners may be added in the future.
+<https://github.com/lz4/lz4>`_, `Zlib
+<https://github.com/zlib-ng/zlib-ng>`_ and
+`Zstd <https://github.com/facebook/zstd>`_.  Also,
+it comes with a highly optimized (it can use SSE2, AVX2 or NEON
+instructions, if available) **shuffle** and **bitshuffle** filters.
 
-Blosc is in charge of coordinating the compressor and pre-conditioners
+Of course, almost every user has her own needs, and in Blosc2 we are
+working on making possible for her to register different codecs
+and filters so that they can fine tune Blosc for different scenarios.
+
+Blosc is in charge of coordinating the compressor and filters
 so that they can leverage the blocking technique (described above) as
 well as multi-threaded execution (if several cores are available)
 automatically. That makes that every compressor and pre-conditioner
 will work at very high speeds, even if it was not initially designed
 for doing blocking or multi-threading. For example, Blosc allows you
-to use the classic ``Zlib`` library, but in a multi-threaded mode.
+to use the ``Zlib`` codec, but in a multi-threaded mode.
 
 Other advantages of Blosc are:
 
@@ -191,4 +205,3 @@ Blosc License
 Blosc is free software and released under the terms of the very
 permissive `BSD license <xhttp://en.wikipedia.org/wiki/MIT_License>`_,
 so you can use it in almost any way you want!
-

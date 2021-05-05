@@ -99,8 +99,7 @@ This mimics existing formats like bcolz">
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
-<div class="section" id="overview">
-<h2>Overview</h2>
+<section id="overview"><h2>Overview</h2>
 <p>The <a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/176">new sparse frame implementation</a>
 allows the storage of Blosc2 super-chunk data chunks sparsely on-disk, using the filesystem as a key/value storage.
 This mimics existing formats like <a class="reference external" href="https://github.com/Blosc/bcolz/blob/master/DISK_FORMAT_v1.rst">bcolz</a>
@@ -124,9 +123,7 @@ The name of the chunk file is built by expressing the chunk ID in hexadecimal,
 padded with zeros (until 8 characters) and adding the <cite>.chunk</cite> extension.
 For example, if the index chunk is 46 (2E in hexadecimal) the chunk file name would
 be <cite>0000002E.chunk</cite>.</p>
-</div>
-<div class="section" id="advantages">
-<h2>Advantages</h2>
+</section><section id="advantages"><h2>Advantages</h2>
 <p>The big advantage of the sparse frame compared with the contiguous one is
 avoiding empty spaces resulting when updating a chunk.</p>
 <p>To better illustrate this, let's imagine that the set of the data chunks in
@@ -135,10 +132,7 @@ a contiguous frame is stored like in the
 built with wood blocks.  But in constrast to the genuine
 <cite>Jenga board game</cite>, not all the blocks have the same size (the uncompressed
 size of a the chunks is the same, but not the compressed one):</p>
-<div class="figure align-center">
-<img alt="/images/sparse-frames/jenga3.png" src="../../images/sparse-frames/jenga3.png" style="width: 50%;">
-</div>
-<p>Above it is shown the initial structure of such a tower. If the yellow piece
+<figure class="align-center"><img alt="/images/sparse-frames/jenga3.png" src="../../images/sparse-frames/jenga3.png" style="width: 50%;"></figure><p>Above it is shown the initial structure of such a tower. If the yellow piece
 is updated (changed by another piece) there are two possibilities.
 The first one is that the new piece fits into the empty space left where
 the old piece was. In that case, the new piece is put in the previous space
@@ -151,9 +145,7 @@ each book is a different chunk:</p>
 the new, taller edition, one only has to grab the old edition and replace it by the new one.
 As there is no limit in the height of the books, the yellow book can be replaced with a
 larger book without creating empty spaces, and making a better use of space.</p>
-</div>
-<div class="section" id="example-of-use">
-<h2>Example of use</h2>
+</section><section id="example-of-use"><h2>Example of use</h2>
 <p>Creating a sparse frame in C-Blosc2 is easy; just specifify the name of the directory where
 you want to store your chunks and you are done:</p>
 <pre class="literal-block">blosc2_storage storage = {.urlpath="dir1.b2frame"};
@@ -169,9 +161,7 @@ for (nchunk = 0; nchunk &lt; NCHUNKS; nchunk++) {
 }</pre>
 <p>Simple and effective.</p>
 <p>You can have a look at a <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/examples/sframe_simple.c">more complete example here</a>.</p>
-</div>
-<div class="section" id="future-work">
-<h2>Future work</h2>
+</section><section id="future-work"><h2>Future work</h2>
 <p>We think that this implementation opens the door to several interesting possibilities.</p>
 <p>For example, by introducing networking code in Blosc2,
 the chunks could be stored in another machine and accessed remotely.
@@ -196,7 +186,7 @@ and the whole team is very pleased with the quality of her contribution; we woul
 to continue having her among us for the next months (but this requires some budget indeed).
 If you like where we are headed, please consider making a donation
 to the Blosc project via the NumFOCUS Foundation: <a class="reference external" href="https://blosc.org/pages/donate">https://blosc.org/pages/donate</a>.  Thank you!</p>
-</div>
+</section>
 </div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">

@@ -103,8 +103,7 @@ articles in our university. ">
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
-<div class="section" id="how-it-all-started">
-<h2>How it all started</h2>
+<section id="how-it-all-started"><h2>How it all started</h2>
 <p>I think I began to become truly interested in compression when, back
 in 1992, I was installing <a class="reference external" href="http://en.wikipedia.org/wiki/C_News">C-News</a>, a news server package meant
 to handle <a class="reference external" href="http://en.wikipedia.org/wiki/Usenet">Usenet News</a>
@@ -131,9 +130,7 @@ subscribe to just a selection of groups so that the transmission would
 end before the new day would start.  And of course, I started
 experimenting with compression for maximizing the number of groups
 that we could bring to our community.</p>
-</div>
-<div class="section" id="compressing-usenet-news">
-<h2>Compressing Usenet News</h2>
+</section><section id="compressing-usenet-news"><h2>Compressing Usenet News</h2>
 <p>The most used compressor by 1992 was <a class="reference external" href="http://en.wikipedia.org/wiki/Compress">compress</a>, a Unix program based on the
 <a class="reference external" href="http://en.wikipedia.org/wiki/LZW">LZW</a> compression algorithm.  But
 LZW had patents issues, so by that time Jean-Loup Gailly and Mark
@@ -161,9 +158,7 @@ realization of how compression could help bringing data faster to the
 system, making some processes more effective.  In fact, that actually
 blew-up my mind and made me passionate about compression technologies
 for the years to come.</p>
-</div>
-<div class="section" id="lzo-and-the-explosion-of-compression-technology">
-<h2>LZO and the explosion of compression technology</h2>
+</section><section id="lzo-and-the-explosion-of-compression-technology"><h2>LZO and the explosion of compression technology</h2>
 <p>During 1996, Markus F.X.J. Oberhumer started to announce the
 availability of his own set of LZO compressors.  These consisted in
 many different compressors, all of them being variations of his own
@@ -192,9 +187,7 @@ exists, as long as it is downloaded and installed separately).</p>
 <p>By that time (mid 2000's) it started to appear a plethora of fast
 compressors with the same spirit than LZO, but with more permissive
 licenses (typically BSD/MIT), many of them being a nice fit for PyTables.</p>
-</div>
-<div class="section" id="a-new-compressor-for-pytables-hdf5">
-<h2>A new compressor for PyTables/HDF5</h2>
+</section><section id="a-new-compressor-for-pytables-hdf5"><h2>A new compressor for PyTables/HDF5</h2>
 <p>By 2008 it was clear that PyTables needed a compressor whose sources
 could be included in the PyTables tarball, so minimizing the
 installation requirements.  For this I started considering a series of
@@ -232,9 +225,7 @@ possible.  After some iterations, we were happy when the new
 compressor worked flawlessly compressing and decompressing <strong>hundreds
 of terabytes</strong> on many different Windows and Unix boxes, both in
 32-bit and 64-bit.  The new beast was ready to ship.</p>
-</div>
-<div class="section" id="blosc-was-born">
-<h2>Blosc was born</h2>
+</section><section id="blosc-was-born"><h2>Blosc was born</h2>
 <p>I then grabbed BloscLZ, the multi-threading support and the
 SSE2-powered shuffle and put it all in the same package.  That also became a
 <strong>standalone, pure C library</strong>, with no attachments to PyTables or HDF5,
@@ -267,7 +258,7 @@ arrangement is critical too).  But one
 thing is clear, achieving this (by Blosc or any other compressor out
 there) is just a matter of time.  Such is the fate of the ever
 increasing gap in CPU versus memory speeds.</p>
-</div>
+</section>
 </div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">

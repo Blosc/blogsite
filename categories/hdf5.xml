@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about hdf5)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/hdf5.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 12 Mar 2021 07:23:57 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Compress Me, Stupid!</title><link>http://blosc.org/posts/compress-me-stupid/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;div class="section" id="how-it-all-started"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about hdf5)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/hdf5.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Wed, 05 May 2021 12:57:52 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Compress Me, Stupid!</title><link>http://blosc.org/posts/compress-me-stupid/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;section id="how-it-all-started"&gt;
 &lt;h2&gt;How it all started&lt;/h2&gt;
 &lt;p&gt;I think I began to become truly interested in compression when, back
 in 1992, I was installing &lt;a class="reference external" href="http://en.wikipedia.org/wiki/C_News"&gt;C-News&lt;/a&gt;, a news server package meant
@@ -27,8 +27,8 @@ subscribe to just a selection of groups so that the transmission would
 end before the new day would start.  And of course, I started
 experimenting with compression for maximizing the number of groups
 that we could bring to our community.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="section" id="compressing-usenet-news"&gt;
+&lt;/section&gt;
+&lt;section id="compressing-usenet-news"&gt;
 &lt;h2&gt;Compressing Usenet News&lt;/h2&gt;
 &lt;p&gt;The most used compressor by 1992 was &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Compress"&gt;compress&lt;/a&gt;, a Unix program based on the
 &lt;a class="reference external" href="http://en.wikipedia.org/wiki/LZW"&gt;LZW&lt;/a&gt; compression algorithm.  But
@@ -57,8 +57,8 @@ realization of how compression could help bringing data faster to the
 system, making some processes more effective.  In fact, that actually
 blew-up my mind and made me passionate about compression technologies
 for the years to come.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="section" id="lzo-and-the-explosion-of-compression-technology"&gt;
+&lt;/section&gt;
+&lt;section id="lzo-and-the-explosion-of-compression-technology"&gt;
 &lt;h2&gt;LZO and the explosion of compression technology&lt;/h2&gt;
 &lt;p&gt;During 1996, Markus F.X.J. Oberhumer started to announce the
 availability of his own set of LZO compressors.  These consisted in
@@ -88,8 +88,8 @@ exists, as long as it is downloaded and installed separately).&lt;/p&gt;
 &lt;p&gt;By that time (mid 2000's) it started to appear a plethora of fast
 compressors with the same spirit than LZO, but with more permissive
 licenses (typically BSD/MIT), many of them being a nice fit for PyTables.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="section" id="a-new-compressor-for-pytables-hdf5"&gt;
+&lt;/section&gt;
+&lt;section id="a-new-compressor-for-pytables-hdf5"&gt;
 &lt;h2&gt;A new compressor for PyTables/HDF5&lt;/h2&gt;
 &lt;p&gt;By 2008 it was clear that PyTables needed a compressor whose sources
 could be included in the PyTables tarball, so minimizing the
@@ -128,8 +128,8 @@ possible.  After some iterations, we were happy when the new
 compressor worked flawlessly compressing and decompressing &lt;strong&gt;hundreds
 of terabytes&lt;/strong&gt; on many different Windows and Unix boxes, both in
 32-bit and 64-bit.  The new beast was ready to ship.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="section" id="blosc-was-born"&gt;
+&lt;/section&gt;
+&lt;section id="blosc-was-born"&gt;
 &lt;h2&gt;Blosc was born&lt;/h2&gt;
 &lt;p&gt;I then grabbed BloscLZ, the multi-threading support and the
 SSE2-powered shuffle and put it all in the same package.  That also became a
@@ -163,4 +163,4 @@ arrangement is critical too).  But one
 thing is clear, achieving this (by Blosc or any other compressor out
 there) is just a matter of time.  Such is the fate of the ever
 increasing gap in CPU versus memory speeds.&lt;/p&gt;
-&lt;/div&gt;&lt;/div&gt;</description><category>blosc</category><category>blosclz</category><category>hdf5</category><category>history</category><category>pytables</category><guid>http://blosc.org/posts/compress-me-stupid/</guid><pubDate>Thu, 28 Aug 2014 17:01:20 GMT</pubDate></item></channel></rss>
+&lt;/section&gt;&lt;/div&gt;</description><category>blosc</category><category>blosclz</category><category>hdf5</category><category>history</category><category>pytables</category><guid>http://blosc.org/posts/compress-me-stupid/</guid><pubDate>Thu, 28 Aug 2014 17:01:20 GMT</pubDate></item></channel></rss>

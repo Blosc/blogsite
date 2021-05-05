@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about Blosc2)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/blosc2.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 12 Mar 2021 07:23:57 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Blosc Has Won Google's Open Source Peer Bonus Program</title><link>http://blosc.org/posts/prize-push-Blosc2/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;Past month &lt;a class="reference external" href="https://opensource.googleblog.com/2017/10/more-open-source-peer-bonus-winners.html"&gt;Google announced the winners for the 2017’s second round of their Open Source Peer Bonus program&lt;/a&gt; and I was among them for my commitment to the Blosc project.  It took a bit, but I wanted to express my thoughts on this nice event.  Needless to say, I am proud and honored for this recognition, most specially when this is the first completely uninterested donation that someone made to me after 15 years of doing open source (in many occasions doing that as a full-time work), so thank you very much Google!  The assumption is that people does open source because 1) they believe in the concept and 2) they can earn a public consideration that allows them to get contracts (so allowing many of us to have a life!).  However, this time the unexpected happened, and that an important corporation like Google decided to publicly recognize this work makes me very happy (would that pave the way for others to follow? :-).&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about Blosc2)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/blosc2.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Wed, 05 May 2021 12:57:52 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Blosc Has Won Google's Open Source Peer Bonus Program</title><link>http://blosc.org/posts/prize-push-Blosc2/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;Past month &lt;a class="reference external" href="https://opensource.googleblog.com/2017/10/more-open-source-peer-bonus-winners.html"&gt;Google announced the winners for the 2017’s second round of their Open Source Peer Bonus program&lt;/a&gt; and I was among them for my commitment to the Blosc project.  It took a bit, but I wanted to express my thoughts on this nice event.  Needless to say, I am proud and honored for this recognition, most specially when this is the first completely uninterested donation that someone made to me after 15 years of doing open source (in many occasions doing that as a full-time work), so thank you very much Google!  The assumption is that people does open source because 1) they believe in the concept and 2) they can earn a public consideration that allows them to get contracts (so allowing many of us to have a life!).  However, this time the unexpected happened, and that an important corporation like Google decided to publicly recognize this work makes me very happy (would that pave the way for others to follow? :-).&lt;/p&gt;
 &lt;p&gt;Having said this, and as it happens with any open source project that has seen some success, the contributions for other people have been instrumental in making Blosc such a featured and stable library.  People like Jack Pappas, Valentin Hänel, Christohper Speller, Antonio Valentino and up to 30 contributors made important contributions to the project.  This award goes indeed to them too.&lt;/p&gt;
 &lt;p&gt;This push comes very timely because it is giving me more stamina towards the release of &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2"&gt;Blosc2&lt;/a&gt;.  Blosc2 is the next generation of Blosc, and will add features like:&lt;/p&gt;
 &lt;ul class="simple"&gt;
@@ -23,7 +23,7 @@ Intel (on top of Unix/Linux, Mac OSX and Windows).&lt;/p&gt;
 candidate to become a fully supported platform besides Intel/AMD.  You
 may be wondering that we could have chosen any other architecture like
 MIPS or PowerPC, so why ARM?&lt;/p&gt;
-&lt;div class="section" id="arm-is-eating-the-world"&gt;
+&lt;section id="arm-is-eating-the-world"&gt;
 &lt;h2&gt;ARM is eating the world&lt;/h2&gt;
 &lt;p&gt;ARM is an increasingly popular architecture and we can find
 implementation exemplars of it not only in the phones, tablets or
@@ -51,8 +51,8 @@ in &lt;a class="reference external" href="http://blosc.org/benchmarks-blosclz.ht
 bandwidth grows with the number of threads in all the dots, but
 specially where compression ratio equals 1 (i.e. no compression is
 active, so Blosc is only doing a &lt;em&gt;memory copy&lt;/em&gt; in this case).&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="section" id="blosc-is-getting-ready-for-arm"&gt;
+&lt;/section&gt;
+&lt;section id="blosc-is-getting-ready-for-arm"&gt;
 &lt;h2&gt;Blosc is getting ready for ARM&lt;/h2&gt;
 &lt;p&gt;So ARM is cool indeed, but what we are doing for making it a
 first-class citizen?  For starters, we have created a new &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2"&gt;C-Blosc2&lt;/a&gt; repository that is going to act
@@ -76,8 +76,8 @@ did a terrific work on implementing the &lt;a class="reference external" href="h
 and during the 2-months stage he did not only that, but he also had
 time to do a preliminary version of the bitshuffle filter as well (not
 completely functional yet, but as time allows, he plans to finish that).&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="section" id="some-hints-on-the-measured-increase-in-performance"&gt;
+&lt;/section&gt;
+&lt;section id="some-hints-on-the-measured-increase-in-performance"&gt;
 &lt;h2&gt;Some hints on the measured increase in performance&lt;/h2&gt;
 &lt;p&gt;So you might be asking, how fast can perform Blosc on an ARM with
 NEON?  Well, let's start first by showing how fast it works on a
@@ -141,8 +141,8 @@ the ARM platform has one of the best bandwidth/Watt ratios that you can find
 in the market, and this can have (and will have) profound implications
 on how computations will be made in the short future (as the &lt;a class="reference external" href="http://www.montblanc-project.eu/publications/energy-efficiency-high-performance-computing-mont-blanc-project"&gt;Mont
 Blanc initiative is trying to demonstrate&lt;/a&gt;).&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="section" id="what-to-expect-from-arm-blosc-in-the-forthcoming-months"&gt;
+&lt;/section&gt;
+&lt;section id="what-to-expect-from-arm-blosc-in-the-forthcoming-months"&gt;
 &lt;h2&gt;What to expect from ARM/Blosc in the forthcoming months&lt;/h2&gt;
 &lt;p&gt;This work on supporting ARM platforms is just the beginning.  As ARM
 processors get more spread, and most specially, &lt;a class="reference external" href="http://www.arm.com/products/processors/cortex-a/cortex-a72-processor.php"&gt;faster&lt;/a&gt;,
@@ -155,4 +155,4 @@ truly first-citizen for the Blosc ecosystem.&lt;/p&gt;
 we want to learn from you :) If you want to contribute code to the
 project, your pull requests are very welcome too!  If you like what we
 are doing and want to see more of this, you can also &lt;a class="reference external" href="http://blosc.org/blog/seeking-sponsoship.html"&gt;sponsor us&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;&lt;/div&gt;</description><category>ARM</category><category>Blosc2</category><category>NEON</category><guid>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</guid><pubDate>Wed, 09 Sep 2015 11:32:20 GMT</pubDate></item></channel></rss>
+&lt;/section&gt;&lt;/div&gt;</description><category>ARM</category><category>Blosc2</category><category>NEON</category><guid>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</guid><pubDate>Wed, 09 Sep 2015 11:32:20 GMT</pubDate></item></channel></rss>

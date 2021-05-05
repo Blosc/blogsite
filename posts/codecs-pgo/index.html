@@ -99,8 +99,7 @@
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
 <p>In <a class="reference external" href="http://blosc.org/posts/blosclz-tuning/">past week's post</a> I was showing how the PGO (<a class="reference external" href="https://en.wikipedia.org/wiki/Profile-guided_optimization">Profile Guided Optimization</a>) capability in modern compilers allowed for a good increase in the performance of the BloscLZ codec.  Today I'd like to test how the PGO optimization affected the speed of the same <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/bench.c">synthetic benchmark</a> that comes with C-Blosc2 for the two other of the most used codecs in Blosc: <a class="reference external" href="http://lz4.github.io/lz4/">LZ4</a> and <a class="reference external" href="http://facebook.github.io/zstd/">Zstd</a>.</p>
-<div class="section" id="id1">
-<h2>LZ4</h2>
+<section id="id1"><h2>LZ4</h2>
 <p>First, for GCC without PGO:</p>
 <table>
 <colgroup>
@@ -124,9 +123,7 @@
 </tr></tbody>
 </table>
 <p>We can see here that, similarly to BloscLZ, although the compression speed has not improved significantly, the decompression is now reaching up to 30 GB/s, and for high compression levels, up to 20 GB/s, which is pretty good.</p>
-</div>
-<div class="section" id="id2">
-<h2>Zstd</h2>
+</section><section id="id2"><h2>Zstd</h2>
 <p>First, for GCC without PGO:</p>
 <table>
 <colgroup>
@@ -151,9 +148,7 @@
 </table>
 <p>Wow, in this case we <em>really</em> can see important speedups in both compressing and decompressing.  Specially interesting is the decompression case where, for the higher compression levels, Zstd can reach speeds exceeding 20 GB/s (whereas without PGO it was not able to exceed 12 GB/s) which seems a bit crazy provided the wonderful compression ratios that Zstd is able to achieve.  Beyond any doubt, for Write Once Read Multiple scenarios there is no competitor for Zstd, most specially when PGO is used.</p>
 <p>This confirms that, once again, when performance is critical for your applications, PGO should be part of your daily weaponery.</p>
-</div>
-<div class="section" id="appendix-hardware-and-software-used">
-<h2>Appendix: Hardware and software used</h2>
+</section><section id="appendix-hardware-and-software-used"><h2>Appendix: Hardware and software used</h2>
 <p>For reference, here it is the configuration that I used for producing the plots in this blog entry.</p>
 <ul class="simple">
 <li><p>CPU: Intel Xeon E3-1245 v5 @ 3.50GHz (4 physical cores with hyper-threading)</p></li>
@@ -162,8 +157,7 @@
 <li><p>C-Blosc2: 2.0.0a4.dev (2017-07-11)</p></li>
 <li><p>LZ4 codec: 1.7.5</p></li>
 <li><p>Zstd codec: 1.3.0</p></li>
-</ul>
-</div>
+</ul></section>
 </div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">

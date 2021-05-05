@@ -28,7 +28,7 @@ data. It has been designed to transmit data to the processor cache
 faster than the traditional, non-compressed, direct memory fetch
 approach">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2014-06-18T16:43:07Z">
+<meta property="article:published_time" content="2021-05-05T06:43:07Z">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -82,10 +82,10 @@ approach">
 <p>Blosc is a <strong>high performance compressor optimized for binary
 data</strong>. It has been designed to transmit data to the processor cache
 faster than the traditional, non-compressed, direct memory fetch
-approach via a <code class="docutils literal">memcpy()</code> OS call. Blosc is the first compressor (that
-I'm aware of) that is meant not only to reduce the size of large
-datasets on-disk or in-memory, but also to accelerate memory-bound
-computations (which is typical in vector-vector operations).</p>
+approach via a <code class="docutils literal">memcpy()</code> OS call.  This can be useful not only
+to reduce the size of large datasets on-disk or in-memory, but also to
+accelerate memory-bound computations (which is typical in vector-vector
+operations).</p>
 <p>It uses the <strong>blocking technique</strong> (as described in this <a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf">article</a>) to reduce
 activity on the memory bus as much as possible.  In short, the
 blocking technique works by dividing datasets in blocks that are small
@@ -94,7 +94,8 @@ compression/decompression there. It also leverages <em>SIMD</em> (SSE2)
 and <em>multi-threading</em> capabilities present in nowadays multi-core
 processors so as to accelerate the compression/decompression process
 to a maximum.</p>
-<p>To whet your appetite look at the kind of speed that Blosc can reach:</p>
+<p>To whet your appetite look at the kind of speed that Blosc can reach for BloscLZ,
+its default codec:</p>
 <table>
 <colgroup>
 <col style="width: 50%">
@@ -105,13 +106,22 @@ to a maximum.</p>
 <td><p><img alt="blosclz-d" src="../../images/blosclz-decomp.png"></p></td>
 </tr></tbody>
 </table>
-<p>You can see more benchmarks in <a class="reference external" href="../synthetic-benchmarks/">Synthetic Benchmarks</a>.  Also, you may want to check out this article on <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">Breaking Down Memory Walls</a> with <a class="reference external" href="https://github.com/Blosc/c-blosc2">Blosc2</a>, the next generation of Blosc.</p>
+<p>And here for LZ4, a well known and very fast codec that comes integrated
+(with other codecs too) with Blosc:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-c" src="../../images/lz4-comp.png"></p></td>
+<td><p><img alt="lz4-d" src="../../images/lz4-decomp.png"></p></td>
+</tr></tbody>
+</table>
+<p>You can see more benchmarks in [our blog](<a class="reference external" href="https://www.blosc.org">https://www.blosc.org</a>).  Also, you may want to check out this article on <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">Breaking Down Memory Walls</a>. Also, check <a class="reference external" href="https://github.com/Blosc/c-blosc2">Blosc2</a>, the next generation of Blosc.</p>
 <hr width="50" size="10">
-<div class="figure align-center">
-<img alt="/images/numfocus-sponsored-project.png" src="../../images/numfocus-sponsored-project.png" style="width: 40%;"><p class="caption">Blosc is a fiscally sponsored project of <a class="reference external" href="https://numfocus.org">NumFOCUS</a>, a nonprofit dedicated to supporting the open source scientific computing community. If you like Blosc and want to support our mission, please consider making a <a class="reference external" href="https://numfocus.org/project/blosc">donation</a> to support our efforts.</p>
-</div>
-<div class="section" id="meta-compression-and-other-advantages-over-existing-compressors">
-<h2>Meta-Compression And Other Advantages Over Existing Compressors</h2>
+<figure class="align-center"><img alt="/images/numfocus-sponsored-project.png" src="../../images/numfocus-sponsored-project.png" style="width: 40%;"><figcaption><p>Blosc is a fiscally sponsored project of <a class="reference external" href="https://numfocus.org">NumFOCUS</a>, a nonprofit dedicated to supporting the open source scientific computing community. If you like Blosc and want to support our mission, please consider making a <a class="reference external" href="https://numfocus.org/project/blosc">donation</a> to support our efforts.</p>
+</figcaption></figure><section id="meta-compression-and-other-advantages-over-existing-compressors"><h2>Meta-Compression And Other Advantages Over Existing Compressors</h2>
 <p>Blosc is not like other compressors: it should rather be called a
 <em>meta-compressor*</em>.  This is so because it can use different
 compressors and pre-conditioners (programs that generally improve
@@ -120,17 +130,20 @@ a compressor because it ships with its very own compressor and one
 pre-conditioner, so that it can work in a standalone fashion.</p>
 <p>Currently, Blosc uses <strong>BloscLZ</strong> by default, a compressor heavily
 based on <a class="reference external" href="http://fastlz.org/">FastLZ</a>. From version 1.3 onwards,
-Blosc also includes support for <a class="reference external" href="http://www.lz4.org">LZ4 and LZ4HC</a>, <a class="reference external" href="https://github.com/google/snappy">Snappy</a> , <a class="reference external" href="http://www.zlib.net">Zlib</a> and <a class="reference external" href="http://www.zstd.net">Zstd</a>.  Also,
-it comes with a highly optimized (it
-can use SSE2 instructions, if available) <strong>shuffle</strong> pre-conditioner.
-Different compressors or pre-conditioners may be added in the future.</p>
-<p>Blosc is in charge of coordinating the compressor and pre-conditioners
+Blosc also includes support for <a class="reference external" href="https://github.com/lz4/lz4">LZ4 and LZ4HC</a>, <a class="reference external" href="https://github.com/zlib-ng/zlib-ng">Zlib</a> and
+<a class="reference external" href="https://github.com/facebook/zstd">Zstd</a>.  Also,
+it comes with a highly optimized (it can use SSE2, AVX2 or NEON
+instructions, if available) <strong>shuffle</strong> and <strong>bitshuffle</strong> filters.</p>
+<p>Of course, almost every user has her own needs, and in Blosc2 we are
+working on making possible for her to register different codecs
+and filters so that they can fine tune Blosc for different scenarios.</p>
+<p>Blosc is in charge of coordinating the compressor and filters
 so that they can leverage the blocking technique (described above) as
 well as multi-threaded execution (if several cores are available)
 automatically. That makes that every compressor and pre-conditioner
 will work at very high speeds, even if it was not initially designed
 for doing blocking or multi-threading. For example, Blosc allows you
-to use the classic <code class="docutils literal">Zlib</code> library, but in a multi-threaded mode.</p>
+to use the <code class="docutils literal">Zlib</code> codec, but in a multi-threaded mode.</p>
 <p>Other advantages of Blosc are:</p>
 <ul class="simple">
 <li><p><strong>Meant for binary data</strong>: can take advantage of the type size
@@ -149,9 +162,7 @@ because it uses multi-threading.</p></li>
 </ul>
 <p>When taken together, all these features set Blosc apart from other
 similar solutions.</p>
-</div>
-<div class="section" id="where-can-blosc-be-used">
-<h2>Where Can Blosc Be Used?</h2>
+</section><section id="where-can-blosc-be-used"><h2>Where Can Blosc Be Used?</h2>
 <p>Blosc was initially developed for the needs of the <a class="reference external" href="http://www.pytables.org">PyTables</a> database and the <a class="reference external" href="https://github.com/Blosc/bcolz">bcolz</a> project, although it may be used
 elsewhere where a fast compressor is needed.  Also, you may want to
 use the new <a class="reference external" href="https://github.com/Blosc/bloscpack">Bloscpack format and reference implementation</a> for much easier access to the
@@ -162,9 +173,7 @@ performance to go beyond expected physical limits.  For example,
 indexing and query operations in extremely large tables.  Even
 in-memory computations can go faster in some cases as well (for
 example, see <a class="reference external" href="http://nbviewer.ipython.org/github/pjimenezmateo/Big-Data/blob/master/Disk%20vs%20Memory,%20btable.ipynb">this IPython notebook</a>)</p>
-</div>
-<div class="section" id="is-it-ready-for-production-use">
-<h2>Is It Ready For Production Use?</h2>
+</section><section id="is-it-ready-for-production-use"><h2>Is It Ready For Production Use?</h2>
 <p>Yup, it is!</p>
 <p>The PyTables community has contributed <a class="reference external" href="synthetic-benchmarks.html">testing Blosc very hard</a>, and I'm happy to say that, since version 0.9.5 on,
 it <strong>worked flawlessly compressing and decompressing hundreds of
@@ -176,26 +185,18 @@ contain bugs, but just that <strong>grave bugs are unlikely</strong>.</p>
 stable, and both the <strong>API and the format have been frozen</strong>, so you
 should expect a large degree of stability for your Blosc-powered
 applications.</p>
-</div>
-<div class="section" id="git-repository-downloads-and-ticketing">
-<h2>Git repository, downloads and ticketing</h2>
+</section><section id="git-repository-downloads-and-ticketing"><h2>Git repository, downloads and ticketing</h2>
 <p>The home of the git repository for all Blosc-related libraries is
 located at:</p>
 <p><a class="reference external" href="https://github.com/Blosc">https://github.com/Blosc</a></p>
 <p>You can download the sources and file tickets there too.</p>
-</div>
-<div class="section" id="mailing-list">
-<h2>Mailing list</h2>
+</section><section id="mailing-list"><h2>Mailing list</h2>
 <p>There is an official Blosc blosc mailing list at:</p>
 <p><a class="reference external" href="http://groups.google.com/group/blosc">http://groups.google.com/group/blosc</a></p>
-</div>
-<div class="section" id="python-wrapping">
-<h2>Python wrapping</h2>
+</section><section id="python-wrapping"><h2>Python wrapping</h2>
 <p>You can find a Python package that wraps Blosc at:</p>
 <p><a class="reference external" href="http://github.com/Blosc/python-blosc">http://github.com/Blosc/python-blosc</a></p>
-</div>
-<div class="section" id="command-line-interface">
-<h2>Command line interface</h2>
+</section><section id="command-line-interface"><h2>Command line interface</h2>
 <p>Bloscpack, a serialization format using Blosc and a reference
 implementaion, is equipped with a nice command line tool which can
 compress existing binary datasets on-disk. It also has built-in
@@ -204,21 +205,17 @@ and on-disk:</p>
 <p><a class="reference external" href="https://github.com/Blosc/bloscpack">https://github.com/Blosc/bloscpack</a></p>
 <p>Although the format may still mutate, Bloscpack is making large
 strides for becoming a great utility.</p>
-</div>
-<div class="section" id="want-to-contribute">
-<h2>Want To Contribute?</h2>
+</section><section id="want-to-contribute"><h2>Want To Contribute?</h2>
 <p>Your contribution is very important to make Blosc as solid as possible.  If
 you detect a bug or wish to propose an enhancement, feel free to open a new
 ticket or make yourself heard on the mailinglist.  Also, you can contribute to
 this project by simply compiling and running different benchmark and test
 suites on your own hardware, as explained in the <a class="reference external" href="synthetic-benchmarks">SyntheticBenchmarks page</a>.</p>
-</div>
-<div class="section" id="blosc-license">
-<h2>Blosc License</h2>
+</section><section id="blosc-license"><h2>Blosc License</h2>
 <p>Blosc is free software and released under the terms of the very
 permissive <a class="reference external" href="xhttp://en.wikipedia.org/wiki/MIT_License">BSD license</a>,
 so you can use it in almost any way you want!</p>
-</div>
+</section>
 </div>
     </div>
     
