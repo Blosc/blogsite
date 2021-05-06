@@ -9,8 +9,9 @@
 .. type: text
 
 
-On behalf of the Blosc team, we are happy to announce the first C-Blosc2
-release (Release Candidate 1) that is meant to be reviewed by users.  As of now
+On behalf of the Blosc team, we are happy to announce the `first C-Blosc2
+release (Release Candidate 1) <https://github.com/Blosc/c-blosc2/releases/tag/v2.0.0.rc1>`_
+that is meant to be reviewed by users.  As of now
 we are declaring both the API and the format frozen, and we are seeking for
 feedback from the community so as to better check the library and declare it
 apt for its use in production.
