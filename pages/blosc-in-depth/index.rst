@@ -1,6 +1,6 @@
 .. title: What Is Blosc?
 .. slug: blosc-in-depth
-.. date: 2021-05-05 06:43:07 UTC
+.. date: 2021-05-06 06:43:07 UTC
 .. tags:
 .. link:
 .. description:
@@ -108,6 +108,8 @@ Other advantages of Blosc are:
   on-disk.  They provide an efficient way to persist or transmit the data
   in compressed format.
 
+But there is much more.  For an updated list of features, see our
+`ROADMAP <https://github.com/Blosc/c-blosc2/blob/main/ROADMAP.md>`_.
 When taken together, all these features set Blosc apart from other
 similar solutions.
 
@@ -115,19 +117,19 @@ similar solutions.
 Where Can Blosc Be Used?
 ------------------------
 
-Blosc was initially developed for the needs of the `PyTables
-<http://www.pytables.org>`_ database and the `bcolz
-<https://github.com/Blosc/bcolz>`_ project, and it is the default
-compressor for the popular `Zarr <https://github.com/zarr-developers/zarr-python>`_
-package; but of course it can be used in any situation where a fast compressor is
-needed.
-
 Applications using Blosc are expected to allow I/O performance to go beyond
 expected physical limits.  For example, see this
 `study from one of the Zarr authors <http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html>`_
 to see the benefits of Blosc on accessing compressed data (please note that
 this example is a bit dated, and that new hardware and recent versions of Blosc
 will make the benefits to be better now in the next future.
+
+Blosc was initially developed for the needs of the `PyTables
+<http://www.pytables.org>`_ database and the `bcolz
+<https://github.com/Blosc/bcolz>`_ project, and it is the default
+compressor for the popular `Zarr <https://github.com/zarr-developers/zarr-python>`_
+package.  Of course, it can be used in any situation where a fast compressor is
+needed.
 
 
 Is It Ready For Production Use?

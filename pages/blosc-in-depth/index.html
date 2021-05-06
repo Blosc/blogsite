@@ -28,7 +28,7 @@ data. It has been designed to transmit data to the processor cache
 faster than the traditional, non-compressed, direct memory fetch
 approach">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2021-05-05T06:43:07Z">
+<meta property="article:published_time" content="2021-05-06T06:43:07Z">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -159,19 +159,21 @@ Super-chunks can host data that is up to 2^63 bytes in size.</p></li>
 on-disk.  They provide an efficient way to persist or transmit the data
 in compressed format.</p></li>
 </ul>
-<p>When taken together, all these features set Blosc apart from other
+<p>But there is much more.  For an updated list of features, see our
+<a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/ROADMAP.md">ROADMAP</a>.
+When taken together, all these features set Blosc apart from other
 similar solutions.</p>
 </section><section id="where-can-blosc-be-used"><h2>Where Can Blosc Be Used?</h2>
-<p>Blosc was initially developed for the needs of the <a class="reference external" href="http://www.pytables.org">PyTables</a> database and the <a class="reference external" href="https://github.com/Blosc/bcolz">bcolz</a> project, and it is the default
-compressor for the popular <a class="reference external" href="https://github.com/zarr-developers/zarr-python">Zarr</a>
-package; but of course it can be used in any situation where a fast compressor is
-needed.</p>
 <p>Applications using Blosc are expected to allow I/O performance to go beyond
 expected physical limits.  For example, see this
 <a class="reference external" href="http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html">study from one of the Zarr authors</a>
 to see the benefits of Blosc on accessing compressed data (please note that
 this example is a bit dated, and that new hardware and recent versions of Blosc
 will make the benefits to be better now in the next future.</p>
+<p>Blosc was initially developed for the needs of the <a class="reference external" href="http://www.pytables.org">PyTables</a> database and the <a class="reference external" href="https://github.com/Blosc/bcolz">bcolz</a> project, and it is the default
+compressor for the popular <a class="reference external" href="https://github.com/zarr-developers/zarr-python">Zarr</a>
+package.  Of course, it can be used in any situation where a fast compressor is
+needed.</p>
 </section><section id="is-it-ready-for-production-use"><h2>Is It Ready For Production Use?</h2>
 <p>Yup, it is!</p>
 <p>Blosc is being used in different libraries, compressing data at a rate
