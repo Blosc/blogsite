@@ -9,7 +9,7 @@
 .. type: text
 
 
-I am happy to announce that the Blosc project recently received a donation of $50,000 USD via NumFOCUS.  Now that we have such an important amount available, our plan is to use it in order to continue making Blosc and its ecosystem more useful for the community.  In order to do so, it is important to stress out that our priorities are going to be on the fundamentals of the stack: getting `C-Blosc2 <https://github.com/Blosc/c-blosc2>`_ out of beta and pushing for making `Caterva <https://github.com/Blosc/Caterva>`_ (the multi-dimensional container on top of C-Blosc2) actually usable.
+I am happy to announce that the Blosc project recently received a donation of $50,000 USD from Huawei via NumFOCUS.  Now that we have such an important amount available, our plan is to use it in order to continue making Blosc and its ecosystem more useful for the community.  In order to do so, it is important to stress out that our priorities are going to be on the fundamentals of the stack: getting `C-Blosc2 <https://github.com/Blosc/c-blosc2>`_ out of beta and pushing for making `Caterva <https://github.com/Blosc/Caterva>`_ (the multi-dimensional container on top of C-Blosc2) actually usable.
 
 Critical Tasks: Pushing C-Blosc2 and Caterva
 --------------------------------------------
