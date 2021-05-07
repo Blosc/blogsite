@@ -139,7 +139,7 @@ NAVIGATION_LINKS = {
       #  ("/rss.xml", "RSS feed"),
         ("/pages/blosc-in-depth/", "Blosc In Depth"),
         ("/pages/synthetic-benchmarks/", "Benchmarks"),
-        # ("/pages/professional-services/", "Professional Services"),
+        ("/pages/professional-services/", "Professional Services"),
         ("/pages/donate/", "Donate to Blosc"),
         # ("/blog/", "Blog"),
     ),
