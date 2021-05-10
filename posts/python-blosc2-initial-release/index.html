@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wrapping C-Blosc2 in Python (a beginner's view) | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/python-blosc2-initial-release/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Marta Iborra">
+<link rel="prev" href="../blosc2-ready-general-review/" title="C-Blosc2 Ready for General Review" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="Wrapping C-Blosc2 in Python (a beginner's view)">
+<meta property="og:url" content="http://blosc.org/posts/python-blosc2-initial-release/">
+<meta property="og:description" content="An initial release of the Python wrapper for
+C-Blosc2 is now available in: https://github.com/Blosc/python-blosc2.
+In this blog I will try to explain some of the most difficult aspects that I had to l">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-05-10T07:32:20Z">
+<meta property="article:tag" content="blosc2 python">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="https://c-blosc2.readthedocs.io/">Documentation</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Wrapping C-Blosc2 in Python (a beginner's view)</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/marta-iborra/">Marta Iborra</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2021-05-10T07:32:20Z" itemprop="datePublished" title="2021-05-10 07:32">2021-05-10 07:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/python-blosc2-initial-release.html">Comments</a>
+
+
+            
+
+        </p>
+</div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>An initial release of the Python wrapper for
+C-Blosc2 is now available in: <a class="reference external" href="https://github.com/Blosc/python-blosc2">https://github.com/Blosc/python-blosc2</a>.
+In this blog I will try to explain some of the most difficult aspects that I had to learn in doing this
+and how I solved them.</p>
+<p>This work is being made thanks to a grant from the Python Software Foundation.</p>
+<section id="python-views"><h2>Python views</h2>
+<p>At university, the first programming language that I learned was Python. But because programming was
+new for the majority of the class the subject only covered the basics: basic statements and classes.
+And although these were easy to understand, the views were unknown to me (until now).</p>
+<p>To explain what the views are, let’s suppose we have the following code in Python:</p>
+<pre class="literal-block">&gt;&gt;&gt; import sys
+&gt;&gt;&gt; a = []
+&gt;&gt;&gt; b = a
+&gt;&gt;&gt; sys.getrefcount(a)
+3</pre>
+<p>The reference count for the object is 3: a, b and the argument passed to
+sys.getrefcount().</p>
+<p>Basically, to avoid making copies of a same variable, Python uses views. Every variable has its counter and until the counter is 0, the variable is not deleted.
+But that means that two threads cannot access the counter at the same time.  Because having a lock for every variable would be inefficient and could produce deadlocks (which means that several threads are waiting for each other), the GIL was created.  So GIL was my next thing to learn.</p>
+</section><section id="gil-and-cython"><h2>GIL and Cython</h2>
+<p>GIL stands for Global Interpreter Lock. With a single lock
+on the interpreter there are no deadlocks. But the execution of any
+Python program must acquire the interpreter lock, which prevents some
+programs to take advantage of the multi-threading execution.</p>
+<p>When writing C extensions, this lock is very useful because
+it can be released. Thus, the program can be more efficient (i.e.
+threads can actually run in parallel).
+To write a function with the GIL I spent many time reading about it.
+Unfortunately, nothing seemed to expain what I wanted to do until
+I found this nice
+<a class="reference external" href="http://nicolas-hug.com/blog/cython_notes#">blog</a>
+from
+Nicolas Hug
+in which he explains the 3 rules you have to follow to make Cython release the GIL.</p>
+<p>First of all, Cython needs to know which C functions that were imported are thread-safe.
+This is done by using the <cite>nogil</cite> statement in the function declaration.
+Then, inside the function the <cite>with nogil</cite> statement lets Cython know that this block is
+going to be executed with the GIL released. But to make that code block safe,
+there cannot be any Python interaction inside that block.</p>
+<p>To understand it better, an example is shown below:</p>
+<pre class="literal-block">cdef extern from "math_operation.h":
+    int add(int a, int b)nogil
+
+cpdef sum(src, dest):
+    cdef int len_src = len(src)
+    cdef int len_dest = len(dest)
+    cdef int result
+    with nogil:
+        # Code with the GIL released
+        result = add(len_src, len_dest)
+    # Code with the GIL, any Python interaction can be done here</pre>
+<p>The function <cite>sum</cite> returns the result of adding the length of <cite>src</cite> and <cite>dest</cite>.
+As you can see, the function has been defined with the <cite>cpdef</cite> statement
+instead of the <cite>def</cite>. The <cite>c</cite> lets Cython know that
+this function can be called with C. So this is necessary when writing a
+function with the GIL released, otherwise you will be trying to execute a Python
+program without the GIL (which, as explained previously cannot be done).
+Notice that <cite>len_src</cite> and <cite>len_dest</cite> have also been defined as C integers with the
+<cite>cdef int</cite> statement. If not, it would not be possible to work with them
+with the GIL released (the <cite>with nogil</cite> block).</p>
+<p>On the other hand, the <cite>p</cite> lets Cython know that this function can be called through Python.
+This does not have to be done always, only when you want to call that function from Python.</p>
+</section><section id="cython-typed-memoryviews"><h2>Cython typed memoryviews</h2>
+<p>One of the main differences between  the python-blosc
+and python-blosc2 API, is that the functions <cite>compress_ptr</cite>
+and <cite>decompress_ptr</cite> are no longer supported. We decided
+to do so, because the Pickle protocol 5 already makes
+an optimization of the copies. That way, we could have
+a similar performance for <cite>compress_ptr</cite>
+and <cite>decompress_ptr</cite> but with the functions <cite>pack</cite>
+and <cite>unpack</cite>.</p>
+<p>However, when timing the functions I realised that
+in the majority of the cases,
+although
+the <cite>compress</cite> function from python-blosc2 was faster
+than the <cite>compress_ptr</cite>,
+the
+<cite>decompress</cite> function was slower than the <cite>decompress_ptr</cite>.
+Thus I checked the code to see if the
+speed could somehow be
+increased.</p>
+<p>Originally, the code used the Python Buffer Protocol.
+which is part of the Python/C API. The Python Buffer Protocol lets
+you (among other things) obtain a
+pointer to the raw data of an object. But because
+it wasn't clear for me wether it needed to do a copy
+or not
+we decided to work with Cython typed memoryviews.</p>
+<p>Cython typed memoryviews are very similar to
+Python memory views, but with the main difference
+that the
+first ones are a C-level type and therefore
+they do not have much Python overhead.
+Because it is a C-level type you have to know
+the dimension of the buffer from which you want to
+obtain
+the typed memoryview as well as its data type.</p>
+<p>The shape dimension of the buffer is expressed writing
+as many <code class="docutils literal">:</code> between brackets as dimensions it has.
+If the memory is allocated contiguously, you can write
+<code class="docutils literal">::1</code> instead in the corresponding dimension.
+On the other hand, the type is expressed as you would
+do it in Cython.
+In the following code, you can see an example for a
+one-dimensional numpy array:</p>
+<pre class="literal-block">import numpy as np
+arr = np.ones((10**6,), dtype=np.double)
+cdef double [:] typed_view = arr</pre>
+<p>However, if you want to define a function that receives
+an object whose type may be unknown,
+you will have to create a
+Python memoryview and then cast it into the
+type you wish as in the next example:</p>
+<pre class="literal-block"># Get a Python memoryview from an object
+mem_view = memoryview(object)
+# Cast that memory view into an unsigned char memoryview
+cdef unsigned char[:]typed_view = mem_view.cast('B')</pre>
+<p>The 'B' indicates to cast the memoryview type into an
+unsigned char.</p>
+<p>But if I run the latter code for a binary Python string,
+it produces a runtime error. It
+took me 10 minutes to fix the error adding the
+<cite>const</cite> statement to the definition of the Cython
+typed memoryview (as shown below), but I spent two
+days trying to
+understand the error and its solution.</p>
+<pre class="literal-block"># Get a Python memoryview from an object
+mem_view = memoryview(object)
+# Cast that memory view into an unsigned char memoryview
+cdef const unsigned char[:]typed_view = mem_view.cast('B')</pre>
+<p>The reason why the <cite>const</cite> statement fixed it, is that a binary Python string is
+a read-only buffer. By declaring the
+typed memoryview to <cite>const</cite>, Cython is being told that
+the object from the memory view is a read-only buffer
+so that it cannot change it.</p>
+</section><section id="conclusions"><h2>Conclusions</h2>
+<p>So far, my experience wrapping <cite>C-Blosc2</cite> has had
+some ups and downs.</p>
+<p>One method that I use whenever I learn something new is
+to write down a summary of what I read. Sometimes is almost a
+copy (therefore some people may find it useless), but
+it always works really well for me.
+It helps me connect the ideas better or
+to build a global idea of what I have or want to do.</p>
+<p>Another aspect I realized when doing this wrapper is that because
+I am a stubborn person, I usually tend to
+force myself to try to understand something and get frustrated
+if I do not.
+However,
+I have to recognize that sometimes it is better to
+forget about it until the next day. Your brain will organize
+your ideas at night so that you can invest better your time
+the next morning.</p>
+<p>But maybe the most difficult
+part for me was the beginning, and therefore
+I have to thank Francesc Alted and
+Aleix Alcacer for giving me a push into the not always easy</p>
+<div class="system-message">
+<p class="system-message-title">System Message: ERROR/3 (<span class="docutils literal">&lt;string&gt;</span>, line 198)</p>
+<p>Unexpected indentation.</p>
+</div>
+<blockquote>
+<p>world of Python extensions.</p>
+</blockquote>
+</section>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosc2-python/" rel="tag">blosc2 python</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../blosc2-ready-general-review/" rel="prev" title="C-Blosc2 Ready for General Review">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/python-blosc2-initial-release/",
+        disqus_title="Wrapping C-Blosc2 in Python (a beginner's view)",
+        disqus_identifier="cache/posts/python-blosc2-initial-release.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

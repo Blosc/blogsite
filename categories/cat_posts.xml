@@ -1,5 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about posts)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/cat_posts.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Mon, 10 May 2021 12:25:22 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>C-Blosc2 Ready for General Review</title><link>http://blosc.org/posts/blosc2-ready-general-review/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;On behalf of the Blosc team, we are happy to announce the &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/releases/tag/v2.0.0.rc1"&gt;first C-Blosc2
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about posts)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/cat_posts.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Mon, 10 May 2021 12:45:25 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Wrapping C-Blosc2 in Python (a beginner's view)</title><link>http://blosc.org/posts/python-blosc2-initial-release/</link><dc:creator>Marta Iborra</dc:creator><description>&lt;div&gt;&lt;p&gt;An initial release of the Python wrapper for
+C-Blosc2 is now available in: &lt;a class="reference external" href="https://github.com/Blosc/python-blosc2"&gt;https://github.com/Blosc/python-blosc2&lt;/a&gt;.
+In this blog I will try to explain some of the most difficult aspects that I had to learn in doing this
+and how I solved them.&lt;/p&gt;
+&lt;p&gt;This work is being made thanks to a grant from the Python Software Foundation.&lt;/p&gt;
+&lt;section id="python-views"&gt;
+&lt;h2&gt;Python views&lt;/h2&gt;
+&lt;p&gt;At university, the first programming language that I learned was Python. But because programming was
+new for the majority of the class the subject only covered the basics: basic statements and classes.
+And although these were easy to understand, the views were unknown to me (until now).&lt;/p&gt;
+&lt;p&gt;To explain what the views are, let’s suppose we have the following code in Python:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;&amp;gt;&amp;gt;&amp;gt; import sys
+&amp;gt;&amp;gt;&amp;gt; a = []
+&amp;gt;&amp;gt;&amp;gt; b = a
+&amp;gt;&amp;gt;&amp;gt; sys.getrefcount(a)
+3&lt;/pre&gt;
+&lt;p&gt;The reference count for the object is 3: a, b and the argument passed to
+sys.getrefcount().&lt;/p&gt;
+&lt;p&gt;Basically, to avoid making copies of a same variable, Python uses views. Every variable has its counter and until the counter is 0, the variable is not deleted.
+But that means that two threads cannot access the counter at the same time.  Because having a lock for every variable would be inefficient and could produce deadlocks (which means that several threads are waiting for each other), the GIL was created.  So GIL was my next thing to learn.&lt;/p&gt;
+&lt;/section&gt;
+&lt;section id="gil-and-cython"&gt;
+&lt;h2&gt;GIL and Cython&lt;/h2&gt;
+&lt;p&gt;GIL stands for Global Interpreter Lock. With a single lock
+on the interpreter there are no deadlocks. But the execution of any
+Python program must acquire the interpreter lock, which prevents some
+programs to take advantage of the multi-threading execution.&lt;/p&gt;
+&lt;p&gt;When writing C extensions, this lock is very useful because
+it can be released. Thus, the program can be more efficient (i.e.
+threads can actually run in parallel).
+To write a function with the GIL I spent many time reading about it.
+Unfortunately, nothing seemed to expain what I wanted to do until
+I found this nice
+&lt;a class="reference external" href="http://nicolas-hug.com/blog/cython_notes#"&gt;blog&lt;/a&gt;
+from
+Nicolas Hug
+in which he explains the 3 rules you have to follow to make Cython release the GIL.&lt;/p&gt;
+&lt;p&gt;First of all, Cython needs to know which C functions that were imported are thread-safe.
+This is done by using the &lt;cite&gt;nogil&lt;/cite&gt; statement in the function declaration.
+Then, inside the function the &lt;cite&gt;with nogil&lt;/cite&gt; statement lets Cython know that this block is
+going to be executed with the GIL released. But to make that code block safe,
+there cannot be any Python interaction inside that block.&lt;/p&gt;
+&lt;p&gt;To understand it better, an example is shown below:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;cdef extern from "math_operation.h":
+    int add(int a, int b)nogil
+
+cpdef sum(src, dest):
+    cdef int len_src = len(src)
+    cdef int len_dest = len(dest)
+    cdef int result
+    with nogil:
+        # Code with the GIL released
+        result = add(len_src, len_dest)
+    # Code with the GIL, any Python interaction can be done here&lt;/pre&gt;
+&lt;p&gt;The function &lt;cite&gt;sum&lt;/cite&gt; returns the result of adding the length of &lt;cite&gt;src&lt;/cite&gt; and &lt;cite&gt;dest&lt;/cite&gt;.
+As you can see, the function has been defined with the &lt;cite&gt;cpdef&lt;/cite&gt; statement
+instead of the &lt;cite&gt;def&lt;/cite&gt;. The &lt;cite&gt;c&lt;/cite&gt; lets Cython know that
+this function can be called with C. So this is necessary when writing a
+function with the GIL released, otherwise you will be trying to execute a Python
+program without the GIL (which, as explained previously cannot be done).
+Notice that &lt;cite&gt;len_src&lt;/cite&gt; and &lt;cite&gt;len_dest&lt;/cite&gt; have also been defined as C integers with the
+&lt;cite&gt;cdef int&lt;/cite&gt; statement. If not, it would not be possible to work with them
+with the GIL released (the &lt;cite&gt;with nogil&lt;/cite&gt; block).&lt;/p&gt;
+&lt;p&gt;On the other hand, the &lt;cite&gt;p&lt;/cite&gt; lets Cython know that this function can be called through Python.
+This does not have to be done always, only when you want to call that function from Python.&lt;/p&gt;
+&lt;/section&gt;
+&lt;section id="cython-typed-memoryviews"&gt;
+&lt;h2&gt;Cython typed memoryviews&lt;/h2&gt;
+&lt;p&gt;One of the main differences between  the python-blosc
+and python-blosc2 API, is that the functions &lt;cite&gt;compress_ptr&lt;/cite&gt;
+and &lt;cite&gt;decompress_ptr&lt;/cite&gt; are no longer supported. We decided
+to do so, because the Pickle protocol 5 already makes
+an optimization of the copies. That way, we could have
+a similar performance for &lt;cite&gt;compress_ptr&lt;/cite&gt;
+and &lt;cite&gt;decompress_ptr&lt;/cite&gt; but with the functions &lt;cite&gt;pack&lt;/cite&gt;
+and &lt;cite&gt;unpack&lt;/cite&gt;.&lt;/p&gt;
+&lt;p&gt;However, when timing the functions I realised that
+in the majority of the cases,
+although
+the &lt;cite&gt;compress&lt;/cite&gt; function from python-blosc2 was faster
+than the &lt;cite&gt;compress_ptr&lt;/cite&gt;,
+the
+&lt;cite&gt;decompress&lt;/cite&gt; function was slower than the &lt;cite&gt;decompress_ptr&lt;/cite&gt;.
+Thus I checked the code to see if the
+speed could somehow be
+increased.&lt;/p&gt;
+&lt;p&gt;Originally, the code used the Python Buffer Protocol.
+which is part of the Python/C API. The Python Buffer Protocol lets
+you (among other things) obtain a
+pointer to the raw data of an object. But because
+it wasn't clear for me wether it needed to do a copy
+or not
+we decided to work with Cython typed memoryviews.&lt;/p&gt;
+&lt;p&gt;Cython typed memoryviews are very similar to
+Python memory views, but with the main difference
+that the
+first ones are a C-level type and therefore
+they do not have much Python overhead.
+Because it is a C-level type you have to know
+the dimension of the buffer from which you want to
+obtain
+the typed memoryview as well as its data type.&lt;/p&gt;
+&lt;p&gt;The shape dimension of the buffer is expressed writing
+as many &lt;code class="docutils literal"&gt;:&lt;/code&gt; between brackets as dimensions it has.
+If the memory is allocated contiguously, you can write
+&lt;code class="docutils literal"&gt;::1&lt;/code&gt; instead in the corresponding dimension.
+On the other hand, the type is expressed as you would
+do it in Cython.
+In the following code, you can see an example for a
+one-dimensional numpy array:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;import numpy as np
+arr = np.ones((10**6,), dtype=np.double)
+cdef double [:] typed_view = arr&lt;/pre&gt;
+&lt;p&gt;However, if you want to define a function that receives
+an object whose type may be unknown,
+you will have to create a
+Python memoryview and then cast it into the
+type you wish as in the next example:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;# Get a Python memoryview from an object
+mem_view = memoryview(object)
+# Cast that memory view into an unsigned char memoryview
+cdef unsigned char[:]typed_view = mem_view.cast('B')&lt;/pre&gt;
+&lt;p&gt;The 'B' indicates to cast the memoryview type into an
+unsigned char.&lt;/p&gt;
+&lt;p&gt;But if I run the latter code for a binary Python string,
+it produces a runtime error. It
+took me 10 minutes to fix the error adding the
+&lt;cite&gt;const&lt;/cite&gt; statement to the definition of the Cython
+typed memoryview (as shown below), but I spent two
+days trying to
+understand the error and its solution.&lt;/p&gt;
+&lt;pre class="literal-block"&gt;# Get a Python memoryview from an object
+mem_view = memoryview(object)
+# Cast that memory view into an unsigned char memoryview
+cdef const unsigned char[:]typed_view = mem_view.cast('B')&lt;/pre&gt;
+&lt;p&gt;The reason why the &lt;cite&gt;const&lt;/cite&gt; statement fixed it, is that a binary Python string is
+a read-only buffer. By declaring the
+typed memoryview to &lt;cite&gt;const&lt;/cite&gt;, Cython is being told that
+the object from the memory view is a read-only buffer
+so that it cannot change it.&lt;/p&gt;
+&lt;/section&gt;
+&lt;section id="conclusions"&gt;
+&lt;h2&gt;Conclusions&lt;/h2&gt;
+&lt;p&gt;So far, my experience wrapping &lt;cite&gt;C-Blosc2&lt;/cite&gt; has had
+some ups and downs.&lt;/p&gt;
+&lt;p&gt;One method that I use whenever I learn something new is
+to write down a summary of what I read. Sometimes is almost a
+copy (therefore some people may find it useless), but
+it always works really well for me.
+It helps me connect the ideas better or
+to build a global idea of what I have or want to do.&lt;/p&gt;
+&lt;p&gt;Another aspect I realized when doing this wrapper is that because
+I am a stubborn person, I usually tend to
+force myself to try to understand something and get frustrated
+if I do not.
+However,
+I have to recognize that sometimes it is better to
+forget about it until the next day. Your brain will organize
+your ideas at night so that you can invest better your time
+the next morning.&lt;/p&gt;
+&lt;p&gt;But maybe the most difficult
+part for me was the beginning, and therefore
+I have to thank Francesc Alted and
+Aleix Alcacer for giving me a push into the not always easy&lt;/p&gt;
+&lt;div class="system-message"&gt;
+&lt;p class="system-message-title"&gt;System Message: ERROR/3 (&lt;span class="docutils literal"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;, line 198)&lt;/p&gt;
+&lt;p&gt;Unexpected indentation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;world of Python extensions.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/section&gt;&lt;/div&gt;</description><category>blosc2 python</category><guid>http://blosc.org/posts/python-blosc2-initial-release/</guid><pubDate>Mon, 10 May 2021 07:32:20 GMT</pubDate></item><item><title>C-Blosc2 Ready for General Review</title><link>http://blosc.org/posts/blosc2-ready-general-review/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;On behalf of the Blosc team, we are happy to announce the &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/releases/tag/v2.0.0.rc1"&gt;first C-Blosc2
 release (Release Candidate 1)&lt;/a&gt;
 that is meant to be reviewed by users.  As of now
 we are declaring both the API and the format frozen, and we are seeking for
@@ -313,15 +484,15 @@ to the Blosc project via the NumFOCUS Foundation: &lt;a class="reference externa
 &lt;h2&gt;Small intro to wheels&lt;/h2&gt;
 &lt;p&gt;Wheels are an advantageous alternative to distribute Python (but also pure C) packages which contain C (or Cython) source code, and hence, need a compiler.  For those that are not familiar to wheels, here it comes a small tutorial on how to create and use wheels.&lt;/p&gt;
 &lt;p&gt;First, let's recall the traditional way to build a source distribution:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_17cc3e0b68fd4d3d804b5c2f315704d5-1" name="rest_code_17cc3e0b68fd4d3d804b5c2f315704d5-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python setup.py sdist
+&lt;pre class="code console"&gt;&lt;a id="rest_code_bfd5fd8e74f04e1cbe9df0972b53dac8-1" name="rest_code_bfd5fd8e74f04e1cbe9df0972b53dac8-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python setup.py sdist
 &lt;/pre&gt;&lt;p&gt;To build a wheel, the process is quite similar:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_c55908831ff74478ab700f02074090a3-1" name="rest_code_c55908831ff74478ab700f02074090a3-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python setup.py bdist_wheel
+&lt;pre class="code console"&gt;&lt;a id="rest_code_071098ecd29d47c68a71dc8507cdb225-1" name="rest_code_071098ecd29d47c68a71dc8507cdb225-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python setup.py bdist_wheel
 &lt;/pre&gt;&lt;p&gt;To install a package via pip (pip decides whether install a from wheel or compile from the source package; wheels have obviously more priority):&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_e1f9687975ef4dc8af190a8c0800c849-1" name="rest_code_e1f9687975ef4dc8af190a8c0800c849-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a id="rest_code_3d08a94000d14f8b8713add9a8df8878-1" name="rest_code_3d08a94000d14f8b8713add9a8df8878-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;To install a package forcing to use source distribution:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_945dfdfbd7224487b896d70958a1ee62-1" name="rest_code_945dfdfbd7224487b896d70958a1ee62-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install --no-binary &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a id="rest_code_271d7a1496b9498cb0538095fd06fcf5-1" name="rest_code_271d7a1496b9498cb0538095fd06fcf5-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install --no-binary &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;To install a package forcing to use wheels:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_3b7121a202534b63a9bb8123386727a8-1" name="rest_code_3b7121a202534b63a9bb8123386727a8-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install --only-binary &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a id="rest_code_ef5669d9c34e4bd69dd0715c0ca968c4-1" name="rest_code_ef5669d9c34e4bd69dd0715c0ca968c4-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;python -m pip install --only-binary &lt;span class="o"&gt;{&lt;/span&gt;package&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/section&gt;
 &lt;section id="different-types-of-wheels"&gt;
 &lt;h2&gt;Different types of wheels&lt;/h2&gt;
@@ -343,26 +514,26 @@ to the Blosc project via the NumFOCUS Foundation: &lt;a class="reference externa
 &lt;h2&gt;Binaries for C-Blosc libraries are included&lt;/h2&gt;
 &lt;p&gt;Although wheels were meant for Python packages, nothing prevents adding more stuff to them.  In particular, we are not only distributing python-blosc binary extensions in our wheels, but also binaries for the C-Blosc library.  This way, people willing to use the C-Blosc library can make use of these wheels to install the necessary development files.&lt;/p&gt;
 &lt;p&gt;First, install the binary wheel via PyPI without the need to manually compile the thing:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_afc184eec2ed41bfbf24c2ed75d807e7-1" name="rest_code_afc184eec2ed41bfbf24c2ed75d807e7-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;pip install --only-binary blosc
+&lt;pre class="code console"&gt;&lt;a id="rest_code_85fd4ad6989a428a8fc4ed62e3546d82-1" name="rest_code_85fd4ad6989a428a8fc4ed62e3546d82-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;pip install --only-binary blosc
 &lt;/pre&gt;&lt;p&gt;Now, let's suppose that we want to compile the &lt;cite&gt;c-blosc/examples/many_compressors.c&lt;/cite&gt; on Linux:&lt;/p&gt;
 &lt;p&gt;First, you have to look where the wheels directory is located.  In our case:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_dd5543df84464ace881e6dbebeeae722-1" name="rest_code_dd5543df84464ace881e6dbebeeae722-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nv"&gt;WHEEL_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/soscar/miniconda3
-&lt;a id="rest_code_dd5543df84464ace881e6dbebeeae722-2" name="rest_code_dd5543df84464ace881e6dbebeeae722-2"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/lib   &lt;span class="c1"&gt;# note that you need the LD_LIBRARY_PATH env variable&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a id="rest_code_0ffd792b34384ca2934995b50fc73ee8-1" name="rest_code_0ffd792b34384ca2934995b50fc73ee8-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nv"&gt;WHEEL_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/soscar/miniconda3
+&lt;a id="rest_code_0ffd792b34384ca2934995b50fc73ee8-2" name="rest_code_0ffd792b34384ca2934995b50fc73ee8-2"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/lib   &lt;span class="c1"&gt;# note that you need the LD_LIBRARY_PATH env variable&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;For the actual compilation, you need to pass the directory for the include and lib directories:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_33c3230de41f4ad19691f799cf4854ef-1" name="rest_code_33c3230de41f4ad19691f799cf4854ef-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;gcc many_compressors.c -I&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/include -o many_compressors -L&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/lib -lblosc
+&lt;pre class="code console"&gt;&lt;a id="rest_code_de020bd2fbe14f758648fd20c98cc26e-1" name="rest_code_de020bd2fbe14f758648fd20c98cc26e-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;gcc many_compressors.c -I&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/include -o many_compressors -L&lt;span class="nv"&gt;$WHEEL_DIR&lt;/span&gt;/lib -lblosc
 &lt;/pre&gt;&lt;p&gt;Finally, run the resulting binary and hopefully you will see something like:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-1" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;./many_compressors
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-2" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-3" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using 4 threads (previously using 1)&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-4" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-4"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using blosclz compressor&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-5" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-5"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 37816 (105.8x)&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-6" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-6"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-7" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-7"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using lz4 compressor&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-8" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-8"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 37938 (105.4x)&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-9" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-9"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-10" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-10"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using lz4hc compressor&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-11" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-11"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 27165 (147.2x)&lt;/span&gt;
-&lt;a id="rest_code_d8d4c4c8cd61468fbbac713be86865b1-12" name="rest_code_d8d4c4c8cd61468fbbac713be86865b1-12"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-1" name="rest_code_0096e3b4e8e343a79008841aca921eed-1"&gt;&lt;/a&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;./many_compressors
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-2" name="rest_code_0096e3b4e8e343a79008841aca921eed-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-3" name="rest_code_0096e3b4e8e343a79008841aca921eed-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using 4 threads (previously using 1)&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-4" name="rest_code_0096e3b4e8e343a79008841aca921eed-4"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using blosclz compressor&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-5" name="rest_code_0096e3b4e8e343a79008841aca921eed-5"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 37816 (105.8x)&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-6" name="rest_code_0096e3b4e8e343a79008841aca921eed-6"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-7" name="rest_code_0096e3b4e8e343a79008841aca921eed-7"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using lz4 compressor&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-8" name="rest_code_0096e3b4e8e343a79008841aca921eed-8"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 37938 (105.4x)&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-9" name="rest_code_0096e3b4e8e343a79008841aca921eed-9"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-10" name="rest_code_0096e3b4e8e343a79008841aca921eed-10"&gt;&lt;/a&gt;&lt;span class="go"&gt;Using lz4hc compressor&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-11" name="rest_code_0096e3b4e8e343a79008841aca921eed-11"&gt;&lt;/a&gt;&lt;span class="go"&gt;Compression: 4000000 -&amp;gt; 27165 (147.2x)&lt;/span&gt;
+&lt;a id="rest_code_0096e3b4e8e343a79008841aca921eed-12" name="rest_code_0096e3b4e8e343a79008841aca921eed-12"&gt;&lt;/a&gt;&lt;span class="go"&gt;Succesful roundtrip!&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;For more details, including compiling with binary wheels on other platforms than Linux, see: &lt;a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst"&gt;https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst&lt;/a&gt;.&lt;/p&gt;
 &lt;/section&gt;
 &lt;section id="final-remarks"&gt;
@@ -553,10 +724,10 @@ to the Blosc project via the NumFOCUS Foundation: &lt;a class="reference externa
 &lt;/section&gt;&lt;/div&gt;</description><category>donation blosc2 caterva</category><guid>http://blosc.org/posts/blosc-donation/</guid><pubDate>Thu, 20 Feb 2020 01:32:20 GMT</pubDate></item><item><title>Blosc2-Meets-Rome</title><link>http://blosc.org/posts/blosc2-meets-rome/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Zen_2"&gt;Zen 2&lt;/a&gt; micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:&lt;/p&gt;
 &lt;img alt="/images/blosc2-meets-rome/amd-rome-arch-multi-die.png" class="align-center" src="http://blosc.org/images/blosc2-meets-rome/amd-rome-arch-multi-die.png"&gt;
 &lt;p&gt;Such a separation of dies for I/O and computing has quite &lt;a class="reference external" href="https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm/3"&gt;large consequences in terms of scalability when accessing memory&lt;/a&gt;, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous &lt;a class="reference external" href="https://blosc.org/posts/breaking-memory-walls/"&gt;Breaking Down Memory Walls&lt;/a&gt;.  This essentially boils down to compute an aggregation with a simple loop like:&lt;/p&gt;
-&lt;pre class="code c"&gt;&lt;a id="rest_code_ac5368f6f0ff4531a83ec645c1f7b00a-1" name="rest_code_ac5368f6f0ff4531a83ec645c1f7b00a-1"&gt;&lt;/a&gt;&lt;span class="cp"&gt;#pragma omp parallel for reduction (+:sum)&lt;/span&gt;
-&lt;a id="rest_code_ac5368f6f0ff4531a83ec645c1f7b00a-2" name="rest_code_ac5368f6f0ff4531a83ec645c1f7b00a-2"&gt;&lt;/a&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-&lt;a id="rest_code_ac5368f6f0ff4531a83ec645c1f7b00a-3" name="rest_code_ac5368f6f0ff4531a83ec645c1f7b00a-3"&gt;&lt;/a&gt;  &lt;span class="n"&gt;sum&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;udata&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
-&lt;a id="rest_code_ac5368f6f0ff4531a83ec645c1f7b00a-4" name="rest_code_ac5368f6f0ff4531a83ec645c1f7b00a-4"&gt;&lt;/a&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;pre class="code c"&gt;&lt;a id="rest_code_6261651569a44b63af5dc624f318434e-1" name="rest_code_6261651569a44b63af5dc624f318434e-1"&gt;&lt;/a&gt;&lt;span class="cp"&gt;#pragma omp parallel for reduction (+:sum)&lt;/span&gt;
+&lt;a id="rest_code_6261651569a44b63af5dc624f318434e-2" name="rest_code_6261651569a44b63af5dc624f318434e-2"&gt;&lt;/a&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;a id="rest_code_6261651569a44b63af5dc624f318434e-3" name="rest_code_6261651569a44b63af5dc624f318434e-3"&gt;&lt;/a&gt;  &lt;span class="n"&gt;sum&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;udata&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;a id="rest_code_6261651569a44b63af5dc624f318434e-4" name="rest_code_6261651569a44b63af5dc624f318434e-4"&gt;&lt;/a&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;As described in the original blog post, the different &lt;cite&gt;udata&lt;/cite&gt; arrays are just chunks of the original dataset that are decompressed just in time for performing the partial aggregation operation; the final result is indeed the sum of all the partial aggregations.  Also we have seen that the time to execute the aggregation is going to depend quite a lot on the kind of data that is decompressed: carefully chosen synthetic data can be decompressed much more quickly than real data.  But syntehtic data is nevertheless interesting as it allows for a roof analysis of where the performance can grow up to.&lt;/p&gt;
 &lt;p&gt;In this blog, we are going to see how the AMD EPYC 7402 (Rome), a 24-core processor performs on both synthetic and real data.&lt;/p&gt;
 &lt;section id="aggregating-the-synthetic-dataset-on-amd-epyc-7402-24-core"&gt;
@@ -671,77 +842,4 @@ to the Blosc project via the NumFOCUS Foundation: &lt;a class="reference externa
 &lt;blockquote&gt;
 &lt;p&gt;** Enjoy Data!**&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;/section&gt;&lt;/div&gt;</description><category>blosc2 beta</category><guid>http://blosc.org/posts/blosc2-first-beta/</guid><pubDate>Wed, 14 Aug 2019 01:32:20 GMT</pubDate></item><item><title>Is ARM Hungry Enough to Eat Intel's Favorite Pie?</title><link>http://blosc.org/posts/arm-memory-walls-followup/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: This entry is a follow-up of the &lt;a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/"&gt;Breaking Down Memory Walls&lt;/a&gt; blog.  Please make sure that you have read it if you want to fully understand all the benchmarks performed here.&lt;/p&gt;
-&lt;p&gt;At the beginning of the 1990s the computing world was mainly using RISC (Reduced Instruction Set Computer) architectures, namely SPARC, Alpha, Power and MIPS CPUs for performing serious calculations and Intel CPUs were seen as something that was appropriate just to run essentially personal applications on PCs, but almost nobody was thinking about them as a serious contender for server environments.  But Intel had an argument that almost nobody was ready to recognize how important it could become; with its dominance of the PC market it quickly ranked to be the largest CPU maker in the world and, with such an enormous revenue, Intel played its cards well and, by the beginning of 2000s, they were able to make of its CISC architecture (Complex Instruction Set Computer) the one with the best compute/price ratio, clearly beating the RISC offerings at that time.  That amazing achievement shut the mouths of CISC critics (to the point that nowadays almost everybody recognizes that performance has very little to do with using RISC or CISC) and cleared the path for Intel to dominate not only the PC world, but also the world of server computing for the next 20 years.&lt;/p&gt;
-&lt;p&gt;Fast forward to the beginning of 2010s, with Intel clearly dominating the market of CPUs for servers.  However, at the same time something potentially disruptive happened: the market for mobile and embedded systems exploded making &lt;a class="reference external" href="https://cacm.acm.org/magazines/2011/5/107684-an-interview-with-steve-furber/fulltext"&gt;the ARM architecture the most widely used architecture in this area&lt;/a&gt;.  By 2017, with over 100 billion ARM processors produced, ARM was already the most widely used architecture in the world.  Now, the smart reader will have noted here a clear parallelism between the situation of Intel at the end of 1990s and ARM at the end of 2010s: both companies were responsible of the design of the most used CPUs in the world.  There was an important difference though: while Intel was able to implement its own designs, ARM was leaving the implementation job to third party vendors.  Of course, this fact will have consequences on the way ARM will be competing with Intel (see below).&lt;/p&gt;
-&lt;section id="arm-plans-for-improving-cpu-performance"&gt;
-&lt;h2&gt;ARM Plans for Improving CPU Performance&lt;/h2&gt;
-&lt;p&gt;So with ARM CPUs dominating the world of mobile and embedded, the question is whether ARM would be interested in having a stab at the client market (laptops and PC desktops) and, by extension, to the server computing market during the 2020s decade or they would renounce to that because they comfortable enough with the current situation?  In 2018 ARM provided an important hint to answer this question: they really want to push hard for the client market with the &lt;a class="reference external" href="https://www.anandtech.com/show/13226/arm-unveils-client-cpu-performance-roadmap"&gt;introduction of the Cortex A76 CPU&lt;/a&gt; which aspires to redefine the capability of ARM to compete with Intel at its own game:&lt;/p&gt;
-&lt;img alt="/images/arm-memory-walls-followup/arm-compute-plans.png" class="align-center" src="http://blosc.org/images/arm-memory-walls-followup/arm-compute-plans.png"&gt;
-&lt;p&gt;On the other hand, the fact that ARM is not just providing licenses to use its IP cores, but also the possibility to buy an architectural licence for vendors to design their own CPU cores using the ARM instruction sets makes possible that other players like Apple, AppliedMicro, Broadcom, Cavium (now Marvell), Nvidia, Qualcomm, and Samsung Electronics can produce ARM CPUs that can be adapted to be used in different scenarios.  One example that is interesting for this discussion is Marvell who, with its ThunderX2 CPU, is already entering into the computing servers market --actually, a new super-computer with more than 100,000 ThunderX2 cores has recently entered into the &lt;a class="reference external" href="https://t.co/LM2wXQrXm8"&gt;TOP500 ranking&lt;/a&gt;; this is the first time that an ARM-based computer enters that list, overwhelmingly dominated by Intel architectures for almost two decades now.&lt;/p&gt;
-&lt;p&gt;In the next sections we are trying to bring more hints (experimentally tested) on whether ARM (and its licensees) are fulfilling their promise, or their claims were just bare marketing.  For checking this, I was able to use two recent (2018) implementations of the ARMv8-A architecture, one meant for the client market and the other for servers, replicated the benchmarks of my previous &lt;a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/"&gt;Breaking Down Memory Walls&lt;/a&gt; blog entry and extracted some interesting results.  Keep reading.&lt;/p&gt;
-&lt;/section&gt;
-&lt;section id="the-kirin-980-cpu"&gt;
-&lt;h2&gt;The Kirin 980 CPU&lt;/h2&gt;
-&lt;p&gt;Here we are going to analyze &lt;a class="reference external" href="https://www.anandtech.com/show/13503/the-mate-20-mate-20-pro-review"&gt;Huawei's Kirin 980 CPU&lt;/a&gt; , a SoC (System On a Chip) that uses the ARM A76 core internally.  This is a fine example of an internal IP core design of ARM that is licensed to be used in a CPU chipset (or SoC) by another vendor (Huawei in this case).  The Kirin 980 wears 4 A76 cores plus 4 A55 cores, but the more powerful ones are the A76 (the A55 are more headed to do light tasks with very little energy consumption, which is critical for phones).  The A76 core is designed to be implemented using a 7nm technology (as it is the case for the Kirin 980, the second SoC in the world to use a 7 nm node, after Apple A12), and supports ARM's DynamIQ technology which allows scalability to target the specific requirements of a SoC.  In our case the Kirin 980 is running in a phone (Humawei's Mate 20), and in this scenario the power dissipation (TDP) cannot exceed the 4 W figure, so DynamIQ should try to be very conservative here and avoid putting too many cores active at the same time.&lt;/p&gt;
-&lt;p&gt;ARM is saying that they designed the &lt;a class="reference external" href="https://arstechnica.com/gadgets/2018/06/arm-promises-laptop-level-performance-in-2019/"&gt;A76 to be a competitor of the Intel Skylake Core i5&lt;/a&gt;, so this is what we are going to check here.  For this, we are going to compare a Kirin 980 in a Huawei Mate 20 phone against a Core i5 included in a MacBook Pro (late 2016).  Here it is the side-by-side performance for the precipitation dataset that I used in the &lt;a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/"&gt;previous blog&lt;/a&gt;:&lt;/p&gt;
-&lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 50%"&gt;
-&lt;col style="width: 50%"&gt;
-&lt;/colgroup&gt;
-&lt;tbody&gt;
-&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="rainfall-kirin980" src="http://blosc.org/images/arm-memory-walls-followup/kirin980-rainfall-lz4-9.png"&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;&lt;img alt="rainfall-i5laptop" src="http://blosc.org/images/arm-memory-walls-followup/i5laptop-lz4-9.png"&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;Here we can already see a couple of things.  First, the speed of the calculation when there is no compression is similar for both CPUs.  This is interesting because, although the bottleneck for this benchmark is in the memory access, the fact that the Kirin 980 performance is almost the same than the Core i5 is a testimony of how well ARM performed in the design of a memory prefetcher, clearly allowing for a good memory-level parallelism.&lt;/p&gt;
-&lt;p&gt;Second, for the compressed case, the Core i5 is still a 50% faster than the Kirin 980, but the performance scales similarly (up to 4 threads) for both CPUs.  The big news here is that the Core i5 has a TDP of 28 W, whereas for the Kirin 980 is just 4 W (and probably less than that), so that means that ARM's DynamIQ works beautifully so as to allow 4 (powerful) cores to run simultaneously in such a restrictive scenario (remember that we are running this benchmark &lt;em&gt;inside a phone&lt;/em&gt;).  It is also true that we are comparing an Intel CPU from 2016 against an ARM CPU from 2018 and that nowadays probably we can find Intel exemplars showing a similar performance than this i5 for probably no more than 10 W (e.g. an &lt;a class="reference external" href="https://ark.intel.com/products/149088/Intel-Core-i5-8265U-Processor-6M-Cache-up-to-3-90-GHz-"&gt;i5-8265U with configurable TDP-down&lt;/a&gt;), although I am not really sure how an Intel CPU will perform with such a strict power constraint.  At any rate, the Kirin 980 still consumes less than half of the power than its Intel counterpart --and its price would probably be a fraction of it too.&lt;/p&gt;
-&lt;p&gt;I believe that these facts are really a good testimony of how serious ARM was on their claim that they were going to catch Intel in the performance side of the things for client devices, and probably with an important advantage in consuming less energy too.  The fact that ARM CPUs are more energy efficient should not be surprising given the experience of ARM in that area for decades.  But another reason for that is the important reduction in the manufacturing technology that ARM has achieved on their new designs (7nm node for ARM vs 14nm node for Intel); undoubtedly, ARM advantage in power consumption is going to be important for their world-domination plans.&lt;/p&gt;
-&lt;/section&gt;
-&lt;section id="the-thunderx2-cpu"&gt;
-&lt;h2&gt;The ThunderX2 CPU&lt;/h2&gt;
-&lt;p&gt;The second way in which ARM sells licenses is the so-called &lt;em&gt;architectural license&lt;/em&gt; allowing companies to design their own CPU cores using the ARM instruction sets.  Cavium (now bought by Marvell) was one of these companies, and they produced different CPU designs that culminated with Vulcan, the micro-architecture that powers the ThunderX2 CPU, which was made available in May 2018.  &lt;a class="reference external" href="https://en.wikichip.org/wiki/cavium/microarchitectures/vulcan"&gt;Vulcan is a 16 nm high-performance 64-bit ARM micro-architecture&lt;/a&gt; that is specifically meant to compete in compute/data server facilities (think of it as a  a Xeon-class ARM-based server microprocessor).  ThunderX2 can pack up to 32 Vulcan cores, and as every Vulcan core supports up to 4 threads, the whole CPU can run up to 128 threads.  With its capability to handle so many threads simultaneously, I expected that its raw compute power should be nothing to sneeze at.&lt;/p&gt;
-&lt;p&gt;So as to check how powerful a ThunderX2 can be, we are going to compare &lt;a class="reference external" href="https://en.wikichip.org/wiki/cavium/thunderx2/cn9975"&gt;ThunderX2 CN9975&lt;/a&gt; (actually a box with 2 instances of it, each containing 28 cores) against one of its natural competitor, the Intel Scalable Gold 5120 (actually a box with 2 instances of it, each containing 14 cores):&lt;/p&gt;
-&lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 51%"&gt;
-&lt;col style="width: 49%"&gt;
-&lt;/colgroup&gt;
-&lt;tbody&gt;
-&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="rainfall-thunderx2" src="http://blosc.org/images/arm-memory-walls-followup/thunderx2-rainfall-lz4-9.png"&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;&lt;p&gt;&lt;img alt="rainfall-scalable" src="http://blosc.org/images/arm-memory-walls-followup/scalable-rainfall-lz4-9.png"&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;Here we see that, when no compression is used, the Intel instance scales much better and more predictably; however the ThunderX2 is able to reach a similar performance (almost 70 GB/s) than the Intel when enough threads are thrown at the computing task.  This is a really interesting fact, because it is showing that, for first time ever, an ARM CPU can match the memory bandwidth of a latest generation Intel CPU (which BTW, was pretty good at that already).&lt;/p&gt;
-&lt;p&gt;Regarding the compressed scenario, Intel Scalable still performs more than 2x faster than the ThunderX2 and it continues to show a really nice scalability.  On the other hand, although the ThunderX2 represents a good step in improving the performance of the ARM architecture, it is still quite far from being able to reach Intel in terms of both raw computing performance and the capacity to scale smoothly.&lt;/p&gt;
-&lt;p&gt;When we look at power consumption, although I was not able to find the exact figure for the ThunderX2 CN9975 model that has been used in the benchmarks above, it is probably in the range of 150 W per CPU, which is quite larger than its Intel Scalable 5120 counterpart which is around 100 W per CPU.  That means that Intel is using quite far less power in their CPU, giving them a clear advantage in server computing at this time.&lt;/p&gt;
-&lt;/section&gt;
-&lt;section id="final-thoughts"&gt;
-&lt;h2&gt;Final Thoughts&lt;/h2&gt;
-&lt;p&gt;From these results, it is quite evident that ARM is making large strides in catching Intel performance, specially in the client side of the things (laptops, and PC desktops), with an important reduction in power consumption, which is specially important for laptops.  Keep these facts in mind when you are going to buy your next laptop or desktop PC and do not blindly assume that Intel is the only reasonable option anymore ;-)&lt;/p&gt;
-&lt;p&gt;On the server side, Intel still holds an important advantage though, and it will not be easy to take the performance crown away from them.  However, the fact that ARM is allowing different vendors to produce their own implementations means that the competition can be more specific and each vendor is free to tackle different aspects of server computing.  So it is not difficult to realize that in the next few years we are going to see new ARM exemplars that would be meant not only for crunching numbers, but that will also specialize in different tasks, like storing and serving big data, routing data or performing artificial intelligence, to just mention a few cases (for example, &lt;a class="reference external" href="https://www.marvell.com/documents/8ru3g25b5f77f5pbjwl9/"&gt;Marvell is trying to position the ThunderX2 more specifically for the data server scenario&lt;/a&gt;) that are going to put Intel architectures in difficulties to maintain its current dominance in the data centers.&lt;/p&gt;
-&lt;p&gt;Finally, we should not forget the fact that software developers (including myself) have been building high performance libraries using exclusively Intel boxes for &lt;em&gt;decades&lt;/em&gt;, so making them extremely efficient for Intel architectures.  If, as we have seen here, ARM architectures are going to be an alternative in the performance client and server scenarios, then software developers will have to increasingly adopt ARM boxes as part of their tooling so as to continue being competitive in a world that is quite likely it won't necessarily be ruled by Intel anymore.&lt;/p&gt;
-&lt;/section&gt;
-&lt;section id="acknowledgements"&gt;
-&lt;h2&gt;Acknowledgements&lt;/h2&gt;
-&lt;p&gt;I would like to thank &lt;a class="reference external" href="https://www.packet.com/"&gt;Packet&lt;/a&gt;, a provider of bare metal servers in the cloud (among other things) for allowing me not only to use their machines for free, but also helping me in different questions about the configuration of the machines.  In particular, Ed Vielmetti has been instrumental in providing me early access to a ThunderX2 server, and making sure that everything was stable enough for the benchmark needs.&lt;/p&gt;
-&lt;/section&gt;
-&lt;section id="appendix-software-used"&gt;
-&lt;h2&gt;Appendix: Software used&lt;/h2&gt;
-&lt;p&gt;For reference, here it is the software that has been used for this blog entry.&lt;/p&gt;
-&lt;p&gt;For the Kirin 980:&lt;/p&gt;
-&lt;ul class="simple"&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;OS&lt;/strong&gt;: Android 9 - Linux Kernel 4.9.97&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Compiler&lt;/strong&gt;: clang 7.0.0&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;C-Blosc2&lt;/strong&gt;: 2.0.0a6.dev (2018-05-18)&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;For the ThunderX2:&lt;/p&gt;
-&lt;ul class="simple"&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;OS&lt;/strong&gt;: Ubuntu 18.04&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Compiler&lt;/strong&gt;: GCC 7.3.0&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;C-Blosc2&lt;/strong&gt;: 2.0.0a6.dev (2018-05-18)&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/section&gt;&lt;/div&gt;</description><category>ARM</category><category>memory wall</category><category>tuning</category><guid>http://blosc.org/posts/arm-memory-walls-followup/</guid><pubDate>Mon, 07 Jan 2019 10:12:20 GMT</pubDate></item></channel></rss>
+&lt;/section&gt;&lt;/div&gt;</description><category>blosc2 beta</category><guid>http://blosc.org/posts/blosc2-first-beta/</guid><pubDate>Wed, 14 Aug 2019 01:32:20 GMT</pubDate></item></channel></rss>
