@@ -246,14 +246,8 @@ the next morning.</p>
 <p>But maybe the most difficult
 part for me was the beginning, and therefore
 I have to thank Francesc Alted and
-Aleix Alcacer for giving me a push into the not always easy</p>
-<div class="system-message">
-<p class="system-message-title">System Message: ERROR/3 (<span class="docutils literal">&lt;string&gt;</span>, line 198)</p>
-<p>Unexpected indentation.</p>
-</div>
-<blockquote>
-<p>world of Python extensions.</p>
-</blockquote>
+Aleix Alcacer for giving me a push into the not always easy
+world of Python extensions.</p>
 </section>
 </div>
     </div>
@@ -620,19 +614,19 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 <section id="small-intro-to-wheels"><h2>Small intro to wheels</h2>
 <p>Wheels are an advantageous alternative to distribute Python (but also pure C) packages which contain C (or Cython) source code, and hence, need a compiler.  For those that are not familiar to wheels, here it comes a small tutorial on how to create and use wheels.</p>
 <p>First, let's recall the traditional way to build a source distribution:</p>
-<pre class="code console"><a id="rest_code_bfd5fd8e74f04e1cbe9df0972b53dac8-1" name="rest_code_bfd5fd8e74f04e1cbe9df0972b53dac8-1"></a><span class="gp">$ </span>python setup.py sdist
+<pre class="code console"><a id="rest_code_3c117cba777d4b7fb1b2d2ea689ae9f9-1" name="rest_code_3c117cba777d4b7fb1b2d2ea689ae9f9-1"></a><span class="gp">$ </span>python setup.py sdist
 </pre>
 <p>To build a wheel, the process is quite similar:</p>
-<pre class="code console"><a id="rest_code_071098ecd29d47c68a71dc8507cdb225-1" name="rest_code_071098ecd29d47c68a71dc8507cdb225-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
+<pre class="code console"><a id="rest_code_12122468aaa747eebdd1f8149fdb2924-1" name="rest_code_12122468aaa747eebdd1f8149fdb2924-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
 </pre>
 <p>To install a package via pip (pip decides whether install a from wheel or compile from the source package; wheels have obviously more priority):</p>
-<pre class="code console"><a id="rest_code_3d08a94000d14f8b8713add9a8df8878-1" name="rest_code_3d08a94000d14f8b8713add9a8df8878-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a id="rest_code_4e959dade96a4458ab55b7b9998a2bc4-1" name="rest_code_4e959dade96a4458ab55b7b9998a2bc4-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use source distribution:</p>
-<pre class="code console"><a id="rest_code_271d7a1496b9498cb0538095fd06fcf5-1" name="rest_code_271d7a1496b9498cb0538095fd06fcf5-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a id="rest_code_7acb36186678493e8e55cd18b4178120-1" name="rest_code_7acb36186678493e8e55cd18b4178120-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use wheels:</p>
-<pre class="code console"><a id="rest_code_ef5669d9c34e4bd69dd0715c0ca968c4-1" name="rest_code_ef5669d9c34e4bd69dd0715c0ca968c4-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a id="rest_code_487c425fca004d6894a317789df1f807-1" name="rest_code_487c425fca004d6894a317789df1f807-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
 </pre></section><section id="different-types-of-wheels"><h2>Different types of wheels</h2>
 <p>There are different kind of wheels, depending on the goals and the build process:</p>
 <ul class="simple">
@@ -650,29 +644,29 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
 </section><section id="binaries-for-c-blosc-libraries-are-included"><h2>Binaries for C-Blosc libraries are included</h2>
 <p>Although wheels were meant for Python packages, nothing prevents adding more stuff to them.  In particular, we are not only distributing python-blosc binary extensions in our wheels, but also binaries for the C-Blosc library.  This way, people willing to use the C-Blosc library can make use of these wheels to install the necessary development files.</p>
 <p>First, install the binary wheel via PyPI without the need to manually compile the thing:</p>
-<pre class="code console"><a id="rest_code_85fd4ad6989a428a8fc4ed62e3546d82-1" name="rest_code_85fd4ad6989a428a8fc4ed62e3546d82-1"></a><span class="gp">$ </span>pip install --only-binary blosc
+<pre class="code console"><a id="rest_code_e4e52c30f91c4e1aa215838b8e3d55d0-1" name="rest_code_e4e52c30f91c4e1aa215838b8e3d55d0-1"></a><span class="gp">$ </span>pip install --only-binary blosc
 </pre>
 <p>Now, let's suppose that we want to compile the <cite>c-blosc/examples/many_compressors.c</cite> on Linux:</p>
 <p>First, you have to look where the wheels directory is located.  In our case:</p>
-<pre class="code console"><a id="rest_code_0ffd792b34384ca2934995b50fc73ee8-1" name="rest_code_0ffd792b34384ca2934995b50fc73ee8-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
-<a id="rest_code_0ffd792b34384ca2934995b50fc73ee8-2" name="rest_code_0ffd792b34384ca2934995b50fc73ee8-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
+<pre class="code console"><a id="rest_code_542bd9e61c014c56802638ad96a37a8a-1" name="rest_code_542bd9e61c014c56802638ad96a37a8a-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
+<a id="rest_code_542bd9e61c014c56802638ad96a37a8a-2" name="rest_code_542bd9e61c014c56802638ad96a37a8a-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
 </pre>
 <p>For the actual compilation, you need to pass the directory for the include and lib directories:</p>
-<pre class="code console"><a id="rest_code_de020bd2fbe14f758648fd20c98cc26e-1" name="rest_code_de020bd2fbe14f758648fd20c98cc26e-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
+<pre class="code console"><a id="rest_code_0d8227bf58d749d0aa849cfeb92bf41d-1" name="rest_code_0d8227bf58d749d0aa849cfeb92bf41d-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
 </pre>
 <p>Finally, run the resulting binary and hopefully you will see something like:</p>
-<pre class="code console"><a id="rest_code_0096e3b4e8e343a79008841aca921eed-1" name="rest_code_0096e3b4e8e343a79008841aca921eed-1"></a><span class="gp">$ </span>./many_compressors
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-2" name="rest_code_0096e3b4e8e343a79008841aca921eed-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-3" name="rest_code_0096e3b4e8e343a79008841aca921eed-3"></a><span class="go">Using 4 threads (previously using 1)</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-4" name="rest_code_0096e3b4e8e343a79008841aca921eed-4"></a><span class="go">Using blosclz compressor</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-5" name="rest_code_0096e3b4e8e343a79008841aca921eed-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-6" name="rest_code_0096e3b4e8e343a79008841aca921eed-6"></a><span class="go">Succesful roundtrip!</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-7" name="rest_code_0096e3b4e8e343a79008841aca921eed-7"></a><span class="go">Using lz4 compressor</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-8" name="rest_code_0096e3b4e8e343a79008841aca921eed-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-9" name="rest_code_0096e3b4e8e343a79008841aca921eed-9"></a><span class="go">Succesful roundtrip!</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-10" name="rest_code_0096e3b4e8e343a79008841aca921eed-10"></a><span class="go">Using lz4hc compressor</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-11" name="rest_code_0096e3b4e8e343a79008841aca921eed-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
-<a id="rest_code_0096e3b4e8e343a79008841aca921eed-12" name="rest_code_0096e3b4e8e343a79008841aca921eed-12"></a><span class="go">Succesful roundtrip!</span>
+<pre class="code console"><a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-1" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-1"></a><span class="gp">$ </span>./many_compressors
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-2" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-3" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-3"></a><span class="go">Using 4 threads (previously using 1)</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-4" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-4"></a><span class="go">Using blosclz compressor</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-5" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-6" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-6"></a><span class="go">Succesful roundtrip!</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-7" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-7"></a><span class="go">Using lz4 compressor</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-8" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-9" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-9"></a><span class="go">Succesful roundtrip!</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-10" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-10"></a><span class="go">Using lz4hc compressor</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-11" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
+<a id="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-12" name="rest_code_66e0d9d1b15246328fb87c6ba9b4b158-12"></a><span class="go">Succesful roundtrip!</span>
 </pre>
 <p>For more details, including compiling with binary wheels on other platforms than Linux, see: <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst">https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst</a>.</p>
 </section><section id="final-remarks"><h2>Final remarks</h2>
@@ -909,10 +903,10 @@ to the Blosc project via the NumFOCUS Foundation: <a class="reference external" 
     <div>
 <p>On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new <a class="reference external" href="https://en.wikipedia.org/wiki/Zen_2">Zen 2</a> micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:</p>
 <img alt="/images/blosc2-meets-rome/amd-rome-arch-multi-die.png" class="align-center" src="images/blosc2-meets-rome/amd-rome-arch-multi-die.png"><p>Such a separation of dies for I/O and computing has quite <a class="reference external" href="https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm/3">large consequences in terms of scalability when accessing memory</a>, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous <a class="reference external" href="https://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a>.  This essentially boils down to compute an aggregation with a simple loop like:</p>
-<pre class="code c"><a id="rest_code_6261651569a44b63af5dc624f318434e-1" name="rest_code_6261651569a44b63af5dc624f318434e-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_6261651569a44b63af5dc624f318434e-2" name="rest_code_6261651569a44b63af5dc624f318434e-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a id="rest_code_6261651569a44b63af5dc624f318434e-3" name="rest_code_6261651569a44b63af5dc624f318434e-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a id="rest_code_6261651569a44b63af5dc624f318434e-4" name="rest_code_6261651569a44b63af5dc624f318434e-4"></a><span class="p">}</span>
+<pre class="code c"><a id="rest_code_2515c90240cd496cb748fe04d0f04652-1" name="rest_code_2515c90240cd496cb748fe04d0f04652-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_2515c90240cd496cb748fe04d0f04652-2" name="rest_code_2515c90240cd496cb748fe04d0f04652-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a id="rest_code_2515c90240cd496cb748fe04d0f04652-3" name="rest_code_2515c90240cd496cb748fe04d0f04652-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a id="rest_code_2515c90240cd496cb748fe04d0f04652-4" name="rest_code_2515c90240cd496cb748fe04d0f04652-4"></a><span class="p">}</span>
 </pre>
 <p>As described in the original blog post, the different <cite>udata</cite> arrays are just chunks of the original dataset that are decompressed just in time for performing the partial aggregation operation; the final result is indeed the sum of all the partial aggregations.  Also we have seen that the time to execute the aggregation is going to depend quite a lot on the kind of data that is decompressed: carefully chosen synthetic data can be decompressed much more quickly than real data.  But syntehtic data is nevertheless interesting as it allows for a roof analysis of where the performance can grow up to.</p>
 <p>In this blog, we are going to see how the AMD EPYC 7402 (Rome), a 24-core processor performs on both synthetic and real data.</p>
