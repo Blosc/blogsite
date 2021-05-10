@@ -27,7 +27,7 @@ processors so as to accelerate the compression/decompression process
 to a maximum.
 
 To whet your appetite look at the kind of speed that Blosc can reach for BloscLZ,
-its default codec:
+its default codec using synthetic data:
 
 .. |blosclz-c| image::   /images/blosclz-comp.png
 .. |blosclz-d| image::   /images/blosclz-decomp.png
@@ -36,17 +36,21 @@ its default codec:
 | |blosclz-c|  | |blosclz-d|  |
 +--------------+--------------+
 
-And here for LZ4, a well known and very fast codec that comes integrated
-(with other codecs too) with Blosc:
+And here its the speed for summing up a vector of real data of float32 values
+for a variety of codecs that come with Blosc2:
 
-.. |lz4-c| image::   /images/lz4-comp.png
-.. |lz4-d| image::   /images/lz4-decomp.png
+.. figure:: /images/sum_openmp-rainfall.png
+   :width: 50%
+   :align: center
 
-+--------------+--------------+
-| |lz4-c|      | |lz4-d|      |
-+--------------+--------------+
+There you can see how compressing with Blosc allows to accelerate real computations
+if you throw cores enough at the task.  For an in deep explanation, see `this blog entry
+<https://www.blosc.org/posts/breaking-memory-walls/>`_.
 
-You can see more benchmarks in  `our blog <https://www.blosc.org>`_.  Also, you may want to check out this article on `Breaking Down Memory Walls <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_. Also, check `Blosc2 <https://github.com/Blosc/c-blosc2>`_, the next generation of Blosc.
+You can see more benchmarks in `our blog <https://www.blosc.org>`_.
+Also, you may want to check out this article on `Breaking Down Memory Walls
+<http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_.
+Also, check `Blosc2 <https://github.com/Blosc/c-blosc2>`_, the next generation of Blosc.
 
 .. raw:: html
 
@@ -56,7 +60,10 @@ You can see more benchmarks in  `our blog <https://www.blosc.org>`_.  Also, you 
    :width: 40%
    :align: center
 
-   Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_, a nonprofit dedicated to supporting the open source scientific computing community. If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
+   Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_,
+   a nonprofit dedicated to supporting the open source scientific computing community.
+   If you like Blosc and want to support our mission, please consider making a
+   `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
 
 
 Meta-Compression And Other Advantages Over Existing Compressors

@@ -95,7 +95,7 @@ and <em>multi-threading</em> capabilities present in nowadays multi-core
 processors so as to accelerate the compression/decompression process
 to a maximum.</p>
 <p>To whet your appetite look at the kind of speed that Blosc can reach for BloscLZ,
-its default codec:</p>
+its default codec using synthetic data:</p>
 <table>
 <colgroup>
 <col style="width: 50%">
@@ -106,21 +106,18 @@ its default codec:</p>
 <td><p><img alt="blosclz-d" src="../../images/blosclz-decomp.png"></p></td>
 </tr></tbody>
 </table>
-<p>And here for LZ4, a well known and very fast codec that comes integrated
-(with other codecs too) with Blosc:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
-<td><p><img alt="lz4-c" src="../../images/lz4-comp.png"></p></td>
-<td><p><img alt="lz4-d" src="../../images/lz4-decomp.png"></p></td>
-</tr></tbody>
-</table>
-<p>You can see more benchmarks in  <a class="reference external" href="https://www.blosc.org">our blog</a>.  Also, you may want to check out this article on <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">Breaking Down Memory Walls</a>. Also, check <a class="reference external" href="https://github.com/Blosc/c-blosc2">Blosc2</a>, the next generation of Blosc.</p>
+<p>And here its the speed for summing up a vector of real data of float32 values
+for a variety of codecs that come with Blosc2:</p>
+<figure class="align-center"><img alt="/images/sum_openmp-rainfall.png" src="../../images/sum_openmp-rainfall.png" style="width: 50%;"></figure><p>There you can see how compressing with Blosc allows to accelerate real computations
+if you throw cores enough at the task.  For an in deep explanation, see <a class="reference external" href="https://www.blosc.org/posts/breaking-memory-walls/">this blog entry</a>.</p>
+<p>You can see more benchmarks in <a class="reference external" href="https://www.blosc.org">our blog</a>.
+Also, you may want to check out this article on <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">Breaking Down Memory Walls</a>.
+Also, check <a class="reference external" href="https://github.com/Blosc/c-blosc2">Blosc2</a>, the next generation of Blosc.</p>
 <hr width="50" size="10">
-<figure class="align-center"><img alt="/images/numfocus-sponsored-project.png" src="../../images/numfocus-sponsored-project.png" style="width: 40%;"><figcaption><p>Blosc is a fiscally sponsored project of <a class="reference external" href="https://numfocus.org">NumFOCUS</a>, a nonprofit dedicated to supporting the open source scientific computing community. If you like Blosc and want to support our mission, please consider making a <a class="reference external" href="https://numfocus.org/project/blosc">donation</a> to support our efforts.</p>
+<figure class="align-center"><img alt="/images/numfocus-sponsored-project.png" src="../../images/numfocus-sponsored-project.png" style="width: 40%;"><figcaption><p>Blosc is a fiscally sponsored project of <a class="reference external" href="https://numfocus.org">NumFOCUS</a>,
+a nonprofit dedicated to supporting the open source scientific computing community.
+If you like Blosc and want to support our mission, please consider making a
+<a class="reference external" href="https://numfocus.org/project/blosc">donation</a> to support our efforts.</p>
 </figcaption></figure><section id="meta-compression-and-other-advantages-over-existing-compressors"><h2>Meta-Compression And Other Advantages Over Existing Compressors</h2>
 <p>Blosc is not like other compressors: it should rather be called a
 <em>meta-compressor*</em>.  This is so because it can use different
