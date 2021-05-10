@@ -44,8 +44,11 @@ for a variety of codecs that come with Blosc2:
    :align: center
 
 There you can see how compressing with Blosc allows to accelerate real computations
-if you throw cores enough at the task.  For an in deep explanation, see `this blog entry
-<https://www.blosc.org/posts/breaking-memory-walls/>`_.
+if you throw cores enough at the task.  This plot has been made on a mid-sized workstation with an `Intel CoreX with 14 cores
+<https://ark.intel.com/content/www/us/en/ark/products/198014/intel-core-i9-10940x-x-series-processor-19-25m-cache-3-30-ghz.html>`_,
+with 4 memory channels (around 56 GB/s read bandwidth), Clear Linux and GCC 11.
+In particular, note how the compressed computation can go beyond the read bandwidth of this box (85 GB/s vs 56 GB/s).
+For a more in deep explanation, see `this blog entry <https://www.blosc.org/posts/breaking-memory-walls/>`_.
 
 You can see more benchmarks in `our blog <https://www.blosc.org>`_.
 Also, you may want to check out this article on `Breaking Down Memory Walls
