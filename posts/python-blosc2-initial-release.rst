@@ -206,4 +206,4 @@ But maybe the most difficult
 part for me was the beginning, and therefore
 I have to thank Francesc Alted and
 Aleix Alcacer for giving me a push into the not always easy
- world of Python extensions.
+world of Python extensions.
