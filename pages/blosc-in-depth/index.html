@@ -108,7 +108,7 @@ its default codec using synthetic data:</p>
 </table>
 <p>And here its the speed for summing up a vector of real data of float32 values
 for a variety of codecs that come with Blosc2:</p>
-<figure class="align-center"><img alt="/images/sum_openmp-rainfall.png" src="../../images/sum_openmp-rainfall.png" style="width: 50%;"></figure><p>There you can see how compressing with Blosc allows to accelerate real computations
+<figure class="align-center"><img alt="/images/sum_openmp-rainfall.png" src="../../images/sum_openmp-rainfall.png" style="width: 75%;"></figure><p>There you can see how compressing with Blosc allows to accelerate real computations
 if you throw cores enough at the task.  This plot has been made on a mid-sized workstation with an <a class="reference external" href="https://ark.intel.com/content/www/us/en/ark/products/198014/intel-core-i9-10940x-x-series-processor-19-25m-cache-3-30-ghz.html">Intel CoreX with 14 cores</a>,
 with 4 memory channels (around 56 GB/s read bandwidth), Clear Linux and GCC 11.
 In particular, note how the compressed computation can go beyond the read bandwidth of this box (85 GB/s vs 56 GB/s).
