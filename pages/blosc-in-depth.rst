@@ -40,7 +40,7 @@ And here its the speed for summing up a vector of real data of float32 values
 for a variety of codecs that come with Blosc2:
 
 .. figure:: /images/sum_openmp-rainfall.png
-   :width: 50%
+   :width: 75%
    :align: center
 
 There you can see how compressing with Blosc allows to accelerate real computations
