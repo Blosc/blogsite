@@ -168,6 +168,13 @@ https://github.com/Blosc
 
 You can download the sources and file tickets there too.
 
+Twitter feed
+------------
+
+Keep informed about the latest developments by following the @Blosc2 twitter account:
+
+https://twitter.com/Blosc2
+
 Mailing list
 ------------
 
