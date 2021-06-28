@@ -73,7 +73,89 @@
 
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/arm-memory-walls-followup/" class="u-url">Is ARM Hungry Enough to Eat Intel's Favorite Pie?</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/blosc2-first-beta/" class="u-url">C-Blosc2 Enters Beta Stage</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/francesc-alted/">Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/blosc2-first-beta/" rel="bookmark">
+            <time class="published dt-published" datetime="2019-08-14T01:32:20Z" itemprop="datePublished" title="2019-08-14 01:32">2019-08-14 01:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="posts/blosc2-first-beta/#disqus_thread" data-disqus-identifier="cache/posts/blosc2-first-beta.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>The first beta version of C-Blosc2 has been released today.  C-Blosc2 is the new iteration of C-Blosc 1.x series, adding more features and better documentation and is the outcome of more than 4 years of slow, but steady development.  This blog entry describes the main features that you may see in next generation of C-Blosc, as well as an overview of what is in our roadmap.</p>
+<p><strong>Note 1</strong>: C-Blosc2 is currently in beta stage, so not ready to be used in production yet.  Having said this, being in beta means that the API has been declared frozen, so there is guarantee that your programs will continue to work with future versions of the library.  If you want to collaborate in this development, you are welcome: have a look at our roadmap below and contribute PR's or just go to the <a class="reference external" href="https://github.com/Blosc/c-blosc2/issues">open issues</a> and help us with them.</p>
+<p><strong>Note 2</strong>: the term <cite>C-Blosc1</cite> will be used instead of the official <cite>C-Blosc</cite> name for referring to the 1.x series of the library.  This is to make the distinction between the C-Blosc 2.x series and C-Blosc 1.x series more explicit.</p>
+<section id="main-features-in-c-blosc2"><h2>Main features in C-Blosc2</h2>
+<section id="new-64-bit-containers"><h3>New 64-bit containers</h3>
+<p>The main container in C-Blosc2 is the <cite>super-chunk</cite> or, for brevity, <cite>schunk</cite>, that is made by smaller containers which are essentially C-Blosc1 32-bit containers.  The <cite>super-chunk</cite> can be backed (or not) by another container which is called a <cite>frame</cite>.  If a <cite>schunk</cite> is not backed by a <cite>frame</cite> (the default), the different chunks will be stored sparsely in-memory.</p>
+<p>The <cite>frame</cite> object allows to store super-chunks contiguously, either on-disk or in-memory.  When a super-chunk is backed by a frame, instead of storing all the chunks sparsely in-memory, they are serialized inside the frame container.  The frame can be stored on-disk too, meaning that persistence of super-chunks is supported and that data can be accessed using the same API independently of where it is stored, memory or disk.</p>
+<p>Finally, the user can add meta-data to frames for different uses and in different layers.  For example, one may think on providing a meta-layer for <a class="reference external" href="http://www.numpy.org">NumPy</a> so that most of the meta-data for it is stored in a meta-layer; then, one can place another meta-layer on top of the latter can add more high-level info (e.g. geo-spatial, meteorological...), if desired.</p>
+<p>When taken together, these features represent a pretty powerful way to store and retrieve compressed data that goes well beyond of the previous contiguous compressed buffer, 32-bit limited, of C-Blosc1.</p>
+</section><section id="new-filters-and-filters-pipeline"><h3>New filters and filters pipeline</h3>
+<p>Besides <cite>shuffle</cite> and <cite>bitshuffle</cite> already present in C-Blosc1, C-Blosc2 already implements:</p>
+<ul class="simple">
+<li><p><cite>delta</cite>: the stored blocks inside a chunk are diff'ed with respect to first block in the chunk.  The basic idea here is that, in some situations, the diff will have more zeros than the original data, leading to better compression.</p></li>
+<li><p><cite>trunc_prec</cite>: it zeroes the least significant bits of the mantissa of float32 and float64 types.  When combined with the <cite>shuffle</cite> or <cite>bitshuffle</cite> filter, this leads to more contiguous zeros, which are compressed better and faster.</p></li>
+</ul>
+<p>Also, a new filter pipeline has been implemented.  With it, the different filters can be pipelined so that the output of one filter can be the input for the next; this happens at the block level, so minimizing the size of temporary buffers, and hence, accelerating the process.  Possible examples of pipelines are a <cite>delta</cite> filter followed by <cite>shuffle</cite>, or a <cite>trunc_prec</cite> followed by <cite>bitshuffle</cite>.  Up to 6 filters can be pipelined, so there is plenty of space for upcoming new filters to collaborate among them.</p>
+</section><section id="more-simd-support-for-arm-and-powerpc"><h3>More SIMD support for ARM and PowerPC</h3>
+<p>New SIMD support for ARM (NEON), allowing for faster operation on ARM architectures.  Only <cite>shuffle</cite> is supported right now, but the idea is to implement <cite>bitshuffle</cite> for NEON too.</p>
+<p>Also, SIMD support for PowerPC (ALTIVEC) is here, and both <cite>shuffle</cite>  and <cite>bitshuffle</cite> are supported.  However, this has been done via a transparent mapping from SSE2 into ALTIVEC emulation in GCC 8, so performance could be better (but still, it is already a nice improvement over native C code; see PR <a class="reference external" href="https://github.com/Blosc/c-blosc2/pull/59">https://github.com/Blosc/c-blosc2/pull/59</a> for details).  Thanks to Jerome Kieffer.</p>
+</section><section id="new-codecs"><h3>New codecs</h3>
+<p>There is a new <a class="reference external" href="https://github.com/inikep/lizard">Lizard codec</a>, which is an efficient compressor with very fast decompression. It achieves compression ratio that is comparable to <cite>zip/zlib</cite> and <cite>zstd/brotli</cite> (at low and medium compression levels) that is able to attain decompression speeds of 1 GB/s or more.</p>
+</section><section id="new-dictionary-support-for-better-compression-ratio"><h3>New dictionary support for better compression ratio</h3>
+<p>Dictionaries allow for better discovery of data duplicates among different blocks: when a block is going to be compressed, C-Blosc2 can use a previously made dictionary (stored in the header of the super-chunk) for compressing all the blocks that are part of the chunks.  This usually improves the compression ratio, as well as the decompression speed, at the expense of a (small) overhead in compression speed.  Currently, this is only supported in the <cite>zstd</cite> codec, but would be nice to extend it to <cite>lz4</cite> and <cite>blosclz</cite> at least.</p>
+</section><section id="much-improved-documentation-mark-up"><h3>Much improved documentation mark-up</h3>
+<p>We are currently using a combination of Sphinx + Doxygen + Breathe for documenting the <a class="reference external" href="https://blosc-doc.readthedocs.io">C API for C-Blosc2</a>.  This is a huge step further compared with the documentation of C-Blosc1, where the developer needed to go the    <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/blosc/blosc.h">blosc.h</a> header for reading the docstrings there.  Thanks to Alberto Sabater for contributing the support for this.</p>
+</section><section id="support-for-intel-ipp-integrated-performance-primitives"><h3>Support for Intel IPP (Integrated Performance Primitives)</h3>
+<p>Intel is producing a series of optimizations in their <a class="reference external" href="https://software.intel.com/en-us/ipp">IPP library</a> and among them, and <a class="reference external" href="https://software.intel.com/en-us/ipp-dev-reference-lz4-compression-functions">accelerated version of the LZ4 codec</a>.  Due to its excellent compression capabilities and speed, LZ4 is probably the most used codec in Blosc, so enabling even a bit more of optimization on LZ4 is always a good news.  And judging by the plots below, the Intel guys seem to have done an excellent job:</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody><tr>
+<td><p><img alt="lz4-no-ipp" src="images/blosc2-first-beta/Blosc2-4MB-LZ4-NO-IPP-Shuffle.png"></p></td>
+<td><p><img alt="lz4-ipp" src="images/blosc2-first-beta/Blosc2-4MB-LZ4-IPP-Shuffle.png"></p></td>
+</tr></tbody>
+</table>
+<p>In the plots above we see a couple of things: 1) the IPP/LZ4 functions can compress <em>more</em> than regular LZ4, and 2) they are quite a bit <em>faster</em> than regular LZ4.  As always, take these plots with a grain of salt, as actual datasets will see more similar compression ratios and speed (but still, the difference can be significant).  Of course, IPP/LZ4 should generate LZ4 chunks that are completely compatible with the original LZ4 library (but in case you detect any incompatibility, please shout!).</p>
+<p>C-Blosc2 beta.1 comes with support for LZ4/IPP out-of-the-box, that is, if IPP is detected in the system, its optimized LZ4 functions are automatically linked and used with the Blosc2 library.  If, for portability or other reasons, you don't want to create a Blosc2 library that is linked with Intel IPP, you can disable support for it passing the <cite>-DDEACTIVATE_IPP=ON</cite> to cmake.  In the future, we surely may give support for other optimized codecs in IPP too (Zstd would be an excellent candidate).</p>
+</section></section><section id="roadmap"><h2>Roadmap</h2>
+<p>Of course, C-Blosc2 is not done yet, and there are many interesting enhancements that we would like to tackle sooner or later.  Here it is a more or less comprehensive list of our roadmap:</p>
+<ul class="simple">
+<li><p>Lock support for <cite>super-chunks</cite>: when different processes are accessing concurrently to super-chunks, make them to sync properly by using locks, either on-disk (frame-backed super-chunks), or in-memory.</p></li>
+<li><p>Checksums: the frame can benefit from having a checksum per every chunk/index/metalayer.  This will provide more safety towards frames that are damaged for whatever reason.  Also, this would provide better feedback when trying to determine the parts of the frame that are corrupted.  Candidates for checksums can be the xxhash32 or xxhash64, depending on the gaols (to be decided).</p></li>
+<li>
+<p>Documentation: utterly important for attracting new users and making the life easier for existing ones.  Important points to have in mind here:</p>
+<ul>
+<li><p>Quality of API docstrings: is the mission of the functions or data structures clearly and succinctly explained? Are all the parameters explained?  Is the return value explained?  What are the possible errors that can be returned?</p></li>
+<li><p>Tutorials/book: besides the API docstrings, more documentation materials should be provided, like tutorials or a book about Blosc (or at least, the beginnings of it).  Due to its adoption in GitHub and Jupyter notebooks, one of the most extended and useful markup systems is MarkDown, so this should also be the first candidate to use here.</p></li>
+</ul>
+</li>
+<li><p>Wrappers for other languages: Python and Java are the most obvious candidates, but others like R or Julia would be nice to have.  Still not sure if these should be produced and maintained by the Blosc development team, or leave them for third-party players that would be interested.</p></li>
+<li><p>It would be nice to use <a class="reference external" href="https://lgtm.com">LGTM</a>, a CI-friendly analyzer for security.</p></li>
+<li><p>Add support for <a class="reference external" href="https://buildkite.com">buildkite</a> as another CI would be handy because it allows to use on-premise machines, potentially speeding-up the time to do the builds, but also to setup pipelines with more complex dependencies and analyzers.</p></li>
+</ul>
+<p>The implementation of these features will require the help of people, either by contributing code (see  <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/DEVELOPING-GUIDE.rst">our developing guidelines</a>) or, as it turns out that <a class="reference external" href="https://numfocus.org/project/blosc">Blosc is a project sponsored by NumFOCUS</a>, you may want to  <a class="reference external" href="https://numfocus.org/donate-to-blosc">make a donation to the project</a>.  If you plan to contribute in any way, thanks so much in the name of the community!</p>
+</section><section id="addendum-special-thanks-to-developers"><h2>Addendum: Special thanks to developers</h2>
+<p>C-Blosc2 is the outcome of the work of <a class="reference external" href="https://github.com/Blosc/c-blosc2/graphs/contributors">many developers</a> that worked not only on C-Blosc2 itself, but also on C-Blosc1, from which C-Blosc2 inherits a lot of features.  I am very grateful to Jack Pappas, who contributed important portability enhancements, specially runtime and cross-platform detection of SSE2/AVX2 (with the help of Julian Taylor) as well as high precision timers (HPET) which are essential for benchmarking purposes.  Lucian Marc also contributed the support for ARM/NEON for the shuffle filter.  Jerome Kieffer contributed support for PowerPC/ALTIVEC.  Alberto Sabater, for his great efforts on producing really nice Blosc2 docs, among other aspects. And last but not least, to Valentin Haenel for general support, bug fixes and other enhancements through the years.</p>
+<blockquote>
+<p>** Enjoy Data!**</p>
+</blockquote>
+</section>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/arm-memory-walls-followup/" class="u-url">Is ARM Hungry Enough to Eat Intel's Favorite Pie?</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/francesc-alted/">Francesc Alted</a>
@@ -173,16 +255,16 @@
 <p><strong>Update (2018-08-09)</strong>: An extended version of this blog post can be found in this <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">article</a>.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, as well as more discussion about the results.</p>
 <p>Nowadays CPUs struggle to get data at enough speed to feed their cores.  The reason for this is that memory speed is <a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf">growing at a slower pace than CPUs increase their speed at crunching numbers</a>.   This memory slowness compared with CPUs is generally known as the <a class="reference external" href="https://en.wikipedia.org/wiki/Random-access_memory#Memory_wall">Memory Wall</a>.</p>
 <p>For example, let's suppose that we want to compute the aggregation of a some large array; here it is how to do that using OpenMP for leveraging all cores in a CPU:</p>
-<pre class="code c"><a id="rest_code_ece7bdb771e64f36ba9f16c55ef57b4a-1" name="rest_code_ece7bdb771e64f36ba9f16c55ef57b4a-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_ece7bdb771e64f36ba9f16c55ef57b4a-2" name="rest_code_ece7bdb771e64f36ba9f16c55ef57b4a-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a id="rest_code_ece7bdb771e64f36ba9f16c55ef57b4a-3" name="rest_code_ece7bdb771e64f36ba9f16c55ef57b4a-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<a id="rest_code_ece7bdb771e64f36ba9f16c55ef57b4a-4" name="rest_code_ece7bdb771e64f36ba9f16c55ef57b4a-4"></a><span class="p">}</span>
+<pre class="code c"><a id="rest_code_2ad7ee59004241af897491c1d2af37cf-1" name="rest_code_2ad7ee59004241af897491c1d2af37cf-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_2ad7ee59004241af897491c1d2af37cf-2" name="rest_code_2ad7ee59004241af897491c1d2af37cf-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a id="rest_code_2ad7ee59004241af897491c1d2af37cf-3" name="rest_code_2ad7ee59004241af897491c1d2af37cf-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a id="rest_code_2ad7ee59004241af897491c1d2af37cf-4" name="rest_code_2ad7ee59004241af897491c1d2af37cf-4"></a><span class="p">}</span>
 </pre>
 <p>With this, some server (an Intel Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores and hyperthreading) takes about 14 ms for doing the aggregation of an array with 100 million of float32 values when using 8 OpenMP threads (optimal number for this CPU).  However, if instead of bringing the whole 100 million elements from memory to the CPU we generate the data inside the loop, we are avoiding the data transmission between memory and CPU, like in:</p>
-<pre class="code c"><a id="rest_code_3b1c5d5e55a545edb931291ff4ff1a6f-1" name="rest_code_3b1c5d5e55a545edb931291ff4ff1a6f-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_3b1c5d5e55a545edb931291ff4ff1a6f-2" name="rest_code_3b1c5d5e55a545edb931291ff4ff1a6f-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<a id="rest_code_3b1c5d5e55a545edb931291ff4ff1a6f-3" name="rest_code_3b1c5d5e55a545edb931291ff4ff1a6f-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
-<a id="rest_code_3b1c5d5e55a545edb931291ff4ff1a6f-4" name="rest_code_3b1c5d5e55a545edb931291ff4ff1a6f-4"></a><span class="p">}</span>
+<pre class="code c"><a id="rest_code_cf2a83780d804b69b44d36027dc0d9fb-1" name="rest_code_cf2a83780d804b69b44d36027dc0d9fb-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_cf2a83780d804b69b44d36027dc0d9fb-2" name="rest_code_cf2a83780d804b69b44d36027dc0d9fb-2"></a><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a id="rest_code_cf2a83780d804b69b44d36027dc0d9fb-3" name="rest_code_cf2a83780d804b69b44d36027dc0d9fb-3"></a>  <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
+<a id="rest_code_cf2a83780d804b69b44d36027dc0d9fb-4" name="rest_code_cf2a83780d804b69b44d36027dc0d9fb-4"></a><span class="p">}</span>
 </pre>
 <p>This loop takes just 3.5 ms, that is, 4x less than the original one.  That means that our CPU could compute the aggregation at a speed that is 4x faster than the speed at which the memory subsystem can provide data elements to the CPU; or put in another words, the CPU is idle, doing nothing during the 75% of the time, waiting for data to arrive (for this example, but there could be other, more extreme cases).  Here we have the memory wall in action indeed.</p>
 <p>That the memory wall exists is an excellent reason to think about ways to workaround it.  One of the most promising venues is to use compression: what if we could store data in compressed state in-memory and use the spare clock cycles of the CPU for decompressing it just when it is needed?  In this blog entry we will see how to implement such a computational kernel on top of data structures that are cache- and compression-friendly and we will examine how they perform on a range of modern CPU architectures.  Some surprises are in store.</p>

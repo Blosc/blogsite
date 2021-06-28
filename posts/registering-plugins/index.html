@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Registering plugins in C-Blosc2 | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/registering-plugins/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Oscar Griñón">
+<link rel="prev" href="../python-blosc2-initial-release/" title="Wrapping C-Blosc2 in Python (a beginner's view)" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content=" Registering plugins in C-Blosc2">
+<meta property="og:url" content="http://blosc.org/posts/registering-plugins/">
+<meta property="og:description" content="Blosc has traditionally supported different filters and codecs for compressing data,
+and it was up to the user to choose one or another depending on her needs.
+However, there will always be scenarios ">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-06-28T10:32:20Z">
+<meta property="article:tag" content="blosc plugins codecs filters">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="https://c-blosc2.readthedocs.io/">Documentation</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url"> Registering plugins in C-Blosc2</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/oscar-grinon/">Oscar Griñón</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2021-06-28T10:32:20Z" itemprop="datePublished" title="2021-06-28 10:32">2021-06-28 10:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/registering-plugins.html">Comments</a>
+
+
+            
+
+        </p>
+</div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>Blosc has traditionally supported different filters and codecs for compressing data,
+and it was up to the user to choose one or another depending on her needs.
+However, there will always be scenarios where a more richer variety of them could be useful.</p>
+<p>Blosc2 has now a new plugin register capability in place so that the info about the new filters and codecs can be persisted and transmitted to different machines.
+In this way Blosc can figure out the info of persistent plugins, and use them so as to decompress the data without problems.</p>
+<p>Besides, the Blosc Development Team has implemented a centralized repository so that people can propose new plugins; and if these plugins fulfill a series of requirements, they will be officially accepted, and distributed <em>within</em> the C-Blosc2 library.  This provides an easy path for extending C-Blosc2 and hence, better adapt to user needs.</p>
+<p>The plugins that can be registered in the repository can be either codecs or filters.</p>
+<ul class="simple">
+<li><p>A <strong>codec</strong> is a program able to compress and decompress a data stream with the objective of reducing its size and to enable a faster transmission of data.</p></li>
+<li><p>A <strong>filter</strong> is a program that reorders the data without changing its size, so that the initial and final size are equal. A filter consists of encoder and decoder.
+The filter encoder is applied before the codec compressor (or codec encoder) in order to make data easier to compress
+and the filter decoder is used after codec decompressor (or codec decoder) to restore the original data arrangement.</p></li>
+</ul>
+<p>Here it is an example on how the compression process goes:</p>
+<pre class="code console"><a id="rest_code_0c7f7d8ed27e4310bb050af382924a99-1" name="rest_code_0c7f7d8ed27e4310bb050af382924a99-1"></a><span class="go">--------------------   filter encoder  -------------------   codec encoder   -------</span>
+<a id="rest_code_0c7f7d8ed27e4310bb050af382924a99-2" name="rest_code_0c7f7d8ed27e4310bb050af382924a99-2"></a><span class="go">|        src        |   -----------&gt;  |        tmp        |   ----------&gt;   | c_src |</span>
+<a id="rest_code_0c7f7d8ed27e4310bb050af382924a99-3" name="rest_code_0c7f7d8ed27e4310bb050af382924a99-3"></a><span class="go">--------------------                   -------------------                   -------</span>
+</pre>
+<p>And the decompression process:</p>
+<pre class="code console"><a id="rest_code_60c53c72ed5b4973a52f89bc4f8338ca-1" name="rest_code_60c53c72ed5b4973a52f89bc4f8338ca-1"></a><span class="go">--------   codec decoder    -------------------   filter decoder  -------------------</span>
+<a id="rest_code_60c53c72ed5b4973a52f89bc4f8338ca-2" name="rest_code_60c53c72ed5b4973a52f89bc4f8338ca-2"></a><span class="go">| c_src |   -----------&gt;   |        tmp        |   ----------&gt;   |        src        |</span>
+<a id="rest_code_60c53c72ed5b4973a52f89bc4f8338ca-3" name="rest_code_60c53c72ed5b4973a52f89bc4f8338ca-3"></a><span class="go">--------                    -------------------                   -------------------</span>
+</pre>
+<section id="register-for-user-plugins"><h2>Register for user plugins</h2>
+<p><strong>User registered plugins</strong> are plugins that users register locally so that they can be used in the same way as Blosc official codecs and filters.
+This option is perfect for users that want to try new filters or codecs on their own.</p>
+<p>The register process is quite simple.  You just use the <code class="docutils literal">blosc2_register_filter()</code> or <code class="docutils literal">blosc2_register_codec()</code> function and then the Blosc2 machinery
+will store its info with the rest of plugins. After that you will be able to access your plugin through its ID by setting Blosc2 compression or decompression
+params.</p>
+<pre class="code console"><a id="rest_code_28581fee14ae4594975ce63f2daa39b4-1" name="rest_code_28581fee14ae4594975ce63f2daa39b4-1"></a><span class="go">                                             filters pipeline</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-2" name="rest_code_28581fee14ae4594975ce63f2daa39b4-2"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-3" name="rest_code_28581fee14ae4594975ce63f2daa39b4-3"></a><span class="go">                                         |  BLOSC_SHUFFLE     1 |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-4" name="rest_code_28581fee14ae4594975ce63f2daa39b4-4"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-5" name="rest_code_28581fee14ae4594975ce63f2daa39b4-5"></a><span class="go">                                         |  BLOSC_BITSHUFFLE  2 |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-6" name="rest_code_28581fee14ae4594975ce63f2daa39b4-6"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-7" name="rest_code_28581fee14ae4594975ce63f2daa39b4-7"></a><span class="go">                                         |  BLOSC_DELTA       3 |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-8" name="rest_code_28581fee14ae4594975ce63f2daa39b4-8"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-9" name="rest_code_28581fee14ae4594975ce63f2daa39b4-9"></a><span class="go">                                         |  BLOSC_TRUNC       4 |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-10" name="rest_code_28581fee14ae4594975ce63f2daa39b4-10"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-11" name="rest_code_28581fee14ae4594975ce63f2daa39b4-11"></a><span class="go">                                         |         ...          |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-12" name="rest_code_28581fee14ae4594975ce63f2daa39b4-12"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-13" name="rest_code_28581fee14ae4594975ce63f2daa39b4-13"></a><span class="go">                                         |  BLOSC_NDCELL     32 |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-14" name="rest_code_28581fee14ae4594975ce63f2daa39b4-14"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-15" name="rest_code_28581fee14ae4594975ce63f2daa39b4-15"></a><span class="go">                                         |  BLOSC_NDMEAN     33 |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-16" name="rest_code_28581fee14ae4594975ce63f2daa39b4-16"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-17" name="rest_code_28581fee14ae4594975ce63f2daa39b4-17"></a><span class="go">                                         |         ...          |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-18" name="rest_code_28581fee14ae4594975ce63f2daa39b4-18"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-19" name="rest_code_28581fee14ae4594975ce63f2daa39b4-19"></a><span class="go">                                         |  urfilter1       160 |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-20" name="rest_code_28581fee14ae4594975ce63f2daa39b4-20"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-21" name="rest_code_28581fee14ae4594975ce63f2daa39b4-21"></a><span class="go">blosc2_register_filter(urfilter2)  ---&gt;  |  urfilter2       161 |  ---&gt; cparams.filters[4] = 161; // can be used now</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-22" name="rest_code_28581fee14ae4594975ce63f2daa39b4-22"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-23" name="rest_code_28581fee14ae4594975ce63f2daa39b4-23"></a><span class="go">                                         |         ...          |</span>
+<a id="rest_code_28581fee14ae4594975ce63f2daa39b4-24" name="rest_code_28581fee14ae4594975ce63f2daa39b4-24"></a><span class="go">                                          ----------------------</span>
+</pre></section><section id="global-register-for-blosc-plugins"><h2>Global register for Blosc plugins</h2>
+<p><strong>Blosc global registered plugins</strong> are Blosc plugins that have passed through a selection process and a review by the Blosc Development Team.
+These plugins will be available for everybody using the C-Blosc2 library.</p>
+<p>You should consider this option if you think that your codec or filter could be useful for the community, or you just want being able to use
+them with upstream C-Blosc2 library.  The steps for registering an official Blosc plugin can be seen at:
+<a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/plugins/README.md">https://github.com/Blosc/c-blosc2/blob/main/plugins/README.md</a></p>
+<p>Some well documented examples of these kind of plugins are the codec <code class="docutils literal">ndlz</code> and the filters <code class="docutils literal">ndcell</code> and <code class="docutils literal">ndmean</code> on the C-Blosc2 GitHub repository:
+<a class="reference external" href="https://github.com/Blosc/c-blosc2/tree/main/plugins">https://github.com/Blosc/c-blosc2/tree/main/plugins</a></p>
+</section><section id="compiling-plugins-examples-using-blosc2-wheels"><h2>Compiling plugins examples using Blosc2 wheels</h2>
+<p>So as to easy the use of the registered filters, full-fledged C-Blosc2 binary libraries including plugins functionality can be installed from
+python-blosc2 (&gt;= 0.1.8) wheels:</p>
+<pre class="code console"><a id="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-1" name="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-1"></a><span class="gp">$ </span>pip install blosc2
+<a id="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-2" name="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-2"></a><span class="go">Collecting blosc2</span>
+<a id="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-3" name="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-3"></a><span class="go">  Downloading blosc2-0.1.8-cp37-cp37m-manylinux2010_x86_64.whl (3.3 MB)</span>
+<a id="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-4" name="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-4"></a><span class="go">     |████████████████████████████████| 3.3 MB 4.7 MB/s</span>
+<a id="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-5" name="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-5"></a><span class="go">Installing collected packages: blosc2</span>
+<a id="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-6" name="rest_code_600fc9fbd8dc453cb64b10ab293cdd87-6"></a><span class="go">Successfully installed blosc2-0.1.8</span>
+</pre>
+<p>Once you have installed the C-Blosc2 libraries you can not only use the official Blosc filters and codecs, but you can also register and use them.
+You can find directions on how to compile C files using the Blosc2 libraries inside these wheels at:
+<a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/COMPILING_WITH_WHEELS.rst">https://github.com/Blosc/c-blosc2/blob/main/COMPILING_WITH_WHEELS.rst</a></p>
+<section id="using-user-plugins"><h3>Using user plugins</h3>
+<p>To use your own plugins with the Blosc machinery you first have to register them through the function <code class="docutils literal">blosc2_register_codec()</code> or <code class="docutils literal">blosc2_register_filter()</code>
+with an ID between <code class="docutils literal">BLOSC2_USER_DEFINED_FILTERS_START</code> and <code class="docutils literal">BLOSC2_USER_DEFINED_FILTERS_STOP</code>. Then you can use this ID in the compression parameters (<cite>cparams.compcode</cite>, <cite>cparams.filters</cite>) and decompression parameters (<cite>dparams.compcode</cite>, <cite>dparams.filters</cite>).
+For any doubts you can see the whole process in the examples <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/examples/urcodecs.c">urcodecs.c</a> and <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/examples/urfilters.c">urfilters.c</a>.</p>
+<pre class="code C"><a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-1" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-1"></a><span class="n">blosc2_codec</span> <span class="n">urcodec</span><span class="p">;</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-2" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-2"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="mi">244</span><span class="p">;</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-3" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-3"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compver</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-4" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-4"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">complib</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-5" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-5"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compname</span> <span class="o">=</span> <span class="s">"urcodec"</span><span class="p">;</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-6" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-6"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">codec_encoder</span><span class="p">;</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-7" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-7"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">codec_decoder</span><span class="p">;</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-8" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-8"></a><span class="n">blosc2_register_codec</span><span class="p">(</span><span class="o">&amp;</span><span class="n">urcodec</span><span class="p">);</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-9" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-9"></a>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-10" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-10"></a><span class="n">blosc2_cparams</span> <span class="n">cparams</span> <span class="o">=</span> <span class="n">BLOSC2_CPARAMS_DEFAULTS</span><span class="p">;</span>
+<a id="rest_code_a2a5d4dd19cd4c05a03306e19139701d-11" name="rest_code_a2a5d4dd19cd4c05a03306e19139701d-11"></a><span class="n">cparams</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="mi">244</span><span class="p">;</span>
+</pre></section><section id="using-blosc-official-plugins"><h3>Using Blosc official plugins</h3>
+<p>To use the Blosc official plugins it is mandatory to add the next lines in order to activate the plugins mechanism:</p>
+<ul class="simple">
+<li><p><code class="docutils literal">#include <span class="pre">"blosc2/codecs-registery.h"</span></code> or <code class="docutils literal">#include <span class="pre">"blosc2/filters-registery.h"</span></code> depending on the plugin type at the beginning of the file</p></li>
+<li><p><code class="docutils literal">#include "blosc2/blosc2.h"</code> at the beginning of the file</p></li>
+<li><p>Call <code class="docutils literal">blosc_init()</code> at the beginning of main() function</p></li>
+<li><p>Call <code class="docutils literal">blosc_destroy()</code> at the end of main() function</p></li>
+</ul>
+<p>Then you just have to use the ID of the plugin that you want to use in the compression parameters (<code class="docutils literal">cparams.compcode</code>).</p>
+<pre class="code C"><a id="rest_code_e3c1f15317c445259b06d2087f089aa3-1" name="rest_code_e3c1f15317c445259b06d2087f089aa3-1"></a><span class="cp">#include</span> <span class="cpf">"blosc2.h"</span><span class="cp"></span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-2" name="rest_code_e3c1f15317c445259b06d2087f089aa3-2"></a><span class="cp">#include</span> <span class="cpf">"../codecs-registry.h"</span><span class="cp"></span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-3" name="rest_code_e3c1f15317c445259b06d2087f089aa3-3"></a><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-4" name="rest_code_e3c1f15317c445259b06d2087f089aa3-4"></a>    <span class="n">blosc_init</span><span class="p">();</span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-5" name="rest_code_e3c1f15317c445259b06d2087f089aa3-5"></a>    <span class="p">...</span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-6" name="rest_code_e3c1f15317c445259b06d2087f089aa3-6"></a>    <span class="n">blosc2_cparams</span> <span class="n">cparams</span> <span class="o">=</span> <span class="n">BLOSC2_CPARAMS_DEFAULTS</span><span class="p">;</span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-7" name="rest_code_e3c1f15317c445259b06d2087f089aa3-7"></a>    <span class="n">cparams</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="n">BLOSC_CODEC_NDLZ</span><span class="p">;</span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-8" name="rest_code_e3c1f15317c445259b06d2087f089aa3-8"></a>    <span class="n">cparams</span><span class="p">.</span><span class="n">compcode_meta</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-9" name="rest_code_e3c1f15317c445259b06d2087f089aa3-9"></a>    <span class="p">...</span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-10" name="rest_code_e3c1f15317c445259b06d2087f089aa3-10"></a>    <span class="n">blosc_destroy</span><span class="p">();</span>
+<a id="rest_code_e3c1f15317c445259b06d2087f089aa3-11" name="rest_code_e3c1f15317c445259b06d2087f089aa3-11"></a><span class="p">}</span>
+</pre>
+<p>In case of doubts, you can see how the whole process works in working tests like:
+<a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/plugins/codecs/ndlz/test_ndlz.c">test_ndlz.c</a>,
+<a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/plugins/filters/ndcell/test_ndcell.c">test_ndcell.c</a>,
+<a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/plugins/filters/ndmean/test_ndmean_mean.c">test_ndmean_mean.c</a> and
+<a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/plugins/filters/ndmean/test_ndmean_repart.c">test_ndmean_repart.c</a>.</p>
+</section></section><section id="final-remarks"><h2>Final remarks</h2>
+<p>The plugin register functionality let use new codecs and filters within Blosc in an easy and quick way. To enhance the plugin experience, we
+have implemented a centralized plugin repository, so that users can propose their own plugins to be in the standard C-Blosc2 library for
+the benefit of all the Blosc community.</p>
+<p>The Blosc Development Team kindly invites you to test the different plugins we already offer, but also to try with your own one.  Besides, if you are willing to contribute it to the community, then apply to register it. This way everyone will be able to enjoy a variety of different and unique plugins.  Hope you will enjoy this new and exciting feature!</p>
+<p>Last but not least, a big thank you to the NumFOCUS foundation for providing a grant for implementing the register functionality.</p>
+</section>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosc-plugins-codecs-filters/" rel="tag">blosc plugins codecs filters</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../python-blosc2-initial-release/" rel="prev" title="Wrapping C-Blosc2 in Python (a beginner's view)">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/registering-plugins/",
+        disqus_title=" Registering plugins in C-Blosc2",
+        disqus_identifier="cache/posts/registering-plugins.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>
