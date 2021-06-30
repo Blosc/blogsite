@@ -20,7 +20,7 @@ It uses the **blocking technique** (as described in this `article
 <http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf>`_) to reduce
 activity on the memory bus as much as possible.  In short, the
 blocking technique works by dividing datasets in blocks that are small
-enough to fit in L1 cache of modern processor and perform
+enough to fit in the caches of modern processor and perform
 compression/decompression there. It also leverages *SIMD* (SSE2)
 and *multi-threading* capabilities present in nowadays multi-core
 processors so as to accelerate the compression/decompression process
