@@ -182,7 +182,7 @@ Want To Contribute?
 
 Your contribution is very important to make Blosc as solid as possible.  If
 you detect a bug or wish to propose an enhancement, feel free to open a new
-ticket or make yourself heard on the mailinglist.  Also, please note that
+ticket or make yourself heard on the mailing list.  Also, please note that
 we have a `Code of Conduct <https://github.com/Blosc/community/blob/master/code_of_conduct.md>`_
 that you should make sure to read before contributing in any way.
 
