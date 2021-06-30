@@ -86,8 +86,6 @@ based on `FastLZ <http://fastlz.org/>`_. Blosc also includes support for `LZ4 an
 `Zstd <https://github.com/facebook/zstd>`_.  Also,
 it comes with highly optimized **shuffle** and **bitshuffle** filters. These can use SSE2, AVX2 (Intel), NEON (ARM) or VMX/AltiVec/VSX (PowerPC) instructions (if available).
 
-Of course, almost every user has her own needs, and in Blosc2 it is possible to `register different codecs and filters <https://www.blosc.org/posts/registering-plugins/>`_ so that you can better adapt Blosc to different scenarios.
-
 Blosc is in charge of coordinating the codecs and filters
 so that they can leverage the blocking technique (described above) as
 well as multi-threaded execution (if several cores are available)
@@ -127,6 +125,12 @@ expected physical limits.  For example, see this
 `study from one of the Zarr authors <http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html>`_
 to see the benefits of Blosc on accessing compressed data (please note that
 this benchmark is a bit dated, and that new hardware and recent versions of Blosc might enhance performance well beyond what is shown there).
+
+
+Adapt Blosc2 to your needs
+--------------------------
+
+We know that every user has her own needs, so we made possible to `register your own codecs and filters <https://www.blosc.org/posts/registering-plugins/>`_ so that you can better adapt Blosc2 to different scenarios. In addition, you can ask them to be included in the main Blosc2 library, which not only allows for much easier deployment, but also contributes to create a richer and more useful Blosc2 ecosystem. 
 
 
 Is It Ready For Production Use?
