@@ -140,10 +140,7 @@ received many reports of failures created by Blosc itself, and when
 that happens we strive to `respond as fast as possible
 <https://www.blosc.org/posts/new-forward-compat-policy/>`_.
 
-Moreover, since Blosc reached 2.0.0, it has been declared
-stable, and both the **API and the format have been frozen**, so you
-should expect a large degree of stability for your Blosc2-powered
-applications too.
+Also, and after a long period of testing, C-Blosc2 entered production stage in 2.0.0, and both the API and the format have been frozen, and that means that there is guarantee that your programs will continue to work with future versions of the library, and that next releases will be able to read from persistent storage generated from previous releases (as of 2.0.0).
 
 Git repository, downloads and ticketing
 ---------------------------------------
