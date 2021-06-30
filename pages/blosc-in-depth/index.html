@@ -132,7 +132,6 @@ with different codecs out of the box.</p>
 based on <a class="reference external" href="http://fastlz.org/">FastLZ</a>. Blosc also includes support for <a class="reference external" href="https://github.com/lz4/lz4">LZ4 and LZ4HC</a>, <a class="reference external" href="https://github.com/zlib-ng/zlib-ng">Zlib</a> and
 <a class="reference external" href="https://github.com/facebook/zstd">Zstd</a>.  Also,
 it comes with highly optimized <strong>shuffle</strong> and <strong>bitshuffle</strong> filters. These can use SSE2, AVX2 (Intel), NEON (ARM) or VMX/AltiVec/VSX (PowerPC) instructions (if available).</p>
-<p>Of course, almost every user has her own needs, and in Blosc2 it is possible to <a class="reference external" href="https://www.blosc.org/posts/registering-plugins/">register different codecs and filters</a> so that you can better adapt Blosc to different scenarios.</p>
 <p>Blosc is in charge of coordinating the codecs and filters
 so that they can leverage the blocking technique (described above) as
 well as multi-threaded execution (if several cores are available)
@@ -164,6 +163,8 @@ expected physical limits.  For example, see this
 <a class="reference external" href="http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html">study from one of the Zarr authors</a>
 to see the benefits of Blosc on accessing compressed data (please note that
 this benchmark is a bit dated, and that new hardware and recent versions of Blosc might enhance performance well beyond what is shown there).</p>
+</section><section id="adapt-blosc2-to-your-needs"><h2>Adapt Blosc2 to your needs</h2>
+<p>We know that every user has her own needs, so we made possible to <a class="reference external" href="https://www.blosc.org/posts/registering-plugins/">register your own codecs and filters</a> so that you can better adapt Blosc2 to different scenarios. In addition, you can ask them to be included in the main Blosc2 library, which not only allows for much easier deployment, but also contributes to create a richer and more useful Blosc2 ecosystem.</p>
 </section><section id="is-it-ready-for-production-use"><h2>Is It Ready For Production Use?</h2>
 <p>Yup, it is!</p>
 <p>Blosc is being used in different libraries, compressing data at a rate
