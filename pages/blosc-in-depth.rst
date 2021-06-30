@@ -127,10 +127,10 @@ to see the benefits of Blosc on accessing compressed data (please note that
 this benchmark is a bit dated, and that new hardware and recent versions of Blosc might enhance performance well beyond what is shown there).
 
 
-Adapt Blosc2 to your needs
+Adapt Blosc to your needs
 --------------------------
 
-We know that every user has her own needs, so we made possible to `register your own codecs and filters <https://www.blosc.org/posts/registering-plugins/>`_ so that you can better adapt Blosc2 to different scenarios. In addition, you can ask them to be included in the main Blosc2 library, which not only allows for much easier deployment, but also contributes to create a richer and more useful Blosc2 ecosystem. 
+We know that every user has her own needs, so we made possible to `register your own codecs and filters <https://www.blosc.org/posts/registering-plugins/>`_ so that you can better adapt Blosc to different scenarios. In addition, you can ask them to be included in the main C-Blosc2 library, which not only allows for much easier deployment, but also contributes to create a richer and more useful ecosystem. 
 
 
 Is It Ready For Production Use?
