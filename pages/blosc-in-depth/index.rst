@@ -44,7 +44,7 @@ for a variety of codecs that come with Blosc2:
    :align: center
 
 There you can see how compressing with Blosc allows to accelerate real computations
-if you throw cores enough at the task.  This plot has been made on a mid-sized workstation with an `Intel CoreX with 14 cores
+if you throw enough cores at the task.  This plot has been made on a mid-sized workstation with an `Intel CoreX with 14 cores
 <https://ark.intel.com/content/www/us/en/ark/products/198014/intel-core-i9-10940x-x-series-processor-19-25m-cache-3-30-ghz.html>`_,
 with 4 memory channels (around 56 GB/s read bandwidth), Clear Linux and GCC 11.
 In particular, note how the compressed computation can go beyond the read bandwidth of this box (85 GB/s vs 56 GB/s).
@@ -80,25 +80,20 @@ At any rate, it can also be called a compressor because it ships
 with different codecs out of the box.
 
 Currently, Blosc uses **BloscLZ** by default, a codec heavily
-based on `FastLZ <http://fastlz.org/>`_. From version 1.3 onwards,
-Blosc also includes support for `LZ4 and LZ4HC
+based on `FastLZ <http://fastlz.org/>`_. Blosc also includes support for `LZ4 and LZ4HC
 <https://github.com/lz4/lz4>`_, `Zlib
 <https://github.com/zlib-ng/zlib-ng>`_ and
 `Zstd <https://github.com/facebook/zstd>`_.  Also,
-it comes with a highly optimized (it can use SSE2, AVX2 or NEON
-instructions, if available) **shuffle** and **bitshuffle** filters.
+it comes with highly optimized **shuffle** and **bitshuffle** filters. These can use SSE2, AVX2 (Intel), NEON (ARM) or VMX/AltiVec/VSX (PowerPC) instructions (if available).
 
-Of course, almost every user has her own needs, and in Blosc2 we are
-working on making possible for her to register different codecs
-and filters so that they can fine tune Blosc for different scenarios.
+Of course, almost every user has her own needs, and in Blosc2 it is possible to `register different codecs and filters <https://www.blosc.org/posts/registering-plugins/>`_ so that you can better adapt Blosc to different scenarios.
 
 Blosc is in charge of coordinating the codecs and filters
 so that they can leverage the blocking technique (described above) as
 well as multi-threaded execution (if several cores are available)
 automatically. That makes that every codec and filter
 will work at very high speeds, even if it was not initially designed
-for doing blocking or multi-threading. For example, Blosc allows you
-to use the ``LZ4`` codec, but in a multi-threaded way.
+for doing blocking or multi-threading. For example, Blosc allows to use the ``LZ4`` codec, but in a multi-threaded way.
 
 Other advantages of Blosc are:
 
@@ -131,15 +126,7 @@ Applications using Blosc are expected to allow I/O performance to go beyond
 expected physical limits.  For example, see this
 `study from one of the Zarr authors <http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html>`_
 to see the benefits of Blosc on accessing compressed data (please note that
-this example is a bit dated, and that new hardware and recent versions of Blosc
-will make the benefits to be better now in the next future.
-
-Blosc was initially developed for the needs of the `PyTables
-<http://www.pytables.org>`_ database and the `bcolz
-<https://github.com/Blosc/bcolz>`_ project, and it is the default
-compressor for the popular `Zarr <https://github.com/zarr-developers/zarr-python>`_
-package.  Of course, it can be used in any situation where a fast compressor is
-needed.
+this benchmark is a bit dated, and that new hardware and recent versions of Blosc might enhance performance well beyond what is shown there).
 
 
 Is It Ready For Production Use?
@@ -149,14 +136,14 @@ Yup, it is!
 
 Blosc is being used in different libraries, compressing data at a rate
 that probably exceeds several Petabytes per month.  Fortunately, we haven't
-received many reports of failures created my Blosc itself, and when
-that happened we try to `respond as fast as possible
+received many reports of failures created by Blosc itself, and when
+that happens we strive to `respond as fast as possible
 <https://www.blosc.org/posts/new-forward-compat-policy/>`_.
 
-Moreover, with the introduction of Blosc 2.0.0 RC1, it has been declared
+Moreover, since Blosc reached 2.0.0, it has been declared
 stable, and both the **API and the format have been frozen**, so you
 should expect a large degree of stability for your Blosc2-powered
-applications.
+applications too.
 
 Git repository, downloads and ticketing
 ---------------------------------------
@@ -185,7 +172,7 @@ http://groups.google.com/group/blosc
 Python wrapping
 ---------------
 
-You can find a Python package that wraps Blosc at:
+The official Python wrappers can be found at:
 
 http://github.com/Blosc/python-blosc
 http://github.com/Blosc/python-blosc2
@@ -205,3 +192,5 @@ Blosc License
 Blosc is free software and released under the terms of the very
 permissive `BSD license <https://en.wikipedia.org/wiki/BSD_licenses>`_,
 so you can use it in almost any way you want!
+
+-- The Blosc Development Team
