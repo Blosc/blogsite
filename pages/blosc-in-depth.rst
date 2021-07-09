@@ -80,6 +80,9 @@ Also, check `Blosc2 <https://github.com/Blosc/c-blosc2>`_, the next generation o
    If you like Blosc and want to support our mission, please consider making a
    `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
 
+.. youtube:: HdscCz97mNs
+   :align: center
+
 
 Meta-Compression And Other Advantages Over Existing Compressors
 ---------------------------------------------------------------
