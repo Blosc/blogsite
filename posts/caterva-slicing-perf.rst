@@ -112,7 +112,7 @@ This is a 4-dimensional array and has the following parameters:
 
 Here the last dimension (3) is not optimized for getting hyper-slices, specially in containers with just single partitioning (Zarr and HDF5).  However, Caterva should still perform well in this situation because of the double partitioning.
 
-The slices we are going to extract will be (1, 80, 100, 50), (400, 1, 100, 50), (400, 80, 1, 50) or (400, 80, 100, 1). Let's see the execution times for slicing these hyper planes:
+The slices we are going to extract will be (1, 80, 100, 50), (400, 1, 100, 50), (400, 80, 1, 50) or (400, 80, 100, 1). Let's see the execution times for slicing these hyperplanes:
 
 .. image:: /images/cat_slicing/4dim.png
   :width: 80%

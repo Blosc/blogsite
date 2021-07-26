@@ -1,5 +1,5 @@
 .. title:  Registering plugins in C-Blosc2
-.. author: Oscar Griñón, Marta Iborra
+.. author: Oscar Guiñón, Marta Iborra
 .. slug: registering-plugins
 .. date: 2021-06-28 10:32:20 UTC
 .. tags: blosc plugins codecs filters
