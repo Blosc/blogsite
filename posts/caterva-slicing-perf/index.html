@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caterva slicing performance | Blosc Main Blog Page </title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="http://blosc.org/posts/caterva-slicing-perf/">
+<link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
+<link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
+<link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
+<link rel="icon" href="../../blosc-favicon_128x128.png" sizes="128x128">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-111342564-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-111342564-2');
+</script><meta name="author" content="Oscar Guiñon, Francesc Alted">
+<link rel="prev" href="../registering-plugins/" title=" Registering plugins in C-Blosc2" type="text/html">
+<meta property="og:site_name" content="Blosc Main Blog Page ">
+<meta property="og:title" content="Caterva slicing performance">
+<meta property="og:url" content="http://blosc.org/posts/caterva-slicing-perf/">
+<meta property="og:description" content="Caterva is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.
+Caterva can be used for a lot of different situations. However, where it really stands out ">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2021-07-26T04:32:20Z">
+<meta property="article:tag" content="caterva slicing perf">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://blosc.org/">
+                <img src="../../blosc-logo_128.png" alt="Blosc Main Blog Page " id="logo"></a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
+                </li>
+<li>
+<a href="https://c-blosc2.readthedocs.io/">Documentation</a>
+                </li>
+<li>
+<a href="../../pages/donate/">Donate to Blosc</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Caterva slicing performance</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/oscar-guinon-francesc-alted/">Oscar Guiñon, Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2021-07-26T04:32:20Z" itemprop="datePublished" title="2021-07-26 04:32">2021-07-26 04:32</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/caterva-slicing-perf.html">Comments</a>
+
+
+            
+
+        </p>
+</div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<img alt="/images/cat_slicing/caterva.png" class="align-center" src="../../images/cat_slicing/caterva.png" style="width: 70%;"><p>Caterva is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.
+Caterva can be used for a lot of different situations. However, where it really stands out is for extracting multidimensional slices of compressed datasets, thanks to the partitioning schema that it implements, the amount of data that has to decompress so as to get the slice is minimized, making things (usually) faster.</p>
+<p>Accordingly, for cases where general slicing performance is important, Caterva turns out to be a good alternative to other solutions like Zarr or HDF5.</p>
+<section id="double-partitioning"><h2>Double partitioning</h2>
+<img alt="/images/cat_slicing/cat_vs_zarr,hdf5.png" class="align-center" src="../../images/cat_slicing/cat_vs_zarr,hdf5.png" style="width: 70%;"><p>Some libraries like HDF5 or Zarr store data into multidimensional chunks. This makes slice extraction from compressed datasets more efficient than using monolithic compression, since only the chunks containing the interesting slice are decompressed instead of the entire array.</p>
+<p>In addition, Caterva introduces a new level of partitioning.  Within each chunk, the data is re-partitioned into smaller multidimensional sets called blocks.  This generally improves the slice extraction, since it allows to decompress only the blocks containing the slice instead of the whole chunks.</p>
+</section><section id="slice-extraction-with-caterva-hdf5-and-zarr"><h2>Slice extraction with Caterva, HDF5 and Zarr</h2>
+<p>Now we are going to compare the ability to extract multidimensional slices from compressed data of Caterva, HDF5 and Zarr.
+The examples below consists in extracting some hyper-planes from chunked arrays with different properties and see how Caterva performs compared with other solutions.</p>
+</section><section id="dimensional-array"><h2>2-dimensional array</h2>
+<p>This is a 2-dimensional array and has the following properties, defined to optimize slice extraction from the second dimension:</p>
+<pre class="code console"><a id="rest_code_bce5a4f233404fe89dbe1357329a21f1-1" name="rest_code_bce5a4f233404fe89dbe1357329a21f1-1"></a><span class="go">shape = (8_000, 8_000)</span>
+<a id="rest_code_bce5a4f233404fe89dbe1357329a21f1-2" name="rest_code_bce5a4f233404fe89dbe1357329a21f1-2"></a><span class="go">chunkshape = (4_000, 100)</span>
+<a id="rest_code_bce5a4f233404fe89dbe1357329a21f1-3" name="rest_code_bce5a4f233404fe89dbe1357329a21f1-3"></a><span class="go">blockshape = (500, 25)</span>
+</pre>
+<img alt="/images/cat_slicing/dim0.png" src="../../images/cat_slicing/dim0.png" style="width: 70%;"><img alt="/images/cat_slicing/dim1.png" src="../../images/cat_slicing/dim1.png" style="width: 70%;"><p>Here we can see that the ratio between chunkshape and blockshape is 8x in dimension 0 and 4x in dimension 1.</p>
+<p>Now we are going to extract some planes from the chunked arrays, and will plot the performance. For dimension 0 we extract a hyperplane of shape {1, 8000}, and for dimension 2 it has a {8000, 1} shape.</p>
+<img alt="/images/cat_slicing/2dim.png" class="align-center" src="../../images/cat_slicing/2dim.png" style="width: 70%;"><p>Here we see that the slicing times are similar in the dimension 1. However, Caterva performs better in the dimension 0. This is because with double partitioning you only have to decompress the blocks containing the slice instead of the whole chunk.</p>
+<p>In fact, Caterva is around 12x faster than HDF5 and 9x faster than Zarr for slicing the dimension 0, which makes sense since Caterva decompresses 8x less data.
+For the dimension 1, Caterva is approximately 3x faster than HDF5 and Zarr; in this case Caterva has to decompress 4x less data.</p>
+<p>To sum up, we have seen that the difference of slice extraction speed depends largely on the difference between the chunk size and the block size. Therefore, for slices where the chunks that contain the slice also have many elements that do not belong to it, the existence of blocks (the second partition) allows to significantly reduce the amount of data to decompress.</p>
+</section><section id="overhead-of-the-second-partition"><h2>Overhead of the second partition</h2>
+<p>Let's see a new case of a 3-dimensional array with the following parameters:</p>
+<pre class="code console"><a id="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-1" name="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-1"></a><span class="go">shape = (800, 600, 300)</span>
+<a id="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-2" name="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-2"></a><span class="go">chunkshape = (200, 100, 80)</span>
+<a id="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-3" name="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-3"></a><span class="go">blockshape = (20, 100, 10)</span>
+</pre>
+<p>Here it is shown that in the dimensions 0 and 2 the difference between shape and chunkshape is not too big and the difference between chunkshape and blockshape is remarkable.</p>
+<p>However, for the dimension 1, there is not a difference at all between chunkshape and blockshape.  This means that in dimension 1 the Caterva machinery will make extra work because of the double partitioning, but it will not get any advantage of it since the block size is going to be equal to the chunk size.</p>
+<p>The slices we are going to extract will have the shapes {1, 600, 300}, {800, 1, 300} or {800, 600, 1}. Let's see the execution times for slicing these planes:</p>
+<img alt="/images/cat_slicing/3dim.png" class="align-center" src="../../images/cat_slicing/3dim.png" style="width: 70%;"><p>As we can see, in the dimension 1 the performance is around the same order than HDF5 and Zarr (Zarr being a bit faster actually), but difference is not large, so that means that the overhead introduced by the second partition is not that important.
+However, in the other dimensions Caterva still outperforms (by far) Zarr and HDF5.  This is because the two level partitioning works as intended here.</p>
+</section><section id="a-last-hyper-slicing-example"><h2>A last hyper-slicing example</h2>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">&lt;string&gt;</span>, line 90)</p>
+<p>Title underline too short.</p>
+<pre class="literal-block">A last hyper-slicing example
+---------------------------</pre>
+</div>
+<p>This is a 4-dimensional array and has the following parameters:</p>
+<pre class="code console"><a id="rest_code_79e155b2b2c649a4a99533f8f62bf81a-1" name="rest_code_79e155b2b2c649a4a99533f8f62bf81a-1"></a><span class="go">shape = (400, 80, 100, 50)</span>
+<a id="rest_code_79e155b2b2c649a4a99533f8f62bf81a-2" name="rest_code_79e155b2b2c649a4a99533f8f62bf81a-2"></a><span class="go">chunkshape = (100, 40, 10, 50)</span>
+<a id="rest_code_79e155b2b2c649a4a99533f8f62bf81a-3" name="rest_code_79e155b2b2c649a4a99533f8f62bf81a-3"></a><span class="go">blockshape = (30, 5, 2, 10)</span>
+</pre>
+<img alt="/images/cat_slicing/4dim.png" class="align-center" src="../../images/cat_slicing/4dim.png" style="width: 70%;"><p>Here the last dimension (3) is not optimized for getting hyper-slices, specially in containers with just single partitioning (Zarr and HDF5).  However, Caterva should still perform well in this situation because of the double partitioning.</p>
+<p>The slices we are going to extract will have the shapes {1, 80, 100, 50}, {400, 1, 100, 50}, {400, 80, 1, 50} or {400, 80, 100, 1}. Let's see the execution times for slicing these hyper planes:</p>
+<img alt="/images/cat_slicing/4dim.png" class="align-center" src="../../images/cat_slicing/4dim.png" style="width: 70%;"><p>As we can see, in this case Caterva outperforms Zarr and HDF5 in all dimensions.  However, the advantage is not that important for the last dimension.  The reason is that in this last dimension Caterva has a noticeably lower ratio between its shape and blockshape than in the other dimensions.</p>
+</section><section id="final-thoughts"><h2>Final thoughts</h2>
+<p>We have seen that adding a second partition is beneficial for slicing performance in general.  Of course, there are some situations where the overhead of the second partition can be noticeable, but the good news is that such an overhead does not get too large when compared with containers with only one level of partitioning.</p>
+<p>Finally, we can conclude that Caterva usually obtains better results due to its second partitioning, but when it shines the most is when the two levels of partitioning are well balanced with respect to the shape of the container.</p>
+<p>For more a more interactive experience, have a look at <a class="reference external" href="https://github.com/Blosc/caterva-scipy21">our Caterva poster</a>.</p>
+</section>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/caterva-slicing-perf/" rel="tag">caterva slicing perf</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../registering-plugins/" rel="prev" title=" Registering plugins in C-Blosc2">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/caterva-slicing-perf/",
+        disqus_title="Caterva slicing performance",
+        disqus_identifier="cache/posts/caterva-slicing-perf.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>
