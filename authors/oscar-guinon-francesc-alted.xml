@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts by Oscar Guiñon, Francesc Alted)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/authors/oscar-guinon-francesc-alted.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Mon, 26 Jul 2021 10:31:08 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Caterva slicing performance</title><link>http://blosc.org/posts/caterva-slicing-perf/</link><dc:creator>Oscar Guiñon, Francesc Alted</dc:creator><description>&lt;div&gt;&lt;img alt="/images/cat_slicing/caterva.png" class="align-center" src="http://blosc.org/images/cat_slicing/caterva.png" style="width: 70%;"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts by Oscar Guiñon, Francesc Alted)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/authors/oscar-guinon-francesc-alted.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Mon, 26 Jul 2021 11:21:34 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Caterva slicing performance</title><link>http://blosc.org/posts/caterva-slicing-perf/</link><dc:creator>Oscar Guiñon, Francesc Alted</dc:creator><description>&lt;div&gt;&lt;img alt="/images/cat_slicing/caterva.png" class="align-center" src="http://blosc.org/images/cat_slicing/caterva.png" style="width: 50%;"&gt;
 &lt;p&gt;Caterva is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.
-Caterva can be used for a lot of different situations. However, where it really stands out is for extracting multidimensional slices of compressed datasets, thanks to the partitioning schema that it implements, the amount of data that has to decompress so as to get the slice is minimized, making things (usually) faster.&lt;/p&gt;
+It can be used for a lot of different situations. However, where it really stands out is for extracting multidimensional slices of compressed datasets, thanks to the partitioning schema that it implements, the amount of data that has to decompress so as to get the slice is minimized, making things (usually) faster.&lt;/p&gt;
 &lt;p&gt;Accordingly, for cases where general slicing performance is important, Caterva turns out to be a good alternative to other solutions like Zarr or HDF5.&lt;/p&gt;
 &lt;section id="double-partitioning"&gt;
 &lt;h2&gt;Double partitioning&lt;/h2&gt;
@@ -12,19 +12,19 @@ Caterva can be used for a lot of different situations. However, where it really 
 &lt;section id="slice-extraction-with-caterva-hdf5-and-zarr"&gt;
 &lt;h2&gt;Slice extraction with Caterva, HDF5 and Zarr&lt;/h2&gt;
 &lt;p&gt;Now we are going to compare the ability to extract multidimensional slices from compressed data of Caterva, HDF5 and Zarr.
-The examples below consists in extracting some hyper-planes from chunked arrays with different properties and see how Caterva performs compared with other solutions.&lt;/p&gt;
+The examples below consist on extracting some hyper-planes from chunked arrays with different properties and seeing how Caterva performs compared with other solutions.&lt;/p&gt;
 &lt;/section&gt;
 &lt;section id="dimensional-array"&gt;
 &lt;h2&gt;2-dimensional array&lt;/h2&gt;
 &lt;p&gt;This is a 2-dimensional array and has the following properties, defined to optimize slice extraction from the second dimension:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_bce5a4f233404fe89dbe1357329a21f1-1" name="rest_code_bce5a4f233404fe89dbe1357329a21f1-1"&gt;&lt;/a&gt;&lt;span class="go"&gt;shape = (8_000, 8_000)&lt;/span&gt;
-&lt;a id="rest_code_bce5a4f233404fe89dbe1357329a21f1-2" name="rest_code_bce5a4f233404fe89dbe1357329a21f1-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;chunkshape = (4_000, 100)&lt;/span&gt;
-&lt;a id="rest_code_bce5a4f233404fe89dbe1357329a21f1-3" name="rest_code_bce5a4f233404fe89dbe1357329a21f1-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;blockshape = (500, 25)&lt;/span&gt;
-&lt;/pre&gt;&lt;img alt="/images/cat_slicing/dim0.png" src="http://blosc.org/images/cat_slicing/dim0.png" style="width: 70%;"&gt;
-&lt;img alt="/images/cat_slicing/dim1.png" src="http://blosc.org/images/cat_slicing/dim1.png" style="width: 70%;"&gt;
-&lt;p&gt;Here we can see that the ratio between chunkshape and blockshape is 8x in dimension 0 and 4x in dimension 1.&lt;/p&gt;
-&lt;p&gt;Now we are going to extract some planes from the chunked arrays, and will plot the performance. For dimension 0 we extract a hyperplane of shape {1, 8000}, and for dimension 2 it has a {8000, 1} shape.&lt;/p&gt;
-&lt;img alt="/images/cat_slicing/2dim.png" class="align-center" src="http://blosc.org/images/cat_slicing/2dim.png" style="width: 70%;"&gt;
+&lt;pre class="code console"&gt;&lt;a id="rest_code_0737ef01af75428b92f3f1f068099cb4-1" name="rest_code_0737ef01af75428b92f3f1f068099cb4-1"&gt;&lt;/a&gt;&lt;span class="go"&gt;shape = (8_000, 8_000)&lt;/span&gt;
+&lt;a id="rest_code_0737ef01af75428b92f3f1f068099cb4-2" name="rest_code_0737ef01af75428b92f3f1f068099cb4-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;chunkshape = (4_000, 100)&lt;/span&gt;
+&lt;a id="rest_code_0737ef01af75428b92f3f1f068099cb4-3" name="rest_code_0737ef01af75428b92f3f1f068099cb4-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;blockshape = (500, 25)&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;Here we can see that the ratio between chunkshape and blockshape is 8x in dimension 0 and 4x in dimension 1.&lt;/p&gt;
+&lt;img alt="/images/cat_slicing/dim0.png" class="align-center" src="http://blosc.org/images/cat_slicing/dim0.png" style="width: 70%;"&gt;
+&lt;img alt="/images/cat_slicing/dim1.png" class="align-center" src="http://blosc.org/images/cat_slicing/dim1.png" style="width: 70%;"&gt;
+&lt;p&gt;Now we are going to extract some planes from the chunked arrays, and will plot the performance. For dimension 0 we extract a hyperplane (1, 8000), and for dimension 1 it is (8000, 1).&lt;/p&gt;
+&lt;img alt="/images/cat_slicing/2dim.png" class="align-center" src="http://blosc.org/images/cat_slicing/2dim.png" style="width: 80%;"&gt;
 &lt;p&gt;Here we see that the slicing times are similar in the dimension 1. However, Caterva performs better in the dimension 0. This is because with double partitioning you only have to decompress the blocks containing the slice instead of the whole chunk.&lt;/p&gt;
 &lt;p&gt;In fact, Caterva is around 12x faster than HDF5 and 9x faster than Zarr for slicing the dimension 0, which makes sense since Caterva decompresses 8x less data.
 For the dimension 1, Caterva is approximately 3x faster than HDF5 and Zarr; in this case Caterva has to decompress 4x less data.&lt;/p&gt;
@@ -33,37 +33,30 @@ For the dimension 1, Caterva is approximately 3x faster than HDF5 and Zarr; in t
 &lt;section id="overhead-of-the-second-partition"&gt;
 &lt;h2&gt;Overhead of the second partition&lt;/h2&gt;
 &lt;p&gt;Let's see a new case of a 3-dimensional array with the following parameters:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-1" name="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-1"&gt;&lt;/a&gt;&lt;span class="go"&gt;shape = (800, 600, 300)&lt;/span&gt;
-&lt;a id="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-2" name="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;chunkshape = (200, 100, 80)&lt;/span&gt;
-&lt;a id="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-3" name="rest_code_4e5443a6495d4e9e8bf5baa48801d32f-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;blockshape = (20, 100, 10)&lt;/span&gt;
+&lt;pre class="code console"&gt;&lt;a id="rest_code_66bc12b16d894adbbfdb5f90a1c4d18d-1" name="rest_code_66bc12b16d894adbbfdb5f90a1c4d18d-1"&gt;&lt;/a&gt;&lt;span class="go"&gt;shape = (800, 600, 300)&lt;/span&gt;
+&lt;a id="rest_code_66bc12b16d894adbbfdb5f90a1c4d18d-2" name="rest_code_66bc12b16d894adbbfdb5f90a1c4d18d-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;chunkshape = (200, 100, 80)&lt;/span&gt;
+&lt;a id="rest_code_66bc12b16d894adbbfdb5f90a1c4d18d-3" name="rest_code_66bc12b16d894adbbfdb5f90a1c4d18d-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;blockshape = (20, 100, 10)&lt;/span&gt;
 &lt;/pre&gt;&lt;p&gt;Here it is shown that in the dimensions 0 and 2 the difference between shape and chunkshape is not too big and the difference between chunkshape and blockshape is remarkable.&lt;/p&gt;
 &lt;p&gt;However, for the dimension 1, there is not a difference at all between chunkshape and blockshape.  This means that in dimension 1 the Caterva machinery will make extra work because of the double partitioning, but it will not get any advantage of it since the block size is going to be equal to the chunk size.&lt;/p&gt;
-&lt;p&gt;The slices we are going to extract will have the shapes {1, 600, 300}, {800, 1, 300} or {800, 600, 1}. Let's see the execution times for slicing these planes:&lt;/p&gt;
-&lt;img alt="/images/cat_slicing/3dim.png" class="align-center" src="http://blosc.org/images/cat_slicing/3dim.png" style="width: 70%;"&gt;
+&lt;p&gt;The slices to extract will be (1, 600, 300), (800, 1, 300) or (800, 600, 1). Let's see the execution times for slicing these planes:&lt;/p&gt;
+&lt;img alt="/images/cat_slicing/3dim.png" class="align-center" src="http://blosc.org/images/cat_slicing/3dim.png" style="width: 80%;"&gt;
 &lt;p&gt;As we can see, in the dimension 1 the performance is around the same order than HDF5 and Zarr (Zarr being a bit faster actually), but difference is not large, so that means that the overhead introduced by the second partition is not that important.
 However, in the other dimensions Caterva still outperforms (by far) Zarr and HDF5.  This is because the two level partitioning works as intended here.&lt;/p&gt;
 &lt;/section&gt;
 &lt;section id="a-last-hyper-slicing-example"&gt;
 &lt;h2&gt;A last hyper-slicing example&lt;/h2&gt;
-&lt;div class="system-message"&gt;
-&lt;p class="system-message-title"&gt;System Message: WARNING/2 (&lt;span class="docutils literal"&gt;&amp;lt;string&amp;gt;&lt;/span&gt;, line 90)&lt;/p&gt;
-&lt;p&gt;Title underline too short.&lt;/p&gt;
-&lt;pre class="literal-block"&gt;A last hyper-slicing example
----------------------------&lt;/pre&gt;
-&lt;/div&gt;
 &lt;p&gt;This is a 4-dimensional array and has the following parameters:&lt;/p&gt;
-&lt;pre class="code console"&gt;&lt;a id="rest_code_79e155b2b2c649a4a99533f8f62bf81a-1" name="rest_code_79e155b2b2c649a4a99533f8f62bf81a-1"&gt;&lt;/a&gt;&lt;span class="go"&gt;shape = (400, 80, 100, 50)&lt;/span&gt;
-&lt;a id="rest_code_79e155b2b2c649a4a99533f8f62bf81a-2" name="rest_code_79e155b2b2c649a4a99533f8f62bf81a-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;chunkshape = (100, 40, 10, 50)&lt;/span&gt;
-&lt;a id="rest_code_79e155b2b2c649a4a99533f8f62bf81a-3" name="rest_code_79e155b2b2c649a4a99533f8f62bf81a-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;blockshape = (30, 5, 2, 10)&lt;/span&gt;
-&lt;/pre&gt;&lt;img alt="/images/cat_slicing/4dim.png" class="align-center" src="http://blosc.org/images/cat_slicing/4dim.png" style="width: 70%;"&gt;
-&lt;p&gt;Here the last dimension (3) is not optimized for getting hyper-slices, specially in containers with just single partitioning (Zarr and HDF5).  However, Caterva should still perform well in this situation because of the double partitioning.&lt;/p&gt;
-&lt;p&gt;The slices we are going to extract will have the shapes {1, 80, 100, 50}, {400, 1, 100, 50}, {400, 80, 1, 50} or {400, 80, 100, 1}. Let's see the execution times for slicing these hyper planes:&lt;/p&gt;
-&lt;img alt="/images/cat_slicing/4dim.png" class="align-center" src="http://blosc.org/images/cat_slicing/4dim.png" style="width: 70%;"&gt;
+&lt;pre class="code console"&gt;&lt;a id="rest_code_28564df88a1f4b16b3aaa854349617a2-1" name="rest_code_28564df88a1f4b16b3aaa854349617a2-1"&gt;&lt;/a&gt;&lt;span class="go"&gt;shape = (400, 80, 100, 50)&lt;/span&gt;
+&lt;a id="rest_code_28564df88a1f4b16b3aaa854349617a2-2" name="rest_code_28564df88a1f4b16b3aaa854349617a2-2"&gt;&lt;/a&gt;&lt;span class="go"&gt;chunkshape = (100, 40, 10, 50)&lt;/span&gt;
+&lt;a id="rest_code_28564df88a1f4b16b3aaa854349617a2-3" name="rest_code_28564df88a1f4b16b3aaa854349617a2-3"&gt;&lt;/a&gt;&lt;span class="go"&gt;blockshape = (30, 5, 2, 10)&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;Here the last dimension (3) is not optimized for getting hyper-slices, specially in containers with just single partitioning (Zarr and HDF5).  However, Caterva should still perform well in this situation because of the double partitioning.&lt;/p&gt;
+&lt;p&gt;The slices we are going to extract will be (1, 80, 100, 50), (400, 1, 100, 50), (400, 80, 1, 50) or (400, 80, 100, 1). Let's see the execution times for slicing these hyper planes:&lt;/p&gt;
+&lt;img alt="/images/cat_slicing/4dim.png" class="align-center" src="http://blosc.org/images/cat_slicing/4dim.png" style="width: 80%;"&gt;
 &lt;p&gt;As we can see, in this case Caterva outperforms Zarr and HDF5 in all dimensions.  However, the advantage is not that important for the last dimension.  The reason is that in this last dimension Caterva has a noticeably lower ratio between its shape and blockshape than in the other dimensions.&lt;/p&gt;
 &lt;/section&gt;
 &lt;section id="final-thoughts"&gt;
 &lt;h2&gt;Final thoughts&lt;/h2&gt;
 &lt;p&gt;We have seen that adding a second partition is beneficial for slicing performance in general.  Of course, there are some situations where the overhead of the second partition can be noticeable, but the good news is that such an overhead does not get too large when compared with containers with only one level of partitioning.&lt;/p&gt;
 &lt;p&gt;Finally, we can conclude that Caterva usually obtains better results due to its second partitioning, but when it shines the most is when the two levels of partitioning are well balanced with respect to the shape of the container.&lt;/p&gt;
-&lt;p&gt;For more a more interactive experience, have a look at &lt;a class="reference external" href="https://github.com/Blosc/caterva-scipy21"&gt;our Caterva poster&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For a more interactive experience, have a look at &lt;a class="reference external" href="https://github.com/Blosc/caterva-scipy21"&gt;our Caterva poster&lt;/a&gt;.&lt;/p&gt;
 &lt;/section&gt;&lt;/div&gt;</description><category>caterva slicing perf</category><guid>http://blosc.org/posts/caterva-slicing-perf/</guid><pubDate>Mon, 26 Jul 2021 04:32:20 GMT</pubDate></item></channel></rss>
