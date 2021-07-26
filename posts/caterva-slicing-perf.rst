@@ -10,7 +10,7 @@
 
 
 .. image:: /images/cat_slicing/caterva.png
-  :width: 30%
+  :width: 70%
   :align: center
 
 Caterva is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.
