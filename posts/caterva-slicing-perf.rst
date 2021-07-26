@@ -57,7 +57,7 @@ This is a 2-dimensional array and has the following properties, defined to optim
 
 Here we can see that the ratio between chunkshape and blockshape is 8x in dimension 0 and 4x in dimension 1.
 
-Now we are going to extract some planes from the chunked arrays, and will plot the performance.
+Now we are going to extract some planes from the chunked arrays, and will plot the performance. For dimension 0 we extract a hyperplane of shape {1, 8000}, and for dimension 2 it has a {8000, 1} shape.
 
 .. image:: /images/cat_slicing/2dim.png
   :width: 70%
@@ -86,7 +86,7 @@ Here it is shown that in the dimensions 0 and 2 the difference between shape and
 
 However, for the dimension 1, there is not a difference at all between chunkshape and blockshape.  This means that in dimension 1 the Caterva machinery will make extra work because of the double partitioning, but it will not get any advantage of it since the block size is going to be equal to the chunk size.
 
-Let's see the execution times for slicing some planes:
+The slices we are going to extract will have the shapes {1, 600, 300}, {800, 1, 300} or {800, 600, 1}. Let's see the execution times for slicing these planes:
 
 .. image:: /images/cat_slicing/3dim.png
   :width: 70%
@@ -113,7 +113,7 @@ This is a 4-dimensional array and has the following parameters:
 
 Here the last dimension (3) is not optimized for getting hyper-slices, specially in containers with just single partitioning (Zarr and HDF5).  However, Caterva should still perform well in this situation because of the double partitioning.
 
-Let's see the execution times for slicing some hyper planes:
+The slices we are going to extract will have the shapes {1, 80, 100, 50}, {400, 1, 100, 50}, {400, 80, 1, 50} or {400, 80, 100, 1}. Let's see the execution times for slicing these hyper planes:
 
 .. image:: /images/cat_slicing/4dim.png
   :width: 70%
@@ -128,3 +128,5 @@ Final thoughts
 We have seen that adding a second partition is beneficial for slicing performance in general.  Of course, there are some situations where the overhead of the second partition can be noticeable, but the good news is that such an overhead does not get too large when compared with containers with only one level of partitioning.
 
 Finally, we can conclude that Caterva usually obtains better results due to its second partitioning, but when it shines the most is when the two levels of partitioning are well balanced with respect to the shape of the container.
+
+For more a more interactive experience, have a look at `our Caterva poster <https://github.com/Blosc/caterva-scipy21>`_.
