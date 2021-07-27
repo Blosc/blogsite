@@ -112,14 +112,14 @@ The filter encoder is applied before the codec compressor (or codec encoder) in 
 and the filter decoder is used after codec decompressor (or codec decoder) to restore the original data arrangement.</p></li>
 </ul>
 <p>Here it is an example on how the compression process goes:</p>
-<pre class="code console"><a id="rest_code_92a79e16ac134483a4b8dd91d948968d-1" name="rest_code_92a79e16ac134483a4b8dd91d948968d-1"></a><span class="go">--------------------   filter encoder  -------------------   codec encoder   -------</span>
-<a id="rest_code_92a79e16ac134483a4b8dd91d948968d-2" name="rest_code_92a79e16ac134483a4b8dd91d948968d-2"></a><span class="go">|        src        |   -----------&gt;  |        tmp        |   ----------&gt;   | c_src |</span>
-<a id="rest_code_92a79e16ac134483a4b8dd91d948968d-3" name="rest_code_92a79e16ac134483a4b8dd91d948968d-3"></a><span class="go">--------------------                   -------------------                   -------</span>
+<pre class="code console"><a id="rest_code_cc44fbe7fba64ca9929fdb53a5f32e71-1" name="rest_code_cc44fbe7fba64ca9929fdb53a5f32e71-1"></a><span class="go">--------------------   filter encoder  -------------------   codec encoder   -------</span>
+<a id="rest_code_cc44fbe7fba64ca9929fdb53a5f32e71-2" name="rest_code_cc44fbe7fba64ca9929fdb53a5f32e71-2"></a><span class="go">|        src        |   -----------&gt;  |        tmp        |   ----------&gt;   | c_src |</span>
+<a id="rest_code_cc44fbe7fba64ca9929fdb53a5f32e71-3" name="rest_code_cc44fbe7fba64ca9929fdb53a5f32e71-3"></a><span class="go">--------------------                   -------------------                   -------</span>
 </pre>
 <p>And the decompression process:</p>
-<pre class="code console"><a id="rest_code_319adf2fb11a4637b52aa2002caad064-1" name="rest_code_319adf2fb11a4637b52aa2002caad064-1"></a><span class="go">--------   codec decoder    -------------------   filter decoder  -------------------</span>
-<a id="rest_code_319adf2fb11a4637b52aa2002caad064-2" name="rest_code_319adf2fb11a4637b52aa2002caad064-2"></a><span class="go">| c_src |   -----------&gt;   |        tmp        |   ----------&gt;   |        src        |</span>
-<a id="rest_code_319adf2fb11a4637b52aa2002caad064-3" name="rest_code_319adf2fb11a4637b52aa2002caad064-3"></a><span class="go">--------                    -------------------                   -------------------</span>
+<pre class="code console"><a id="rest_code_93b424a99c16441283a562465d9897dc-1" name="rest_code_93b424a99c16441283a562465d9897dc-1"></a><span class="go">--------   codec decoder    -------------------   filter decoder  -------------------</span>
+<a id="rest_code_93b424a99c16441283a562465d9897dc-2" name="rest_code_93b424a99c16441283a562465d9897dc-2"></a><span class="go">| c_src |   -----------&gt;   |        tmp        |   ----------&gt;   |        src        |</span>
+<a id="rest_code_93b424a99c16441283a562465d9897dc-3" name="rest_code_93b424a99c16441283a562465d9897dc-3"></a><span class="go">--------                    -------------------                   -------------------</span>
 </pre>
 <section id="register-for-user-plugins"><h2>Register for user plugins</h2>
 <p><strong>User registered plugins</strong> are plugins that users register locally so that they can be used in the same way as Blosc official codecs and filters.
@@ -127,30 +127,30 @@ This option is perfect for users that want to try new filters or codecs on their
 <p>The register process is quite simple.  You just use the <code class="docutils literal">blosc2_register_filter()</code> or <code class="docutils literal">blosc2_register_codec()</code> function and then the Blosc2 machinery
 will store its info with the rest of plugins. After that you will be able to access your plugin through its ID by setting Blosc2 compression or decompression
 params.</p>
-<pre class="code console"><a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-1" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-1"></a><span class="go">                                             filters pipeline</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-2" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-2"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-3" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-3"></a><span class="go">                                         |  BLOSC_SHUFFLE     1 |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-4" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-4"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-5" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-5"></a><span class="go">                                         |  BLOSC_BITSHUFFLE  2 |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-6" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-6"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-7" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-7"></a><span class="go">                                         |  BLOSC_DELTA       3 |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-8" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-8"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-9" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-9"></a><span class="go">                                         |  BLOSC_TRUNC       4 |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-10" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-10"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-11" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-11"></a><span class="go">                                         |         ...          |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-12" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-12"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-13" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-13"></a><span class="go">                                         |  BLOSC_NDCELL     32 |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-14" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-14"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-15" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-15"></a><span class="go">                                         |  BLOSC_NDMEAN     33 |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-16" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-16"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-17" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-17"></a><span class="go">                                         |         ...          |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-18" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-18"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-19" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-19"></a><span class="go">                                         |  urfilter1       160 |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-20" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-20"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-21" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-21"></a><span class="go">blosc2_register_filter(urfilter2)  ---&gt;  |  urfilter2       161 |  ---&gt; cparams.filters[4] = 161; // can be used now</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-22" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-22"></a><span class="go">                                          ----------------------</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-23" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-23"></a><span class="go">                                         |         ...          |</span>
-<a id="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-24" name="rest_code_a2a1ba9f4ea5449992f8e8e909ed0063-24"></a><span class="go">                                          ----------------------</span>
+<pre class="code console"><a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-1" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-1"></a><span class="go">                                             filters pipeline</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-2" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-2"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-3" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-3"></a><span class="go">                                         |  BLOSC_SHUFFLE     1 |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-4" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-4"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-5" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-5"></a><span class="go">                                         |  BLOSC_BITSHUFFLE  2 |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-6" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-6"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-7" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-7"></a><span class="go">                                         |  BLOSC_DELTA       3 |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-8" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-8"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-9" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-9"></a><span class="go">                                         |  BLOSC_TRUNC       4 |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-10" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-10"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-11" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-11"></a><span class="go">                                         |         ...          |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-12" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-12"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-13" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-13"></a><span class="go">                                         |  BLOSC_NDCELL     32 |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-14" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-14"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-15" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-15"></a><span class="go">                                         |  BLOSC_NDMEAN     33 |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-16" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-16"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-17" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-17"></a><span class="go">                                         |         ...          |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-18" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-18"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-19" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-19"></a><span class="go">                                         |  urfilter1       160 |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-20" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-20"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-21" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-21"></a><span class="go">blosc2_register_filter(urfilter2)  ---&gt;  |  urfilter2       161 |  ---&gt; cparams.filters[4] = 161; // can be used now</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-22" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-22"></a><span class="go">                                          ----------------------</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-23" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-23"></a><span class="go">                                         |         ...          |</span>
+<a id="rest_code_8e338773b0f048a89dcb19a6ae73b97e-24" name="rest_code_8e338773b0f048a89dcb19a6ae73b97e-24"></a><span class="go">                                          ----------------------</span>
 </pre></section><section id="global-register-for-blosc-plugins"><h2>Global register for Blosc plugins</h2>
 <p><strong>Blosc global registered plugins</strong> are Blosc plugins that have passed through a selection process and a review by the Blosc Development Team.
 These plugins will be available for everybody using the C-Blosc2 library.</p>
@@ -162,12 +162,12 @@ them with upstream C-Blosc2 library.  The steps for registering an official Blos
 </section><section id="compiling-plugins-examples-using-blosc2-wheels"><h2>Compiling plugins examples using Blosc2 wheels</h2>
 <p>So as to easy the use of the registered filters, full-fledged C-Blosc2 binary libraries including plugins functionality can be installed from
 python-blosc2 (&gt;= 0.1.8) wheels:</p>
-<pre class="code console"><a id="rest_code_2c866e55ec51452cb8653c0a40d1bd20-1" name="rest_code_2c866e55ec51452cb8653c0a40d1bd20-1"></a><span class="gp">$ </span>pip install blosc2
-<a id="rest_code_2c866e55ec51452cb8653c0a40d1bd20-2" name="rest_code_2c866e55ec51452cb8653c0a40d1bd20-2"></a><span class="go">Collecting blosc2</span>
-<a id="rest_code_2c866e55ec51452cb8653c0a40d1bd20-3" name="rest_code_2c866e55ec51452cb8653c0a40d1bd20-3"></a><span class="go">  Downloading blosc2-0.1.8-cp37-cp37m-manylinux2010_x86_64.whl (3.3 MB)</span>
-<a id="rest_code_2c866e55ec51452cb8653c0a40d1bd20-4" name="rest_code_2c866e55ec51452cb8653c0a40d1bd20-4"></a><span class="go">     |████████████████████████████████| 3.3 MB 4.7 MB/s</span>
-<a id="rest_code_2c866e55ec51452cb8653c0a40d1bd20-5" name="rest_code_2c866e55ec51452cb8653c0a40d1bd20-5"></a><span class="go">Installing collected packages: blosc2</span>
-<a id="rest_code_2c866e55ec51452cb8653c0a40d1bd20-6" name="rest_code_2c866e55ec51452cb8653c0a40d1bd20-6"></a><span class="go">Successfully installed blosc2-0.1.8</span>
+<pre class="code console"><a id="rest_code_694c2c5132e74f46a5af33474cea0d73-1" name="rest_code_694c2c5132e74f46a5af33474cea0d73-1"></a><span class="gp">$ </span>pip install blosc2
+<a id="rest_code_694c2c5132e74f46a5af33474cea0d73-2" name="rest_code_694c2c5132e74f46a5af33474cea0d73-2"></a><span class="go">Collecting blosc2</span>
+<a id="rest_code_694c2c5132e74f46a5af33474cea0d73-3" name="rest_code_694c2c5132e74f46a5af33474cea0d73-3"></a><span class="go">  Downloading blosc2-0.1.8-cp37-cp37m-manylinux2010_x86_64.whl (3.3 MB)</span>
+<a id="rest_code_694c2c5132e74f46a5af33474cea0d73-4" name="rest_code_694c2c5132e74f46a5af33474cea0d73-4"></a><span class="go">     |████████████████████████████████| 3.3 MB 4.7 MB/s</span>
+<a id="rest_code_694c2c5132e74f46a5af33474cea0d73-5" name="rest_code_694c2c5132e74f46a5af33474cea0d73-5"></a><span class="go">Installing collected packages: blosc2</span>
+<a id="rest_code_694c2c5132e74f46a5af33474cea0d73-6" name="rest_code_694c2c5132e74f46a5af33474cea0d73-6"></a><span class="go">Successfully installed blosc2-0.1.8</span>
 </pre>
 <p>Once you have installed the C-Blosc2 libraries you can not only use the official Blosc filters and codecs, but you can also register and use them.
 You can find directions on how to compile C files using the Blosc2 libraries inside these wheels at:
@@ -176,17 +176,17 @@ You can find directions on how to compile C files using the Blosc2 libraries ins
 <p>To use your own plugins with the Blosc machinery you first have to register them through the function <code class="docutils literal">blosc2_register_codec()</code> or <code class="docutils literal">blosc2_register_filter()</code>
 with an ID between <code class="docutils literal">BLOSC2_USER_DEFINED_FILTERS_START</code> and <code class="docutils literal">BLOSC2_USER_DEFINED_FILTERS_STOP</code>. Then you can use this ID in the compression parameters (<cite>cparams.compcode</cite>, <cite>cparams.filters</cite>) and decompression parameters (<cite>dparams.compcode</cite>, <cite>dparams.filters</cite>).
 For any doubts you can see the whole process in the examples <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/examples/urcodecs.c">urcodecs.c</a> and <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/examples/urfilters.c">urfilters.c</a>.</p>
-<pre class="code C"><a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-1" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-1"></a><span class="n">blosc2_codec</span> <span class="n">urcodec</span><span class="p">;</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-2" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-2"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="mi">244</span><span class="p">;</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-3" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-3"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compver</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-4" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-4"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">complib</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-5" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-5"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compname</span> <span class="o">=</span> <span class="s">"urcodec"</span><span class="p">;</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-6" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-6"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">codec_encoder</span><span class="p">;</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-7" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-7"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">codec_decoder</span><span class="p">;</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-8" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-8"></a><span class="n">blosc2_register_codec</span><span class="p">(</span><span class="o">&amp;</span><span class="n">urcodec</span><span class="p">);</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-9" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-9"></a>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-10" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-10"></a><span class="n">blosc2_cparams</span> <span class="n">cparams</span> <span class="o">=</span> <span class="n">BLOSC2_CPARAMS_DEFAULTS</span><span class="p">;</span>
-<a id="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-11" name="rest_code_12a7ebd0c6604ee1b440d2b33f55df76-11"></a><span class="n">cparams</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="mi">244</span><span class="p">;</span>
+<pre class="code C"><a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-1" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-1"></a><span class="n">blosc2_codec</span> <span class="n">urcodec</span><span class="p">;</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-2" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-2"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="mi">244</span><span class="p">;</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-3" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-3"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compver</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-4" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-4"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">complib</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-5" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-5"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">compname</span> <span class="o">=</span> <span class="s">"urcodec"</span><span class="p">;</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-6" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-6"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">codec_encoder</span><span class="p">;</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-7" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-7"></a><span class="n">udcodec</span><span class="p">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">codec_decoder</span><span class="p">;</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-8" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-8"></a><span class="n">blosc2_register_codec</span><span class="p">(</span><span class="o">&amp;</span><span class="n">urcodec</span><span class="p">);</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-9" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-9"></a>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-10" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-10"></a><span class="n">blosc2_cparams</span> <span class="n">cparams</span> <span class="o">=</span> <span class="n">BLOSC2_CPARAMS_DEFAULTS</span><span class="p">;</span>
+<a id="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-11" name="rest_code_1e7b7fe6f7fb4fc4ad490a812b8947c6-11"></a><span class="n">cparams</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="mi">244</span><span class="p">;</span>
 </pre></section><section id="using-blosc-official-plugins"><h3>Using Blosc official plugins</h3>
 <p>To use the Blosc official plugins it is mandatory to add the next lines in order to activate the plugins mechanism:</p>
 <ul class="simple">
@@ -196,17 +196,17 @@ For any doubts you can see the whole process in the examples <a class="reference
 <li><p>Call <code class="docutils literal">blosc_destroy()</code> at the end of main() function</p></li>
 </ul>
 <p>Then you just have to use the ID of the plugin that you want to use in the compression parameters (<code class="docutils literal">cparams.compcode</code>).</p>
-<pre class="code C"><a id="rest_code_190c69e558f84690ac31f9ff7e015884-1" name="rest_code_190c69e558f84690ac31f9ff7e015884-1"></a><span class="cp">#include</span> <span class="cpf">"blosc2.h"</span><span class="cp"></span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-2" name="rest_code_190c69e558f84690ac31f9ff7e015884-2"></a><span class="cp">#include</span> <span class="cpf">"../codecs-registry.h"</span><span class="cp"></span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-3" name="rest_code_190c69e558f84690ac31f9ff7e015884-3"></a><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-4" name="rest_code_190c69e558f84690ac31f9ff7e015884-4"></a>    <span class="n">blosc_init</span><span class="p">();</span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-5" name="rest_code_190c69e558f84690ac31f9ff7e015884-5"></a>    <span class="p">...</span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-6" name="rest_code_190c69e558f84690ac31f9ff7e015884-6"></a>    <span class="n">blosc2_cparams</span> <span class="n">cparams</span> <span class="o">=</span> <span class="n">BLOSC2_CPARAMS_DEFAULTS</span><span class="p">;</span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-7" name="rest_code_190c69e558f84690ac31f9ff7e015884-7"></a>    <span class="n">cparams</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="n">BLOSC_CODEC_NDLZ</span><span class="p">;</span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-8" name="rest_code_190c69e558f84690ac31f9ff7e015884-8"></a>    <span class="n">cparams</span><span class="p">.</span><span class="n">compcode_meta</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-9" name="rest_code_190c69e558f84690ac31f9ff7e015884-9"></a>    <span class="p">...</span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-10" name="rest_code_190c69e558f84690ac31f9ff7e015884-10"></a>    <span class="n">blosc_destroy</span><span class="p">();</span>
-<a id="rest_code_190c69e558f84690ac31f9ff7e015884-11" name="rest_code_190c69e558f84690ac31f9ff7e015884-11"></a><span class="p">}</span>
+<pre class="code C"><a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-1" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-1"></a><span class="cp">#include</span> <span class="cpf">"blosc2.h"</span><span class="cp"></span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-2" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-2"></a><span class="cp">#include</span> <span class="cpf">"../codecs-registry.h"</span><span class="cp"></span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-3" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-3"></a><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-4" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-4"></a>    <span class="n">blosc_init</span><span class="p">();</span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-5" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-5"></a>    <span class="p">...</span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-6" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-6"></a>    <span class="n">blosc2_cparams</span> <span class="n">cparams</span> <span class="o">=</span> <span class="n">BLOSC2_CPARAMS_DEFAULTS</span><span class="p">;</span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-7" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-7"></a>    <span class="n">cparams</span><span class="p">.</span><span class="n">compcode</span> <span class="o">=</span> <span class="n">BLOSC_CODEC_NDLZ</span><span class="p">;</span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-8" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-8"></a>    <span class="n">cparams</span><span class="p">.</span><span class="n">compcode_meta</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-9" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-9"></a>    <span class="p">...</span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-10" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-10"></a>    <span class="n">blosc_destroy</span><span class="p">();</span>
+<a id="rest_code_ad80930693ff4dc583aed7f818dfa1b9-11" name="rest_code_ad80930693ff4dc583aed7f818dfa1b9-11"></a><span class="p">}</span>
 </pre>
 <p>In case of doubts, you can see how the whole process works in working tests like:
 <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/plugins/codecs/ndlz/test_ndlz.c">test_ndlz.c</a>,
