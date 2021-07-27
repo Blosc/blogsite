@@ -13,9 +13,9 @@
   :width: 50%
   :align: center
 
-`Caterva <https://caterva.readthedocs.io/en/latest/getting_started/overview.html>`_ is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.  It is build on top of the `C-Blosc2 <https://c-blosc2.readthedocs.io/en/latest/>`_ library.  It can be used for a lot of different situations; however, where it really stands out is for extracting multidimensional slices of compressed datasets because,  thanks to the partitioning schema that it implements, the amount of data that has to be decompressed so as to get the slice is minimized, making things faster (usually).
+`Caterva <https://caterva.readthedocs.io/en/latest/getting_started/overview.html>`_ is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.  It is build on top of the `C-Blosc2 <https://c-blosc2.readthedocs.io/en/latest/>`_ library, leveraging all its avantages on modern CPUs.  
 
-It can be used for a lot of different situations; however, where it really stands out is for extracting multidimensional slices of compressed datasets because,  thanks to the partitioning schema that it implements, the amount of data that has to be decompressed so as to get the slice is minimized, making things faster (usually).
+Caterva can be used in a lot of different situations; however, where it really stands out is for extracting multidimensional slices of compressed datasets because, thanks to the double partitioning schema that it implements, the amount of data that has to be decompressed so as to get the slice is minimized, making data extraction faster (usually).  In this installment, you will be offered a rational on how double partitioning works, together with some examples where it shines, and others where it is not that good.
 
 
 Double partitioning
