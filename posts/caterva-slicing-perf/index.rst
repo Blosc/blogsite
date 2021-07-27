@@ -13,10 +13,8 @@
   :width: 50%
   :align: center
 
-Caterva is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.
-It can be used for a lot of different situations. However, where it really stands out is for extracting multidimensional slices of compressed datasets, thanks to the partitioning schema that it implements, the amount of data that has to decompress so as to get the slice is minimized, making things (usually) faster.
-
-Accordingly, for cases where general slicing performance is important, Caterva turns out to be a good alternative to other solutions like Zarr or HDF5.
+Caterva is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.  It is build on top of the C-Blosc2 library.
+It can be used for a lot of different situations; however, where it really stands out is for extracting multidimensional slices of compressed datasets because,  thanks to the partitioning schema that it implements, the amount of data that has to be decompressed so as to get the slice is minimized, making things faster (usually).
 
 
 Double partitioning
@@ -29,20 +27,19 @@ Double partitioning
 
 Some libraries like HDF5 or Zarr store data into multidimensional chunks. This makes slice extraction from compressed datasets more efficient than using monolithic compression, since only the chunks containing the interesting slice are decompressed instead of the entire array.
 
-In addition, Caterva introduces a new level of partitioning.  Within each chunk, the data is re-partitioned into smaller multidimensional sets called blocks.  This generally improves the slice extraction, since it allows to decompress only the blocks containing the slice instead of the whole chunks.
+In addition, Caterva introduces a new level of partitioning.  Within each chunk, the data is re-partitioned into smaller multidimensional sets called blocks.  This generally improves the slice extraction, since this allows to decompress only the blocks containing the data in desired slice instead of the whole chunks.
 
 
 Slice extraction with Caterva, HDF5 and Zarr
 --------------------------------------------
 
-Now we are going to compare the ability to extract multidimensional slices from compressed data of Caterva, HDF5 and Zarr. 
-The examples below consist on extracting some hyper-planes from chunked arrays with different properties and seeing how Caterva performs compared with other solutions.
+So as to see how the double partitioning performs with respect to a traditional single partition schema, we are going to compare the ability to extract multidimensional slices from compressed data of Caterva, HDF5 and Zarr. The examples below consist on extracting some hyper-planes from chunked arrays with different properties and seeing how Caterva performs compared with traditional libraries.
 
 
 2-dimensional array
 -------------------
 
-This is a 2-dimensional array and has the following properties, defined to optimize slice extraction from the second dimension:
+This is a 2-dimensional array and has the following properties, designed to optimize slice extraction from the second dimension:
 
 .. code-block:: console
 
@@ -60,7 +57,7 @@ Here we can see that the ratio between chunkshape and blockshape is 8x in dimens
   :width: 70%
   :align: center
 
-Now we are going to extract some planes from the chunked arrays, and will plot the performance. For dimension 0 we extract a hyperplane `[i, :]`, and for dimension 1 it is `[:, i]`, where *i* is a random integer.
+Now we are going to extract some planes from the chunked arrays and will plot the performance. For dimension 0 we extract a hyperplane `[i, :]`, and for dimension 1, `[:, i]`, where *i* is a random integer.
 
 .. image:: /images/cat_slicing/2dim.png
   :width: 80%
@@ -71,13 +68,13 @@ Here we see that the slicing times are similar in the dimension 1. However, Cate
 In fact, Caterva is around 12x faster than HDF5 and 9x faster than Zarr for slicing the dimension 0, which makes sense since Caterva decompresses 8x less data.
 For the dimension 1, Caterva is approximately 3x faster than HDF5 and Zarr; in this case Caterva has to decompress 4x less data.
 
-To sum up, we have seen that the difference of slice extraction speed depends largely on the difference between the chunk size and the block size. Therefore, for slices where the chunks that contain the slice also have many elements that do not belong to it, the existence of blocks (the second partition) allows to significantly reduce the amount of data to decompress.
+That is, the difference in slice extraction speed depends largely on the ratio between the chunk size and the block size. Therefore, for slices where the chunks that contain the slice also have many items that do not belong to it, the existence of blocks (i.e. the second partition) allows to significantly reduce the amount of data to decompress.
 
 
 Overhead of the second partition
 --------------------------------
 
-Let's see a new case of a 3-dimensional array with the following parameters:
+So as to better assess the possible performance cost of the second partition, let's analyze a new case of a 3-dimensional array with the following parameters:
 
 .. code-block:: console
 
@@ -85,9 +82,9 @@ Let's see a new case of a 3-dimensional array with the following parameters:
     chunkshape = (200, 100, 80)
     blockshape = (20, 100, 10)
 
-Here it is shown that in the dimensions 0 and 2 the difference between shape and chunkshape is not too big and the difference between chunkshape and blockshape is remarkable.
+So, in the dimensions 0 and 2 the difference between shape and chunkshape is not too big whereas the difference between chunkshape and blockshape is remarkable.
 
-However, for the dimension 1, there is not a difference at all between chunkshape and blockshape.  This means that in dimension 1 the Caterva machinery will make extra work because of the double partitioning, but it will not get any advantage of it since the block size is going to be equal to the chunk size.
+However, for the dimension 1, there is not a difference at all between chunkshape and blockshape.  This means that in dim 1 the Caterva machinery will make extra work because of the double partitioning, but it will not get any advantage of it since the block size is going to be equal to the chunk size.  This a perfect scenario for measuring the overhead of the second partition.
 
 The slices to extract will be `[i, :, :]`, `[:, i, :]` or `[:, :, i]`. Let's see the execution times for slicing these planes:
 
@@ -95,14 +92,14 @@ The slices to extract will be `[i, :, :]`, `[:, i, :]` or `[:, :, i]`. Let's see
   :width: 80%
   :align: center
 
-As we can see, in the dimension 1 the performance is around the same order than HDF5 and Zarr (Zarr being a bit faster actually), but difference is not large, so that means that the overhead introduced by the second partition is not that important.
+As we can see, the performance in dim 1 is around the same order than HDF5 and Zarr (Zarr being a bit faster actually), but difference is not large, so that means that the overhead introduced purely by the second partition is not that important.
 However, in the other dimensions Caterva still outperforms (by far) Zarr and HDF5.  This is because the two level partitioning works as intended here.
 
 
 A last hyper-slicing example
 ----------------------------
 
-This is a 4-dimensional array and has the following parameters:
+Let's see a final example showing the double partitioning working on a wide range of dimensions.  In this case we choose a 4-dimensional array with the following parameters:
 
 .. code-block:: console
 
@@ -124,8 +121,8 @@ As we can see, in this case Caterva outperforms Zarr and HDF5 in all dimensions.
 Final thoughts
 --------------
 
-We have seen that adding a second partition is beneficial for slicing performance in general.  Of course, there are some situations where the overhead of the second partition can be noticeable, but the good news is that such an overhead does not get too large when compared with containers with only one level of partitioning.
+We have seen that adding a second partition is beneficial for improving slicing performance in general.  Of course, there are some situations where the overhead of the second partition can be noticeable, but the good news is that such an overhead does not get too large when compared with containers with only one level of partitioning.
 
-Finally, we can conclude that Caterva usually obtains better results due to its second partitioning, but when it shines the most is when the two levels of partitioning are well balanced with respect to the shape of the container.
+Finally, we can conclude that Caterva usually obtains better results due to its second partitioning, but when it shines the most is when the two levels of partitioning are well balanced among them and also with respect to the shape of the container.
 
-For a more interactive experience, have a look at `our Caterva poster <https://github.com/Blosc/caterva-scipy21>`_. It is based on a Jupyter notebook that you can adapt to your own scenarios.
+As always, there is no replacement for experimentation so, in case you want to try Caterva by yourself (and you should if you really care about this problem), you can use `our Caterva poster <https://github.com/Blosc/caterva-scipy21>`_; it is based on a Jupyter notebook that you can adapt to your own scenarios.
