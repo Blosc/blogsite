@@ -102,19 +102,19 @@
 <section id="small-intro-to-wheels"><h2>Small intro to wheels</h2>
 <p>Wheels are an advantageous alternative to distribute Python (but also pure C) packages which contain C (or Cython) source code, and hence, need a compiler.  For those that are not familiar to wheels, here it comes a small tutorial on how to create and use wheels.</p>
 <p>First, let's recall the traditional way to build a source distribution:</p>
-<pre class="code console"><a id="rest_code_bc682deecb6847d2ae4096d6d4b188fc-1" name="rest_code_bc682deecb6847d2ae4096d6d4b188fc-1"></a><span class="gp">$ </span>python setup.py sdist
+<pre class="code console"><a id="rest_code_ecdc868ab9414c53ab7522a7265c7c23-1" name="rest_code_ecdc868ab9414c53ab7522a7265c7c23-1"></a><span class="gp">$ </span>python setup.py sdist
 </pre>
 <p>To build a wheel, the process is quite similar:</p>
-<pre class="code console"><a id="rest_code_386b646f86c147799d46a7e8e2d50019-1" name="rest_code_386b646f86c147799d46a7e8e2d50019-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
+<pre class="code console"><a id="rest_code_628c6cc0825e4cb0a63a23d1696f3d4c-1" name="rest_code_628c6cc0825e4cb0a63a23d1696f3d4c-1"></a><span class="gp">$ </span>python setup.py bdist_wheel
 </pre>
 <p>To install a package via pip (pip decides whether install a from wheel or compile from the source package; wheels have obviously more priority):</p>
-<pre class="code console"><a id="rest_code_ee1efa9d1f9d4b6cb4e9d2526c18d562-1" name="rest_code_ee1efa9d1f9d4b6cb4e9d2526c18d562-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a id="rest_code_61a2795182094dd7a2d1461eaab07b2e-1" name="rest_code_61a2795182094dd7a2d1461eaab07b2e-1"></a><span class="gp">$ </span>python -m pip install <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use source distribution:</p>
-<pre class="code console"><a id="rest_code_ee760f1bade641419c1d3cd24e8bbfd2-1" name="rest_code_ee760f1bade641419c1d3cd24e8bbfd2-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a id="rest_code_853b946926664d2db70a9eff90d87886-1" name="rest_code_853b946926664d2db70a9eff90d87886-1"></a><span class="gp">$ </span>python -m pip install --no-binary <span class="o">{</span>package<span class="o">}</span>
 </pre>
 <p>To install a package forcing to use wheels:</p>
-<pre class="code console"><a id="rest_code_8ec0b613272d4e5fbb7484879d106ff0-1" name="rest_code_8ec0b613272d4e5fbb7484879d106ff0-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
+<pre class="code console"><a id="rest_code_9ac0e1a1badf49fdad7a2264462c6bbb-1" name="rest_code_9ac0e1a1badf49fdad7a2264462c6bbb-1"></a><span class="gp">$ </span>python -m pip install --only-binary <span class="o">{</span>package<span class="o">}</span>
 </pre></section><section id="different-types-of-wheels"><h2>Different types of wheels</h2>
 <p>There are different kind of wheels, depending on the goals and the build process:</p>
 <ul class="simple">
@@ -132,29 +132,29 @@
 </section><section id="binaries-for-c-blosc-libraries-are-included"><h2>Binaries for C-Blosc libraries are included</h2>
 <p>Although wheels were meant for Python packages, nothing prevents adding more stuff to them.  In particular, we are not only distributing python-blosc binary extensions in our wheels, but also binaries for the C-Blosc library.  This way, people willing to use the C-Blosc library can make use of these wheels to install the necessary development files.</p>
 <p>First, install the binary wheel via PyPI without the need to manually compile the thing:</p>
-<pre class="code console"><a id="rest_code_29e41c789c8d48d6824b7a450b3f0d67-1" name="rest_code_29e41c789c8d48d6824b7a450b3f0d67-1"></a><span class="gp">$ </span>pip install --only-binary blosc
+<pre class="code console"><a id="rest_code_8d907d5dac2b4047befab6497cd44012-1" name="rest_code_8d907d5dac2b4047befab6497cd44012-1"></a><span class="gp">$ </span>pip install --only-binary blosc
 </pre>
 <p>Now, let's suppose that we want to compile the <cite>c-blosc/examples/many_compressors.c</cite> on Linux:</p>
 <p>First, you have to look where the wheels directory is located.  In our case:</p>
-<pre class="code console"><a id="rest_code_c415fba9d3404ceba3ffdbfd8b1d237d-1" name="rest_code_c415fba9d3404ceba3ffdbfd8b1d237d-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
-<a id="rest_code_c415fba9d3404ceba3ffdbfd8b1d237d-2" name="rest_code_c415fba9d3404ceba3ffdbfd8b1d237d-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
+<pre class="code console"><a id="rest_code_7240cb8ea3354301b493045365bfcd24-1" name="rest_code_7240cb8ea3354301b493045365bfcd24-1"></a><span class="gp">$ </span><span class="nv">WHEEL_DIR</span><span class="o">=</span>/home/soscar/miniconda3
+<a id="rest_code_7240cb8ea3354301b493045365bfcd24-2" name="rest_code_7240cb8ea3354301b493045365bfcd24-2"></a><span class="gp">$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$WHEEL_DIR</span>/lib   <span class="c1"># note that you need the LD_LIBRARY_PATH env variable</span>
 </pre>
 <p>For the actual compilation, you need to pass the directory for the include and lib directories:</p>
-<pre class="code console"><a id="rest_code_cfce5a1f57da4df0871c044971531771-1" name="rest_code_cfce5a1f57da4df0871c044971531771-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
+<pre class="code console"><a id="rest_code_066b03bf059e476a918f5e2410e195e4-1" name="rest_code_066b03bf059e476a918f5e2410e195e4-1"></a><span class="gp">$ </span>gcc many_compressors.c -I<span class="nv">$WHEEL_DIR</span>/include -o many_compressors -L<span class="nv">$WHEEL_DIR</span>/lib -lblosc
 </pre>
 <p>Finally, run the resulting binary and hopefully you will see something like:</p>
-<pre class="code console"><a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-1" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-1"></a><span class="gp">$ </span>./many_compressors
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-2" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-3" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-3"></a><span class="go">Using 4 threads (previously using 1)</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-4" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-4"></a><span class="go">Using blosclz compressor</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-5" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-6" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-6"></a><span class="go">Succesful roundtrip!</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-7" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-7"></a><span class="go">Using lz4 compressor</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-8" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-9" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-9"></a><span class="go">Succesful roundtrip!</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-10" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-10"></a><span class="go">Using lz4hc compressor</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-11" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
-<a id="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-12" name="rest_code_f4f6b9a817af4d329c8c6b3f20da0633-12"></a><span class="go">Succesful roundtrip!</span>
+<pre class="code console"><a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-1" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-1"></a><span class="gp">$ </span>./many_compressors
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-2" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-2"></a><span class="go">Blosc version info: 1.20.1 ($Date:: 2020-09-08 #$)</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-3" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-3"></a><span class="go">Using 4 threads (previously using 1)</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-4" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-4"></a><span class="go">Using blosclz compressor</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-5" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-5"></a><span class="go">Compression: 4000000 -&gt; 37816 (105.8x)</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-6" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-6"></a><span class="go">Succesful roundtrip!</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-7" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-7"></a><span class="go">Using lz4 compressor</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-8" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-8"></a><span class="go">Compression: 4000000 -&gt; 37938 (105.4x)</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-9" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-9"></a><span class="go">Succesful roundtrip!</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-10" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-10"></a><span class="go">Using lz4hc compressor</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-11" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-11"></a><span class="go">Compression: 4000000 -&gt; 27165 (147.2x)</span>
+<a id="rest_code_7d03290a55864bd9a781747fdb5ce6d8-12" name="rest_code_7d03290a55864bd9a781747fdb5ce6d8-12"></a><span class="go">Succesful roundtrip!</span>
 </pre>
 <p>For more details, including compiling with binary wheels on other platforms than Linux, see: <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst">https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst</a>.</p>
 </section><section id="final-remarks"><h2>Final remarks</h2>
