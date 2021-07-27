@@ -13,7 +13,8 @@
   :width: 50%
   :align: center
 
-Caterva is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.  It is build on top of the C-Blosc2 library.
+`Caterva <https://caterva.readthedocs.io/en/latest/getting_started/overview.html>`_ is a C library for handling multi-dimensional, chunked, compressed datasets in an easy and fast way.  It is build on top of the `C-Blosc2 <https://c-blosc2.readthedocs.io/en/latest/>`_ library.  It can be used for a lot of different situations; however, where it really stands out is for extracting multidimensional slices of compressed datasets because,  thanks to the partitioning schema that it implements, the amount of data that has to be decompressed so as to get the slice is minimized, making things faster (usually).
+
 It can be used for a lot of different situations; however, where it really stands out is for extracting multidimensional slices of compressed datasets because,  thanks to the partitioning schema that it implements, the amount of data that has to be decompressed so as to get the slice is minimized, making things faster (usually).
 
 
@@ -25,7 +26,7 @@ Double partitioning
   :align: center
 
 
-Some libraries like HDF5 or Zarr store data into multidimensional chunks. This makes slice extraction from compressed datasets more efficient than using monolithic compression, since only the chunks containing the interesting slice are decompressed instead of the entire array.
+Some libraries like `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_ or `Zarr <https://zarr.readthedocs.io/en/stable/>`_ store data into multidimensional chunks. This makes slice extraction from compressed datasets more efficient than using monolithic compression, since only the chunks containing the interesting slice are decompressed instead of the entire array.
 
 In addition, Caterva introduces a new level of partitioning.  Within each chunk, the data is re-partitioned into smaller multidimensional sets called blocks.  This generally improves the slice extraction, since this allows to decompress only the blocks containing the data in desired slice instead of the whole chunks.
 
@@ -34,6 +35,8 @@ Slice extraction with Caterva, HDF5 and Zarr
 --------------------------------------------
 
 So as to see how the double partitioning performs with respect to a traditional single partition schema, we are going to compare the ability to extract multidimensional slices from compressed data of Caterva, HDF5 and Zarr. The examples below consist on extracting some hyper-planes from chunked arrays with different properties and seeing how Caterva performs compared with traditional libraries.
+
+**Note:** So as to better compare apples with apples, all the benchmarks below have been run using Blosc (with LZ4 as the internal codec) as the compressor by default, with the shuffle filter.  Even if Caterva uses the newest C-Blosc2 compressor, and HDF5 and Zarr uses its C-Blosc(1) antecessor, the performance of both libraries are very similar.  Also, for easier interactivity, we have used the libraries via Python wrappers (`python-caterva <https://python-caterva.readthedocs.io/en/latest/>`_, `h5py <http://www.h5py.org>`_, `Zarr <https://zarr.readthedocs.io/en/stable/>`_).
 
 
 2-dimensional array
