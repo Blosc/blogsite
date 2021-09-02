@@ -152,8 +152,8 @@ for doing blocking or multi-threading. For example, Blosc allows to use the <cod
 <li><p><strong>Meant for binary data</strong>: can take advantage of the type size
 meta-information for improved compression ratio (using the
 integrated shuffle and bitshuffle filters).</p></li>
-<li><p><strong>Small overhead on non-compressible data</strong>: only a maximum of (32
-+ 4 * nblocks_used) additional bytes over the source buffer length
+<li><p><strong>Small overhead on non-compressible data</strong>: only a maximum of 32
+(16 for Blosc1) additional bytes over the source buffer length
 are needed to compress <em>every</em> input.</p></li>
 <li><p><strong>Super-chunks</strong>: in Blosc2 we are introducing these as a way to
 overcome the limitations of chunks (which can be up to 2^31 bytes in size).

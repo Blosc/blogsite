@@ -115,8 +115,8 @@ Other advantages of Blosc are:
   meta-information for improved compression ratio (using the
   integrated shuffle and bitshuffle filters).
 
-* **Small overhead on non-compressible data**: only a maximum of (32
-  + 4 * nblocks_used) additional bytes over the source buffer length
+* **Small overhead on non-compressible data**: only a maximum of 32
+  (16 for Blosc1) additional bytes over the source buffer length
   are needed to compress *every* input.
 
 * **Super-chunks**: in Blosc2 we are introducing these as a way to
