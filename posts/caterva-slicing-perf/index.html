@@ -106,9 +106,9 @@ C">
 <p><strong>Note:</strong> So as to better compare apples with apples, all the benchmarks below have been run using Blosc (with LZ4 as the internal codec) as the compressor by default, with the shuffle filter.  Even if Caterva uses the newest C-Blosc2 compressor, and HDF5 and Zarr uses its C-Blosc(1) antecessor, the performance of both libraries are very similar.  Also, for easier interactivity, we have used the libraries via Python wrappers (<a class="reference external" href="https://python-caterva.readthedocs.io/en/latest/">python-caterva</a>, <a class="reference external" href="http://www.h5py.org">h5py</a>, <a class="reference external" href="https://zarr.readthedocs.io/en/stable/">Zarr</a>).</p>
 </section><section id="dimensional-array"><h2>2-dimensional array</h2>
 <p>This is a 2-dimensional array and has the following properties, designed to optimize slice extraction from the second dimension:</p>
-<pre class="code console"><a id="rest_code_7d2195fb52fe4cd08e8b2ffbd3781c7a-1" name="rest_code_7d2195fb52fe4cd08e8b2ffbd3781c7a-1"></a><span class="go">shape = (8_000, 8_000)</span>
-<a id="rest_code_7d2195fb52fe4cd08e8b2ffbd3781c7a-2" name="rest_code_7d2195fb52fe4cd08e8b2ffbd3781c7a-2"></a><span class="go">chunkshape = (4_000, 100)</span>
-<a id="rest_code_7d2195fb52fe4cd08e8b2ffbd3781c7a-3" name="rest_code_7d2195fb52fe4cd08e8b2ffbd3781c7a-3"></a><span class="go">blockshape = (500, 25)</span>
+<pre class="code console"><a id="rest_code_ae650a6211d94f96ad243650d6a6339e-1" name="rest_code_ae650a6211d94f96ad243650d6a6339e-1"></a><span class="go">shape = (8_000, 8_000)</span>
+<a id="rest_code_ae650a6211d94f96ad243650d6a6339e-2" name="rest_code_ae650a6211d94f96ad243650d6a6339e-2"></a><span class="go">chunkshape = (4_000, 100)</span>
+<a id="rest_code_ae650a6211d94f96ad243650d6a6339e-3" name="rest_code_ae650a6211d94f96ad243650d6a6339e-3"></a><span class="go">blockshape = (500, 25)</span>
 </pre>
 <p>Here we can see that the ratio between chunkshape and blockshape is 8x in dimension 0 and 4x in dimension 1.</p>
 <img alt="/images/cat_slicing/dim0.png" class="align-center" src="../../images/cat_slicing/dim0.png" style="width: 70%;"><img alt="/images/cat_slicing/dim1.png" class="align-center" src="../../images/cat_slicing/dim1.png" style="width: 70%;"><p>Now we are going to extract some planes from the chunked arrays and will plot the performance. For dimension 0 we extract a hyperplane <cite>[i, :]</cite>, and for dimension 1, <cite>[:, i]</cite>, where <em>i</em> is a random integer.</p>
@@ -118,9 +118,9 @@ For the dimension 1, Caterva is approximately 3x faster than HDF5 and Zarr; in t
 <p>That is, the difference in slice extraction speed depends largely on the ratio between the chunk size and the block size. Therefore, for slices where the chunks that contain the slice also have many items that do not belong to it, the existence of blocks (i.e. the second partition) allows to significantly reduce the amount of data to decompress.</p>
 </section><section id="overhead-of-the-second-partition"><h2>Overhead of the second partition</h2>
 <p>So as to better assess the possible performance cost of the second partition, let's analyze a new case of a 3-dimensional array with the following parameters:</p>
-<pre class="code console"><a id="rest_code_5136d79c9a564d0e9a91a55c29d38c1c-1" name="rest_code_5136d79c9a564d0e9a91a55c29d38c1c-1"></a><span class="go">shape = (800, 600, 300)</span>
-<a id="rest_code_5136d79c9a564d0e9a91a55c29d38c1c-2" name="rest_code_5136d79c9a564d0e9a91a55c29d38c1c-2"></a><span class="go">chunkshape = (200, 100, 80)</span>
-<a id="rest_code_5136d79c9a564d0e9a91a55c29d38c1c-3" name="rest_code_5136d79c9a564d0e9a91a55c29d38c1c-3"></a><span class="go">blockshape = (20, 100, 10)</span>
+<pre class="code console"><a id="rest_code_36846230670b4653af63ecce7a8ba51c-1" name="rest_code_36846230670b4653af63ecce7a8ba51c-1"></a><span class="go">shape = (800, 600, 300)</span>
+<a id="rest_code_36846230670b4653af63ecce7a8ba51c-2" name="rest_code_36846230670b4653af63ecce7a8ba51c-2"></a><span class="go">chunkshape = (200, 100, 80)</span>
+<a id="rest_code_36846230670b4653af63ecce7a8ba51c-3" name="rest_code_36846230670b4653af63ecce7a8ba51c-3"></a><span class="go">blockshape = (20, 100, 10)</span>
 </pre>
 <p>So, in the dimensions 0 and 2 the difference between shape and chunkshape is not too big whereas the difference between chunkshape and blockshape is remarkable.</p>
 <p>However, for the dimension 1, there is not a difference at all between chunkshape and blockshape.  This means that in dim 1 the Caterva machinery will make extra work because of the double partitioning, but it will not get any advantage of it since the block size is going to be equal to the chunk size.  This a perfect scenario for measuring the overhead of the second partition.</p>
@@ -129,9 +129,9 @@ For the dimension 1, Caterva is approximately 3x faster than HDF5 and Zarr; in t
 However, in the other dimensions Caterva still outperforms (by far) Zarr and HDF5.  This is because the two level partitioning works as intended here.</p>
 </section><section id="a-last-hyper-slicing-example"><h2>A last hyper-slicing example</h2>
 <p>Let's see a final example showing the double partitioning working on a wide range of dimensions.  In this case we choose a 4-dimensional array with the following parameters:</p>
-<pre class="code console"><a id="rest_code_5ac355192ee445d7a856cdec0be54e8c-1" name="rest_code_5ac355192ee445d7a856cdec0be54e8c-1"></a><span class="go">shape = (400, 80, 100, 50)</span>
-<a id="rest_code_5ac355192ee445d7a856cdec0be54e8c-2" name="rest_code_5ac355192ee445d7a856cdec0be54e8c-2"></a><span class="go">chunkshape = (100, 40, 10, 50)</span>
-<a id="rest_code_5ac355192ee445d7a856cdec0be54e8c-3" name="rest_code_5ac355192ee445d7a856cdec0be54e8c-3"></a><span class="go">blockshape = (30, 5, 2, 10)</span>
+<pre class="code console"><a id="rest_code_94336dccbbb94342ba6e1884bce4b454-1" name="rest_code_94336dccbbb94342ba6e1884bce4b454-1"></a><span class="go">shape = (400, 80, 100, 50)</span>
+<a id="rest_code_94336dccbbb94342ba6e1884bce4b454-2" name="rest_code_94336dccbbb94342ba6e1884bce4b454-2"></a><span class="go">chunkshape = (100, 40, 10, 50)</span>
+<a id="rest_code_94336dccbbb94342ba6e1884bce4b454-3" name="rest_code_94336dccbbb94342ba6e1884bce4b454-3"></a><span class="go">blockshape = (30, 5, 2, 10)</span>
 </pre>
 <p>Here the last dimension (3) is not optimized for getting hyper-slices, specially in containers with just single partitioning (Zarr and HDF5).  However, Caterva should still perform well in this situation because of the double partitioning.</p>
 <p>The slices we are going to extract will be <cite>[i, :, :, :]</cite>, <cite>[:, i, :, :]</cite>, <cite>[:, :, i, :]</cite> or <cite>[:, :, :, i]</cite>. Let's see the execution times for slicing these hyperplanes:</p>
