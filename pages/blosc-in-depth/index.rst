@@ -30,6 +30,8 @@ Watch this introductory video about the main features of Blosc:
    :align: center
 
 
+You may also want to see the `slides for a talk explaining the highlights of Blosc2 <https://www.blosc.org/docs/blosc2-intro-LEAPS-Innov-2021.pdf>`_.
+
 
 Why it works?
 -------------
