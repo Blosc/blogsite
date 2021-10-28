@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about PGO)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/pgo.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Wed, 13 Oct 2021 10:15:43 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Testing PGO with LZ4 and Zstd codecs</title><link>http://blosc.org/posts/codecs-pgo/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;In &lt;a class="reference external" href="http://blosc.org/posts/blosclz-tuning/"&gt;past week's post&lt;/a&gt; I was showing how the PGO (&lt;a class="reference external" href="https://en.wikipedia.org/wiki/Profile-guided_optimization"&gt;Profile Guided Optimization&lt;/a&gt;) capability in modern compilers allowed for a good increase in the performance of the BloscLZ codec.  Today I'd like to test how the PGO optimization affected the speed of the same &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/bench.c"&gt;synthetic benchmark&lt;/a&gt; that comes with C-Blosc2 for the two other of the most used codecs in Blosc: &lt;a class="reference external" href="http://lz4.github.io/lz4/"&gt;LZ4&lt;/a&gt; and &lt;a class="reference external" href="http://facebook.github.io/zstd/"&gt;Zstd&lt;/a&gt;.&lt;/p&gt;
-&lt;section id="id1"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about PGO)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/pgo.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Thu, 28 Oct 2021 12:11:34 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Testing PGO with LZ4 and Zstd codecs</title><link>http://blosc.org/posts/codecs-pgo/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;In &lt;a class="reference external" href="http://blosc.org/posts/blosclz-tuning/"&gt;past week's post&lt;/a&gt; I was showing how the PGO (&lt;a class="reference external" href="https://en.wikipedia.org/wiki/Profile-guided_optimization"&gt;Profile Guided Optimization&lt;/a&gt;) capability in modern compilers allowed for a good increase in the performance of the BloscLZ codec.  Today I'd like to test how the PGO optimization affected the speed of the same &lt;a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/bench.c"&gt;synthetic benchmark&lt;/a&gt; that comes with C-Blosc2 for the two other of the most used codecs in Blosc: &lt;a class="reference external" href="http://lz4.github.io/lz4/"&gt;LZ4&lt;/a&gt; and &lt;a class="reference external" href="http://facebook.github.io/zstd/"&gt;Zstd&lt;/a&gt;.&lt;/p&gt;
+&lt;section id="lz4-1"&gt;
 &lt;h2&gt;LZ4&lt;/h2&gt;
 &lt;p&gt;First, for GCC without PGO:&lt;/p&gt;
 &lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 50%"&gt;
-&lt;col style="width: 50%"&gt;
-&lt;/colgroup&gt;
 &lt;tbody&gt;
 &lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="lz4-old-c" src="http://blosc.org/images/codecs-pgo/lz4-comp-gcc-6.3.png"&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;&lt;p&gt;&lt;img alt="lz4-old-d" src="http://blosc.org/images/codecs-pgo/lz4-decomp-gcc-6.3.png"&gt;&lt;/p&gt;&lt;/td&gt;
@@ -16,10 +12,6 @@
 &lt;/table&gt;
 &lt;p&gt;Now with PGO enabled:&lt;/p&gt;
 &lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 50%"&gt;
-&lt;col style="width: 50%"&gt;
-&lt;/colgroup&gt;
 &lt;tbody&gt;
 &lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="lz4-pgo-c" src="http://blosc.org/images/codecs-pgo/lz4-comp-pgo.png"&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;&lt;p&gt;&lt;img alt="lz4-pgo-d" src="http://blosc.org/images/codecs-pgo/lz4-decomp-pgo.png"&gt;&lt;/p&gt;&lt;/td&gt;
@@ -28,14 +20,10 @@
 &lt;/table&gt;
 &lt;p&gt;We can see here that, similarly to BloscLZ, although the compression speed has not improved significantly, the decompression is now reaching up to 30 GB/s, and for high compression levels, up to 20 GB/s, which is pretty good.&lt;/p&gt;
 &lt;/section&gt;
-&lt;section id="id2"&gt;
+&lt;section id="zstd-1"&gt;
 &lt;h2&gt;Zstd&lt;/h2&gt;
 &lt;p&gt;First, for GCC without PGO:&lt;/p&gt;
 &lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 50%"&gt;
-&lt;col style="width: 50%"&gt;
-&lt;/colgroup&gt;
 &lt;tbody&gt;
 &lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="zstd-old-c" src="http://blosc.org/images/codecs-pgo/zstd-comp-gcc-6.3.png"&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;&lt;p&gt;&lt;img alt="zstd-old-d" src="http://blosc.org/images/codecs-pgo/zstd-decomp-gcc-6.3.png"&gt;&lt;/p&gt;&lt;/td&gt;
@@ -44,10 +32,6 @@
 &lt;/table&gt;
 &lt;p&gt;Now with PGO enabled:&lt;/p&gt;
 &lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 50%"&gt;
-&lt;col style="width: 50%"&gt;
-&lt;/colgroup&gt;
 &lt;tbody&gt;
 &lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="zstd-pgo-c" src="http://blosc.org/images/codecs-pgo/zstd-comp-pgo.png"&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;&lt;p&gt;&lt;img alt="zstd-pgo-d" src="http://blosc.org/images/codecs-pgo/zstd-decomp-pgo.png"&gt;&lt;/p&gt;&lt;/td&gt;

@@ -93,10 +93,10 @@
     <div>
 <p>On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new <a class="reference external" href="https://en.wikipedia.org/wiki/Zen_2">Zen 2</a> micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:</p>
 <img alt="/images/blosc2-meets-rome/amd-rome-arch-multi-die.png" class="align-center" src="images/blosc2-meets-rome/amd-rome-arch-multi-die.png"><p>Such a separation of dies for I/O and computing has quite <a class="reference external" href="https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm/3">large consequences in terms of scalability when accessing memory</a>, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous <a class="reference external" href="https://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a>.  This essentially boils down to compute an aggregation with a simple loop like:</p>
-<pre class="code c"><a id="rest_code_e9cd0227310842028c2a679c296362db-1" name="rest_code_e9cd0227310842028c2a679c296362db-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_e9cd0227310842028c2a679c296362db-2" name="rest_code_e9cd0227310842028c2a679c296362db-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<a id="rest_code_e9cd0227310842028c2a679c296362db-3" name="rest_code_e9cd0227310842028c2a679c296362db-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
-<a id="rest_code_e9cd0227310842028c2a679c296362db-4" name="rest_code_e9cd0227310842028c2a679c296362db-4"></a><span class="p">}</span><span class="w"></span>
+<pre class="code c"><a id="rest_code_04e137575dfd437781dffcda9e930a37-1" name="rest_code_04e137575dfd437781dffcda9e930a37-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_04e137575dfd437781dffcda9e930a37-2" name="rest_code_04e137575dfd437781dffcda9e930a37-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="rest_code_04e137575dfd437781dffcda9e930a37-3" name="rest_code_04e137575dfd437781dffcda9e930a37-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<a id="rest_code_04e137575dfd437781dffcda9e930a37-4" name="rest_code_04e137575dfd437781dffcda9e930a37-4"></a><span class="p">}</span><span class="w"></span>
 </pre>
 <p>As described in the original blog post, the different <cite>udata</cite> arrays are just chunks of the original dataset that are decompressed just in time for performing the partial aggregation operation; the final result is indeed the sum of all the partial aggregations.  Also we have seen that the time to execute the aggregation is going to depend quite a lot on the kind of data that is decompressed: carefully chosen synthetic data can be decompressed much more quickly than real data.  But syntehtic data is nevertheless interesting as it allows for a roof analysis of where the performance can grow up to.</p>
 <p>In this blog, we are going to see how the AMD EPYC 7402 (Rome), a 24-core processor performs on both synthetic and real data.</p>
@@ -168,16 +168,10 @@
 <p>We are currently using a combination of Sphinx + Doxygen + Breathe for documenting the <a class="reference external" href="https://blosc-doc.readthedocs.io">C API for C-Blosc2</a>.  This is a huge step further compared with the documentation of C-Blosc1, where the developer needed to go the    <a class="reference external" href="https://github.com/Blosc/c-blosc/blob/master/blosc/blosc.h">blosc.h</a> header for reading the docstrings there.  Thanks to Alberto Sabater for contributing the support for this.</p>
 </section><section id="support-for-intel-ipp-integrated-performance-primitives"><h3>Support for Intel IPP (Integrated Performance Primitives)</h3>
 <p>Intel is producing a series of optimizations in their <a class="reference external" href="https://software.intel.com/en-us/ipp">IPP library</a> and among them, and <a class="reference external" href="https://software.intel.com/en-us/ipp-dev-reference-lz4-compression-functions">accelerated version of the LZ4 codec</a>.  Due to its excellent compression capabilities and speed, LZ4 is probably the most used codec in Blosc, so enabling even a bit more of optimization on LZ4 is always a good news.  And judging by the plots below, the Intel guys seem to have done an excellent job:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4-no-ipp" src="images/blosc2-first-beta/Blosc2-4MB-LZ4-NO-IPP-Shuffle.png"></p></td>
 <td><p><img alt="lz4-ipp" src="images/blosc2-first-beta/Blosc2-4MB-LZ4-IPP-Shuffle.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>In the plots above we see a couple of things: 1) the IPP/LZ4 functions can compress <em>more</em> than regular LZ4, and 2) they are quite a bit <em>faster</em> than regular LZ4.  As always, take these plots with a grain of salt, as actual datasets will see more similar compression ratios and speed (but still, the difference can be significant).  Of course, IPP/LZ4 should generate LZ4 chunks that are completely compatible with the original LZ4 library (but in case you detect any incompatibility, please shout!).</p>
 <p>C-Blosc2 beta.1 comes with support for LZ4/IPP out-of-the-box, that is, if IPP is detected in the system, its optimized LZ4 functions are automatically linked and used with the Blosc2 library.  If, for portability or other reasons, you don't want to create a Blosc2 library that is linked with Intel IPP, you can disable support for it passing the <cite>-DDEACTIVATE_IPP=ON</cite> to cmake.  In the future, we surely may give support for other optimized codecs in IPP too (Zstd would be an excellent candidate).</p>
 </section></section><section id="roadmap"><h2>Roadmap</h2>
@@ -233,32 +227,20 @@
 </section><section id="the-kirin-980-cpu"><h2>The Kirin 980 CPU</h2>
 <p>Here we are going to analyze <a class="reference external" href="https://www.anandtech.com/show/13503/the-mate-20-mate-20-pro-review">Huawei's Kirin 980 CPU</a> , a SoC (System On a Chip) that uses the ARM A76 core internally.  This is a fine example of an internal IP core design of ARM that is licensed to be used in a CPU chipset (or SoC) by another vendor (Huawei in this case).  The Kirin 980 wears 4 A76 cores plus 4 A55 cores, but the more powerful ones are the A76 (the A55 are more headed to do light tasks with very little energy consumption, which is critical for phones).  The A76 core is designed to be implemented using a 7nm technology (as it is the case for the Kirin 980, the second SoC in the world to use a 7 nm node, after Apple A12), and supports ARM's DynamIQ technology which allows scalability to target the specific requirements of a SoC.  In our case the Kirin 980 is running in a phone (Humawei's Mate 20), and in this scenario the power dissipation (TDP) cannot exceed the 4 W figure, so DynamIQ should try to be very conservative here and avoid putting too many cores active at the same time.</p>
 <p>ARM is saying that they designed the <a class="reference external" href="https://arstechnica.com/gadgets/2018/06/arm-promises-laptop-level-performance-in-2019/">A76 to be a competitor of the Intel Skylake Core i5</a>, so this is what we are going to check here.  For this, we are going to compare a Kirin 980 in a Huawei Mate 20 phone against a Core i5 included in a MacBook Pro (late 2016).  Here it is the side-by-side performance for the precipitation dataset that I used in the <a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/">previous blog</a>:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="rainfall-kirin980" src="images/arm-memory-walls-followup/kirin980-rainfall-lz4-9.png"></p></td>
 <td><p><img alt="rainfall-i5laptop" src="images/arm-memory-walls-followup/i5laptop-lz4-9.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>Here we can already see a couple of things.  First, the speed of the calculation when there is no compression is similar for both CPUs.  This is interesting because, although the bottleneck for this benchmark is in the memory access, the fact that the Kirin 980 performance is almost the same than the Core i5 is a testimony of how well ARM performed in the design of a memory prefetcher, clearly allowing for a good memory-level parallelism.</p>
 <p>Second, for the compressed case, the Core i5 is still a 50% faster than the Kirin 980, but the performance scales similarly (up to 4 threads) for both CPUs.  The big news here is that the Core i5 has a TDP of 28 W, whereas for the Kirin 980 is just 4 W (and probably less than that), so that means that ARM's DynamIQ works beautifully so as to allow 4 (powerful) cores to run simultaneously in such a restrictive scenario (remember that we are running this benchmark <em>inside a phone</em>).  It is also true that we are comparing an Intel CPU from 2016 against an ARM CPU from 2018 and that nowadays probably we can find Intel exemplars showing a similar performance than this i5 for probably no more than 10 W (e.g. an <a class="reference external" href="https://ark.intel.com/products/149088/Intel-Core-i5-8265U-Processor-6M-Cache-up-to-3-90-GHz-">i5-8265U with configurable TDP-down</a>), although I am not really sure how an Intel CPU will perform with such a strict power constraint.  At any rate, the Kirin 980 still consumes less than half of the power than its Intel counterpart --and its price would probably be a fraction of it too.</p>
 <p>I believe that these facts are really a good testimony of how serious ARM was on their claim that they were going to catch Intel in the performance side of the things for client devices, and probably with an important advantage in consuming less energy too.  The fact that ARM CPUs are more energy efficient should not be surprising given the experience of ARM in that area for decades.  But another reason for that is the important reduction in the manufacturing technology that ARM has achieved on their new designs (7nm node for ARM vs 14nm node for Intel); undoubtedly, ARM advantage in power consumption is going to be important for their world-domination plans.</p>
 </section><section id="the-thunderx2-cpu"><h2>The ThunderX2 CPU</h2>
 <p>The second way in which ARM sells licenses is the so-called <em>architectural license</em> allowing companies to design their own CPU cores using the ARM instruction sets.  Cavium (now bought by Marvell) was one of these companies, and they produced different CPU designs that culminated with Vulcan, the micro-architecture that powers the ThunderX2 CPU, which was made available in May 2018.  <a class="reference external" href="https://en.wikichip.org/wiki/cavium/microarchitectures/vulcan">Vulcan is a 16 nm high-performance 64-bit ARM micro-architecture</a> that is specifically meant to compete in compute/data server facilities (think of it as a  a Xeon-class ARM-based server microprocessor).  ThunderX2 can pack up to 32 Vulcan cores, and as every Vulcan core supports up to 4 threads, the whole CPU can run up to 128 threads.  With its capability to handle so many threads simultaneously, I expected that its raw compute power should be nothing to sneeze at.</p>
 <p>So as to check how powerful a ThunderX2 can be, we are going to compare <a class="reference external" href="https://en.wikichip.org/wiki/cavium/thunderx2/cn9975">ThunderX2 CN9975</a> (actually a box with 2 instances of it, each containing 28 cores) against one of its natural competitor, the Intel Scalable Gold 5120 (actually a box with 2 instances of it, each containing 14 cores):</p>
-<table>
-<colgroup>
-<col style="width: 51%">
-<col style="width: 49%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="rainfall-thunderx2" src="images/arm-memory-walls-followup/thunderx2-rainfall-lz4-9.png"></p></td>
 <td><p><img alt="rainfall-scalable" src="images/arm-memory-walls-followup/scalable-rainfall-lz4-9.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>Here we see that, when no compression is used, the Intel instance scales much better and more predictably; however the ThunderX2 is able to reach a similar performance (almost 70 GB/s) than the Intel when enough threads are thrown at the computing task.  This is a really interesting fact, because it is showing that, for first time ever, an ARM CPU can match the memory bandwidth of a latest generation Intel CPU (which BTW, was pretty good at that already).</p>
 <p>Regarding the compressed scenario, Intel Scalable still performs more than 2x faster than the ThunderX2 and it continues to show a really nice scalability.  On the other hand, although the ThunderX2 represents a good step in improving the performance of the ARM architecture, it is still quite far from being able to reach Intel in terms of both raw computing performance and the capacity to scale smoothly.</p>
 <p>When we look at power consumption, although I was not able to find the exact figure for the ThunderX2 CN9975 model that has been used in the benchmarks above, it is probably in the range of 150 W per CPU, which is quite larger than its Intel Scalable 5120 counterpart which is around 100 W per CPU.  That means that Intel is using quite far less power in their CPU, giving them a clear advantage in server computing at this time.</p>
@@ -305,16 +287,16 @@
 <p><strong>Update (2018-08-09)</strong>: An extended version of this blog post can be found in this <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">article</a>.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, as well as more discussion about the results.</p>
 <p>Nowadays CPUs struggle to get data at enough speed to feed their cores.  The reason for this is that memory speed is <a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf">growing at a slower pace than CPUs increase their speed at crunching numbers</a>.   This memory slowness compared with CPUs is generally known as the <a class="reference external" href="https://en.wikipedia.org/wiki/Random-access_memory#Memory_wall">Memory Wall</a>.</p>
 <p>For example, let's suppose that we want to compute the aggregation of a some large array; here it is how to do that using OpenMP for leveraging all cores in a CPU:</p>
-<pre class="code c"><a id="rest_code_7357119c5aa84041bab3fdf2ae94be1c-1" name="rest_code_7357119c5aa84041bab3fdf2ae94be1c-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_7357119c5aa84041bab3fdf2ae94be1c-2" name="rest_code_7357119c5aa84041bab3fdf2ae94be1c-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<a id="rest_code_7357119c5aa84041bab3fdf2ae94be1c-3" name="rest_code_7357119c5aa84041bab3fdf2ae94be1c-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
-<a id="rest_code_7357119c5aa84041bab3fdf2ae94be1c-4" name="rest_code_7357119c5aa84041bab3fdf2ae94be1c-4"></a><span class="p">}</span><span class="w"></span>
+<pre class="code c"><a id="rest_code_59b5fdedfa1446d39230060ca467efa4-1" name="rest_code_59b5fdedfa1446d39230060ca467efa4-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_59b5fdedfa1446d39230060ca467efa4-2" name="rest_code_59b5fdedfa1446d39230060ca467efa4-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="rest_code_59b5fdedfa1446d39230060ca467efa4-3" name="rest_code_59b5fdedfa1446d39230060ca467efa4-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<a id="rest_code_59b5fdedfa1446d39230060ca467efa4-4" name="rest_code_59b5fdedfa1446d39230060ca467efa4-4"></a><span class="p">}</span><span class="w"></span>
 </pre>
 <p>With this, some server (an Intel Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores and hyperthreading) takes about 14 ms for doing the aggregation of an array with 100 million of float32 values when using 8 OpenMP threads (optimal number for this CPU).  However, if instead of bringing the whole 100 million elements from memory to the CPU we generate the data inside the loop, we are avoiding the data transmission between memory and CPU, like in:</p>
-<pre class="code c"><a id="rest_code_c8df705699e3462bb117481b563583a3-1" name="rest_code_c8df705699e3462bb117481b563583a3-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_c8df705699e3462bb117481b563583a3-2" name="rest_code_c8df705699e3462bb117481b563583a3-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<a id="rest_code_c8df705699e3462bb117481b563583a3-3" name="rest_code_c8df705699e3462bb117481b563583a3-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span><span class="w"></span>
-<a id="rest_code_c8df705699e3462bb117481b563583a3-4" name="rest_code_c8df705699e3462bb117481b563583a3-4"></a><span class="p">}</span><span class="w"></span>
+<pre class="code c"><a id="rest_code_f9d6e45bf66b4b5aa7e64d29abbacdab-1" name="rest_code_f9d6e45bf66b4b5aa7e64d29abbacdab-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_f9d6e45bf66b4b5aa7e64d29abbacdab-2" name="rest_code_f9d6e45bf66b4b5aa7e64d29abbacdab-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="rest_code_f9d6e45bf66b4b5aa7e64d29abbacdab-3" name="rest_code_f9d6e45bf66b4b5aa7e64d29abbacdab-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<a id="rest_code_f9d6e45bf66b4b5aa7e64d29abbacdab-4" name="rest_code_f9d6e45bf66b4b5aa7e64d29abbacdab-4"></a><span class="p">}</span><span class="w"></span>
 </pre>
 <p>This loop takes just 3.5 ms, that is, 4x less than the original one.  That means that our CPU could compute the aggregation at a speed that is 4x faster than the speed at which the memory subsystem can provide data elements to the CPU; or put in another words, the CPU is idle, doing nothing during the 75% of the time, waiting for data to arrive (for this example, but there could be other, more extreme cases).  Here we have the memory wall in action indeed.</p>
 <p>That the memory wall exists is an excellent reason to think about ways to workaround it.  One of the most promising venues is to use compression: what if we could store data in compressed state in-memory and use the spare clock cycles of the CPU for decompressing it just when it is needed?  In this blog entry we will see how to implement such a computational kernel on top of data structures that are cache- and compression-friendly and we will examine how they perform on a range of modern CPU architectures.  Some surprises are in store.</p>
@@ -346,16 +328,10 @@
 <p><em>Caveat</em>: For the sake of easy reproducibility, for building the 100 million dataset I have chosen a small <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/read-grid-150x150.py">geographical area with a size of 150x150</a> and reused it repeatedly so as to fill the final dataset completely.  As the size of the chunks is lesser than this area, and the super-chunk (as configured here) does not use data redundancies from other chunks, the results obtained here can be safely extrapolated to the actual dataset made from real data (bar some small differences).</p>
 </section><section id="choosing-the-compression-codec"><h2>Choosing the Compression Codec</h2>
 <p>When determining the best codec to use inside Blosc2 (it has support for BloscLZ, LZ4, LZ4HC, Zstd, Zlib and Lizard), it turns out that they behave quite differently, both in terms of compression and speed, with the dataset they have to compress <em>and</em> with the CPU architecture in which they run.  This is quite usual, and the reason why you should always try to find the best codec for your use case.  Here we have how the different codecs behaves for our precipitation dataset in terms of decompression speed for our reference platform (Intel Xeon E3-1245):</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="i7server-codecs" src="images/breaking-down-memory-walls/i7server-rainfall-codecs.png"></p></td>
 <td><p><img alt="rainfall-cr" src="images/breaking-down-memory-walls/rainfall-cr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>In this case LZ4HC is the codec that decompress faster for any number of threads and hence, the one selected for the benchmarks for the reference platform.  A similar procedure has been followed to select the codec for the CPUs.  The selected codec for every CPU will be conveniently specified in the discussion of the results below.</p>
 <p>For completeness, I am also showing the compression ratios achieved by the different codecs for the precipitation dataset.  Although there are significant differences for them, these usually come at the cost of compression/decompression time.  At any rate, even though compression ratio is important, in this blog we are mainly interested in the best decompression speed, so we will use this latter as the only important parameter for codec selection.</p>
 </section><section id="results-on-different-cpus"><h2>Results on Different CPUs</h2>
@@ -445,50 +421,26 @@
 </section><section id="how-this-change-affects-performance"><h2>How this change affects performance</h2>
 <p>So as to allow to visualize at a glance the differences in performance that the new release is introducing, let's have a look at the impact on two of the most used codecs inside C-Blosc: LZ4 and LZ4HC.  In the plots below the left side is the pre-1.14.0 version (non-split blocks) and on the right, the forthcoming 1.14.0 (split blocks).  Note that I am using here the typical synthetic benchmarks for C-Blosc, so expect a different outcome for your own data.</p>
 <p>Let's start by LZ4HC, a High Compression Ratio codec (and the one that triggered the initial report of the <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">forward compatibility issue</a>).  When compressing, we have this change in behavior:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4hc-c" src="images/new-forward-compat-policy/suite-lz4hc-pre-1.14-compr.png"></p></td>
 <td><p><img alt="lz4hc-compat-c" src="images/new-forward-compat-policy/suite-lz4hc-compat-compr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>For LZ4HC decompression:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4hc-d" src="images/new-forward-compat-policy/suite-lz4hc-pre-1.14-decompr.png"></p></td>
 <td><p><img alt="lz4hc-compat-d" src="images/new-forward-compat-policy/suite-lz4hc-compat-decompr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>For LZ4HC one can see that, when using non-split blocks, it can achieve better compression ratios (this is expected, as the block sizes are larger).  Speed-wise the performance is quite similar, with maybe some advantage for split blocks (expected as well).  As the raison d'être for HCR codecs is maximize the compression ration, that was the reason why I did the split change for LZ4HC in 1.11.0.</p>
 <p>And now for LZ4, a codec meant for speed (although it normally gives pretty decent results in compression ratio).  When compressing, here it is the change:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4-c" src="images/new-forward-compat-policy/suite-lz4-pre-1.14-compr.png"></p></td>
 <td><p><img alt="lz4-compat-c" src="images/new-forward-compat-policy/suite-lz4-compat-compr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>For LZ4 decompression:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4-d" src="images/new-forward-compat-policy/suite-lz4-pre-1.14-decompr.png"></p></td>
 <td><p><img alt="lz4-compat-d" src="images/new-forward-compat-policy/suite-lz4-compat-decompr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>So, here one can see that when using Blosc pre-1.14 (i.e. non-split blocks) we are getting a bit less compression ratio than for the forthcoming 1.14, which even if counter-intutive, it matches my experience with non-HCR codecs.  Speed-wise the difference is not that much during compression; however, decompression is significantly faster with non-split blocks.  As LZ4 is meant for speed, this was possibly the reason that pushed me towards making non-split blocks by default for LZ4 in addition to HCR codecs in 1.11.0.</p>
 </section><section id="feedback"><h2>Feedback</h2>
 <p>If you have suggestions on this forward compatibility issue or the solution that has been implemented, please shout!</p>

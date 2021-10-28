@@ -107,16 +107,10 @@ processors so as to accelerate the compression/decompression process
 to a maximum.</p>
 <p>To whet your appetite look at the kind of speed that Blosc can reach for BloscLZ,
 its default codec using synthetic data:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="blosclz-c" src="../../images/blosclz-comp.png"></p></td>
 <td><p><img alt="blosclz-d" src="../../images/blosclz-decomp.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>And here its the speed for summing up a vector of real data of float32 values
 for a variety of codecs that come with Blosc2:</p>
 <figure class="align-center"><img alt="/images/sum_openmp-rainfall.png" src="../../images/sum_openmp-rainfall.png" style="width: 75%;"></figure><p>There you can see how compressing with Blosc allows to accelerate real computations

@@ -101,39 +101,21 @@
 <p>After the initial support for Lizard in Blosc, it took me some time to determine a decent map between the compression levels in Blosc (1-9) to the ones in Lizard (10-49), mainly for allowing fast compression and decompression (what Blosc is all about).  During the way, I discovered that the most interesting compression levels in Lizard have been  <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/lizard/blosc/blosc.c#L606-L625">10, 20 and 41</a>.  This was indeed determined using the <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/bench.c">synthetic benchamrk</a> that comes with Blosc, but that is the usual path that gaves me quite good estimates for a first calibration (we are working on a more complete tuner that can adapt to actual data in real time, but I'll blog about it in another occasion).</p>
 <section id="a-new-star-has-born"><h2>A new star has born</h2>
 <p>After the calibration was done the results of the new codec are really surprising:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lizard-c" src="../../images/the-lizard-codec/lizard-suite-8p-compr.png"></p></td>
 <td><p><img alt="lizard-d" src="../../images/the-lizard-codec/lizard-suite-8p-decompr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>The interesting part of Lizard can be seen when large compression levels for Blosc are used, specially 8 and 9.  Those are mapped to compression level 41 in Lizard, which means that the LIZv1 + Huffman compression method is used.  Following the documentation, this matches the compression levels of Zlib and Zstd/Brotli, and it shows.</p>
 <p>Just for reference, here it is the performance of the LZ4 codec, from which Lizard inherits a good part of its code:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4-c" src="../../images/codecs-pgo/lz4-comp-gcc-6.3.png"></p></td>
 <td><p><img alt="lz4-d" src="../../images/codecs-pgo/lz4-decomp-gcc-6.3.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>And here the performance of Zstd, which also uses Huffman coding:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="zstd-c" src="../../images/codecs-pgo/zstd-comp-gcc-6.3.png"></p></td>
 <td><p><img alt="zstd-d" src="../../images/codecs-pgo/zstd-decomp-gcc-6.3.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>So, while Lizard (or at least, the current mapping that I did for it inside Blosc) in low compression levels cannot beat the speed of LZ4 or the compression ratios of Zstd, for high compression levels it clearly beats LZ4 and Zstd speed both for compression and decompression.  Most specially, it works extremely well for achieving pretty reasonable compression ratios (typically better than Zlib, albeit not as good as Zstd) at very good decompression speed and exceptional compression speed (compressing at more than the memcpy() speed, at very good ratios, oh really?).</p>
 <p>Finally, for those wondering why I have not used the LIZv1 + Huffman compression method also for the lower compression levels in Blosc, the answer is that I obviously tried that, but for some reason, this method only performs well for large buffers, whereas for small buffers (like the ones created by low compression levels in Blosc) its performance is rather poor.  I was kind of getting a similar behaviour with Zstd, where performance shines for decompressing large buffers (the difference is that Lizard can compress at tremendous speed when compared with Zstd in this scenario), so I suppose this is typical when Huffman methods are used.</p>
 </section><section id="finding-its-place-among-blosc-codecs"><h2>Finding its place among Blosc codecs</h2>

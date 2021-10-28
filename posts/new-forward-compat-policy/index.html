@@ -127,50 +127,26 @@ Recently, a C-Blosc user filed an issue describing how buffers created with a mo
 </section><section id="how-this-change-affects-performance"><h2>How this change affects performance</h2>
 <p>So as to allow to visualize at a glance the differences in performance that the new release is introducing, let's have a look at the impact on two of the most used codecs inside C-Blosc: LZ4 and LZ4HC.  In the plots below the left side is the pre-1.14.0 version (non-split blocks) and on the right, the forthcoming 1.14.0 (split blocks).  Note that I am using here the typical synthetic benchmarks for C-Blosc, so expect a different outcome for your own data.</p>
 <p>Let's start by LZ4HC, a High Compression Ratio codec (and the one that triggered the initial report of the <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">forward compatibility issue</a>).  When compressing, we have this change in behavior:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4hc-c" src="../../images/new-forward-compat-policy/suite-lz4hc-pre-1.14-compr.png"></p></td>
 <td><p><img alt="lz4hc-compat-c" src="../../images/new-forward-compat-policy/suite-lz4hc-compat-compr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>For LZ4HC decompression:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4hc-d" src="../../images/new-forward-compat-policy/suite-lz4hc-pre-1.14-decompr.png"></p></td>
 <td><p><img alt="lz4hc-compat-d" src="../../images/new-forward-compat-policy/suite-lz4hc-compat-decompr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>For LZ4HC one can see that, when using non-split blocks, it can achieve better compression ratios (this is expected, as the block sizes are larger).  Speed-wise the performance is quite similar, with maybe some advantage for split blocks (expected as well).  As the raison d'être for HCR codecs is maximize the compression ration, that was the reason why I did the split change for LZ4HC in 1.11.0.</p>
 <p>And now for LZ4, a codec meant for speed (although it normally gives pretty decent results in compression ratio).  When compressing, here it is the change:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4-c" src="../../images/new-forward-compat-policy/suite-lz4-pre-1.14-compr.png"></p></td>
 <td><p><img alt="lz4-compat-c" src="../../images/new-forward-compat-policy/suite-lz4-compat-compr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>For LZ4 decompression:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4-d" src="../../images/new-forward-compat-policy/suite-lz4-pre-1.14-decompr.png"></p></td>
 <td><p><img alt="lz4-compat-d" src="../../images/new-forward-compat-policy/suite-lz4-compat-decompr.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>So, here one can see that when using Blosc pre-1.14 (i.e. non-split blocks) we are getting a bit less compression ratio than for the forthcoming 1.14, which even if counter-intutive, it matches my experience with non-HCR codecs.  Speed-wise the difference is not that much during compression; however, decompression is significantly faster with non-split blocks.  As LZ4 is meant for speed, this was possibly the reason that pushed me towards making non-split blocks by default for LZ4 in addition to HCR codecs in 1.11.0.</p>
 </section><section id="feedback"><h2>Feedback</h2>
 <p>If you have suggestions on this forward compatibility issue or the solution that has been implemented, please shout!</p>

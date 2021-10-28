@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about optimization)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/optimization.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Wed, 13 Oct 2021 10:15:43 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Fine Tuning the BloscLZ codec</title><link>http://blosc.org/posts/blosclz-tuning/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;Yesterday I was reading about the exciting new CPU architectures that both &lt;a class="reference external" href="http://www.anandtech.com/show/11544/intel-skylake-ep-vs-amd-epyc-7000-cpu-battle-of-the-decade"&gt;AMD and Intel are introducing&lt;/a&gt; and I was wondering how the improved architecture of the new cores and most specially, its caches, could apply to Blosc.  It turns out that I have access to a server with a relatively modern CPU (Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores) and I decided to have a go at fine-tune the included BloscLZ codec (the one that I know the best) inside C-Blosc2.  Of course, I already spent some time tuning BloscLZ, but that was some years ago and provided the fast pace at which CPUs are evolving I thought that this was excellent timing for another round of fine-tuning, most specially in preparation for users adopting the forthcoming  RYZEN, Threadripper, EPYC and Skylake-SP architectures.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about optimization)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/optimization.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Thu, 28 Oct 2021 12:11:34 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Fine Tuning the BloscLZ codec</title><link>http://blosc.org/posts/blosclz-tuning/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;Yesterday I was reading about the exciting new CPU architectures that both &lt;a class="reference external" href="http://www.anandtech.com/show/11544/intel-skylake-ep-vs-amd-epyc-7000-cpu-battle-of-the-decade"&gt;AMD and Intel are introducing&lt;/a&gt; and I was wondering how the improved architecture of the new cores and most specially, its caches, could apply to Blosc.  It turns out that I have access to a server with a relatively modern CPU (Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores) and I decided to have a go at fine-tune the included BloscLZ codec (the one that I know the best) inside C-Blosc2.  Of course, I already spent some time tuning BloscLZ, but that was some years ago and provided the fast pace at which CPUs are evolving I thought that this was excellent timing for another round of fine-tuning, most specially in preparation for users adopting the forthcoming  RYZEN, Threadripper, EPYC and Skylake-SP architectures.&lt;/p&gt;
 &lt;p&gt;Frankly speaking, I was expecting to get very little improvements in this front, but the results have been unexpectedly good.  Keep reading.&lt;/p&gt;
 &lt;section id="where-we-come-from"&gt;
 &lt;h2&gt;Where we come from&lt;/h2&gt;
 &lt;p&gt;Just for reference, here it is the performance of the BloscLZ codec in my server before the new tuning work:&lt;/p&gt;
 &lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 50%"&gt;
-&lt;col style="width: 50%"&gt;
-&lt;/colgroup&gt;
 &lt;tbody&gt;
 &lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="blosclz-old-c" src="http://blosc.org/images/blosclz-tuning/blosclz-suite-8p-old-param-compr.png"&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;&lt;p&gt;&lt;img alt="blosclz-old-d" src="http://blosc.org/images/blosclz-tuning/blosclz-suite-8p-old-param-decompr.png"&gt;&lt;/p&gt;&lt;/td&gt;
@@ -22,10 +18,6 @@
 &lt;h2&gt;The new BloscLZ after fine tuning&lt;/h2&gt;
 &lt;p&gt;So, after a couple of hours playing with different parameters in BloscLZ and C-Blosc2, I started to realize that the new Intel CPU performed exceedingly well when asked to compress more, to the point that high compression settings were not performing that slow in comparision with low compression ones; rather the contrary: high compression settings were operating at almost the same speed than lower ones (which was a welcome surprise indeed).  Hence I tried to be set quite more aggressive parameters in BloscLZ, while trying to keep the size of internal blocks in Blosc2 below 256 KB (the typical size of L2 caches in modern CPUs).  This is the result:&lt;/p&gt;
 &lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 50%"&gt;
-&lt;col style="width: 50%"&gt;
-&lt;/colgroup&gt;
 &lt;tbody&gt;
 &lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="blosclz-new-c" src="http://blosc.org/images/blosclz-tuning/blosclz-suite-8p-new-param2-gcc6-compr.png"&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;&lt;p&gt;&lt;img alt="blosclz-new-d" src="http://blosc.org/images/blosclz-tuning/blosclz-suite-8p-new-param2-gcc6-decompr.png"&gt;&lt;/p&gt;&lt;/td&gt;
@@ -39,10 +31,6 @@
 &lt;h2&gt;Room for more improvements?  Enter PGO.&lt;/h2&gt;
 &lt;p&gt;To temporary end (optimization is a never ending task) this quest for speed, I am curious about the speed that we can buy by using the PGO (&lt;a class="reference external" href="https://en.wikipedia.org/wiki/Profile-guided_optimization"&gt;Profile Guided Optimization&lt;/a&gt;) capability that is present in most of the modern compilers.  Here I am going to use the PGO of GCC in combination with our benchmark at hand so as to provide the profile for the compiler optimizer.  Here are the results when PGO is applied to the new parametrization:&lt;/p&gt;
 &lt;table&gt;
-&lt;colgroup&gt;
-&lt;col style="width: 50%"&gt;
-&lt;col style="width: 50%"&gt;
-&lt;/colgroup&gt;
 &lt;tbody&gt;
 &lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;img alt="blosclz-pgo-c" src="http://blosc.org/images/blosclz-tuning/blosclz-suite-8p-new-param2-gcc6.pgo-compr.png"&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;&lt;p&gt;&lt;img alt="blosclz-pgo-d" src="http://blosc.org/images/blosclz-tuning/blosclz-suite-8p-new-param2-gcc6.pgo-decompr.png"&gt;&lt;/p&gt;&lt;/td&gt;

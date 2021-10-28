@@ -99,53 +99,29 @@
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
 <p>In <a class="reference external" href="http://blosc.org/posts/blosclz-tuning/">past week's post</a> I was showing how the PGO (<a class="reference external" href="https://en.wikipedia.org/wiki/Profile-guided_optimization">Profile Guided Optimization</a>) capability in modern compilers allowed for a good increase in the performance of the BloscLZ codec.  Today I'd like to test how the PGO optimization affected the speed of the same <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/master/bench/bench.c">synthetic benchmark</a> that comes with C-Blosc2 for the two other of the most used codecs in Blosc: <a class="reference external" href="http://lz4.github.io/lz4/">LZ4</a> and <a class="reference external" href="http://facebook.github.io/zstd/">Zstd</a>.</p>
-<section id="id1"><h2>LZ4</h2>
+<section id="lz4-1"><h2>LZ4</h2>
 <p>First, for GCC without PGO:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4-old-c" src="../../images/codecs-pgo/lz4-comp-gcc-6.3.png"></p></td>
 <td><p><img alt="lz4-old-d" src="../../images/codecs-pgo/lz4-decomp-gcc-6.3.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>Now with PGO enabled:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="lz4-pgo-c" src="../../images/codecs-pgo/lz4-comp-pgo.png"></p></td>
 <td><p><img alt="lz4-pgo-d" src="../../images/codecs-pgo/lz4-decomp-pgo.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>We can see here that, similarly to BloscLZ, although the compression speed has not improved significantly, the decompression is now reaching up to 30 GB/s, and for high compression levels, up to 20 GB/s, which is pretty good.</p>
-</section><section id="id2"><h2>Zstd</h2>
+</section><section id="zstd-1"><h2>Zstd</h2>
 <p>First, for GCC without PGO:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="zstd-old-c" src="../../images/codecs-pgo/zstd-comp-gcc-6.3.png"></p></td>
 <td><p><img alt="zstd-old-d" src="../../images/codecs-pgo/zstd-decomp-gcc-6.3.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>Now with PGO enabled:</p>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody><tr>
+<table><tbody><tr>
 <td><p><img alt="zstd-pgo-c" src="../../images/codecs-pgo/zstd-comp-pgo.png"></p></td>
 <td><p><img alt="zstd-pgo-d" src="../../images/codecs-pgo/zstd-decomp-pgo.png"></p></td>
-</tr></tbody>
-</table>
+</tr></tbody></table>
 <p>Wow, in this case we <em>really</em> can see important speedups in both compressing and decompressing.  Specially interesting is the decompression case where, for the higher compression levels, Zstd can reach speeds exceeding 20 GB/s (whereas without PGO it was not able to exceed 12 GB/s) which seems a bit crazy provided the wonderful compression ratios that Zstd is able to achieve.  Beyond any doubt, for Write Once Read Multiple scenarios there is no competitor for Zstd, most specially when PGO is used.</p>
 <p>This confirms that, once again, when performance is critical for your applications, PGO should be part of your daily weaponery.</p>
 </section><section id="appendix-hardware-and-software-used"><h2>Appendix: Hardware and software used</h2>
