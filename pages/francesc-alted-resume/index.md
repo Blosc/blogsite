@@ -1,7 +1,7 @@
 <!-- 
 .. title: Francesc Alted Resumé
 .. slug: francesc-alted-resume
-.. date: 2020-08-04 07:08:24 UTC
+.. date: 2020-10-29 07:08:24 UTC
 .. tags: 
 .. category: 
 .. link: 
@@ -11,13 +11,13 @@
 
 ## Experience
 
- - [ironArray SL](https://ironarray.io): July 2021 - Today
+ - [ironArray SL](https://ironarray.io): October 2021 - Today
 
-     Working for overcoming the limits imposed by technology when computing with multidimensional arrays, specially where the memory bandwidth becomes a bottleneck and compression can help in surpassing the so called memory wall.
+     CEO.  Working for overcoming the limits imposed by technology when computing with multidimensional arrays, specially where the memory bandwidth becomes a bottleneck and compression can help in surpassing the so called memory wall.
 
- - [Freelance consultant](http://www.blosc.org): May 2014 - Today
+ - [Blosc Development Team](https://blosc.org): May 2014 - Today
 
-     Designing and coding libraries for extremley fast compression ([C-Blosc](https://github.com/Blosc/c-blosc), [Python-Blosc](https://github.com/Blosc/python-blosc)) and for coping with large tabular datasets ([Caterva](https://github.com/Blosc/caterva), [cat4py](https://github.com/Blosc/cat4py), [bcolz](https://github.com/Blosc/bcolz)).  Also providing consulting services about handling big data for customers.
+     BDFL. Designing and coding libraries for extremley fast compression ([C-Blosc2](https://github.com/Blosc/c-blosc2), [Python-Blosc2](https://github.com/Blosc/python-blosc2)) and for coping with large multidimensional datasets ([Caterva](https://github.com/Blosc/Caterva), [Caterva-Python](https://github.com/Blosc/caterva-python)).
 
   - [University of Oslo](http://www.mn.uio.no/geo/english/): Consultant --- September 2016 - September 2018
 
