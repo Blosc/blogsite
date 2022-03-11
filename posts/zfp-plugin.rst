@@ -73,11 +73,11 @@ The next plots represent the compression results obtained by using the different
 **Note:** It is important to remark that this is a specific dataset and the codec may perform differently for other ones.
 
 .. image:: /images/zfp-plugin/ratio_zfp.png
-  :width: 50%
+  :width: 75%
   :align: center
 
 .. image:: /images/zfp-plugin/times_zfp.png
-  :width: 50%
+  :width: 75%
   :align: center
 
 Below the bars it is annotated what parameter is used for each test. For example, for the first column, the different compression modes are setup like this:
