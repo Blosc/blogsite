@@ -9,8 +9,8 @@
 .. type: text
 
 
-Announcing Support for lossy ZFP codec
---------------------------------------
+Announcing Support for Lossy ZFP Codec as a Plugin for C-Blosc2
+===============================================================
 
 Blosc supports different filters and codecs for compressing data, like e.g. the lossless `NDLZ <https://github.com/Blosc/c-blosc2/tree/main/plugins/codecs/ndlz>`_ codec and the `NDCELL <https://github.com/Blosc/c-blosc2/tree/main/plugins/filters/ndcell>`_ filter.  These have been developed explicitly to be used in   multidimensional datasets (via `Caterva <https://github.com/Blosc/caterva/>`_ or `ironArray Community Edition <https://github.com/ironArray/iarray-community>`_).
 
@@ -95,4 +95,4 @@ The integration of ZFP as a codec plugin will greatly enhance the capabilities o
 
 However, if the priority is to get good compression ratios without paying too much attention to the amount of data loss, one should use the FIXED-RATE mode, which let choose the desired compression ratio.  With that, ZFP will manage to achieve that storage budget.  This mode also has the advantage that the third partition can be used for improving slicing speed.
 
-This work has been done thanks to a Small Development Grant from the `NumFOCUS Foundation <https://numfocus.org>`_, to whom we are very grateful indeed. NumFOCUS is doing a great job in sponsoring scientific projects and you can donate to the Blosc project (or many others under the NumFOCUS umbrella) via its `donation page <https://numfocus.org/support#donate>`_.
+This work has been done thanks to a Small Development Grant from the `NumFOCUS Foundation <https://numfocus.org>`_, to whom we are very grateful indeed. NumFOCUS is doing a excellent job in sponsoring scientific projects and you can donate to the Blosc project (or many others under the NumFOCUS umbrella) via its `donation page <https://numfocus.org/support#donate>`_.
