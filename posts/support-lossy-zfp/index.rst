@@ -31,7 +31,7 @@ Similarly to other registered Blosc2 official plugins, this codec is now availab
 So, in order to use ZFP, users just have to choose the ID for the desired ZFP mode between the ones listed in `blosc2/codecs-registry.h <https://github.com/Blosc/c-blosc2/blob/main/include/blosc2/codecs-registry.h>`_. For more info on how the plugin selection machinery works, see https://www.blosc.org/posts/registering-plugins/.
 
 ZFP modes
-~~~~~~~~~
+---------
 
 As ZFP is a lossy codec, but it still lets the user to choose how big this data loss is.  There are different compression modes:
 

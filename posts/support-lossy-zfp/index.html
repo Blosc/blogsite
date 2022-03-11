@@ -104,7 +104,7 @@ Blosc supports different filters and codecs for compressing data, like e.g. the 
 </section><section id="zfp-implementation"><h3>ZFP implementation</h3>
 <p>Similarly to other registered Blosc2 official plugins, this codec is now available at the <a class="reference external" href="https://github.com/Blosc/c-blosc2/tree/main/plugins/codecs/zfp">blosc2/plugins directory</a> of the <a class="reference external" href="https://github.com/Blosc/c-blosc2">C-Blosc2 repository</a>.  However, as there are different modes for working with ZFP, there are different codec IDs that map each of these.</p>
 <p>So, in order to use ZFP, users just have to choose the ID for the desired ZFP mode between the ones listed in <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/include/blosc2/codecs-registry.h">blosc2/codecs-registry.h</a>. For more info on how the plugin selection machinery works, see <a class="reference external" href="https://www.blosc.org/posts/registering-plugins/">https://www.blosc.org/posts/registering-plugins/</a>.</p>
-<section id="zfp-modes"><h4>ZFP modes</h4>
+</section><section id="zfp-modes"><h3>ZFP modes</h3>
 <p>As ZFP is a lossy codec, but it still lets the user to choose how big this data loss is.  There are different compression modes:</p>
 <ul class="simple">
 <li><p><strong>BLOSC_CODEC_ZFP_FIXED_ACCURACY:</strong> The user can choose the absolute error in truncation.  For example, if the desired absolute error is 0.01, each value loss must be less than or equal to 0.01. With that, if 23.0567 is a value of the original input, after compressing and decompressing this input with error=0.01, the new value must be between 23.0467 and 23.0667.</p></li>
@@ -112,7 +112,7 @@ Blosc supports different filters and codecs for compressing data, like e.g. the 
 <li><p><strong>BLOSC_CODEC_ZFP_FIXED_RATE:</strong> The user chooses the size that the compressed cells must have based on the input cell size. For example, if the cell size is 2000 bytes and user chooses ratio=50, the output cell size will be 50% of 2000 = 1000 bytes.</p></li>
 </ul>
 <p>For more info, see: <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/plugins/codecs/zfp/README.md">https://github.com/Blosc/c-blosc2/blob/main/plugins/codecs/zfp/README.md</a></p>
-</section></section><section id="third-partition"><h3>Third partition</h3>
+</section><section id="third-partition"><h3>Third partition</h3>
 <p>One of the most appealing features of Caterva besides supporting multi-dimensionality, is its implementation of a second partitioning schema, <a class="reference external" href="https://www.blosc.org/posts/caterva-slicing-perf/">making slicing more efficient</a>.  As one of the distinctive characteristics of ZFP is that it compresses data in independent (and small) cells, we have been toying with the idea of implementing a third partition so that slicing or single-point selection can be made even faster.</p>
 <p>So, as part of the current ZFP implementation, we have tried to combine Blosc2 machinery (chunking and blocking) with ZFP functions, allowing to extract single cells from the ZFP streams (blocks in Blosc jargon). Due to the properties and limitation of the different ZFP compression modes, we have been able to implement the third partition <strong>only</strong> for the <em>FIXED-RATE</em> mode.</p>
 <p>At the moment we have implemented the next third-partition related functions:</p>
