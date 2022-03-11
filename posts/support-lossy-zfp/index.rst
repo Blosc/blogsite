@@ -72,7 +72,7 @@ The next plots represent the compression results obtained by using the different
 
 **Note:** It is important to remark that this is a specific dataset and the codec may perform differently for other ones.
 
-.. image:: /images/zfp_plugin/ratio_zfp.png
+.. image:: /images/zfp-plugin/ratio_zfp.png
   :width: 50%
   :align: center
 
