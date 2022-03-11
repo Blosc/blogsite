@@ -85,7 +85,7 @@ Recently, a C-Blosc user filed an issue describing how buffers created with a mo
             <time class="published dt-published" datetime="2018-02-21T15:32:20Z" itemprop="datePublished" title="2018-02-21 15:32">2018-02-21 15:32</time></a>
             </p>
                 <p class="commentline">
-        
+    
     <a href="#disqus_thread" data-disqus-identifier="cache/posts/new-forward-compat-policy.html">Comments</a>
 
 
@@ -96,8 +96,7 @@ Recently, a C-Blosc user filed an issue describing how buffers created with a mo
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<section id="the-215-issue"><h2>The #215 issue</h2>
+    <section id="the-215-issue"><h2>The #215 issue</h2>
 <p>Recently, a C-Blosc user filed an <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">issue</a> describing how buffers created with a modern version of C-Blosc (starting from 1.11.0) were not able to be decompressed with an older version of the library (1.7.0), i.e. C-Blosc was effectively breaking the so-called <em>forward-compatibility</em>.  After some investigation, it turned out that the culprit was an optimization that was introduced in 1.11.0 in order to allow better compression ratios and in some cases, better speed too.</p>
 <p>Not all the codecs inside C-Blosc were equally affected; the ones that are experiencing the issue are LZ4, LZ4HC and Zlib (quite luckily, BloscLZ, the default codec, is not bitten by this and should be forward compatible probably til 1.0.0); that is, when a user is using a modern C-Blosc library (&gt; 1.11.0) <em>and</em> is using any of the affected codecs, there are situations (namely when the shuffle or bitshuffle filter are active and the buffers to be compressed are larger than 32 KB) that the result cannot be decompressed with older versions (&lt; 1.11.0).</p>
 </section><section id="why-this-occurred"><h2>Why this occurred?</h2>
@@ -160,7 +159,6 @@ Recently, a C-Blosc user filed an issue describing how buffers created with a mo
 <li><p>LZ4: 1.8.1</p></li>
 </ul></section>
 </div>
-    </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/forward-compatibility-policy-splitmode/" rel="tag">forward compatibility policy splitmode</a></li>
         </ul>
@@ -173,7 +171,7 @@ Recently, a C-Blosc user filed an issue describing how buffers created with a mo
             </li>
         </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
         
-        
+    
         <div id="disqus_thread"></div>
         <script>
         var disqus_shortname ="blosc",
@@ -198,7 +196,7 @@ Recently, a C-Blosc user filed an issue describing how buffers created with a mo
         <!--End of body content-->
 
         <footer id="footer">
-            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2022         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

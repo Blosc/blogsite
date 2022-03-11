@@ -86,7 +86,7 @@
             <time class="published dt-published" datetime="2017-07-14T06:32:20Z" itemprop="datePublished" title="2017-07-14 06:32">2017-07-14 06:32</time></a>
             </p>
                 <p class="commentline">
-        
+    
     <a href="#disqus_thread" data-disqus-identifier="cache/posts/blosclz-tuning.html">Comments</a>
 
 
@@ -97,8 +97,7 @@
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>Yesterday I was reading about the exciting new CPU architectures that both <a class="reference external" href="http://www.anandtech.com/show/11544/intel-skylake-ep-vs-amd-epyc-7000-cpu-battle-of-the-decade">AMD and Intel are introducing</a> and I was wondering how the improved architecture of the new cores and most specially, its caches, could apply to Blosc.  It turns out that I have access to a server with a relatively modern CPU (Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores) and I decided to have a go at fine-tune the included BloscLZ codec (the one that I know the best) inside C-Blosc2.  Of course, I already spent some time tuning BloscLZ, but that was some years ago and provided the fast pace at which CPUs are evolving I thought that this was excellent timing for another round of fine-tuning, most specially in preparation for users adopting the forthcoming  RYZEN, Threadripper, EPYC and Skylake-SP architectures.</p>
+    <p>Yesterday I was reading about the exciting new CPU architectures that both <a class="reference external" href="http://www.anandtech.com/show/11544/intel-skylake-ep-vs-amd-epyc-7000-cpu-battle-of-the-decade">AMD and Intel are introducing</a> and I was wondering how the improved architecture of the new cores and most specially, its caches, could apply to Blosc.  It turns out that I have access to a server with a relatively modern CPU (Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores) and I decided to have a go at fine-tune the included BloscLZ codec (the one that I know the best) inside C-Blosc2.  Of course, I already spent some time tuning BloscLZ, but that was some years ago and provided the fast pace at which CPUs are evolving I thought that this was excellent timing for another round of fine-tuning, most specially in preparation for users adopting the forthcoming  RYZEN, Threadripper, EPYC and Skylake-SP architectures.</p>
 <p>Frankly speaking, I was expecting to get very little improvements in this front, but the results have been unexpectedly good.  Keep reading.</p>
 <section id="where-we-come-from"><h2>Where we come from</h2>
 <p>Just for reference, here it is the performance of the BloscLZ codec in my server before the new tuning work:</p>
@@ -134,7 +133,6 @@
 <li><p>BloscLZ: 1.0.6 (2017-07-14)</p></li>
 </ul></section>
 </div>
-    </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/blosclz/" rel="tag">blosclz</a></li>
             <li><a class="tag p-category" href="../../categories/optimization/" rel="tag">optimization</a></li>
@@ -149,7 +147,7 @@
             </li>
         </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
         
-        
+    
         <div id="disqus_thread"></div>
         <script>
         var disqus_shortname ="blosc",
@@ -174,7 +172,7 @@
         <!--End of body content-->
 
         <footer id="footer">
-            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2022         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

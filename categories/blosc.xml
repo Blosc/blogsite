@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about blosc)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/blosc.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2021 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 29 Oct 2021 14:35:18 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Hairy situation of Microsoft Windows compilers</title><link>http://blosc.org/posts/hairy-msvc-situation.rst/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;Recently -- and to the requirement of a customer who recently
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blosc Main Blog Page  (Posts about blosc)</title><link>http://blosc.org/</link><description></description><atom:link href="http://blosc.org/categories/blosc.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2022 &lt;a href="mailto:blosc@blosc.org"&gt;The Blosc Developers&lt;/a&gt; </copyright><lastBuildDate>Fri, 11 Mar 2022 11:49:38 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Hairy situation of Microsoft Windows compilers</title><link>http://blosc.org/posts/hairy-msvc-situation.rst/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;p&gt;Recently -- and to the requirement of a customer who recently
 &lt;a class="reference external" href="http://blosc.org/blog/seeking-sponsoship.html"&gt;sponsorized us&lt;/a&gt; -- I
 struggled a lot trying to get the maximum performance out of Visual
 Studio compilers.  Here there are some quick benchmarks to show you an
@@ -55,7 +55,7 @@ know an equivalent technique for Unix (although it probably exists
 also), allowing to use top-performance DLLs in your apps using
 different compilers in a quite easy way.&lt;/p&gt;
 &lt;p&gt;In case you have more hints on how to get better performance on
-Windows, please tell us.&lt;/p&gt;&lt;/div&gt;</description><category>blosc</category><category>compilers</category><category>windows</category><guid>http://blosc.org/posts/hairy-msvc-situation.rst/</guid><pubDate>Mon, 06 Jul 2015 10:04:20 GMT</pubDate></item><item><title>New 'bitshuffle' filter</title><link>http://blosc.org/posts/new-bitshuffle-filter/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;p&gt;Although Blosc was meant for hosting more than one filter since day 0,
+Windows, please tell us.&lt;/p&gt;</description><category>blosc</category><category>compilers</category><category>windows</category><guid>http://blosc.org/posts/hairy-msvc-situation.rst/</guid><pubDate>Mon, 06 Jul 2015 10:04:20 GMT</pubDate></item><item><title>New 'bitshuffle' filter</title><link>http://blosc.org/posts/new-bitshuffle-filter/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;p&gt;Although Blosc was meant for hosting more than one filter since day 0,
 it has traditionally came with just a single filter, known as
 'shuffle', meant for shuffling bytes in binary blocks.  Today this has
 changed, and c-blosc has officially received a new filter called
@@ -313,7 +313,7 @@ space, but still keeping good performance.  Of course, this is just a
 quick experiment with synthetic data, but I am pretty sure that the
 new 'bitshuffle' filter will find a good niche in real world datasets.
 Anyone interested in contributing some real data benchmark?&lt;/p&gt;
-&lt;p&gt;I'd like to thank Kiyo Masui for his help in this 'bitshuffle' backport.&lt;/p&gt;&lt;/div&gt;</description><category>blosc</category><category>filters</category><guid>http://blosc.org/posts/new-bitshuffle-filter/</guid><pubDate>Sun, 05 Jul 2015 15:24:20 GMT</pubDate></item><item><title>Seeking Sponsorship for Bcolz/Blosc</title><link>http://blosc.org/posts/seeking-sponsoship/</link><dc:creator>Valentin Haenel</dc:creator><description>&lt;div&gt;&lt;p&gt;Dear Everyone,&lt;/p&gt;
+&lt;p&gt;I'd like to thank Kiyo Masui for his help in this 'bitshuffle' backport.&lt;/p&gt;</description><category>blosc</category><category>filters</category><guid>http://blosc.org/posts/new-bitshuffle-filter/</guid><pubDate>Sun, 05 Jul 2015 15:24:20 GMT</pubDate></item><item><title>Seeking Sponsorship for Bcolz/Blosc</title><link>http://blosc.org/posts/seeking-sponsoship/</link><dc:creator>Valentin Haenel</dc:creator><description>&lt;p&gt;Dear Everyone,&lt;/p&gt;
 &lt;p&gt;as you may or may not know, the &lt;a class="reference external" href="https://github.com/blosc/c-blosc"&gt;Blosc&lt;/a&gt;
 compressor has become the basis for some novel, innovative technological
 experiments in the PyData space.  Especially the &lt;a class="reference external" href="https://github.com/blosc/bcolz"&gt;Bcolz&lt;/a&gt; and &lt;a class="reference external" href="https://github.com/blosc/bloscpack"&gt;Bloscpack&lt;/a&gt; projects which provide a way to perform
@@ -358,7 +358,7 @@ in general.&lt;/p&gt;
 &lt;p&gt;We welcome any feedback regarding the above options and please do tell
 us about any additional models that may be interesting to us or for you.&lt;/p&gt;
 &lt;p&gt;With best wishes and looking forward to your input,&lt;/p&gt;
-&lt;p&gt;Francesc Alted and Valentin Haenel&lt;/p&gt;&lt;/div&gt;</description><category>blosc</category><category>blosclz</category><category>sponsorhip</category><guid>http://blosc.org/posts/seeking-sponsoship/</guid><pubDate>Tue, 26 May 2015 08:41:20 GMT</pubDate></item><item><title>Compress Me, Stupid!</title><link>http://blosc.org/posts/compress-me-stupid/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;div&gt;&lt;section id="how-it-all-started"&gt;
+&lt;p&gt;Francesc Alted and Valentin Haenel&lt;/p&gt;</description><category>blosc</category><category>blosclz</category><category>sponsorhip</category><guid>http://blosc.org/posts/seeking-sponsoship/</guid><pubDate>Tue, 26 May 2015 08:41:20 GMT</pubDate></item><item><title>Compress Me, Stupid!</title><link>http://blosc.org/posts/compress-me-stupid/</link><dc:creator>Francesc Alted</dc:creator><description>&lt;section id="how-it-all-started"&gt;
 &lt;h2&gt;How it all started&lt;/h2&gt;
 &lt;p&gt;I think I began to become truly interested in compression when, back
 in 1992, I was installing &lt;a class="reference external" href="http://en.wikipedia.org/wiki/C_News"&gt;C-News&lt;/a&gt;, a news server package meant
@@ -522,4 +522,4 @@ arrangement is critical too).  But one
 thing is clear, achieving this (by Blosc or any other compressor out
 there) is just a matter of time.  Such is the fate of the ever
 increasing gap in CPU versus memory speeds.&lt;/p&gt;
-&lt;/section&gt;&lt;/div&gt;</description><category>blosc</category><category>blosclz</category><category>hdf5</category><category>history</category><category>pytables</category><guid>http://blosc.org/posts/compress-me-stupid/</guid><pubDate>Thu, 28 Aug 2014 17:01:20 GMT</pubDate></item></channel></rss>
+&lt;/section&gt;</description><category>blosc</category><category>blosclz</category><category>hdf5</category><category>history</category><category>pytables</category><guid>http://blosc.org/posts/compress-me-stupid/</guid><pubDate>Thu, 28 Aug 2014 17:01:20 GMT</pubDate></item></channel></rss>

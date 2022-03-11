@@ -83,20 +83,19 @@
             <time class="published dt-published" datetime="2019-11-25T18:32:20Z" itemprop="datePublished" title="2019-11-25 18:32">2019-11-25 18:32</time></a>
             </p>
                 <p class="commentline">
-        
+    
     <a href="posts/blosc2-meets-rome/#disqus_thread" data-disqus-identifier="cache/posts/blosc2-meets-rome.html">Comments</a>
 
 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new <a class="reference external" href="https://en.wikipedia.org/wiki/Zen_2">Zen 2</a> micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:</p>
+    <p>On August 7, 2019, AMD released a new generation of its series of EPYC processors, the EPYC 7002, also known as Rome, which are based on the new <a class="reference external" href="https://en.wikipedia.org/wiki/Zen_2">Zen 2</a> micro-architecture.  Zen 2 is a significant departure from the physical design paradigm of AMD's previous Zen architectures, mainly in that the I/O components of the CPU are laid out on a separate die, different from computing dies; this is quite different from Naples (aka EPYC 7001), its antecessor in the EPYC series:</p>
 <img alt="/images/blosc2-meets-rome/amd-rome-arch-multi-die.png" class="align-center" src="images/blosc2-meets-rome/amd-rome-arch-multi-die.png"><p>Such a separation of dies for I/O and computing has quite <a class="reference external" href="https://www.anandtech.com/show/15044/the-amd-ryzen-threadripper-3960x-and-3970x-review-24-and-32-cores-on-7nm/3">large consequences in terms of scalability when accessing memory</a>, which is critical for Blosc operation, and here we want to check how Blosc and AMD Rome couple behaves.  As there is no replacement for experimentation, we are going to use the same benchmark that was introduced in our previous <a class="reference external" href="https://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a>.  This essentially boils down to compute an aggregation with a simple loop like:</p>
-<pre class="code c"><a id="rest_code_3ee5fdc9cfdb4c368a6745906ba99020-1" name="rest_code_3ee5fdc9cfdb4c368a6745906ba99020-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_3ee5fdc9cfdb4c368a6745906ba99020-2" name="rest_code_3ee5fdc9cfdb4c368a6745906ba99020-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<a id="rest_code_3ee5fdc9cfdb4c368a6745906ba99020-3" name="rest_code_3ee5fdc9cfdb4c368a6745906ba99020-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
-<a id="rest_code_3ee5fdc9cfdb4c368a6745906ba99020-4" name="rest_code_3ee5fdc9cfdb4c368a6745906ba99020-4"></a><span class="p">}</span><span class="w"></span>
+<pre class="code c"><a id="rest_code_0062b16617364aa7a3c0b675aa93704a-1" name="rest_code_0062b16617364aa7a3c0b675aa93704a-1" href="posts/blosc2-meets-rome/#rest_code_0062b16617364aa7a3c0b675aa93704a-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_0062b16617364aa7a3c0b675aa93704a-2" name="rest_code_0062b16617364aa7a3c0b675aa93704a-2" href="posts/blosc2-meets-rome/#rest_code_0062b16617364aa7a3c0b675aa93704a-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="rest_code_0062b16617364aa7a3c0b675aa93704a-3" name="rest_code_0062b16617364aa7a3c0b675aa93704a-3" href="posts/blosc2-meets-rome/#rest_code_0062b16617364aa7a3c0b675aa93704a-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<a id="rest_code_0062b16617364aa7a3c0b675aa93704a-4" name="rest_code_0062b16617364aa7a3c0b675aa93704a-4" href="posts/blosc2-meets-rome/#rest_code_0062b16617364aa7a3c0b675aa93704a-4"></a><span class="p">}</span><span class="w"></span>
 </pre>
 <p>As described in the original blog post, the different <cite>udata</cite> arrays are just chunks of the original dataset that are decompressed just in time for performing the partial aggregation operation; the final result is indeed the sum of all the partial aggregations.  Also we have seen that the time to execute the aggregation is going to depend quite a lot on the kind of data that is decompressed: carefully chosen synthetic data can be decompressed much more quickly than real data.  But syntehtic data is nevertheless interesting as it allows for a roof analysis of where the performance can grow up to.</p>
 <p>In this blog, we are going to see how the AMD EPYC 7402 (Rome), a 24-core processor performs on both synthetic and real data.</p>
@@ -122,7 +121,6 @@
 <p>Thanks to <a class="reference external" href="https://www.packet.com">packet.com</a> for kindly providing the hardware for the purposes of this benchmark.  Packet guys have been really collaborative through the time in allowing me testing new, bare-metal hardware, and I must say that I am quite impressed on how easy is to start using their services with almost no effort on user's side.</p>
 </section>
 </div>
-    </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/blosc2-first-beta/" class="u-url">C-Blosc2 Enters Beta Stage</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
@@ -133,15 +131,14 @@
             <time class="published dt-published" datetime="2019-08-14T01:32:20Z" itemprop="datePublished" title="2019-08-14 01:32">2019-08-14 01:32</time></a>
             </p>
                 <p class="commentline">
-        
+    
     <a href="posts/blosc2-first-beta/#disqus_thread" data-disqus-identifier="cache/posts/blosc2-first-beta.html">Comments</a>
 
 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>The first beta version of C-Blosc2 has been released today.  C-Blosc2 is the new iteration of C-Blosc 1.x series, adding more features and better documentation and is the outcome of more than 4 years of slow, but steady development.  This blog entry describes the main features that you may see in next generation of C-Blosc, as well as an overview of what is in our roadmap.</p>
+    <p>The first beta version of C-Blosc2 has been released today.  C-Blosc2 is the new iteration of C-Blosc 1.x series, adding more features and better documentation and is the outcome of more than 4 years of slow, but steady development.  This blog entry describes the main features that you may see in next generation of C-Blosc, as well as an overview of what is in our roadmap.</p>
 <p><strong>Note 1</strong>: C-Blosc2 is currently in beta stage, so not ready to be used in production yet.  Having said this, being in beta means that the API has been declared frozen, so there is guarantee that your programs will continue to work with future versions of the library.  If you want to collaborate in this development, you are welcome: have a look at our roadmap below and contribute PR's or just go to the <a class="reference external" href="https://github.com/Blosc/c-blosc2/issues">open issues</a> and help us with them.</p>
 <p><strong>Note 2</strong>: the term <cite>C-Blosc1</cite> will be used instead of the official <cite>C-Blosc</cite> name for referring to the 1.x series of the library.  This is to make the distinction between the C-Blosc 2.x series and C-Blosc 1.x series more explicit.</p>
 <section id="main-features-in-c-blosc2"><h2>Main features in C-Blosc2</h2>
@@ -198,7 +195,6 @@
 </blockquote>
 </section>
 </div>
-    </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/arm-memory-walls-followup/" class="u-url">Is ARM Hungry Enough to Eat Intel's Favorite Pie?</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
@@ -209,15 +205,14 @@
             <time class="published dt-published" datetime="2019-01-07T10:12:20Z" itemprop="datePublished" title="2019-01-07 10:12">2019-01-07 10:12</time></a>
             </p>
                 <p class="commentline">
-        
+    
     <a href="posts/arm-memory-walls-followup/#disqus_thread" data-disqus-identifier="cache/posts/arm-memory-walls-followup.html">Comments</a>
 
 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div>
-<p><strong>Note</strong>: This entry is a follow-up of the <a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a> blog.  Please make sure that you have read it if you want to fully understand all the benchmarks performed here.</p>
+    <p><strong>Note</strong>: This entry is a follow-up of the <a class="reference external" href="http://blosc.org/posts/breaking-memory-walls/">Breaking Down Memory Walls</a> blog.  Please make sure that you have read it if you want to fully understand all the benchmarks performed here.</p>
 <p>At the beginning of the 1990s the computing world was mainly using RISC (Reduced Instruction Set Computer) architectures, namely SPARC, Alpha, Power and MIPS CPUs for performing serious calculations and Intel CPUs were seen as something that was appropriate just to run essentially personal applications on PCs, but almost nobody was thinking about them as a serious contender for server environments.  But Intel had an argument that almost nobody was ready to recognize how important it could become; with its dominance of the PC market it quickly ranked to be the largest CPU maker in the world and, with such an enormous revenue, Intel played its cards well and, by the beginning of 2000s, they were able to make of its CISC architecture (Complex Instruction Set Computer) the one with the best compute/price ratio, clearly beating the RISC offerings at that time.  That amazing achievement shut the mouths of CISC critics (to the point that nowadays almost everybody recognizes that performance has very little to do with using RISC or CISC) and cleared the path for Intel to dominate not only the PC world, but also the world of server computing for the next 20 years.</p>
 <p>Fast forward to the beginning of 2010s, with Intel clearly dominating the market of CPUs for servers.  However, at the same time something potentially disruptive happened: the market for mobile and embedded systems exploded making <a class="reference external" href="https://cacm.acm.org/magazines/2011/5/107684-an-interview-with-steve-furber/fulltext">the ARM architecture the most widely used architecture in this area</a>.  By 2017, with over 100 billion ARM processors produced, ARM was already the most widely used architecture in the world.  Now, the smart reader will have noted here a clear parallelism between the situation of Intel at the end of 1990s and ARM at the end of 2010s: both companies were responsible of the design of the most used CPUs in the world.  There was an important difference though: while Intel was able to implement its own designs, ARM was leaving the implementation job to third party vendors.  Of course, this fact will have consequences on the way ARM will be competing with Intel (see below).</p>
 <section id="arm-plans-for-improving-cpu-performance"><h2>ARM Plans for Improving CPU Performance</h2>
@@ -265,7 +260,6 @@
 <li><p><strong>C-Blosc2</strong>: 2.0.0a6.dev (2018-05-18)</p></li>
 </ul></section>
 </div>
-    </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/breaking-memory-walls/" class="u-url">Breaking Down Memory Walls</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
@@ -276,27 +270,26 @@
             <time class="published dt-published" datetime="2018-06-25T18:32:20Z" itemprop="datePublished" title="2018-06-25 18:32">2018-06-25 18:32</time></a>
             </p>
                 <p class="commentline">
-        
+    
     <a href="posts/breaking-memory-walls/#disqus_thread" data-disqus-identifier="cache/posts/breaking-down-memory-walls.html">Comments</a>
 
 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div>
-<p><strong>Update (2018-08-09)</strong>: An extended version of this blog post can be found in this <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">article</a>.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, as well as more discussion about the results.</p>
+    <p><strong>Update (2018-08-09)</strong>: An extended version of this blog post can be found in this <a class="reference external" href="http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf">article</a>.  On it, you will find a complementary study with synthetic data (mainly for finding ultimate performance limits), a more comprehensive set of CPUs has been used, as well as more discussion about the results.</p>
 <p>Nowadays CPUs struggle to get data at enough speed to feed their cores.  The reason for this is that memory speed is <a class="reference external" href="http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf">growing at a slower pace than CPUs increase their speed at crunching numbers</a>.   This memory slowness compared with CPUs is generally known as the <a class="reference external" href="https://en.wikipedia.org/wiki/Random-access_memory#Memory_wall">Memory Wall</a>.</p>
 <p>For example, let's suppose that we want to compute the aggregation of a some large array; here it is how to do that using OpenMP for leveraging all cores in a CPU:</p>
-<pre class="code c"><a id="rest_code_bfb8bc8376ad426db7e4a3f1df576351-1" name="rest_code_bfb8bc8376ad426db7e4a3f1df576351-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_bfb8bc8376ad426db7e4a3f1df576351-2" name="rest_code_bfb8bc8376ad426db7e4a3f1df576351-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<a id="rest_code_bfb8bc8376ad426db7e4a3f1df576351-3" name="rest_code_bfb8bc8376ad426db7e4a3f1df576351-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
-<a id="rest_code_bfb8bc8376ad426db7e4a3f1df576351-4" name="rest_code_bfb8bc8376ad426db7e4a3f1df576351-4"></a><span class="p">}</span><span class="w"></span>
+<pre class="code c"><a id="rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-1" name="rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-1" href="posts/breaking-memory-walls/#rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-2" name="rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-2" href="posts/breaking-memory-walls/#rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-3" name="rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-3" href="posts/breaking-memory-walls/#rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">udata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<a id="rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-4" name="rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-4" href="posts/breaking-memory-walls/#rest_code_b6f8062fbfee4d10a1c6b7d7df0a78ac-4"></a><span class="p">}</span><span class="w"></span>
 </pre>
 <p>With this, some server (an Intel Xeon E3-1245 v5 @ 3.50GHz, with 4 physical cores and hyperthreading) takes about 14 ms for doing the aggregation of an array with 100 million of float32 values when using 8 OpenMP threads (optimal number for this CPU).  However, if instead of bringing the whole 100 million elements from memory to the CPU we generate the data inside the loop, we are avoiding the data transmission between memory and CPU, like in:</p>
-<pre class="code c"><a id="rest_code_05d0c6ecdd70410184ce17421b07ef0f-1" name="rest_code_05d0c6ecdd70410184ce17421b07ef0f-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
-<a id="rest_code_05d0c6ecdd70410184ce17421b07ef0f-2" name="rest_code_05d0c6ecdd70410184ce17421b07ef0f-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<a id="rest_code_05d0c6ecdd70410184ce17421b07ef0f-3" name="rest_code_05d0c6ecdd70410184ce17421b07ef0f-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span><span class="w"></span>
-<a id="rest_code_05d0c6ecdd70410184ce17421b07ef0f-4" name="rest_code_05d0c6ecdd70410184ce17421b07ef0f-4"></a><span class="p">}</span><span class="w"></span>
+<pre class="code c"><a id="rest_code_6a7cd07cccb9464a8cd7078d92d866ee-1" name="rest_code_6a7cd07cccb9464a8cd7078d92d866ee-1" href="posts/breaking-memory-walls/#rest_code_6a7cd07cccb9464a8cd7078d92d866ee-1"></a><span class="cp">#pragma omp parallel for reduction (+:sum)</span>
+<a id="rest_code_6a7cd07cccb9464a8cd7078d92d866ee-2" name="rest_code_6a7cd07cccb9464a8cd7078d92d866ee-2" href="posts/breaking-memory-walls/#rest_code_6a7cd07cccb9464a8cd7078d92d866ee-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="rest_code_6a7cd07cccb9464a8cd7078d92d866ee-3" name="rest_code_6a7cd07cccb9464a8cd7078d92d866ee-3" href="posts/breaking-memory-walls/#rest_code_6a7cd07cccb9464a8cd7078d92d866ee-3"></a><span class="w">  </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<a id="rest_code_6a7cd07cccb9464a8cd7078d92d866ee-4" name="rest_code_6a7cd07cccb9464a8cd7078d92d866ee-4" href="posts/breaking-memory-walls/#rest_code_6a7cd07cccb9464a8cd7078d92d866ee-4"></a><span class="p">}</span><span class="w"></span>
 </pre>
 <p>This loop takes just 3.5 ms, that is, 4x less than the original one.  That means that our CPU could compute the aggregation at a speed that is 4x faster than the speed at which the memory subsystem can provide data elements to the CPU; or put in another words, the CPU is idle, doing nothing during the 75% of the time, waiting for data to arrive (for this example, but there could be other, more extreme cases).  Here we have the memory wall in action indeed.</p>
 <p>That the memory wall exists is an excellent reason to think about ways to workaround it.  One of the most promising venues is to use compression: what if we could store data in compressed state in-memory and use the spare clock cycles of the CPU for decompressing it just when it is needed?  In this blog entry we will see how to implement such a computational kernel on top of data structures that are cache- and compression-friendly and we will examine how they perform on a range of modern CPU architectures.  Some surprises are in store.</p>
@@ -372,7 +365,6 @@
 <li><p><strong>C-Blosc2</strong>: 2.0.0a6.dev (2018-05-18)</p></li>
 </ul></section>
 </div>
-    </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/new-forward-compat-policy/" class="u-url">New Forward Compatibility Policy</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
@@ -383,15 +375,14 @@
             <time class="published dt-published" datetime="2018-02-21T15:32:20Z" itemprop="datePublished" title="2018-02-21 15:32">2018-02-21 15:32</time></a>
             </p>
                 <p class="commentline">
-        
+    
     <a href="posts/new-forward-compat-policy/#disqus_thread" data-disqus-identifier="cache/posts/new-forward-compat-policy.html">Comments</a>
 
 
         </p>
 </div>
     </header><div class="e-content entry-content">
-    <div>
-<section id="the-215-issue"><h2>The #215 issue</h2>
+    <section id="the-215-issue"><h2>The #215 issue</h2>
 <p>Recently, a C-Blosc user filed an <a class="reference external" href="https://github.com/Blosc/c-blosc/issues/215">issue</a> describing how buffers created with a modern version of C-Blosc (starting from 1.11.0) were not able to be decompressed with an older version of the library (1.7.0), i.e. C-Blosc was effectively breaking the so-called <em>forward-compatibility</em>.  After some investigation, it turned out that the culprit was an optimization that was introduced in 1.11.0 in order to allow better compression ratios and in some cases, better speed too.</p>
 <p>Not all the codecs inside C-Blosc were equally affected; the ones that are experiencing the issue are LZ4, LZ4HC and Zlib (quite luckily, BloscLZ, the default codec, is not bitten by this and should be forward compatible probably til 1.0.0); that is, when a user is using a modern C-Blosc library (&gt; 1.11.0) <em>and</em> is using any of the affected codecs, there are situations (namely when the shuffle or bitshuffle filter are active and the buffers to be compressed are larger than 32 KB) that the result cannot be decompressed with older versions (&lt; 1.11.0).</p>
 </section><section id="why-this-occurred"><h2>Why this occurred?</h2>
@@ -454,7 +445,6 @@
 <li><p>LZ4: 1.8.1</p></li>
 </ul></section>
 </div>
-    </div>
     </article>
 </div>
 
@@ -470,7 +460,7 @@
         <!--End of body content-->
 
         <footer id="footer">
-            Contents © 2021         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2022         <a href="mailto:blosc@blosc.org">The Blosc Developers</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>
