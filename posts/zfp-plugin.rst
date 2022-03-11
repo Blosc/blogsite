@@ -74,9 +74,11 @@ The next plots represent the compression results obtained by using the different
 
 .. image:: /images/zfp_plugin/ratio_zfp.png
   :width: 50%
+  :align: center
 
-.. image:: /images/zfp_plugin/times_zfp.png
+.. image:: /images/zfp-plugin/times_zfp.png
   :width: 50%
+  :align: center
 
 Below the bars it is annotated what parameter is used for each test. For example, for the first column, the different compression modes are setup like this:
 
