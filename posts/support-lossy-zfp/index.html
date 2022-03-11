@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#5670d4">
 <meta name="generator" content="Nikola (getnikola.com)">
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
-<link rel="canonical" href="http://blosc.org/pages/support-lossy-zfp/">
+<link rel="canonical" href="http://blosc.org/posts/support-lossy-zfp/">
 <link rel="icon" href="../../blosc-favicon_16x16.png" sizes="16x16">
 <link rel="icon" href="../../blosc-favicon_32x32.png" sizes="32x32">
 <link rel="icon" href="../../blosc-favicon_64x64.png" sizes="64x64">
@@ -20,11 +20,12 @@
 
   gtag('config', 'UA-111342564-2');
 </script><meta name="author" content="Oscar Guiñon, Francesc Alted">
+<link rel="prev" href="../caterva-slicing-perf/" title="Caterva Slicing Performance: A Study" type="text/html">
 <meta property="og:site_name" content="Blosc Main Blog Page ">
 <meta property="og:title" content="Announcing Support for Lossy ZFP Codec as a Plugin for C-Blosc2">
-<meta property="og:url" content="http://blosc.org/pages/support-lossy-zfp/">
-<meta property="og:description" content="Announcing Support for lossy ZFP codec
-Blosc supports different filters and codecs for compressing data, like e.g. the lossless NDLZ codec and the NDCELL filter.  These have been developed explicitly ">
+<meta property="og:url" content="http://blosc.org/posts/support-lossy-zfp/">
+<meta property="og:description" content="Announcing Support for Lossy ZFP Codec as a Plugin for C-Blosc2
+Blosc supports different filters and codecs for compressing data, like e.g. the lossless NDLZ codec and the NDCELL filter.  These have b">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2022-03-11T10:32:20Z">
 <meta property="article:tag" content="blosc plugins zfp lossy">
@@ -50,13 +51,13 @@ Blosc supports different filters and codecs for compressing data, like e.g. the 
         <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
             <ul class="nav navbar-nav">
 <li>
-<a href="../blosc-in-depth/">Blosc In Depth</a>
+<a href="../../pages/blosc-in-depth/">Blosc In Depth</a>
                 </li>
 <li>
 <a href="https://c-blosc2.readthedocs.io/">Documentation</a>
                 </li>
 <li>
-<a href="../donate/">Donate to Blosc</a>
+<a href="../../pages/donate/">Donate to Blosc</a>
 
                 
             </li>
@@ -72,21 +73,38 @@ Blosc supports different filters and codecs for compressing data, like e.g. the 
         <div class="row">
             
             
-<article class="post-text storypage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Announcing Support for Lossy ZFP Codec as a Plugin for C-Blosc2</a></h1>
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Announcing Support for Lossy ZFP Codec as a Plugin for C-Blosc2</a></h1>
 
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/oscar-guinon-francesc-alted/">Oscar Guiñon, Francesc Alted</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2022-03-11T10:32:20Z" itemprop="datePublished" title="2022-03-11 10:32">2022-03-11 10:32</time></a>
+            </p>
+                <p class="commentline">
+    
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/zfp-plugin.html">Comments</a>
+
+
+            
+
+        </p>
+</div>
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <section id="announcing-support-for-lossy-zfp-codec"><h2>Announcing Support for lossy ZFP codec</h2>
+    <section id="announcing-support-for-lossy-zfp-codec-as-a-plugin-for-c-blosc2"><h2>Announcing Support for Lossy ZFP Codec as a Plugin for C-Blosc2</h2>
 <p>Blosc supports different filters and codecs for compressing data, like e.g. the lossless <a class="reference external" href="https://github.com/Blosc/c-blosc2/tree/main/plugins/codecs/ndlz">NDLZ</a> codec and the <a class="reference external" href="https://github.com/Blosc/c-blosc2/tree/main/plugins/filters/ndcell">NDCELL</a> filter.  These have been developed explicitly to be used in   multidimensional datasets (via <a class="reference external" href="https://github.com/Blosc/caterva/">Caterva</a> or <a class="reference external" href="https://github.com/ironArray/iarray-community">ironArray Community Edition</a>).</p>
 <p>However, a lossy codec like <a class="reference external" href="https://zfp.readthedocs.io/">ZFP</a> allows for much better compression ratios at the expense of loosing some precision in floating point data.  Moreover, while NDLZ is only available for 2-dim datasets, ZFP can be used up to 4-dim datasets.</p>
-</section><section id="how-zfp-works"><h2>How ZFP works?</h2>
+<section id="how-zfp-works"><h3>How ZFP works?</h3>
 <p>ZFP partitions datasets into cells of 4^(number of dimensions) values, i.e., 4, 16, 64, or 256 values for 1D, 2D, 3D, and 4D arrays, respectively. Each cell is then (de)compressed independently, and the resulting bit strings are concatenated into a single stream of bits.</p>
 <p>Furthermore, ZFP usually truncates each input value either to a fixed number of bits to meet a storage budget or to some variable length needed to meet a chosen error tolerance.  More more info on how this works, see <a class="reference external" href="https://zfp.readthedocs.io/en/release0.5.5/overview.html">zfp overview docs</a>.</p>
-</section><section id="zfp-implementation"><h2>ZFP implementation</h2>
+</section><section id="zfp-implementation"><h3>ZFP implementation</h3>
 <p>Similarly to other registered Blosc2 official plugins, this codec is now available at the <a class="reference external" href="https://github.com/Blosc/c-blosc2/tree/main/plugins/codecs/zfp">blosc2/plugins directory</a> of the <a class="reference external" href="https://github.com/Blosc/c-blosc2">C-Blosc2 repository</a>.  However, as there are different modes for working with ZFP, there are different codec IDs that map each of these.</p>
 <p>So, in order to use ZFP, users just have to choose the ID for the desired ZFP mode between the ones listed in <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/include/blosc2/codecs-registry.h">blosc2/codecs-registry.h</a>. For more info on how the plugin selection machinery works, see <a class="reference external" href="https://www.blosc.org/posts/registering-plugins/">https://www.blosc.org/posts/registering-plugins/</a>.</p>
-<section id="zfp-modes"><h3>ZFP modes</h3>
+<section id="zfp-modes"><h4>ZFP modes</h4>
 <p>As ZFP is a lossy codec, but it still lets the user to choose how big this data loss is.  There are different compression modes:</p>
 <ul class="simple">
 <li><p><strong>BLOSC_CODEC_ZFP_FIXED_ACCURACY:</strong> The user can choose the absolute error in truncation.  For example, if the desired absolute error is 0.01, each value loss must be less than or equal to 0.01. With that, if 23.0567 is a value of the original input, after compressing and decompressing this input with error=0.01, the new value must be between 23.0467 and 23.0667.</p></li>
@@ -94,7 +112,7 @@ Blosc supports different filters and codecs for compressing data, like e.g. the 
 <li><p><strong>BLOSC_CODEC_ZFP_FIXED_RATE:</strong> The user chooses the size that the compressed cells must have based on the input cell size. For example, if the cell size is 2000 bytes and user chooses ratio=50, the output cell size will be 50% of 2000 = 1000 bytes.</p></li>
 </ul>
 <p>For more info, see: <a class="reference external" href="https://github.com/Blosc/c-blosc2/blob/main/plugins/codecs/zfp/README.md">https://github.com/Blosc/c-blosc2/blob/main/plugins/codecs/zfp/README.md</a></p>
-</section></section><section id="third-partition"><h2>Third partition</h2>
+</section></section><section id="third-partition"><h3>Third partition</h3>
 <p>One of the most appealing features of Caterva besides supporting multi-dimensionality, is its implementation of a second partitioning schema, <a class="reference external" href="https://www.blosc.org/posts/caterva-slicing-perf/">making slicing more efficient</a>.  As one of the distinctive characteristics of ZFP is that it compresses data in independent (and small) cells, we have been toying with the idea of implementing a third partition so that slicing or single-point selection can be made even faster.</p>
 <p>So, as part of the current ZFP implementation, we have tried to combine Blosc2 machinery (chunking and blocking) with ZFP functions, allowing to extract single cells from the ZFP streams (blocks in Blosc jargon). Due to the properties and limitation of the different ZFP compression modes, we have been able to implement the third partition <strong>only</strong> for the <em>FIXED-RATE</em> mode.</p>
 <p>At the moment we have implemented the next third-partition related functions:</p>
@@ -103,7 +121,7 @@ Blosc supports different filters and codecs for compressing data, like e.g. the 
 <li><p><cite>blosc2_zfp_getitem()</cite>: given a specific chunk and a specific block, the function allows to access the desired <strong>item</strong> from the block, decompressing only the cell that contains it instead of the whole block.</p></li>
 </ul>
 <p>Of course, we could have been more ambitious and try to merge this third partition with the existing <a class="reference external" href="https://c-blosc2.readthedocs.io/en/latest/reference/context.html?highlight=blosc_getitem#c.blosc2_getitem_ctx">blosc2_getitem_ctx()</a> function for getting slices out of chunks in a general way, but as this would only work for a mode of the ZFP plugin, it won't be general enough, so we considered not a good idea to do it.  Having said this, using the above functions will still allow for a good improvement in speed for retrieving single items, or a cell-size amount of items.</p>
-</section><section id="benchmark-zfp-fixed-accuracy-vs-fixed-precision-vs-fixed-rate-modes"><h2>Benchmark: ZFP FIXED-ACCURACY VS FIXED_PRECISION VS FIXED-RATE modes</h2>
+</section><section id="benchmark-zfp-fixed-accuracy-vs-fixed-precision-vs-fixed-rate-modes"><h3>Benchmark: ZFP FIXED-ACCURACY VS FIXED_PRECISION VS FIXED-RATE modes</h3>
 <p>The dataset used in this benchmark is called <em>precipitation_amount_1hour_Accumulation.zarr</em> and has been fetched from <a class="reference external" href="https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5">ERA5 database</a>, which provides hourly estimates of a large number of atmospheric, land and oceanic climate variables.</p>
 <p>Specifically, the downloaded dataset in Caterva format has this parameters:</p>
 <ul class="simple">
@@ -123,15 +141,42 @@ Blosc supports different filters and codecs for compressing data, like e.g. the 
 </ul>
 <p>Although the FIXED-PRECISION mode does not obtain great results, we see that with the FIXED-ACCURACY mode we do get better performance as the absolute error increases.  Similarly, we can see how the FIXED-RATE mode gets the requested ratios, which is cool but, in exchange, the amount of data loss is unknown.</p>
 <p>Also, while FIXED-ACCURACY and FIXED-RATE modes consume similar times, the FIXED-PRECISION mode, which seems to have less data loss, also takes longer to compress.  Generally speaking we can see how, the more data loss (more data truncation) achieved by a mode, the faster it operates.</p>
-</section><section id="conclusions"><h2>Conclusions</h2>
+</section><section id="conclusions"><h3>Conclusions</h3>
 <p>The integration of ZFP as a codec plugin will greatly enhance the capabilities of lossy compression inside C-Blosc2.  The current ZFP plugin supports different modes; if users want to specify data loss during compression, it is recommended to use the FIXED-ACCURACY or FIXED-PRECISION modes (and most specially the former because of its better compression performance).</p>
 <p>However, if the priority is to get good compression ratios without paying too much attention to the amount of data loss, one should use the FIXED-RATE mode, which let choose the desired compression ratio.  With that, ZFP will manage to achieve that storage budget.  This mode also has the advantage that the third partition can be used for improving slicing speed.</p>
-<p>This work has been done thanks to a Small Development Grant from the <a class="reference external" href="https://numfocus.org">NumFOCUS Foundation</a>, to whom we are very grateful indeed. NumFOCUS is doing a great job in sponsoring scientific projects and you can donate to the Blosc project (or many others under the NumFOCUS umbrella) via its <a class="reference external" href="https://numfocus.org/support#donate">donation page</a>.</p>
-</section>
+<p>This work has been done thanks to a Small Development Grant from the <a class="reference external" href="https://numfocus.org">NumFOCUS Foundation</a>, to whom we are very grateful indeed. NumFOCUS is doing a excellent job in sponsoring scientific projects and you can donate to the Blosc project (or many others under the NumFOCUS umbrella) via its <a class="reference external" href="https://numfocus.org/support#donate">donation page</a>.</p>
+</section></section>
 </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blosc-plugins-zfp-lossy/" rel="tag">blosc plugins zfp lossy</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../caterva-slicing-perf/" rel="prev" title="Caterva Slicing Performance: A Study">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
     
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="blosc",
+            disqus_url="http://blosc.org/posts/support-lossy-zfp/",
+        disqus_title="Announcing Support for Lossy ZFP Codec as a Plugin for C-Blosc2",
+        disqus_identifier="cache/posts/zfp-plugin.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
 
-</article>
+
+        </section></article><script>var disqus_shortname="blosc";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
 </div>
         <!--End of body content-->
 
