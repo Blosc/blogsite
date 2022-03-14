@@ -48,7 +48,7 @@ One of the most appealing features of Caterva besides supporting multi-dimension
 
 So, as part of the current ZFP implementation, we have tried to combine Blosc2 machinery (chunking and blocking) with ZFP functions, allowing to extract single cells from the ZFP streams (blocks in Blosc jargon). Due to the properties and limitation of the different ZFP compression modes, we have been able to implement the third partition **only** for the *FIXED-RATE* mode.
 
-At the moment we have implemented the next third-partition related functions:
+At the moment we are implementing the next third-partition related functions:
 
 - `blosc2_zfp_getcell()`: given a specific chunk and a specific block, the function allows users to decompress a chosen **cell** inside the block (ZFP stream).
 - `blosc2_zfp_getitem()`: given a specific chunk and a specific block, the function allows to access the desired **item** from the block, decompressing only the cell that contains it instead of the whole block.
