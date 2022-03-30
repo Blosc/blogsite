@@ -21,19 +21,19 @@ How ZFP works?
 
 ZFP partitions datasets into cells of 4^(number of dimensions) values, i.e., 4, 16, 64, or 256 values for 1D, 2D, 3D, and 4D arrays, respectively. Each cell is then (de)compressed independently, and the resulting bit strings are concatenated into a single stream of bits.
 
-Furthermore, ZFP usually truncates each input value either to a fixed number of bits to meet a storage budget or to some variable length needed to meet a chosen error tolerance.  More more info on how this works, see `zfp overview docs <https://zfp.readthedocs.io/en/release0.5.5/overview.html>`_.
+Furthermore, ZFP usually truncates each input value either to a fixed number of bits to meet a storage budget or to some variable length needed to meet a chosen error tolerance.  For more info on how this works, see `zfp overview docs <https://zfp.readthedocs.io/en/release0.5.5/overview.html>`_.
 
 ZFP implementation
 ------------------
 
-Similarly to other registered Blosc2 official plugins, this codec is now available at the `blosc2/plugins directory <https://github.com/Blosc/c-blosc2/tree/main/plugins/codecs/zfp>`_ of the `C-Blosc2 repository <https://github.com/Blosc/c-blosc2>`_.  However, as there are different modes for working with ZFP, there are different codec IDs that map each of these.
+Similarly to other registered Blosc2 official plugins, this codec is now available at the `blosc2/plugins directory <https://github.com/Blosc/c-blosc2/tree/main/plugins/codecs/zfp>`_ of the `C-Blosc2 repository <https://github.com/Blosc/c-blosc2>`_.  However, as there are different modes for working with ZFP, there are several associated codec IDs (see later).
 
-So, in order to use ZFP, users just have to choose the ID for the desired ZFP mode between the ones listed in `blosc2/codecs-registry.h <https://github.com/Blosc/c-blosc2/blob/main/include/blosc2/codecs-registry.h>`_. For more info on how the plugin selection machinery works, see https://www.blosc.org/posts/registering-plugins/.
+So, in order to use ZFP, users just have to choose the ID for the desired ZFP mode between the ones listed in `blosc2/codecs-registry.h <https://github.com/Blosc/c-blosc2/blob/main/include/blosc2/codecs-registry.h>`_. For more info on how the plugin selection mechanism works, see https://www.blosc.org/posts/registering-plugins/.
 
 ZFP modes
 ---------
 
-As ZFP is a lossy codec, but it still lets the user to choose how big this data loss is.  There are different compression modes:
+ZFP is a lossy codec, but it still lets the user to choose the degree of the data loss.  There are different compression modes:
 
 - **BLOSC_CODEC_ZFP_FIXED_ACCURACY:** The user can choose the absolute error in truncation.  For example, if the desired absolute error is 0.01, each value loss must be less than or equal to 0.01. With that, if 23.0567 is a value of the original input, after compressing and decompressing this input with error=0.01, the new value must be between 23.0467 and 23.0667.
 - **BLOSC_CODEC_ZFP_FIXED_PRECISION:** The user specifies the maximum number of bit planes encoded during compression (relative error). This is, for each input value, the number of most significant bits that will be encoded.
@@ -95,6 +95,6 @@ Conclusions
 
 The integration of ZFP as a codec plugin will greatly enhance the capabilities of lossy compression inside C-Blosc2.  The current ZFP plugin supports different modes; if users want to specify data loss during compression, it is recommended to use the FIXED-ACCURACY or FIXED-PRECISION modes (and most specially the former because of its better compression performance).
 
-However, if the priority is to get good compression ratios without paying too much attention to the amount of data loss, one should use the FIXED-RATE mode, which let choose the desired compression ratio.  With that, ZFP will manage to achieve that storage budget.  This mode also has the advantage that the third partition can be used for improving slicing speed.
+However, if the priority is to get good compression ratios without paying too much attention to the amount of data loss, one should use the FIXED-RATE mode, which let choose the desired compression ratio.  This mode also has the advantage that the third partition can be used for improving slicing speed.
 
 This work has been done thanks to a Small Development Grant from the `NumFOCUS Foundation <https://numfocus.org>`_, to whom we are very grateful indeed. NumFOCUS is doing a excellent job in sponsoring scientific projects and you can donate to the Blosc project (or many others under the NumFOCUS umbrella) via its `donation page <https://numfocus.org/support#donate>`_.
