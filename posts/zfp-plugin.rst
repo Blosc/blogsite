@@ -80,12 +80,12 @@ Although the FIXED-PRECISION mode does not obtain great results, we see that wit
 Also, while FIXED-ACCURACY and FIXED-RATE modes consume similar times, the FIXED-PRECISION mode, which seems to have less data loss, also takes longer to compress.  Generally speaking we can see how, the more data loss (more data truncation) achieved by a mode, the faster it operates.
 
 
-Third partition
----------------
+"Third partition"
+-----------------
 
 One of the most appealing features of Caterva besides supporting multi-dimensionality, is its implementation of a second partitioning schema, `making slicing more efficient <https://www.blosc.org/posts/caterva-slicing-perf/>`_.  As one of the distinctive characteristics of ZFP is that it compresses data in independent (and small) cells, we have been toying with the idea of implementing a third partition so that slicing of thin selections or just single-point selection can be made faster.
 
-So, as part of the current ZFP implementation, we have combined the Caterva/Blosc2 partitioning (chunking and blocking) with the independent cell handling of ZFP, allowing to extract single cells within the ZFP streams (blocks in Blosc jargon). Due to the properties and limitations of the different ZFP compression modes, we have been able to implement this sort of third partition **only** for the *FIXED-RATE* mode, and just for the `blosc2_getitem_ctx() <https://c-blosc2.readthedocs.io/en/latest/reference/context.html?highlight=blosc_getitem#c.blosc2_getitem_ctx>`_ function. 
+So, as part of the current ZFP implementation, we have combined the Caterva/Blosc2 partitioning (chunking and blocking) with the independent cell handling of ZFP, allowing to extract single cells within the ZFP streams (blocks in Blosc jargon). Due to the properties and limitations of the different ZFP compression modes, we have been able to implement this sort of "third partition" **only** for the *FIXED-RATE* mode, and just for the `blosc2_getitem_ctx() <https://c-blosc2.readthedocs.io/en/latest/reference/context.html?highlight=blosc_getitem#c.blosc2_getitem_ctx>`_ function. 
 
 This combination of the existing partitioning and single cell extraction is useful for selecting more narrowly the data to extract.  For example, you can see below a comparison of the times that it takes to retrieve some single elements out of different multidimensional arrays from the ERA5 dataset (see above).  Here we have used a regular Blosc2 / LZ4 codec to compare against the new Blosc2 / ZFP_FIXED_RATE:
 
