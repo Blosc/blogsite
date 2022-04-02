@@ -83,17 +83,19 @@ Also, while FIXED-ACCURACY and FIXED-RATE modes consume similar times, the FIXED
 "Third partition"
 -----------------
 
-One of the most appealing features of Caterva besides supporting multi-dimensionality, is its implementation of a second partitioning schema, `making slicing more efficient <https://www.blosc.org/posts/caterva-slicing-perf/>`_.  As one of the distinctive characteristics of ZFP is that it compresses data in independent (and small) cells, we have been toying with the idea of implementing a third partition so that slicing of thin selections or just single-point selection can be made faster.
+One of the most appealing features of Caterva besides supporting multi-dimensionality is its implementation of a second partition, `making slicing more efficient <https://www.blosc.org/posts/caterva-slicing-perf/>`_.  As one of the distinctive characteristics of ZFP is that it compresses data in independent (and small) cells, we have been toying with the idea of implementing a third partition so that slicing of thin selections or just single-point selection can be made faster.
 
-So, as part of the current ZFP implementation, we have combined the Caterva/Blosc2 partitioning (chunking and blocking) with the independent cell handling of ZFP, allowing to extract single cells within the ZFP streams (blocks in Blosc jargon). Due to the properties and limitations of the different ZFP compression modes, we have been able to implement this sort of "third partition" **only** for the *FIXED-RATE* mode, and just for the `blosc2_getitem_ctx() <https://c-blosc2.readthedocs.io/en/latest/reference/context.html?highlight=blosc_getitem#c.blosc2_getitem_ctx>`_ function. 
+So, as part of the current ZFP implementation, we have combined the Caterva/Blosc2 partitioning (chunking and blocking) with the independent cell handling of ZFP, allowing to extract single cells within the ZFP streams (blocks in Blosc jargon). Due to the properties and limitations of the different ZFP compression modes, we have been able to implement a sort of "third partition" just for the *FIXED-RATE* mode when used together with the `blosc2_getitem_ctx() <https://c-blosc2.readthedocs.io/en/latest/reference/context.html?highlight=blosc_getitem#c.blosc2_getitem_ctx>`_ function. 
 
-This combination of the existing partitioning and single cell extraction is useful for selecting more narrowly the data to extract.  For example, you can see below a comparison of the times that it takes to retrieve some single elements out of different multidimensional arrays from the ERA5 dataset (see above).  Here we have used a regular Blosc2 / LZ4 codec to compare against the new Blosc2 / ZFP_FIXED_RATE:
+Such a combination of the existing partitioning and single cell extraction is useful for selecting more narrowly the data to extract, saving time and memory.  As an example, below you can see a comparison of the mean times that it takes to retrieve a bunch of single elements out of different multidimensional arrays from the ERA5 dataset (see above).  Here we have used Blosc2 with a regular LZ4 codec compared against the FIXED-RATE mode of the new ZFP codec:
 
 .. image:: /images/zfp-plugin/zfp_fixed_rate.png
   :width: 100%
   :align: center
 
-As you can see, Blosc2 in combination with ZFP in FIXED_RATE mode allows for a good improvement in speed for retrieving single elements (or a cell-size amount of items) in comparison with the classic codecs inside Blosc2.
+As you can see, using the ZFP codec in FIXED-RATE mode allows for a good improvement in speed (up to more than 2x) for retrieving single elements (or, in general an amount not exceeding the cell size) in comparison with the existing codecs (even the fastest ones, like LZ4) inside Blosc2.  As the performance improvement is of the same order than random access time of modern SSDs, we anticipate that this could be a major win in scenarios where random access is important.
+
+If you are curious on how this new functionality performs for your own datasets and computer, you can use/adapt our `benchmark code <https://github.com/Blosc/caterva/blob/master/bench/bench_zfp_getitem.c>`_.
 
 
 Conclusions
@@ -101,6 +103,6 @@ Conclusions
 
 The integration of ZFP as a codec plugin will greatly enhance the capabilities of lossy compression inside C-Blosc2.  The current ZFP plugin supports different modes; if users want to specify data loss during compression, it is recommended to use the FIXED-ACCURACY or FIXED-PRECISION modes (and most specially the former because of its better compression performance).
 
-However, if the priority is to get good compression ratios without paying too much attention to the amount of data loss, one should use the FIXED-RATE mode, which let choose the desired compression ratio.  This mode also has the advantage that a "third partition" can be used for improving slicing speed.
+However, if the priority is to get specific compression ratios without paying too much attention to the amount of data loss, one should use the FIXED-RATE mode, which let choose the desired compression ratio.  This mode also has the advantage that a "third partition" can be used for improving random elements access speed.
 
 This work has been done thanks to a Small Development Grant from the `NumFOCUS Foundation <https://numfocus.org>`_, to whom we are very grateful indeed. NumFOCUS is doing a excellent job in sponsoring scientific projects and you can donate to the Blosc project (or many others under the NumFOCUS umbrella) via its `donation page <https://numfocus.org/support#donate>`_.
