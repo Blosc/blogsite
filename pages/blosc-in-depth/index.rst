@@ -131,7 +131,7 @@ Other advantages of Blosc are:
   in compressed format.
 
 But there is much more.  For an updated list of features, see our
-`ROADMAP <https://github.com/Blosc/c-blosc2/blob/main/ROADMAP.md>`_.
+`ROADMAP <https://github.com/Blosc/c-blosc2/blob/main/ROADMAP.rst>`_.
 When taken together, all these features set Blosc apart from other
 similar solutions.
 
