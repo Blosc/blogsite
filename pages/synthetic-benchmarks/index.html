@@ -102,70 +102,70 @@ the benchmark.</p>
 <p><a class="reference external" href="https://github.com/Blosc/c-blosc">https://github.com/Blosc/c-blosc</a></p>
 <p>Then, compile the sources:</p>
 <p><em>GCC/Clang (Unix) or MINGW/Clang (Windows)</em></p>
-<div class="code"><pre class="code console"><a id="rest_code_02823e5014954d4893c2cdf8b4cc7a86-1" name="rest_code_02823e5014954d4893c2cdf8b4cc7a86-1" href="#rest_code_02823e5014954d4893c2cdf8b4cc7a86-1"></a><span class="gp">$ </span><span class="nb">cd</span> your_blosc_sources
-<a id="rest_code_02823e5014954d4893c2cdf8b4cc7a86-2" name="rest_code_02823e5014954d4893c2cdf8b4cc7a86-2" href="#rest_code_02823e5014954d4893c2cdf8b4cc7a86-2"></a><span class="gp">$ </span>mkdir build
-<a id="rest_code_02823e5014954d4893c2cdf8b4cc7a86-3" name="rest_code_02823e5014954d4893c2cdf8b4cc7a86-3" href="#rest_code_02823e5014954d4893c2cdf8b4cc7a86-3"></a><span class="gp">$ </span><span class="nb">cd</span> build
-<a id="rest_code_02823e5014954d4893c2cdf8b4cc7a86-4" name="rest_code_02823e5014954d4893c2cdf8b4cc7a86-4" href="#rest_code_02823e5014954d4893c2cdf8b4cc7a86-4"></a><span class="gp">$ </span>cmake ..
-<a id="rest_code_02823e5014954d4893c2cdf8b4cc7a86-5" name="rest_code_02823e5014954d4893c2cdf8b4cc7a86-5" href="#rest_code_02823e5014954d4893c2cdf8b4cc7a86-5"></a><span class="gp">$ </span>make  <span class="c1"># the benchmark will appear in `your_blosc_sources`/build/bench</span>
-<a id="rest_code_02823e5014954d4893c2cdf8b4cc7a86-6" name="rest_code_02823e5014954d4893c2cdf8b4cc7a86-6" href="#rest_code_02823e5014954d4893c2cdf8b4cc7a86-6"></a><span class="gp">$ </span>cp bench/bench ../bench
-<a id="rest_code_02823e5014954d4893c2cdf8b4cc7a86-7" name="rest_code_02823e5014954d4893c2cdf8b4cc7a86-7" href="#rest_code_02823e5014954d4893c2cdf8b4cc7a86-7"></a><span class="gp">$ </span><span class="nb">cd</span> ../bench
+<div class="code"><pre class="code console"><a id="rest_code_25cd53a3644b42acb9324e7e462968db-1" name="rest_code_25cd53a3644b42acb9324e7e462968db-1" href="#rest_code_25cd53a3644b42acb9324e7e462968db-1"></a><span class="gp">$ </span><span class="nb">cd</span> your_blosc_sources
+<a id="rest_code_25cd53a3644b42acb9324e7e462968db-2" name="rest_code_25cd53a3644b42acb9324e7e462968db-2" href="#rest_code_25cd53a3644b42acb9324e7e462968db-2"></a><span class="gp">$ </span>mkdir build
+<a id="rest_code_25cd53a3644b42acb9324e7e462968db-3" name="rest_code_25cd53a3644b42acb9324e7e462968db-3" href="#rest_code_25cd53a3644b42acb9324e7e462968db-3"></a><span class="gp">$ </span><span class="nb">cd</span> build
+<a id="rest_code_25cd53a3644b42acb9324e7e462968db-4" name="rest_code_25cd53a3644b42acb9324e7e462968db-4" href="#rest_code_25cd53a3644b42acb9324e7e462968db-4"></a><span class="gp">$ </span>cmake ..
+<a id="rest_code_25cd53a3644b42acb9324e7e462968db-5" name="rest_code_25cd53a3644b42acb9324e7e462968db-5" href="#rest_code_25cd53a3644b42acb9324e7e462968db-5"></a><span class="gp">$ </span>make  <span class="c1"># the benchmark will appear in `your_blosc_sources`/build/bench</span>
+<a id="rest_code_25cd53a3644b42acb9324e7e462968db-6" name="rest_code_25cd53a3644b42acb9324e7e462968db-6" href="#rest_code_25cd53a3644b42acb9324e7e462968db-6"></a><span class="gp">$ </span>cp bench/bench ../bench
+<a id="rest_code_25cd53a3644b42acb9324e7e462968db-7" name="rest_code_25cd53a3644b42acb9324e7e462968db-7" href="#rest_code_25cd53a3644b42acb9324e7e462968db-7"></a><span class="gp">$ </span><span class="nb">cd</span> ../bench
 </pre></div>
 </section><section id="running-and-plotting-the-different-suites-in-benchmark"><h2>Running and plotting the different suites in benchmark</h2>
 <p>Now that you have the executable benchmark, you can run it by passing
 the <code class="docutils literal">suite</code> parameter followed by the number of cores in your machine
 to the <code class="docutils literal">bench</code> program, i.e. something like:</p>
-<div class="code"><pre class="code console"><a id="rest_code_cf0ada74dfec46bbbd1251b856c8227b-1" name="rest_code_cf0ada74dfec46bbbd1251b856c8227b-1" href="#rest_code_cf0ada74dfec46bbbd1251b856c8227b-1"></a><span class="gp">$ </span>./bench <span class="nv">$CODEC</span> suite <span class="o">[</span>nthreads<span class="o">]</span>  <span class="c1"># $CODEC can be any of blosclz, lz4, lz4hc, snappy, zlib</span>
+<div class="code"><pre class="code console"><a id="rest_code_0529418e28924b8f8dbf06da746e6a77-1" name="rest_code_0529418e28924b8f8dbf06da746e6a77-1" href="#rest_code_0529418e28924b8f8dbf06da746e6a77-1"></a><span class="gp">$ </span>./bench <span class="nv">$CODEC</span> suite <span class="o">[</span>nthreads<span class="o">]</span>  <span class="c1"># $CODEC can be any of blosclz, lz4, lz4hc, snappy, zlib</span>
 </pre></div>
 <p>then a small suite will be run that checks the speed of Blosc for the
 specified number of threads.  Given this output, you can convert it
 into a plot by using the <code class="docutils literal"><span class="pre">bench/plot-speeds.py</span></code> scripts (you will need
 the [<a class="reference external" href="http://matplotlib.sourceforge.net/">http://matplotlib.sourceforge.net/</a> matplotlib] library
 installed).  You can print a small online help for this script usage:</p>
-<div class="code"><pre class="code console"><a id="rest_code_c918398cb4974f51836e246f53a5b93c-1" name="rest_code_c918398cb4974f51836e246f53a5b93c-1" href="#rest_code_c918398cb4974f51836e246f53a5b93c-1"></a><span class="gp">$ </span>python plot-speeds.py -h
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-2" name="rest_code_c918398cb4974f51836e246f53a5b93c-2" href="#rest_code_c918398cb4974f51836e246f53a5b93c-2"></a><span class="go">Usage: plot-speeds.py [-r] [-o outfile] [-t title ] [-d|-c] filename</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-3" name="rest_code_c918398cb4974f51836e246f53a5b93c-3" href="#rest_code_c918398cb4974f51836e246f53a5b93c-3"></a>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-4" name="rest_code_c918398cb4974f51836e246f53a5b93c-4" href="#rest_code_c918398cb4974f51836e246f53a5b93c-4"></a><span class="go">Options:</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-5" name="rest_code_c918398cb4974f51836e246f53a5b93c-5" href="#rest_code_c918398cb4974f51836e246f53a5b93c-5"></a><span class="go">  -h, --help            show this help message and exit</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-6" name="rest_code_c918398cb4974f51836e246f53a5b93c-6" href="#rest_code_c918398cb4974f51836e246f53a5b93c-6"></a><span class="go">  -o OUTFILE, --outfile=OUTFILE</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-7" name="rest_code_c918398cb4974f51836e246f53a5b93c-7" href="#rest_code_c918398cb4974f51836e246f53a5b93c-7"></a><span class="go">                        filename for output (many extensions supported, e.g.</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-8" name="rest_code_c918398cb4974f51836e246f53a5b93c-8" href="#rest_code_c918398cb4974f51836e246f53a5b93c-8"></a><span class="go">                        .png, .jpg, .pdf)</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-9" name="rest_code_c918398cb4974f51836e246f53a5b93c-9" href="#rest_code_c918398cb4974f51836e246f53a5b93c-9"></a><span class="go">  -t TITLE, --title=TITLE</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-10" name="rest_code_c918398cb4974f51836e246f53a5b93c-10" href="#rest_code_c918398cb4974f51836e246f53a5b93c-10"></a><span class="go">                        title of the plot</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-11" name="rest_code_c918398cb4974f51836e246f53a5b93c-11" href="#rest_code_c918398cb4974f51836e246f53a5b93c-11"></a><span class="go">  -l LIMIT, --limit=LIMIT</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-12" name="rest_code_c918398cb4974f51836e246f53a5b93c-12" href="#rest_code_c918398cb4974f51836e246f53a5b93c-12"></a><span class="go">                        expression to limit number of threads shown</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-13" name="rest_code_c918398cb4974f51836e246f53a5b93c-13" href="#rest_code_c918398cb4974f51836e246f53a5b93c-13"></a><span class="go">  -x XMAX, --xmax=XMAX  limit the x-axis</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-14" name="rest_code_c918398cb4974f51836e246f53a5b93c-14" href="#rest_code_c918398cb4974f51836e246f53a5b93c-14"></a><span class="go">  -r, --report          generate file for reporting</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-15" name="rest_code_c918398cb4974f51836e246f53a5b93c-15" href="#rest_code_c918398cb4974f51836e246f53a5b93c-15"></a><span class="go">  -d, --decompress      plot decompression data</span>
-<a id="rest_code_c918398cb4974f51836e246f53a5b93c-16" name="rest_code_c918398cb4974f51836e246f53a5b93c-16" href="#rest_code_c918398cb4974f51836e246f53a5b93c-16"></a><span class="go">  -c, --compress        plot compression data</span>
+<div class="code"><pre class="code console"><a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-1" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-1" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-1"></a><span class="gp">$ </span>python plot-speeds.py -h
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-2" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-2" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-2"></a><span class="go">Usage: plot-speeds.py [-r] [-o outfile] [-t title ] [-d|-c] filename</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-3" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-3" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-3"></a>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-4" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-4" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-4"></a><span class="go">Options:</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-5" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-5" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-5"></a><span class="go">  -h, --help            show this help message and exit</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-6" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-6" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-6"></a><span class="go">  -o OUTFILE, --outfile=OUTFILE</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-7" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-7" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-7"></a><span class="go">                        filename for output (many extensions supported, e.g.</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-8" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-8" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-8"></a><span class="go">                        .png, .jpg, .pdf)</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-9" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-9" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-9"></a><span class="go">  -t TITLE, --title=TITLE</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-10" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-10" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-10"></a><span class="go">                        title of the plot</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-11" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-11" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-11"></a><span class="go">  -l LIMIT, --limit=LIMIT</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-12" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-12" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-12"></a><span class="go">                        expression to limit number of threads shown</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-13" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-13" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-13"></a><span class="go">  -x XMAX, --xmax=XMAX  limit the x-axis</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-14" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-14" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-14"></a><span class="go">  -r, --report          generate file for reporting</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-15" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-15" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-15"></a><span class="go">  -d, --decompress      plot decompression data</span>
+<a id="rest_code_aeb4f466d8c54f5c835e78637466b8e9-16" name="rest_code_aeb4f466d8c54f5c835e78637466b8e9-16" href="#rest_code_aeb4f466d8c54f5c835e78637466b8e9-16"></a><span class="go">  -c, --compress        plot compression data</span>
 </pre></div>
 <p>For example, if you have, say, 4 cores in your machine, and want to
 get the plots interactively, proceed like this:</p>
-<div class="code"><pre class="code console"><a id="rest_code_9f5e77f223544731a7e1d5891a2376a6-1" name="rest_code_9f5e77f223544731a7e1d5891a2376a6-1" href="#rest_code_9f5e77f223544731a7e1d5891a2376a6-1"></a><span class="gp">$ </span>./bench blosclz suite <span class="m">4</span> &gt; blosclz.txt
-<a id="rest_code_9f5e77f223544731a7e1d5891a2376a6-2" name="rest_code_9f5e77f223544731a7e1d5891a2376a6-2" href="#rest_code_9f5e77f223544731a7e1d5891a2376a6-2"></a><span class="gp">$ </span>python plot-speeds.py -c blosclz.txt   <span class="c1"># get the compression plot</span>
-<a id="rest_code_9f5e77f223544731a7e1d5891a2376a6-3" name="rest_code_9f5e77f223544731a7e1d5891a2376a6-3" href="#rest_code_9f5e77f223544731a7e1d5891a2376a6-3"></a><span class="gp">$ </span>python plot-speeds.py -d blosclz.txt   <span class="c1"># get the decompression one</span>
+<div class="code"><pre class="code console"><a id="rest_code_10ee2d34171f4fcface40e821d3512f1-1" name="rest_code_10ee2d34171f4fcface40e821d3512f1-1" href="#rest_code_10ee2d34171f4fcface40e821d3512f1-1"></a><span class="gp">$ </span>./bench blosclz suite <span class="m">4</span> &gt; blosclz.txt
+<a id="rest_code_10ee2d34171f4fcface40e821d3512f1-2" name="rest_code_10ee2d34171f4fcface40e821d3512f1-2" href="#rest_code_10ee2d34171f4fcface40e821d3512f1-2"></a><span class="gp">$ </span>python plot-speeds.py -c blosclz.txt   <span class="c1"># get the compression plot</span>
+<a id="rest_code_10ee2d34171f4fcface40e821d3512f1-3" name="rest_code_10ee2d34171f4fcface40e821d3512f1-3" href="#rest_code_10ee2d34171f4fcface40e821d3512f1-3"></a><span class="gp">$ </span>python plot-speeds.py -d blosclz.txt   <span class="c1"># get the decompression one</span>
 </pre></div>
 <p>Alternatively, you can directly get a plot file by using the <code class="docutils literal"><span class="pre">-o</span></code>
 flag:</p>
-<div class="code"><pre class="code console"><a id="rest_code_7a80cbde128444bf85e6eabfdab9058a-1" name="rest_code_7a80cbde128444bf85e6eabfdab9058a-1" href="#rest_code_7a80cbde128444bf85e6eabfdab9058a-1"></a><span class="gp">$ </span>python plot-speeds.py -o plot.png -c mysuite-blosclz.txt
+<div class="code"><pre class="code console"><a id="rest_code_f7699861c9704fe6ad1e67a484a1e896-1" name="rest_code_f7699861c9704fe6ad1e67a484a1e896-1" href="#rest_code_f7699861c9704fe6ad1e67a484a1e896-1"></a><span class="gp">$ </span>python plot-speeds.py -o plot.png -c mysuite-blosclz.txt
 </pre></div>
 <p>Or, you can get a nice plot apt for reporting and publication on this site
 with:</p>
-<div class="code"><pre class="code console"><a id="rest_code_44d9bfd262c64f62b0ef5796a0fa71b2-1" name="rest_code_44d9bfd262c64f62b0ef5796a0fa71b2-1" href="#rest_code_44d9bfd262c64f62b0ef5796a0fa71b2-1"></a><span class="gp">$ </span>python plot-speeds.py -r -c blosclz.txt  <span class="c1"># gives blosclz-compr.png</span>
-<a id="rest_code_44d9bfd262c64f62b0ef5796a0fa71b2-2" name="rest_code_44d9bfd262c64f62b0ef5796a0fa71b2-2" href="#rest_code_44d9bfd262c64f62b0ef5796a0fa71b2-2"></a><span class="gp">$ </span>python plot-speeds.py -r -d blosclz.txt  <span class="c1"># gives blosclz-decompr.png</span>
+<div class="code"><pre class="code console"><a id="rest_code_88b4bebaaf8041e0a68edb9e80c3880e-1" name="rest_code_88b4bebaaf8041e0a68edb9e80c3880e-1" href="#rest_code_88b4bebaaf8041e0a68edb9e80c3880e-1"></a><span class="gp">$ </span>python plot-speeds.py -r -c blosclz.txt  <span class="c1"># gives blosclz-compr.png</span>
+<a id="rest_code_88b4bebaaf8041e0a68edb9e80c3880e-2" name="rest_code_88b4bebaaf8041e0a68edb9e80c3880e-2" href="#rest_code_88b4bebaaf8041e0a68edb9e80c3880e-2"></a><span class="gp">$ </span>python plot-speeds.py -r -d blosclz.txt  <span class="c1"># gives blosclz-decompr.png</span>
 </pre></div>
 <p>Sometimes the legend may cover some of the data in this case you can
 increase the limit of the x-axis (compression ratio) using the <code class="docutils literal"><span class="pre">-x</span></code>
 switch (<cite>10</cite> is quite a good value):</p>
-<div class="code"><pre class="code console"><a id="rest_code_86252d37fad14c42be6ec08bb30f8c8e-1" name="rest_code_86252d37fad14c42be6ec08bb30f8c8e-1" href="#rest_code_86252d37fad14c42be6ec08bb30f8c8e-1"></a><span class="gp">$ </span>python plot-speeds.py -x <span class="m">10</span> -c mysuite.txt
+<div class="code"><pre class="code console"><a id="rest_code_0a720eab1c8e4184a93582c470e91412-1" name="rest_code_0a720eab1c8e4184a93582c470e91412-1" href="#rest_code_0a720eab1c8e4184a93582c470e91412-1"></a><span class="gp">$ </span>python plot-speeds.py -x <span class="m">10</span> -c mysuite.txt
 </pre></div>
 <p>If you have many, many threads, the output can become quite confusing
 and you may want to take a look at the <code class="docutils literal"><span class="pre">-l</span></code> switch. This can limit the
 number of displayed threads using an arbitrary Python expression, like
 a list or an iterator over <code class="docutils literal">ints</code> (indexing starts at 1, not 0):</p>
-<div class="code"><pre class="code console"><a id="rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-1" name="rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-1" href="#rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-1"></a><span class="gp">$ </span>python plot-speeds.py -l <span class="s1">'[1]'</span> -c mysuite.txt
-<a id="rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-2" name="rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-2" href="#rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-2"></a><span class="gp">$ </span>python plot-speeds.py -l <span class="s1">'range(1, 8)'</span> mysuite.txt
-<a id="rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-3" name="rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-3" href="#rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-3"></a><span class="gp">$ </span>python plot-speeds.py -l <span class="s1">'range(1, 8, 2)'</span> mysuite.txt
-<a id="rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-4" name="rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-4" href="#rest_code_a2fce0ea1f5c4ce4bee22db8c019b6ff-4"></a><span class="gp">$ </span>python plot-speeds.py -l <span class="s1">'[1, 3, 28]'</span> mysuite.txt
+<div class="code"><pre class="code console"><a id="rest_code_4cd9386277c8446186c12e588f8b93c4-1" name="rest_code_4cd9386277c8446186c12e588f8b93c4-1" href="#rest_code_4cd9386277c8446186c12e588f8b93c4-1"></a><span class="gp">$ </span>python plot-speeds.py -l <span class="s1">'[1]'</span> -c mysuite.txt
+<a id="rest_code_4cd9386277c8446186c12e588f8b93c4-2" name="rest_code_4cd9386277c8446186c12e588f8b93c4-2" href="#rest_code_4cd9386277c8446186c12e588f8b93c4-2"></a><span class="gp">$ </span>python plot-speeds.py -l <span class="s1">'range(1, 8)'</span> mysuite.txt
+<a id="rest_code_4cd9386277c8446186c12e588f8b93c4-3" name="rest_code_4cd9386277c8446186c12e588f8b93c4-3" href="#rest_code_4cd9386277c8446186c12e588f8b93c4-3"></a><span class="gp">$ </span>python plot-speeds.py -l <span class="s1">'range(1, 8, 2)'</span> mysuite.txt
+<a id="rest_code_4cd9386277c8446186c12e588f8b93c4-4" name="rest_code_4cd9386277c8446186c12e588f8b93c4-4" href="#rest_code_4cd9386277c8446186c12e588f8b93c4-4"></a><span class="gp">$ </span>python plot-speeds.py -l <span class="s1">'[1, 3, 28]'</span> mysuite.txt
 </pre></div>
 </section><section id="reporting-your-results-back"><h2>Reporting your results back</h2>
 <p>If you want to help with fine-tuning Blosc for other processors, please send
@@ -183,8 +183,8 @@ following information (as a minimum):</p>
 costly) than the <code class="docutils literal">suite</code> above.  The <code class="docutils literal">hardsuite</code> will take between 1 and 6
 hours to run, depending on your machine and the number of cores, and will
 compress/decompress around 4 TB of data.  Running it is easy:</p>
-<div class="code"><pre class="code console"><a id="rest_code_f0bcf927970041eea0231295b381b300-1" name="rest_code_f0bcf927970041eea0231295b381b300-1" href="#rest_code_f0bcf927970041eea0231295b381b300-1"></a><span class="gp">$ </span>./bench <span class="sb">`</span>compr<span class="sb">`</span> hardsuite <span class="m">4</span> &gt; myhardsuite.txt
-<a id="rest_code_f0bcf927970041eea0231295b381b300-2" name="rest_code_f0bcf927970041eea0231295b381b300-2" href="#rest_code_f0bcf927970041eea0231295b381b300-2"></a><span class="gp">$ </span>gzip -9 &lt; myhardsuite.txt &gt; myhardsuite.txt.gz    <span class="c1"># use zip or 7z compressors if on Windows</span>
+<div class="code"><pre class="code console"><a id="rest_code_e823df3fd238422bbbf7362cd0daf183-1" name="rest_code_e823df3fd238422bbbf7362cd0daf183-1" href="#rest_code_e823df3fd238422bbbf7362cd0daf183-1"></a><span class="gp">$ </span>./bench <span class="sb">`</span>compr<span class="sb">`</span> hardsuite <span class="m">4</span> &gt; myhardsuite.txt
+<a id="rest_code_e823df3fd238422bbbf7362cd0daf183-2" name="rest_code_e823df3fd238422bbbf7362cd0daf183-2" href="#rest_code_e823df3fd238422bbbf7362cd0daf183-2"></a><span class="gp">$ </span>gzip -9 &lt; myhardsuite.txt &gt; myhardsuite.txt.gz    <span class="c1"># use zip or 7z compressors if on Windows</span>
 </pre></div>
 <p><strong>IMPORTANT</strong>: In order to get fine results, please be sure that you
 are not running other heavy process while running the suites.</p>
