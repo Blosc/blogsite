@@ -1,7 +1,7 @@
 <!-- 
 .. title: Francesc Alted CV
 .. slug: francesc-alted-cv
-.. date: 2020-10-30 07:08:24 UTC
+.. date: 2022-06-08 07:08:24 UTC
 .. tags: 
 .. category: 
 .. link: 
@@ -13,7 +13,7 @@
 
  - [ironArray SL](https://ironarray.io): October 2021 - Today
 
-     CEO.  Working for overcoming the limits imposed by technology when computing with multidimensional arrays, specially where the memory bandwidth becomes a bottleneck and compression can help in surpassing the so called memory wall.
+     CEO.  Developing libraries for overcoming the limits imposed by technology when computing with multidimensional arrays, specially where the memory bandwidth becomes a bottleneck.  Expert in compression applied to storage and computation.
 
  - [Blosc Development Team](https://blosc.org): May 2014 - Today
 
