@@ -7,398 +7,398 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://blosc.org/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2014/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2015/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2016/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2017/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2018/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2019/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2020/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2021/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/2022/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/archive.html</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/aleix-alcacer/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/francesc-alted/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/marta-iborra/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/oscar-guinon-francesc-alted/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/oscar-guinon-marta-iborra/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/oscar-guinon/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/authors/valentin-haenel/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/amd/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/arm/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc-performance-tuning/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc-plugins-codecs-filters/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc-plugins-zfp-lossy/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc-progress-report-grants/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc2-beta/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc2-metalayers/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc2-python/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc2-release-candidate/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc2-sparse-frame-format/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosc2/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/blosclz/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/caches/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/cat_posts/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/caterva-slicing-perf/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/compilers/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/donation-blosc2-caterva/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/filters/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/forward-compatibility-policy-splitmode/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/google/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/hdf5/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/history/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/lizard/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/lz4/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/memory-wall/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/neon/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/optimization/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/pgo/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/prize/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/pytables/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/rome/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/sponsorhip/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/tuning/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/wheels/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/windows/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/zstandard/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/categories/zstd/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/index-1.html</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/index-2.html</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/benchmarks-blosclz/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/benchmarks-lz4/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/benchmarks-lz4hc/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/benchmarks-snappy/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/benchmarks-zlib/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/blosc-in-depth/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/donate/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/francesc-alted-cv/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/francesc-alted-resume/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/professional-services/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/pages/synthetic-benchmarks/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/arm-is-becoming-a-first-class-citizen-for-blosc/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/arm-memory-walls-followup/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/beast-release/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/blosc-donation/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/blosc-metalayers/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/blosc2-first-beta/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/blosc2-meets-rome/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/blosc2-ready-general-review/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/blosclz-tuning/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/breaking-memory-walls/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/caterva-slicing-perf/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/codecs-pgo/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/compress-me-stupid/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/hairy-msvc-situation.rst/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/introducing-sparse-frames/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/mid-2020-progress-report/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/new-bitshuffle-filter/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/new-blosc-wheels/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/new-forward-compat-policy/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/new-lizard-codec/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/prize-push-Blosc2/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/python-blosc2-initial-release/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/registering-plugins/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/seeking-sponsoship/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/support-lossy-zfp/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
  <url>
   <loc>http://blosc.org/posts/zstd-has-just-landed-in-blosc/</loc>
-  <lastmod>2022-06-03T11:42:00Z</lastmod>
+  <lastmod>2022-06-08T15:23:00Z</lastmod>
  </url>
 </urlset>
