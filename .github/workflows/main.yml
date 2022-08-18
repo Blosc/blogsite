@@ -34,7 +34,7 @@ jobs:
     - name: Copy Nikola site to publish directory
       run: cp -r output/* publish/
     - name: Build c-blosc2 docs
-      run: sphinx-build -b html c-blosc2/doc/sphinx/source publish/c-blosc2
+      run: sphinx-build -b html c-blosc2/doc/sphinx/source publish/c-blosc2 || true
     - name: Build python-blosc2 docs
       run: sphinx-build -b html python-blosc2/doc publish/python-blosc2
 
