@@ -13,12 +13,14 @@ jobs:
       run: git clone https://github.com/Blosc/c-blosc2.git
     - name: Check out python-blosc2
       run: git clone https://github.com/Blosc/python-blosc2.git
+    - name: ls
+      run: ls
 
     # Install dependencies
     - name: Install dependencies c-blosc2
-      run: pip install -r c-blosc2/doc/requirents.txt
+      run: pip install -r c-blosc2/doc/requirements.txt
     - name: Install dependencies python-blosc2
-      run: pip install -r python-blosc2/requirents-doc.txt
+      run: pip install -r python-blosc2/requirements-doc.txt
 
     # Build websites
     - name: Build Nikola website
