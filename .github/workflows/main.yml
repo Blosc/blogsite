@@ -13,15 +13,13 @@ jobs:
       run: git clone https://github.com/Blosc/c-blosc2.git
     - name: Check out python-blosc2
       run: git clone https://github.com/Blosc/python-blosc2.git
-    - name: ls
-      run: ls
 
     # Install dependencies
     - name: Install dependencies c-blosc2
       run: pip install -r c-blosc2/doc/requirements.txt
     - name: Install dependencies python-blosc2
       run: pip install -r python-blosc2/requirements-doc.txt
-    - name: Pin pygments # there is an exception otherwise
+    - name: Pin pygments # Sphinx fails without this: 'HtmlFormatter' object has no attribute 'get_linenos_style_defs'
       run: pip install pygments==2.11.2
 
     # Build websites
@@ -29,12 +27,8 @@ jobs:
       uses: getnikola/nikola-action@v3
       with:
         dry_run: true
-    - name: ls
-      run: ls -l
-    - name: Create publish directory
-      run: mkdir publish
-    - name: Copy Nikola site to publish directory
-      run: cp -r output/* publish/
+    - name: Create artifact directory # The Nikola action creates output/ as root, and it's not writeable
+      run: mkdir publish && cp -r output/* publish/
     - name: Build c-blosc2 docs
       run: sphinx-build -b html c-blosc2/doc/sphinx/source publish/c-blosc2
     - name: Build python-blosc2 docs
