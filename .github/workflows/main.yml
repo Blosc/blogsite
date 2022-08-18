@@ -10,9 +10,9 @@ jobs:
     - name: Check out website repo
       uses: actions/checkout@v2
     - name: Check out c-blosc2
-      run: git clone git@github.com:Blosc/c-blosc2.git
+      run: git clone https://github.com/Blosc/c-blosc2.git
     - name: Check out python-blosc2
-      run: git clone git@github.com:Blosc/python-blosc2.git
+      run: git clone https://github.com/Blosc/python-blosc2.git
 
     # Install dependencies
     - name: Install dependencies c-blosc2
