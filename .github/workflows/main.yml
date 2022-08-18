@@ -25,7 +25,8 @@ jobs:
       uses: getnikola/nikola-action@v3
       with:
         dry_run: true
-    - run: ls
+    - name: ls
+      run: ls
     - name: Build c-blosc2 docs
       run: sphinx-build -b html c-blosc2/doc/sphinx/source /public/c-blosc2
     - name: Build python-blosc2 docs
@@ -33,7 +34,7 @@ jobs:
 
     # Deploy
     - name: Create blosc website artifact
-    - uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3
       with:
         name: blosc-website
         path: /public/
