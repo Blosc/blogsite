@@ -29,8 +29,12 @@ jobs:
         dry_run: true
     - name: ls
       run: ls
+    - name: Create c-blosc2 output directory
+      run: mkdir output/c-blosc2
     - name: Build c-blosc2 docs
       run: sphinx-build -b html c-blosc2/doc/sphinx/source output/c-blosc2
+    - name: Create python-blosc2 output directory
+      run: mkdir output/python-blosc2
     - name: Build python-blosc2 docs
       run: sphinx-build -b html python-blosc2/doc output/python-blosc2
 
