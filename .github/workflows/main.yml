@@ -30,14 +30,14 @@ jobs:
     - name: ls
       run: ls
     - name: Build c-blosc2 docs
-      run: sphinx-build -b html c-blosc2/doc/sphinx/source /public/c-blosc2
+      run: sphinx-build -b html c-blosc2/doc/sphinx/source output/c-blosc2
     - name: Build python-blosc2 docs
-      run: sphinx-build -b html python-blosc2/doc /public/python-blosc2
+      run: sphinx-build -b html python-blosc2/doc output/python-blosc2
 
     # Deploy
     - name: Create blosc website artifact
       uses: actions/upload-artifact@v3
       with:
         name: blosc-website
-        path: /public/
+        path: output/
 
