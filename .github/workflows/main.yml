@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ master, ci_website ]
+    branches: [ master ]
   repository_dispatch:
     types: [ update_website ]
 
@@ -47,7 +47,7 @@ jobs:
       run: sphinx-build -b html python-blosc2/doc _site/python-blosc2
 
     # Deploy
-    - name: Deploy to GitHub Pages
+    - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v1
 
     - name: Deploy to GitHub Pages
