@@ -13,15 +13,19 @@ jobs:
     # Check out repositories
     - name: Check out website repo
       uses: actions/checkout@v2
-    - name: Check out c-blosc2
+    - name: Check out C-Blosc2
       run: git clone https://github.com/Blosc/c-blosc2.git
-    - name: Check out python-blosc2
+    - name: Check out Python-Blosc
+      run: git clone https://github.com/Blosc/python-blosc.git
+    - name: Check out Python-Blosc2
       run: git clone https://github.com/Blosc/python-blosc2.git
 
     # Install dependencies
-    - name: Install dependencies c-blosc2
+    - name: Install dependencies C-Blosc2
       run: pip install -r c-blosc2/doc/requirements.txt
-    - name: Install dependencies python-blosc2
+    - name: Install dependencies Python-Blosc
+      run: pip install -r python-blosc/requirements_rtfd.txt
+    - name: Install dependencies Python-Blosc2
       run: pip install -r python-blosc2/requirements-doc.txt
     - name: Pin pygments # Sphinx fails without this: 'HtmlFormatter' object has no attribute 'get_linenos_style_defs'
       run: pip install pygments==2.11.2
@@ -32,15 +36,25 @@ jobs:
       with:
         dry_run: true
     - name: Create artifact directory # The Nikola action creates output/ as root, and it's not writeable
-      run: mkdir publish && cp -r output/* publish/
-    - name: Build c-blosc2 docs
-      run: sphinx-build -b html c-blosc2/doc/sphinx/source publish/c-blosc2
-    - name: Build python-blosc2 docs
-      run: sphinx-build -b html python-blosc2/doc publish/python-blosc2
+      run: mkdir _site && cp -r output/* _site/
+    - name: Build C-Blosc2 docs
+      run: sphinx-build -b html c-blosc2/doc/sphinx/source _site/c-blosc2
+    - name: Build Python-Blosc docs
+      run: sphinx-build -b html python-blosc/doc _site/python-blosc
+    - name: Build Python-Blosc2 docs
+      run: sphinx-build -b html python-blosc2/doc _site/python-blosc2
 
     # Deploy
     - name: Create blosc website artifact
       uses: actions/upload-artifact@v3
       with:
         name: blosc-website
-        path: publish/
+        path: _site/
+
+    - name: Deploy to GitHub Pages
+      uses: actions/upload-pages-artifact
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v1
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
