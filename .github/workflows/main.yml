@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ master ]
+    branches: [ master, ci_website ]
   repository_dispatch:
     types: [ update_website ]
 
