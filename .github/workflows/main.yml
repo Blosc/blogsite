@@ -1,4 +1,8 @@
-on: [push]
+on:
+  push:
+    branches: [ master ]
+  repository_dispatch:
+    types: [ update_website ]
 
 jobs:
   build_website:
@@ -40,4 +44,3 @@ jobs:
       with:
         name: blosc-website
         path: publish/
-
