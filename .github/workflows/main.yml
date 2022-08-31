@@ -47,16 +47,8 @@ jobs:
       run: sphinx-build -b html python-blosc2/doc _site/python-blosc2
 
     # Deploy
-    - name: Create blosc website artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: blosc-website
-        path: _site/
-
     - name: Deploy to GitHub Pages
       uses: actions/upload-pages-artifact@v1
-      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v1
-      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
