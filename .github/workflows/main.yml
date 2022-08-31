@@ -25,6 +25,8 @@ jobs:
       run: pip install -r c-blosc2/doc/requirements.txt
     - name: Install dependencies Python-Blosc
       run: pip install -r python-blosc/requirements_rtfd.txt
+    - name: Install Python-Blosc  # Python-Blosc Sphinx conf.py imports blosc, not sure why
+      run: pip install -e $(pwd)/python-blosc/
     - name: Install dependencies Python-Blosc2
       run: pip install -r python-blosc2/requirements-doc.txt
     - name: Pin pygments # Sphinx fails without this: 'HtmlFormatter' object has no attribute 'get_linenos_style_defs'
