@@ -52,7 +52,7 @@ jobs:
         path: _site/
 
     - name: Deploy to GitHub Pages
-      uses: actions/upload-pages-artifact
+      uses: actions/upload-pages-artifact@v1
       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     - name: Deploy to GitHub Pages
