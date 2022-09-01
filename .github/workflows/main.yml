@@ -34,7 +34,7 @@ jobs:
 
     # Build websites
     - name: Build Nikola website
-      uses: getnikola/nikola-action@v3
+      uses: getnikola/nikola-action@v5
       with:
         dry_run: true
     - name: Create artifact directory # The Nikola action creates output/ as root, and it's not writeable
