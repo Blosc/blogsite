@@ -3,11 +3,14 @@ channels:
   - conda-forge
 dependencies:
   - python
+  - scikit-build
+  - cmake
+  - ninja
+
   - sphinx
   - pydata-sphinx-theme
   - doxygen=1.9
   - breathe
   - numpydoc
   - myst-parser
-  - scikit-build
   - pygments=2.11.2  # Sphinx fails without this: 'HtmlFormatter' object has no attribute 'get_linenos_style_defs' with newer versions
