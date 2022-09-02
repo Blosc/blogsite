@@ -7,7 +7,7 @@ dependencies:
   - cmake
   - ninja
   - cython
-  - msgpack
+  - msgpack-python
 
   - sphinx
   - pydata-sphinx-theme
