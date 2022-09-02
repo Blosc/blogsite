@@ -6,6 +6,7 @@ dependencies:
   - scikit-build
   - cmake
   - ninja
+  - cython
 
   - sphinx
   - pydata-sphinx-theme
