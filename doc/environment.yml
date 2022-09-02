@@ -1,0 +1,18 @@
+name: blosc-docs
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - doxygen=1.9
+  - sphinx
+  - pydata-sphinx-theme
+  - breathe
+  - numpydoc
+  - mock
+  - pygments=2.11.2  # Sphinx fails without this: 'HtmlFormatter' object has no attribute 'get_linenos_style_defs' with newer versions
+  - scikit-build
+  - cython
+  - numpy
+  - cmake
+  - myst-parser
+  - ninja

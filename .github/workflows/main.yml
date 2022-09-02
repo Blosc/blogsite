@@ -12,44 +12,47 @@ jobs:
     name: 'Build website'
     steps:
 
-    # Check out repositories
+    # Set up environment
     - name: Check out website repo
       uses: actions/checkout@v2
-    - name: Check out C-Blosc2
-      run: git clone https://github.com/Blosc/c-blosc2.git
-    - name: Check out Python-Blosc
-      run: git clone https://github.com/Blosc/python-blosc.git
-    - name: Check out Python-Blosc2
-      run: git clone https://github.com/Blosc/python-blosc2.git
+    - name: Set up environment and install dependencies
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        mamba-version: "*"
+        channels: conda-forge
+        activate-environment: blosc-docs
+        environment-file: doc/environment.yml
 
-    # Install dependencies
-    - name: Install dependencies C-Blosc2
-      run: pip install -r c-blosc2/doc/requirements.txt
-    - name: Install dependencies Python-Blosc
-      run: pip install -r python-blosc/requirements_rtfd.txt
-    - name: Install Python-Blosc  # Python-Blosc Sphinx conf.py imports blosc, not sure why
-      run: pip install -e $(pwd)/python-blosc/
-    - name: Install dependencies Python-Blosc2
-      run: pip install -r python-blosc2/requirements-doc.txt
-    - name: Pin pygments # Sphinx fails without this: 'HtmlFormatter' object has no attribute 'get_linenos_style_defs'
-      run: pip install pygments==2.11.2
-
-    # Build websites
+    # blosc.org (nikola)
     - name: Build Nikola website
       uses: getnikola/nikola-action@v5
       with:
         dry_run: true
-    - name: Create artifact directory # The Nikola action creates output/ as root, and it's not writeable
+    - name: Create artifact directory
+      # The Nikola action creates `output/` as root, and it's not writeable
+      # `_site/` is the default directory for the upload/deploy pages actions
       run: mkdir _site && cp -r output/* _site/
-    - name: Build C-Blosc2 docs
-      run: sphinx-build -b html c-blosc2/doc/sphinx/source _site/c-blosc2
-    - name: Build Python-Blosc docs
-      run: sphinx-build -b html python-blosc/doc _site/python-blosc
-    - name: Build Python-Blosc2 docs
-      run: sphinx-build -b html python-blosc2/doc _site/python-blosc2
 
-    - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v1
+    # blosc.org/c-blosc2
+    - name: Check out C-Blosc2
+      run: git clone https://github.com/Blosc/c-blosc2.git
+    - name: Build C-Blosc2 docs
+      run: sphinx-build -W c-blosc2/doc/sphinx/source _site/c-blosc2
+
+    # blosc.org/python-blosc
+    - name: Check out Python-Blosc
+      run: git clone https://github.com/Blosc/python-blosc.git
+    - name: Install Python-Blosc  # Python-Blosc Sphinx conf.py imports blosc, not sure why
+      run: pip install -e $(pwd)/python-blosc/
+    - name: Build Python-Blosc docs
+      run: sphinx-build -W python-blosc/doc _site/python-blosc
+
+    # blosc.org/python-blosc2
+    - name: Check out Python-Blosc2
+      run: git clone https://github.com/Blosc/python-blosc2.git
+    - name: Build Python-Blosc2 docs
+      run: sphinx-build -W python-blosc2/doc _site/python-blosc2
+
 
   deploy_website:
     needs: build_website
@@ -63,5 +66,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+    - name: Upload GitHub Pages artifact
+      uses: actions/upload-pages-artifact@v1
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v1
