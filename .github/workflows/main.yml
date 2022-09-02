@@ -69,6 +69,9 @@ jobs:
       run: sphinx-build python-blosc2/doc _site/python-blosc2
       shell: bash -l {0}
 
+    # upload artifact
+    - name: Upload GitHub Pages artifact
+      uses: actions/upload-pages-artifact@v1
 
   deploy_website:
     needs: build_website
@@ -82,7 +85,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-    - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v1
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v1
