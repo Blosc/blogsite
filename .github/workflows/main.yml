@@ -57,7 +57,7 @@ jobs:
 
     # blosc.org/python-blosc2
     - name: Check out Python-Blosc2
-      run: git clone https://github.com/Blosc/python-blosc2.git
+      run: git clone --recurse-submodules https://github.com/Blosc/python-blosc2.git
     - name: Build Python-Blosc2
       run: cd python-blosc2 && python setup.py build_ext --inplace
       shell: bash -l {0}
