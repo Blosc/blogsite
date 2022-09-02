@@ -51,7 +51,7 @@ jobs:
       run: cd python-blosc && python setup.py build  # python-blosc must be build from its directory (otherwise can't find README.rst used in setup.py)
       shell: bash -l {0}
     - name: Build Python-Blosc docs
-      run: sphinx-build -W python-blosc/doc _site/python-blosc
+      run: cd python-blosc && sphinx-build -W doc ../_site/python-blosc  # sphinx-build needs to be called from the docs directory, as some paths are relative
       shell: bash -l {0}
 
     # blosc.org/python-blosc2
