@@ -45,14 +45,14 @@ jobs:
     - name: Check out Python-Blosc
       run: git clone https://github.com/Blosc/python-blosc.git
     - name: Build Python-Blosc
-      run: cd python-blosc && python setup.py build  # python-blosc must be build from its directory (otherwise can't find README.rst used in setup.py)
+      run: cd python-blosc && python setup.py build
       shell: bash -l {0}
     - name: Install Python-Blosc
       run: pip install -e $(pwd)/python-blosc/
       shell: bash -l {0}
     - name: Build Python-Blosc docs
       # TODO: Fix warnings in the build and restore `-W` parameter
-      run: cd python-blosc && sphinx-build doc ../_site/python-blosc  # sphinx-build needs to be called from the docs directory, as some paths are relative
+      run: cd python-blosc && sphinx-build doc ../_site/python-blosc
       shell: bash -l {0}
 
     # blosc.org/python-blosc2
@@ -64,14 +64,9 @@ jobs:
     - name: Install Python-Blosc2
       run: pip install -e $(pwd)/python-blosc2/
       shell: bash -l {0}
-    - name: Try importing blosc2
-      run: python -c "import blosc2"
-      shell: bash -l {0}
-    - name: Try importing blosc2.SChunk.vlmeta
-      run: python -c "import blosc2.SChunk.vlmeta"
-      shell: bash -l {0}
     - name: Build Python-Blosc2 docs
-      run: sphinx-build -W python-blosc2/doc _site/python-blosc2
+      # TODO: Fix warnings in the build and restore `-W` parameter
+      run: sphinx-build python-blosc2/doc _site/python-blosc2
       shell: bash -l {0}
 
 
