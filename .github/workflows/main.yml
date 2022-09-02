@@ -64,8 +64,14 @@ jobs:
     - name: Install Python-Blosc2
       run: pip install -e $(pwd)/python-blosc2/
       shell: bash -l {0}
+    - name: Try importing blosc2
+      run: python -c "import blosc2"
+      shell: bash -l {0}
+    - name: Try importing blosc2.SChunk.vlmeta
+      run: python -c "import blosc2.SChunk.vlmeta"
+      shell: bash -l {0}
     - name: Build Python-Blosc2 docs
-      run: PYTHONPATH=$(pwd)/python-blosc2 cd python-blosc2 && sphinx-build -W doc ../_site/python-blosc2
+      run: sphinx-build -W python-blosc2/doc _site/python-blosc2
       shell: bash -l {0}
 
 
