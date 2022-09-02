@@ -41,13 +41,6 @@ jobs:
       run: sphinx-build c-blosc2/doc/sphinx/source _site/c-blosc2
       shell: bash -l {0}
 
-    # blosc.org/python-blosc2
-    - name: Check out Python-Blosc2
-      run: git clone https://github.com/Blosc/python-blosc2.git
-    - name: Build Python-Blosc2 docs
-      run: sphinx-build -W python-blosc2/doc _site/python-blosc2
-      shell: bash -l {0}
-
     # blosc.org/python-blosc
     - name: Check out Python-Blosc
       run: git clone https://github.com/Blosc/python-blosc.git
@@ -59,6 +52,16 @@ jobs:
       shell: bash -l {0}
     - name: Build Python-Blosc docs
       run: sphinx-build -W python-blosc/doc _site/python-blosc
+      shell: bash -l {0}
+
+    # blosc.org/python-blosc2
+    - name: Check out Python-Blosc2
+      run: git clone https://github.com/Blosc/python-blosc2.git
+    - name: Build Python-Blosc2
+      run: python python-blosc2/setup.py build
+      shell: bash -l {0}
+    - name: Build Python-Blosc2 docs
+      run: sphinx-build -W python-blosc2/doc _site/python-blosc2
       shell: bash -l {0}
 
 
