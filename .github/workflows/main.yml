@@ -62,7 +62,7 @@ jobs:
       run: python python-blosc2/setup.py build
       shell: bash -l {0}
     - name: Build Python-Blosc2 docs
-      run: sphinx-build -W python-blosc2/doc _site/python-blosc2
+      run: cd python-blosc2 && sphinx-build -W doc ../_site/python-blosc2
       shell: bash -l {0}
 
 
