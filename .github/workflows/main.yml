@@ -65,7 +65,7 @@ jobs:
       run: pip install -e $(pwd)/python-blosc2/
       shell: bash -l {0}
     - name: Build Python-Blosc2 docs
-      run: cd python-blosc2 && sphinx-build -W doc ../_site/python-blosc2
+      run: PYTHONPATH=$(pwd)/python-blosc2 cd python-blosc2 && sphinx-build -W doc ../_site/python-blosc2
       shell: bash -l {0}
 
 
