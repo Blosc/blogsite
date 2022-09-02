@@ -44,11 +44,11 @@ jobs:
     # blosc.org/python-blosc
     - name: Check out Python-Blosc
       run: git clone https://github.com/Blosc/python-blosc.git
-    - name: Install Python-Blosc  # Python-Blosc Sphinx conf.py imports blosc, not sure why
-      run: pip install -e $(pwd)/python-blosc/
-      shell: bash -l {0}
     - name: Build Python-Blosc
       run: cd python-blosc && python setup.py build  # python-blosc must be build from its directory (otherwise can't find README.rst used in setup.py)
+      shell: bash -l {0}
+    - name: Install Python-Blosc
+      run: pip install -e $(pwd)/python-blosc/
       shell: bash -l {0}
     - name: Build Python-Blosc docs
       # TODO: Fix warnings in the build and restore `-W` parameter
@@ -59,7 +59,10 @@ jobs:
     - name: Check out Python-Blosc2
       run: git clone https://github.com/Blosc/python-blosc2.git
     - name: Build Python-Blosc2
-      run: cd python-blosc2 && python setup.py build
+      run: cd python-blosc2 && python setup.py build_ext --inplace
+      shell: bash -l {0}
+    - name: Install Python-Blosc2
+      run: pip install -e $(pwd)/python-blosc2/
       shell: bash -l {0}
     - name: Build Python-Blosc2 docs
       run: cd python-blosc2 && sphinx-build -W doc ../_site/python-blosc2
