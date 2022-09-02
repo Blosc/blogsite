@@ -59,7 +59,7 @@ jobs:
     - name: Check out Python-Blosc2
       run: git clone https://github.com/Blosc/python-blosc2.git
     - name: Build Python-Blosc2
-      run: python python-blosc2/setup.py build
+      run: cd python-blosc2 && python setup.py build
       shell: bash -l {0}
     - name: Build Python-Blosc2 docs
       run: cd python-blosc2 && sphinx-build -W doc ../_site/python-blosc2
