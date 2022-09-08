@@ -61,6 +61,9 @@ jobs:
     - name: Build Python-Blosc2
       run: cd python-blosc2 && python setup.py build_ext --inplace
       shell: bash -l {0}
+    - name: Install Python-Blosc2 doc dependencies
+      run: cd python-blosc2 && pip install -r requirements-doc.txt
+      shell: bash -l {0}
     - name: Install Python-Blosc2
       run: pip install -e $(pwd)/python-blosc2/
       shell: bash -l {0}
