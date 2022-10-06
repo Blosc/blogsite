@@ -1,7 +1,7 @@
 .. title: New features in Python-Blosc2
 .. author: Marta Iborra, Francesc Alted
 .. slug: python-blosc2-improvements
-.. date: 2022-10-05 10:32:20 UTC
+.. date: 2022-10-06 10:32:20 UTC
 .. tags: blosc2 features performance
 .. category:
 .. link:
@@ -43,13 +43,25 @@ In the code above, the data between `start` and the SChunk size will be updated 
 Serialize SChunk from/to a contiguous compressed buffer
 -------------------------------------------------------
 
-Furthermore, we added a method to convert from a SChunk to a contiguous, serialized buffer::
+Super-chunks can be serialized in two slightly different format frames: contiguous and sparse.  A contiguous frame (aka `cframe <https://github.com/Blosc/c-blosc2/blob/main/README_CFRAME_FORMAT.rst>`_) serializes the super-chunk into a sequential buffer, whereas the sparse frame (aka `sframe <https://github.com/Blosc/c-blosc2/blob/main/README_SFRAME_FORMAT.rst>`_) uses a contiguous frame for metadata (including indexes) and the data is stored in so-called `chunks <https://github.com/Blosc/c-blosc2/blob/main/README_CHUNK_FORMAT.rst>`_ which are stored separately. Here it is how the look like:
+
+.. image:: /images/python-blosc2-improvements/frame-blosc2.png
+  :width: 50%
+  :align: center
+  :alt: Compression ratio for different codecs
+
+The contiguous and sparse formats come with its own pros and cons.  A contiguous frame is ideal for transmitting / storing data as a whole buffer / file, while the sparse one is better to be used as a store while a super-chunk is being built.
+
+In this new version of Python-Blosc2, we have added a method to convert from a SChunk to a contiguous, serialized buffer::
 
     buf = schunk.to_cframe()
 
 as well as a function to convert from that buffer back to the SChunk::
 
     schunk = schunk_from_cframe(buf)
+
+This allows for a nice way to serialize / deserialize super-chunks for transmission / storage purposes.
+
 
 Serialize NumPy arrays
 ----------------------
