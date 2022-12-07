@@ -43,7 +43,7 @@ jobs:
 
     # blosc.org/python-blosc
     - name: Check out Python-Blosc
-      run: git clone https://github.com/Blosc/python-blosc.git
+      run: git clone --recurse-submodules https://github.com/Blosc/python-blosc.git
     - name: Build Python-Blosc
       run: cd python-blosc && python setup.py build
       shell: bash -l {0}
