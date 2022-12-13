@@ -126,7 +126,6 @@ Of course, there are situations where using big chunks would not be acceptable; 
 
 Please note that in the current implementation, we have just provided optimized Blosc2 paths for the `Table <http://www.pytables.org/usersguide/libref/structured_storage.html?highlight=table#tables.Table>`_ object in PyTables.  Starting with Table objects makes sense because it is the most important object in PyTables.  Other chunked objects in PyTables (like 'EArray' or 'CArray') could be optimized too to be used through Blosc2, but that would be for another go.
 
-For more details about the Blosc2 implementation, see `the original pull request <https://github.com/PyTables/PyTables/pull/969>`_; this includes a Blosc2 filter implementation too. Furthermore, we have added some more documentation about Blosc2 in the `Optimization tips <http://www.pytables.org/usersguide/optimization.html>`_ chapter of PyTables Users Guide.
+We have also added some documentation about Blosc2 in the 'Optimization tips' chapter of the `PyTables User's Guide <http://www.pytables.org/usersguide>`_ that you may want to check (although most of it can be found here).  For low-level details about the Blosc2 implementation, use the source: https://github.com/PyTables/PyTables/pull/969.
 
 Last but not least, we would like to thank NumFOCUS and other PyTables donors for providing the funds required to implement Blosc2 support in PyTables.  If you like what we are doing, you can support our work by donating to the `PyTables <https://numfocus.org/project/pytables>`_ or `Blosc <https://numfocus.org/project/blosc>`_ teams.
-
