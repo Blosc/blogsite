@@ -54,7 +54,7 @@ Now, we are going to analyze a plot comparing the memory and time use of perform
 - Using Blosc2 filter with Zstd codec + Bitshuffle; the table size is 341 MB.
 
 .. image:: /images/blosc2_pytables/inkernel-nocomp-zlib-blosc-zstd.png
-  :width: 100%
+  :width: 125%
   :align: center
 
 As we can see, the queries with no compression do not take much time or memory consumption, but it requires storing a 3.1 GB table. When using ZLIB, which is the HDF5 default, it does not require much memory either, but it takes a much more time (about 10x more), but the table is more than 6x smaller. When using Blosc, the resource consumption is much more contained, but it still takes more time (1.66x more) and uses a bit more memory than the no compression case; in addition, the compression ratio is close to the ZLIB case.
