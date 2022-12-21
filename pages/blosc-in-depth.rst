@@ -25,7 +25,8 @@ Watch this introductory video about the main features of Blosc:
 ..    </embed>
 
 .. .. youtube:: HdscCz97mNs
-.. youtube:: vIj-Z3sUKdo
+.. .. youtube:: vIj-Z3sUKdo
+.. youtube:: m7xrxFI4WSg
    :width: 75%
    :align: center
 
