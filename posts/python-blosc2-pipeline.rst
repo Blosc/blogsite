@@ -103,8 +103,8 @@ And to use it you just use its ID in the cparams::
 
     schunk.cparams = {"codec": id, "codec_meta": meta}
 
-Final thoughts
---------------
+Final words
+-----------
 
 We have seen how easily you can define your own filters and codecs for the Blosc2 compression pipeline.  They are very easy to use because they conveniently wrap input and output data as NumPy arrays.  Now, you can start experimenting with different filter/compression algorithms straight from Python.  You can even come with a library of such filters/codecs that can be used in all your data pipeline processing.  Welcome to compression made easy!
 
