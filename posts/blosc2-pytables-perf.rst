@@ -71,12 +71,18 @@ Now that we have seen how Blosc2 can help PyTables in getting great query perfor
 
 For this benchmark, we have been exploring the best configuration for speed, so we will be using 16 threads (for both Blosc2 and NumExpr) and the Shuffle filter instead of Bitshuffle; this leads to slightly less compression ratios (see below), but now the goal is speed, not storage (keep in mind that Pandas stores data in-memory without compression).
 
-Here it is how PyTables and pandas behave when doing the same 6 queries than in the previous section:
+Here it is how PyTables and pandas behave when doing the same 6 queries than in the previous section.
 
 .. image:: /images/blosc2_pytables/inkernel-pandas.png
   :width: 125%
   :align: center
 
+Note that both PyTables and pandas are using the numexpr engine behind the scenes.  Here it another plot comparing raw I/O performance for a variety of
+codecs and filters:
+
+.. image:: /images/blosc2_pytables/inkernel-vs-pandas.png
+  :width: 70%
+  :align: center
 
 As we can see, the queries using Blosc2 + LZ4 get nearly as good times as using Pandas, while the memory consumption is much smaller with Blosc2 (as much as 20x less in this case).  This is quite a feat actually, as this means that compression results in acceleration that almost compensates for all the additional layers in PyTables (the disk subsystem and the HDF5 library itself)
 
@@ -85,7 +91,6 @@ And in case you wonder how much compression ratio we have lost by switching from
 .. image:: /images/blosc2_pytables/shuffle-bitshuffle-ratios.png
   :width: 70%
   :align: center
-
 
 All in all, and when used correctly, compression can make out-of-core queries go as fast as pure in-memory ones (even when using a high performance tool-set like pandas + NumExpr).
 
