@@ -13,7 +13,7 @@
 
 By providing support for a second partition in HDF5, the chunks (aka the 'first partition') can be made larger, ideally fitting in cache level 3 in modern CPUs (see below for advantages of this).  Meanwhile, Blosc2 will use its internal blocks (aka the second partition) as the minimum amount of data that should be read and decompressed during data retrieval, no matter how small the hyperslice to be read is.
 
-When Blosc2 is used as an additional partition tool (referred ahead as 'optimized Blosc2' too), it can bypass the HDF5 pipeline for writing and for reading.  This brings another degree of freedom when choosing the different internal I/O buffers, which is of extraordinary importance in terms of performance and/or resource saving.
+When Blosc2 is used to implement a second partition for data (referred ahead as 'optimized Blosc2' too), it can bypass the HDF5 pipeline for writing and for reading.  This brings another degree of freedom when choosing the different internal I/O buffers, which can be of extraordinary importance in terms of performance and/or resource saving.
 
 How second partition allows for Big Chunking
 ============================================
@@ -24,9 +24,9 @@ Blosc2 in PyTables is meant for compressing data in big chunks (typically in the
 
 - It speeds-up compression and decompression because multithreading works better with more blocks. Remember that you can specify the number of threads to use by using the `MAX_BLOSC_THREADS <http://www.pytables.org/usersguide/parameter_files.html?highlight=max_blosc_threads#tables.parameters.MAX_BLOSC_THREADS>`_ parameter, or by using the `BLOSC_NTHREADS <https://www.blosc.org/c-blosc2/reference/blosc1.html?highlight=blosc_nthreads#blosc1-api>`_ environment variable.
 
-However, the traditional drawback of having large chunks is that getting small slices would take long time because the whole chunk has to be read completely and decompressed.  Blosc2 surmounts that difficulty like this: it asks HDF5 where chunks start on-disk (via `H5Dget_chunk_info() <https://docs.hdfgroup.org/hdf5/v1_12/group___h5_d.html#title12>`_), and then it access to the internal blocks independently instead of having to decompress the entire chunk.  This effectively avoids penalizing access to small data slices.
+However, the traditional drawback of having large chunks is that getting small slices would take long time because the whole chunk has to be read completely and decompressed.  Blosc2 surmounts that difficulty like this: it asks HDF5 where chunks start on-disk (via `H5Dget_chunk_info() <https://docs.hdfgroup.org/hdf5/v1_12/group___h5_d.html#title12>`_), and then it access to the internal blocks (aka the *second partition*) independently instead of having to decompress the entire chunk.  This effectively avoids penalizing access to small data slices.
 
-In the graphic below you can see that, in order to retrieve the green slice, only blocks 2 and 3 needs to be addressed and decompressed, instead of the (potentially much) larger chunk 0 and 1, which would be the case for the traditional 1 single partition in HDF5:
+In the graphic below you can see the second partition in action where, in order to retrieve the green slice, only blocks 2 and 3 needs to be addressed and decompressed, instead of the (potentially much) larger chunk 0 and 1, which would be the case for the traditional 1 single partition in HDF5:
 
 .. image:: /images/blosc2_pytables/block-slice.png
   :width: 70%
