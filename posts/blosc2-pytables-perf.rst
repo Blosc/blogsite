@@ -15,8 +15,8 @@ By providing support for a second partition in HDF5, the chunks (aka the 'first 
 
 When Blosc2 is used as an additional partition tool (referred ahead as 'optimized Blosc2' too), it can bypass the HDF5 pipeline for writing and for reading.  This brings another degree of freedom when choosing the different internal I/O buffers, which is of extraordinary importance in terms of performance and/or resource saving.
 
-Meant for Big Chunking
-======================
+How second partition allows for Big Chunking
+============================================
 
 Blosc2 in PyTables is meant for compressing data in big chunks (typically in the range of level 3 caches in modern CPUs, that is, 10 ~ 1000 MB).  This has some interesting advantages:
 
@@ -24,23 +24,29 @@ Blosc2 in PyTables is meant for compressing data in big chunks (typically in the
 
 - It speeds-up compression and decompression because multithreading works better with more blocks. Remember that you can specify the number of threads to use by using the `MAX_BLOSC_THREADS <http://www.pytables.org/usersguide/parameter_files.html?highlight=max_blosc_threads#tables.parameters.MAX_BLOSC_THREADS>`_ parameter, or by using the `BLOSC_NTHREADS <https://www.blosc.org/c-blosc2/reference/blosc1.html?highlight=blosc_nthreads#blosc1-api>`_ environment variable.
 
+However, the traditional drawback of having large chunks is that getting small slices would take long time because the whole chunk has to be read completely and decompressed.  Blosc2 surmounts that difficulty like this: it asks HDF5 where chunks start on-disk (via `H5Dget_chunk_info() <https://docs.hdfgroup.org/hdf5/v1_12/group___h5_d.html#title12>`_), and then it access to the internal blocks independently instead of having to decompress the entire chunk.  This effectively avoids penalizing access to small data slices.
+
+In the graphic below you can see that, in order to retrieve the green slice, only blocks 2 and 3 needs to be addressed and decompressed, instead of the (potentially much) larger chunk 0 and 1, which would be the case for the traditional 1 single partition in HDF5:
+
 .. image:: /images/blosc2_pytables/block-slice.png
   :width: 70%
   :align: center
 
-The traditional drawback of having large chunks is that getting small slices would take long time because the whole chunk has to be read completely and decompressed.  Blosc2 surmounts that difficulty like this: it asks HDF5 where chunks start on-disk (via `H5Dget_chunk_info() <https://docs.hdfgroup.org/hdf5/v1_12/group___h5_d.html#title12>`_), and then it access to the internal blocks independently instead of having to decompress the entire chunk.  This effectively avoids penalizing access to small data slices.
 
-Below we are comparing the performance of existing filters inside PyTables (like Zlib or Blosc(1)) against Blosc2, both working as a filter or in optimized mode, that is, bypassing the HDF5 filter pipeline completely.
+In the benchmarks below we are comparing the performance of existing filters inside PyTables (like Zlib or Blosc(1)) against Blosc2, both working as a filter or in optimized mode, that is, bypassing the HDF5 filter pipeline completely.
 
 Benchmarks
 ==========
 
-The data used in the benchmarks below have been fetched from `ERA5 database <https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5>`_, which provides hourly estimates of a large number of atmospheric, land and oceanic climate variables.  To build the tables used for reading and writing operations, there have been fetched five different ERA5 datasets with the same shape (100 x 720 x 1440) and the same variables (latitude, longitude and time).  Then, we have built a table with a column for each variable and each dataset (for a total of 8 columns). Finally, there have been written 100 x 720 x 1440 rows to this table (more than 100 million rows), which makes for a total size of 3.1 GB.
+The data used in this section have been fetched from `ERA5 database <https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5>`_, which provides hourly estimates of a large number of atmospheric, land and oceanic climate variables.  To build the tables used for reading and writing operations, we have used five different ERA5 datasets with the same shape (100 x 720 x 1440) and the same variables (latitude, longitude and time).  Then, we have built a table with a column for each variable and each dataset and added the latitude, longitude and time as columns (for a total of 8 cols). Finally, there have been written 100 x 720 x 1440 rows (more than 100 million) to this table, which makes for a total data size of 3.1 GB.
 
-Next, we present different scenarios when comparing resource usage for writing and reading between the Blosc and Blosc2 filters, including the Blosc2 optimized versions.  First scenario is when PyTables is choosing the chunkshape automatically (the default); as Blosc2 is meant towards large chunks, PyTables has been tuned to produce far larger chunks for Blosc2 in this case (Blosc and other filters will remain using the same chunk sizes as usual). Second, we will visit the case where the chunkshape is equal for both Blosc and Blosc2.  Spoiler alert: we will see how Blosc2 behaves well (and sometimes *much beter*) in both scenarios.
+We present different scenarios when comparing resource usage for writing and reading between the Blosc and Blosc2 filters, including the Blosc2 optimized versions.  First one is when PyTables is choosing the chunkshape automatically (the default); as Blosc2 is meant towards large chunks, PyTables has been tuned to produce far larger chunks for Blosc2 in this case (Blosc and other filters will remain using the same chunk sizes as usual). Second, we will visit the case where the chunkshape is equal for both Blosc and Blosc2.  Spoiler alert: we will see how Blosc2 behaves well (and sometimes *much beter*) in both scenarios.
 
-Inkernel searches with automatic chunkshape
---------------------------------------------
+Automatic chunkshape
+--------------------
+
+Inkernel searches
+~~~~~~~~~~~~~~~~~
 
 We start by performing `inkernel queries <https://www.pytables.org/usersguide/optimization.html#in-kernel-searches>`_ where the chunkshape for the table is chosen automatically by the PyTables machinery.  This size is the same for Blosc, Zlib and uncompressed cases which are all using 16384 rows (about 512 KB), whereas for Blosc2 the computed chunkshape is quite larger: 1179648 rows (about 36 MB; this actually depends on the size of the L3 cache, which is automatically queried in real-time by PyTables and it turns out to be exactly 36 MB for our CPU, an Intel i9-13900K).
 
@@ -62,8 +68,8 @@ However, the big jump comes when using Blosc2 with BloscLZ and BitShuffle, since
 
 Finally, in case we want to improve compression further, Blosc2 can be used with the ZSTD codec, which achieves the best compression ratio here, in exchange for a slightly slower time (but still 1.15x faster than not using compression).
 
-Inkernel vs pandas queries
---------------------------
+PyTables inkernel vs pandas queries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now that we have seen how Blosc2 can help PyTables in getting great query performance, we are going to compare it against pandas queries; to make things more interesting, we will be using the same NumExpr engine in both PyTables (where it is used in inkernel queries) and pandas.
 
@@ -91,61 +97,63 @@ And in case you wonder how much compression ratio we have lost by switching from
 
 All in all, and when used correctly, compression can make out-of-core queries go as fast as pure in-memory ones (even when using a high performance tool-set like pandas + NumExpr).
 
-Writing and reading speed: automatic chunkshape
------------------------------------------------
+Writing and reading speed with automatic chunkshape
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Now, the chunkshape continues to be chosen automatically by the PyTables machinery.  Remember that this is different for Blosc (16384 rows, about 512 KB) and Blosc2 (1179648 rows, about 36 MB).
+Now, let's have a look at the raw write and read performance. In this case we are going to compare Blosc, Blosc2 as an HDF5 filter, and the optimized Blosc2 (acting as a de facto second partition). Remember that in this section the chunkshape determination is still automatic and different for Blosc (16384 rows, about 512 KB) and Blosc2 (1179648 rows, about 36 MB).
 
 .. image:: /images/blosc2_pytables/append-expectedrows.png
   :width: 70%
   :align: center
 
-For writing, optimized Blosc2 is able to do the job faster and get better compression ratios than others, mainly because it uses the HDF5 direct chunking mechanism, so bypassing the overhead of the HDF5 pipeline.
+For writing, optimized Blosc2 is able to do the job faster and get better compression ratios than others, mainly because it uses the HDF5 direct chunking mechanism, bypassing the overhead of the HDF5 pipeline.
 
-**Note**: the standard Blosc2 filter cannot make of use HDF5 direct chunking, but it still has an advantage when using bigger chunks because it can allow for more threads working in parallel and hence, allowing improved parallel (de-)compression.
+**Note**: the standard Blosc2 filter cannot make of use HDF5 direct chunking, but it still has an advantage when using bigger chunks because it allows for more threads working in parallel and hence, allowing improved parallel (de-)compression.
 
-.. image:: /images/blosc2_pytables/inkernel-queries-expectedrows.png
+The plot below shows how optimized Blosc2 is able to read the table faster and how the performance advantage grows as we use more threads.
+
+.. image:: /images/blosc2_pytables/read-expectedrows.png
   :width: 70%
   :align: center
 
-The plot above shows how optimized Blosc2 is able to read the table faster and how the advantage grows as we use more threads.
+And now, let's compare the mean times of Blosc and Blosc2 optimized to read a small slice. In this case, Blosc chunkshape is much smaller, but optimized Blosc2 still can reach similar speed since it uses blocks that are similar in size to Blosc chunks.
 
 .. image:: /images/blosc2_pytables/slice-read-expectedrows.png
   :width: 70%
   :align: center
 
-Above we can see a plot comparing the mean times of Blosc and Blosc2 optimized to read a small slice. In this case, Blosc chunkshape is small, so optimized Blosc2 is similar in speed since the later uses blocks that are similar in size to Blosc chunks.
 
-Writing and reading speed: same chunkshape
-------------------------------------------
+Writing and reading speed when using the same chunkshape
+--------------------------------------------------------
 
-In this case, we have chosen the chunkshape to be 720 x 1440 rows (about 32 MB) for both Blosc and Blosc2.
+In this scenario, we are choosing the same chunkshape (720 x 1440 rows, about 32 MB) for both Blosc and Blosc2.  Let's see how this affects performance:
 
 .. image:: /images/blosc2_pytables/append-chunklen.png
   :width: 70%
   :align: center
 
-The plot above shows how optimized Blosc2 manages to write the table faster mainly because it bypasses the HDF5 pipeline.  The advantage is larger when more threads are used.
+The plot above shows how optimized Blosc2 manages to write the table faster (mainly because it can bypass the HDF5 pipeline); with the advantage being larger as more threads are used.
 
-.. image:: /images/blosc2_pytables/inkernel-queries-chunklen.png
+.. image:: /images/blosc2_pytables/read-chunklen.png
   :width: 70%
   :align: center
 
-Regarding inkernel searches, the optimized Blosc2 is able to read the table faster to, and we continue to see the same trend of getting more advantage when more threads are thrown at the task.
+Regarding reading, the optimized Blosc2 is able to perform faster too, and we continue to see the same trend of getting more speed when more threads are thrown at the task, with optimized Blosc2 scaling better.
+
+Finally, let's compare the mean times of Blosc and Blosc2 when reading a small slice in this same chunkshape scenario. In this case, since chunkshapes are equal and large, optimized Blosc2 is much faster than the others because it has the ability to decompresses just the necessary internal blocks, instead of the whole chunks.  However, the Blosc and the Blosc2 filter still need to decompress the whole chunk, so getting much worse times.  See this effect below:
 
 .. image:: /images/blosc2_pytables/slice-read-chunklen.png
   :width: 70%
   :align: center
 
-Finally, let's compare the mean times of Blosc and Blosc2 when reading a small slice in this same chunkshape scenario. In this case, since chunkshapes are equal and large, optimized Blosc2 is much faster than the others because it has the ability to decompresses the internal blocks instead of the whole chunks.  However, the Blosc and the Blosc2 filter still need to decompress the whole chunk, so getting much worse times.
 
 Final words
 ===========
 
-By offering a second partition on top of the HDF5 layer, Blosc2 provides a great boost in PyTables I/O speed, specially when using big chunks.  That means that you can query large compressed datasets in less time, and more importantly, typically faster than when using no compression (and even compiting with a pure in-memory solution like pandas).
+By allowing a second partition on top of the HDF5 layer, Blosc2 provides a great boost in PyTables I/O speed, specially when using big chunks (mainly when they fit in L3 CPU cache).  That means that you can read, write and query large compressed datasets in less time. Interestingly, Blosc2 compression can make these operations faster than when using no compression at all, and even being competitive against a pure in-memory solution like pandas (but consuming vastly less memory).
 
-On the other hand, there are situations where using big chunks would not be acceptable; for example, when using other HDF5 apps that do not support the optimized Blosc2 partition, and using the plain Blosc2 filter would be mandatory; in this case having large chunks would penalize the retrieval of small data slices too much. As with other HDF5 filters, always try to find the best one for your needs. By the way, you can find a nice assortment of generic filters (including Blosc2) for HDF5 in: https://github.com/silx-kit/hdf5plugin .
+On the other hand, there are situations where using big chunks would not be acceptable. For example, when using other HDF5 apps that do not support the optimized paths for Blosc2 second partition, and one is forced to use the plain Blosc2 filter. In this case having large chunks would penalize the retrieval of small data slices too much. By the way, you can find a nice assortment of generic filters (including Blosc2) for HDF5 in the `hdf5plugin library <https://github.com/silx-kit/hdf5plugin>`_.
 
-Please note that in the current implementation, we have just provided optimized Blosc2 paths for the `Table <http://www.pytables.org/usersguide/libref/structured_storage.html?highlight=table#tables.Table>`_ object in PyTables.  That makes sense because `Table` objects are the most important ones in PyTables.  Other chunked objects in PyTables (like `EArray` or `CArray`) could be optimized with Blosc2 in the future too.
+Also note that, in the current implementation we have just provided optimized Blosc2 paths for the `Table <http://www.pytables.org/usersguide/libref/structured_storage.html?highlight=table#tables.Table>`_ object in PyTables.  That makes sense because `Table` is probably the most used entity in PyTables.  Other chunked objects in PyTables (like `EArray` or `CArray`) could be optimized with Blosc2 in the future too (although that would require providing a `*multidimensional* second partition for Blosc2 <https://github.com/Blosc/caterva>`_).
 
 Last but not least, we would like to thank NumFOCUS and other PyTables donors for providing the funds required to implement Blosc2 support in PyTables.  If you like what we are doing, and would like our effort to continue developing well, you can support our work by donating to `PyTables project <https://numfocus.org/project/pytables>`_ or `Blosc project <https://numfocus.org/project/blosc>`_ teams. Thank you!
