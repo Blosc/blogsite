@@ -1,4 +1,4 @@
-.. title: Blosc2 Meets PyTables: Helping HDF5 Achieving Extremely High I/O Performance
+.. title: Blosc2 Meets PyTables: Making HDF5 I/O Performance Awesome
 .. author: Oscar Guiñon, Francesc Alted
 .. slug: blosc2-pytables-perf
 .. date: 2022-12-23 12:32:20 UTC
