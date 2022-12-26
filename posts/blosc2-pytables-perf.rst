@@ -83,11 +83,11 @@ Here it is how PyTables and pandas behave when doing the same 6 queries than in 
 
 And here it is another plot for the same queries, but comparing raw I/O performance for a variety of codecs and filters:
 
-.. image:: /images/blosc2_pytables/inkernel-vs-pandas.png
-  :width: 70%
+.. image:: /images/blosc2_pytables/inkernel-vs-pandas2.png
+  :width: 80%
   :align: center
 
-As we can see, the queries using Blosc2 + LZ4 get nearly as good times as with pandas, while the memory consumption is much smaller with Blosc2 (as much as 20x less in this case, but for larger tables it will be larger too).  This is quite a feat actually, as this means that Blosc2 compression results in acceleration that almost compensates for all the additional layers in PyTables (the disk subsystem and the HDF5 library itself).
+As we can see, the queries using Blosc2 are generally faster (up to 2x faster) than not using compression.  Furthermore, Blosc2 + LZ4 get nearly as good times as pandas, while the memory consumption is much smaller with Blosc2 (as much as 20x less in this case; more for larger tables indeed). This is remarkable, as this means that Blosc2 compression results in acceleration that almost compensates for all the additional layers in PyTables (the disk subsystem and the HDF5 library itself).
 
 And in case you wonder how much compression ratio we have lost by switching from Bitshuffle to Shuffle, not much actually:
 
@@ -95,7 +95,7 @@ And in case you wonder how much compression ratio we have lost by switching from
   :width: 70%
   :align: center
 
-All in all, and when used correctly, compression can make out-of-core queries go as fast as pure in-memory ones (even when using a high performance tool-set like pandas + NumExpr).
+The take away message here is that, when used correctly, compression can make out-of-core queries go as fast as pure in-memory ones (even when using a high performance tool-set like pandas + NumExpr).
 
 Writing and reading speed with automatic chunkshape
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
