@@ -14,7 +14,8 @@ Since then, we have been aware (thanks to `Mark Kittisopikul <https://github.com
 
 As we decided to implement support for `H5Dchunk_iter` in PyTables, we were curious on the sort of boost this could provide reading tables created from real data.  Keep reading for the experiments we've conducted about this.
 
-## Effect on (relatively small) datasets
+Effect on (relatively small) datasets
+-------------------------------------
 
 We start by reading a table with real data coming from our usual `ERA5 database <https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5>`_.  We fetched one year (2000 to be specific) of data with five different ERA5 datasets with the same shape and the same coordinates (latitude, longitude and time). This data has been stored on a table with 8 columns with 32 bytes per row and with 9 millions rows (for a grand total of 270 GB); the number of chunks is about 8K in this case.
 
@@ -27,7 +28,8 @@ When using compression, the size is typically reduced between a factor of 6x (LZ
 
 We see how the improvement when using HDF5 1.14 (and hence H5Dchunk_iter) for reading data sequentially (via a PyTables query) is not that noticeable, but for random queries, the speedup is way more apparent. For comparison purposes, we added the figures for Blosc1+LZ4; one can notice the great job of Blosc2, specially in terms of random reads due to the double partitioning and HDF5 pipeline replacement.
 
-## A trillion rows table
+A trillion rows table
+---------------------
 
 But 8K chunks is not such a large figure, and we are interested in using datasets with a larger amount. As it is very time consuming to download large amounts of real data for our benchmarks purposes, we have decided to use synthetic data (basically, a bunch of zeros) just to explore how the new H5Dchunk_iter function scales when handling extremely large datasets in HDF5.
 
@@ -44,7 +46,8 @@ As expected, we are getting significantly better results when using HDF5 1.14 (w
 
 It is worth noting that even though the data in this case are made of zeros, Blosc2 still needs to compress/decompress the full 32 TB of data.  And the same goes for numexpr, which is used internally to perform the computations for the query in the sequential read case.  This is testimonial of the optimization efforts in the data flow (i.e. avoiding as much memory copies as possible) inside PyTables.
 
-## 100 trillion rows baby
+100 trillion rows baby
+----------------------
 
 As a final exercise, we took the previous experiment to the limit, and made a table with 100 trillion (that’s a 1 followed with 14 zeros!) rows and measured different interesting aspects.  It is worth noting that the total size for this case is 2.8 PB (**PetaBytes**), and the number of chunks in this case is around 85 millions (finally, large enough to fully demonstrate the scalability of the new H5Dchunk_iter).
 
