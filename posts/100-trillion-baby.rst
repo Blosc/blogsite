@@ -62,7 +62,8 @@ As we can see, despite the large amount of chunks, the sequential read speed act
 
 The script that creates the table and reads it can be found at `bench/100-trillion-rows-baby.py <https://github.com/PyTables/PyTables/blob/master/bench/100-trillion-baby.py>`_.  For the curious, it took about 24 hours to run on a Linux box wearing an Intel 13900K CPU with 32 GB of RAM. The memory consumption during writing was about 110 MB, whereas for reading was 1.7 GB steadily.  The final size for the file has been 17 GB, for a compression ratio of more than 175000x.
 
-## Final words
+Conclusion
+----------
 
 As we have seen, the H5Dchunk_iter function recently introduced in HDF5 1.14 is confirmed to be of a big help in performing reads more efficiently.  We have also demonstrated that scalability is excellent, reaching phenomenal sequential speeds (exceeding 75 GB/s with synthetic data) that cannot be easily achieved by the most modern I/O subsystems, so avoiding software slowdowns (other than compression).
 
