@@ -1,7 +1,7 @@
 .. title: 100 Trillion Rows Baby
 .. author: Francesc Alted
 .. slug: 100-trillion-baby
-.. date: 2023-02-09 12:32:20 UTC
+.. date: 2023-02-10 10:32:20 UTC
 .. tags: pytables blosc2 hdf5
 .. category:
 .. link:
@@ -21,10 +21,10 @@ We start by reading a table with real data coming from our usual `ERA5 database 
 
 When using compression, the size is typically reduced between a factor of 6x (LZ4 + shuffle) and  9x (Zstd + bitshuffle); in any case, the resulting file size is larger than the RAM available in our box (32 GB), so we can safely exclude OS filesystem caching effects here. Let's have a look at the results on reading this dataset inside PyTables (using shuffle only; for bitshuffle results are just a bit slower):
 
-.. image:: /images/100-trillion-baby/real-data-9Grow.png
-  :width: 100%
-  :alt: real-data-9Grow
-  :align: center
+.. image:: /images/100-trillion-baby/real-data-9Grow-seq.png
+  :width: 33%
+.. image:: /images/100-trillion-baby/real-data-9Grow-rand.png
+  :width: 33%
 
 We see how the improvement when using HDF5 1.14 (and hence H5Dchunk_iter) for reading data sequentially (via a PyTables query) is not that noticeable, but for random queries, the speedup is way more apparent. For comparison purposes, we added the figures for Blosc1+LZ4; one can notice the great job of Blosc2, specially in terms of random reads due to the double partitioning and HDF5 pipeline replacement.
 
@@ -37,10 +37,10 @@ Now we will be creating a large table with 1 trillion rows, with the same 8 fiel
 
 With this, lets' have a look at the plots for the read speed:
 
-.. image:: /images/100-trillion-baby/synth-data-9Grow.png
-  :width: 100%
-  :alt: synth-data-9Grow
-  :align: center
+.. image:: /images/100-trillion-baby/synth-data-9Grow-seq.png
+  :width: 33%
+.. image:: /images/100-trillion-baby/synth-data-9Grow-rand.png
+  :width: 33%
 
 As expected, we are getting significantly better results when using HDF5 1.14 (with H5Dchunk_iter) in both sequential and random cases.  For comparison purposes, we have added Blosc1-Zstd which does not make use of the new functionality. In particular, note how Blosc1 gets better results for random reads than Blosc2 with HDF5 1.12; as this is somehow unexpected, if you have an explanation, please chime in.
 
@@ -49,14 +49,14 @@ It is worth noting that even though the data in this case are made of zeros, Blo
 100 trillion rows baby
 ----------------------
 
-As a final exercise, we took the previous experiment to the limit, and made a table with 100 trillion (that’s a 1 followed with 14 zeros!) rows and measured different interesting aspects.  It is worth noting that the total size for this case is 2.8 PB (**PetaBytes**), and the number of chunks in this case is around 85 millions (finally, large enough to fully demonstrate the scalability of the new H5Dchunk_iter).
+As a final exercise, we took the previous experiment to the limit, and made a table with 100 trillion (that’s a 1 followed with 14 zeros!) rows and measured different interesting aspects.  It is worth noting that the total size for this case is 2.8 PB (**Petabyte**), and the number of chunks in this case is around 85 millions (finally, large enough to fully demonstrate the scalability of the new H5Dchunk_iter).
 
 Here it is the speed of random and sequential reads:
 
-.. image:: /images/100-trillion-baby/100-trillion-table.png
-  :width: 100%
-  :alt: 100-trillion-table
-  :align: center
+.. image:: /images/100-trillion-baby/synth-data-100Trow-seq.png
+  :width: 33%
+.. image:: /images/100-trillion-baby/synth-data-100Trow-rand.png
+  :width: 33%
 
 As we can see, despite the large amount of chunks, the sequential read speed actually improved up to more than 75 GB/s.  Regarding the random read latency, it increased to 60 µs; this is not too bad actually, as in real life the latencies during random reads in such a large files are determined by the storage media, which is no less than 100 µs for the fastest SSDs nowadays.
 
@@ -65,8 +65,8 @@ The script that creates the table and reads it can be found at `bench/100-trilli
 Conclusion
 ----------
 
-As we have seen, the H5Dchunk_iter function recently introduced in HDF5 1.14 is confirmed to be of a big help in performing reads more efficiently.  We have also demonstrated that scalability is excellent, reaching phenomenal sequential speeds (exceeding 75 GB/s with synthetic data) that cannot be easily achieved by the most modern I/O subsystems, so avoiding software slowdowns (other than compression).
+As we have seen, the H5Dchunk_iter function recently introduced in HDF5 1.14 is confirmed to be of a big help in performing reads more efficiently.  We have also demonstrated that scalability is excellent, reaching phenomenal sequential speeds (exceeding 75 GB/s with synthetic data) that cannot be easily achieved by the most modern I/O subsystems, and hence avoiding unnecessary bottlenecks.
 
 Indeed, the combo HDF5 / Blosc2 is able to handle monster sized tables (on the petabyte ballpark) without becoming a significant bottlenecks in performance.  Not that you need to handle such a sheer amount of data anytime soon, but it is always reassuring to use a tool that is not going to take a step back in daunting scenarios like this.
 
-If you regularly store and process large datasets and need advice to partition your data, or choosing the best combination of codec, filters, chunk and block sizes, or many other aspects of compression, do not hesitate to contact the Blosc team at contact@blosc.org.  We have more than 30 years of cummulated experience in storage systems like HDF5, meta-compressors like Blosc and efficient I/O in general.
+If you regularly store and process large datasets and need advice to partition your data, or choosing the best combination of codec, filters, chunk and block sizes, or many other aspects of compression, do not hesitate to contact the Blosc team at `contact (at) blosc.org`.  We have more than 30 years of cumulated experience in storage systems like HDF5, Blosc and efficient I/O in general; but most importantly, we have the ability to integrate these innovative technologies quickly into your products, enabling a faster access to these innovations.
