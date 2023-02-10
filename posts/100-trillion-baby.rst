@@ -22,9 +22,9 @@ We start by reading a table with real data coming from our usual `ERA5 database 
 When using compression, the size is typically reduced between a factor of 6x (LZ4 + shuffle) and  9x (Zstd + bitshuffle); in any case, the resulting file size is larger than the RAM available in our box (32 GB), so we can safely exclude OS filesystem caching effects here. Let's have a look at the results on reading this dataset inside PyTables (using shuffle only; for bitshuffle results are just a bit slower):
 
 .. image:: /images/100-trillion-baby/real-data-9Grow-seq.png
-  :width: 33%
+  :width: 50%
 .. image:: /images/100-trillion-baby/real-data-9Grow-rand.png
-  :width: 33%
+  :width: 50%
 
 We see how the improvement when using HDF5 1.14 (and hence H5Dchunk_iter) for reading data sequentially (via a PyTables query) is not that noticeable, but for random queries, the speedup is way more apparent. For comparison purposes, we added the figures for Blosc1+LZ4; one can notice the great job of Blosc2, specially in terms of random reads due to the double partitioning and HDF5 pipeline replacement.
 
@@ -38,9 +38,9 @@ Now we will be creating a large table with 1 trillion rows, with the same 8 fiel
 With this, lets' have a look at the plots for the read speed:
 
 .. image:: /images/100-trillion-baby/synth-data-9Grow-seq.png
-  :width: 33%
+  :width: 50%
 .. image:: /images/100-trillion-baby/synth-data-9Grow-rand.png
-  :width: 33%
+  :width: 50%
 
 As expected, we are getting significantly better results when using HDF5 1.14 (with H5Dchunk_iter) in both sequential and random cases.  For comparison purposes, we have added Blosc1-Zstd which does not make use of the new functionality. In particular, note how Blosc1 gets better results for random reads than Blosc2 with HDF5 1.12; as this is somehow unexpected, if you have an explanation, please chime in.
 
@@ -54,9 +54,9 @@ As a final exercise, we took the previous experiment to the limit, and made a ta
 Here it is the speed of random and sequential reads:
 
 .. image:: /images/100-trillion-baby/synth-data-100Trow-seq.png
-  :width: 33%
+  :width: 50%
 .. image:: /images/100-trillion-baby/synth-data-100Trow-rand.png
-  :width: 33%
+  :width: 50%
 
 As we can see, despite the large amount of chunks, the sequential read speed actually improved up to more than 75 GB/s.  Regarding the random read latency, it increased to 60 µs; this is not too bad actually, as in real life the latencies during random reads in such a large files are determined by the storage media, which is no less than 100 µs for the fastest SSDs nowadays.
 
