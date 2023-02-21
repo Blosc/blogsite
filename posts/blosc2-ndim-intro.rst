@@ -17,7 +17,7 @@ Going multidimensional in the first *and* the second partition
 
 Blosc (both Blosc1 and Blosc2) has always had a two-level partition schema to leverage the different cache levels in modern CPUs and make compression happen as quickly as possible.  With Blosc2 NDim we are taking a step further and both partitions, known as chunks and blocks, are gaining multidimensional capabilities meaning that one can split some dataset (`super-chunk` in Blosc2 parlance) in such a n-dim pieces:
 
-.. image:: ./images/b2nd-2level-parts.png
+.. image:: /images/blosc2-ndim-intro/b2nd-2level-parts.png
   :width: 75%
 
 With these more fine-grained partitions, it is possible to retrieve arbitrary n-dim slices more rapidly because you don't have to decompress data that would be necessary for the coarse-grained partitions typical in other libraries.
@@ -26,14 +26,14 @@ Remember that having a second partition means that we have better flexibility to
 
 For example, for a 4-d array with a shape of (50, 100, 300, 250) with `float64` items, we can choose a chunk with shape (10, 25, 50, 50) and a block with shape (3, 5, 10, 20) which makes for about 5 MB and 23 KB respectively.  This way, a chunk fits comfortably on a L3 cache in most of modern CPUs, and a block in a L1 cache (we are tuning for speed here).  With that configuration, the NDArray object in the Python-Blosc2 package can slice the array as shown below:
 
-.. image:: ./images/Read-Partial-Slices-B2ND.png
+.. image:: /images/blosc2-ndim-intro/Read-Partial-Slices-B2ND.png
   :width: 75%
 
 The advantage of the second partition is very apparent here.  Above we have been using the Zstd codec with compression level 1 (the fastest inside Blosc2) + the Shuffle filter for all the libraries.  The box used was an Intel 13900K CPU with 32 GB of RAM and using an up-to-date `Clear Linux <https://clearlinux.org>`_ distro.
 
 Of course, the double partitioning comes with some overhead during the creation of the partitions: more data moves and computations need to be done in order to place the data in the correct positions.  However, the Blosc2 team has done its best in order to do do as little data movement as possible and keep it under a minimum.  Below we can see how the creation (write) of an array from anew is still quite competitive:
 
-.. image:: ./images/Complete-Write-Read-B2ND.png
+.. image:: /images/blosc2-ndim-intro/Complete-Write-Read-B2ND.png
   :width: 75%
 
 On the other hand, one can see that when reading the complete array, the double partitioning overhead is not really noticeable, and actually, it benefits Blosc2 NDArray somewhat (but very little, and probably due to the decompression happening at L1 level).
