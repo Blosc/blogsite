@@ -49,7 +49,7 @@ It is worth noting that even though the data in this case are made of zeros, Blo
 100 trillion rows baby
 ----------------------
 
-As a final exercise, we took the previous experiment to the limit, and made a table with 100 trillion (that’s a 1 followed with 14 zeros!) rows and measured different interesting aspects.  It is worth noting that the total size for this case is 2.8 PB (**Petabyte**), and the number of chunks in this case is around 85 millions (finally, large enough to fully demonstrate the scalability of the new H5Dchunk_iter).
+As a final exercise, we took the previous experiment to the limit, and made a table with 100 trillion (that’s a 1 followed with 14 zeros!) rows and measured different interesting aspects.  It is worth noting that the total size for this case is 2.8 PB (**PetaByte**), and the number of chunks in this case is around 85 millions (finally, large enough to fully demonstrate the scalability of the new H5Dchunk_iter functionality).
 
 Here it is the speed of random and sequential reads:
 
@@ -60,13 +60,13 @@ Here it is the speed of random and sequential reads:
 
 As we can see, despite the large amount of chunks, the sequential read speed actually improved up to more than 75 GB/s.  Regarding the random read latency, it increased to 60 µs; this is not too bad actually, as in real life the latencies during random reads in such a large files are determined by the storage media, which is no less than 100 µs for the fastest SSDs nowadays.
 
-The script that creates the table and reads it can be found at `bench/100-trillion-rows-baby.py <https://github.com/PyTables/PyTables/blob/master/bench/100-trillion-baby.py>`_.  For the curious, it took about 24 hours to run on a Linux box wearing an Intel 13900K CPU with 32 GB of RAM. The memory consumption during writing was about 110 MB, whereas for reading was 1.7 GB steadily.  The final size for the file has been 17 GB, for a compression ratio of more than 175000x.
+The script that creates the table and reads it can be found at `bench/100-trillion-rows-baby.py <https://github.com/PyTables/PyTables/blob/master/bench/100-trillion-baby.py>`_.  For the curious, it took about 24 hours to run on a Linux box wearing an Intel 13900K CPU with 32 GB of RAM. The memory consumption during writing was about 110 MB, whereas for reading was 1.7 GB steadily (pretty good for a multi-petabyte table).  The final size for the file has been 17 GB, for a compression ratio of more than 175000x.
 
 Conclusion
 ----------
 
 As we have seen, the H5Dchunk_iter function recently introduced in HDF5 1.14 is confirmed to be of a big help in performing reads more efficiently.  We have also demonstrated that scalability is excellent, reaching phenomenal sequential speeds (exceeding 75 GB/s with synthetic data) that cannot be easily achieved by the most modern I/O subsystems, and hence avoiding unnecessary bottlenecks.
 
-Indeed, the combo HDF5 / Blosc2 is able to handle monster sized tables (on the petabyte ballpark) without becoming a significant bottlenecks in performance.  Not that you need to handle such a sheer amount of data anytime soon, but it is always reassuring to use a tool that is not going to take a step back in daunting scenarios like this.
+Indeed, the combo HDF5 / Blosc2 is able to handle monster sized tables (on the petabyte ballpark) without becoming a significant bottleneck in performance.  Not that you need to handle such a sheer amount of data anytime soon, but it is always reassuring to use a tool that is not going to take a step back in daunting scenarios like this.
 
 If you regularly store and process large datasets and need advice to partition your data, or choosing the best combination of codec, filters, chunk and block sizes, or many other aspects of compression, do not hesitate to contact the Blosc team at `contact (at) blosc.org`.  We have more than 30 years of cumulated experience in storage systems like HDF5, Blosc and efficient I/O in general; but most importantly, we have the ability to integrate these innovative technologies quickly into your products, enabling a faster access to these innovations.
