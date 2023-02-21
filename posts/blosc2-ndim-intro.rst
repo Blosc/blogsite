@@ -10,7 +10,7 @@
 
 One of the latest and more exciting additions in recently released C-Blosc2 2.7.0 is the `Blosc2 NDim layer <https://www.blosc.org/c-blosc2/reference/b2nd.html>`_ (or `b2nd` for short).  It allows to create *and* read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way.
 
-This capability was formerly part of `Caterva <https://github.com/Blosc/caterva>`_, and now we are including it in C-Blosc2 for convenience.  As a consequence, the Caterva and `Python-Caterva <https://github.com/Blosc/python-caterva>`_ projects are now officially deprecated and all the action will happen in the `C-Blosc2 <https://github.com/Blosc/c-blosc2>`_ / `Python-Blosc2 <https://github.com/Blosc/python-blosc2>` side of the things.
+This capability was formerly part of `Caterva <https://github.com/Blosc/caterva>`_, and now we are including it in C-Blosc2 for convenience.  As a consequence, the Caterva and `Python-Caterva <https://github.com/Blosc/python-caterva>`_ projects are now officially deprecated and all the action will happen in the `C-Blosc2 <https://github.com/Blosc/c-blosc2>`_ / `Python-Blosc2 <https://github.com/Blosc/python-blosc2>`_ side of the things.
 
 Going multidimensional in the first *and* the second partition
 --------------------------------------------------------------
