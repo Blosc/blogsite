@@ -65,3 +65,10 @@ We have seen how, when sensibly chosen, the double partition provides a formidab
 Finally, we will be releasing the new `NDArray` object in the forthcoming release of Python-Blosc2 very soon.  This will enable full access to these shiny new features of Blosc2 from the convenience of Python.  Stay tuned!
 
 If you regularly store and process large datasets and need advice to partition your data, or choosing the best combination of codec, filters, chunk and block sizes, or many other aspects of compression, do not hesitate to contact the Blosc team at `contact (at) blosc.org`.  We have more than 30 years of cumulative experience in data handling systems like HDF5, Blosc and efficient I/O in general; but most importantly, we have the ability to integrate these innovative technologies quickly into your products, enabling a faster access to these innovations.
+
+Update (2023-02-24)
+-------------------
+
+* We have a new video explaning why the double partition is useful:
+.. youtube:: LvP9zxMGBng
+
