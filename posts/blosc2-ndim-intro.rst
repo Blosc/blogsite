@@ -69,6 +69,11 @@ If you regularly store and process large datasets and need advice to partition y
 Update (2023-02-24)
 -------------------
 
+* We have released Python-Blosc2 2.1.1 with the new `NDArray` object: https://github.com/Blosc/python-blosc2/releases/
+
 * We have a new video explaning why the double partition is useful:
+
 .. youtube:: LvP9zxMGBng
+
+Enjoy!
 
