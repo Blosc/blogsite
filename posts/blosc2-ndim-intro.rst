@@ -25,6 +25,7 @@ With Blosc2 NDim we are taking this feature a step further and both partitions, 
 
 .. image:: /images/blosc2-ndim-intro/b2nd-2level-parts.png
   :width: 75%
+  :align: center
 
 With these more fine-grained cubes (aka partitions), it is possible to retrieve arbitrary n-dim slices more rapidly because you don't have to decompress all the data that is necessary for the more coarse-grained partitions typical in other libraries.
 
@@ -32,11 +33,13 @@ For example, for a 4-d array with a shape of (50, 100, 300, 250) with `float64` 
 
 .. image:: /images/blosc2-ndim-intro/Read-Partial-Slices-B2ND.png
   :width: 75%
+  :align: center
 
 Of course, the double partition comes with some overhead during the creation of the partitions: more data moves and computations are required in order to place the data in the correct positions.  However, we have done our best in order to minimize the data movement as much as possible.  Below we can see how the speed of creation (write) of an array from anew is still quite competitive:
 
 .. image:: /images/blosc2-ndim-intro/Complete-Write-Read-B2ND.png
   :width: 75%
+  :align: center
 
 On the other hand, we can also see that, when reading the complete array, the double partitioning overhead is not really a big issue, and actually, it benefits Blosc2 `NDArray` somewhat.
 
