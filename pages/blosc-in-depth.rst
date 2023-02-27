@@ -31,17 +31,22 @@ Watch this introductory video about the main features of Blosc:
    :width: 75%
    :align: center
 
+You may also want to see the `slides for a talk explaining the highlights of Blosc2 <https://www.blosc.org/docs/blosc2-intro-LEAPS-Innov-2021.pdf>`_.
 
-And another one on the multi-dimensional capabilities of Blosc2, and specially on
+Blosc2 also comes with `NDim, a container with multi-dimensional capabilities <https://www.blosc.org/posts/blosc2-ndim-intro/>`_.
+In particular, Blosc2 NDim excels at reading multi-dimensional slices thanks to its innovative pinapple-style partitioning.  See
 `why slicing in a pineapple-style (aka double partition) is useful <https://www.youtube.com/watch?v=LvP9zxMGBng>`_:
 
-.. image:: /images/slicing-pineapple-style.png
+.. Although this is nice, the format below shows the video in a more consistent with the above one
+.. .. image:: /images/slicing-pineapple-style.png
+..   :width: 75%
+..   :align: center
+..   :alt: Slicing a dataset in pineapple-style
+..   :target: https://www.youtube.com/watch?v=LvP9zxMGBng
+
+.. youtube:: LvP9zxMGBng
    :width: 75%
    :align: center
-   :alt: Slicing a dataset in pineapple-style
-   :target: https://www.youtube.com/watch?v=LvP9zxMGBng
-
-You may also want to see the `slides for a talk explaining the highlights of Blosc2 <https://www.blosc.org/docs/blosc2-intro-LEAPS-Innov-2021.pdf>`_.
 
 
 Why it works?
