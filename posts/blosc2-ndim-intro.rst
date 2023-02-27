@@ -72,14 +72,12 @@ Update (2023-02-24)
 * We have released Python-Blosc2 2.1.1 with the new `NDArray` object: https://github.com/Blosc/python-blosc2/releases/
 
 * We have also prepared a ~2 min explanatory video on `why slicing in a pineapple-style (aka double partition)
-is useful <https://www.youtube.com/watch?v=LvP9zxMGBng>`_:
+  is useful <https://www.youtube.com/watch?v=LvP9zxMGBng>`_:
 
-.. .. youtube:: LvP9zxMGBng
 .. image:: https://github.com/Blosc/blogsite/blob/master/files/images/slicing-pineapple-style.png?raw=true
   :width: 50%
   :alt: Slicing a dataset in pineapple-style
   :target: https://www.youtube.com/watch?v=LvP9zxMGBng
 
-
-Enjoy!
+Enjoy the meal!
 
