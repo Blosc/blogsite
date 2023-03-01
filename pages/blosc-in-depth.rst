@@ -31,7 +31,7 @@ Watch this introductory video about the main features of Blosc:
    :width: 75%
    :align: center
 
-Blosc2 is the new iteration of Blosc 1.x series, adding more features and `better documentation <https://www.blosc.org/c-blosc2/c-blosc2.html>`_. Also, check out the `slides explaining the highlights of Blosc2 <https://www.blosc.org/docs/blosc2-intro-LEAPS-Innov-2021.pdf>`_.  When Blosc2 cooperates with other libraries, magic can happen; for exemple, when used in combination with HDF5/PyTables, it allows to query `100 trillion rows tables in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.
+Blosc2 is the new iteration of Blosc 1.x series, adding more features and `better documentation <https://www.blosc.org/c-blosc2/c-blosc2.html>`_. Also, check out the `slides explaining the highlights of Blosc2 <https://www.blosc.org/docs/blosc2-intro-LEAPS-Innov-2021.pdf>`_.  When Blosc2 cooperates with other libraries, magic can happen. As an example, when used in combination with HDF5/PyTables, Blosc2 helps to query `100 trillion rows tables in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.
 
 Blosc2 also comes with `NDim, a container with multi-dimensional capabilities <https://www.blosc.org/posts/blosc2-ndim-intro/>`_.
 In particular, Blosc2 NDim excels at reading multi-dimensional slices thanks to its innovative pinapple-style partitioning.  See
