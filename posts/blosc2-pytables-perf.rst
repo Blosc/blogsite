@@ -48,7 +48,7 @@ Automatic chunkshape
 Inkernel searches
 ~~~~~~~~~~~~~~~~~
 
-We start by performing `inkernel queries <https://www.pytables.org/usersguide/optimization.html#in-kernel-searches>`_ where the chunkshape for the table is chosen automatically by the PyTables machinery (see `query script here <https://github.com/PyTables/PyTables/blob/master/bench/query_meteo_data.py>`_.  This size is the same for Blosc, Zlib and uncompressed cases which are all using 16384 rows (about 512 KB), whereas for Blosc2 the computed chunkshape is quite larger: 1179648 rows (about 36 MB; this actually depends on the size of the L3 cache, which is automatically queried in real-time by PyTables and it turns out to be exactly 36 MB for our CPU, an Intel i9-13900K).
+We start by performing `inkernel queries <https://www.pytables.org/usersguide/optimization.html#in-kernel-searches>`_ where the chunkshape for the table is chosen automatically by the PyTables machinery (see `query script here <https://github.com/PyTables/PyTables/blob/master/bench/query_meteo_data.py>`_).  This size is the same for Blosc, Zlib and uncompressed cases which are all using 16384 rows (about 512 KB), whereas for Blosc2 the computed chunkshape is quite larger: 1179648 rows (about 36 MB; this actually depends on the size of the L3 cache, which is automatically queried in real-time by PyTables and it turns out to be exactly 36 MB for our CPU, an Intel i9-13900K).
 
 Now, we are going to analyze the memory and time usage of performing six inkernel searches, which means scanning the full table six times, in different cases:
 
