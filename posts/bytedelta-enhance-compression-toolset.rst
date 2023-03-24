@@ -2,7 +2,7 @@
 .. author: Francesc Alted
 .. slug: bytedelta-enhance-compression-toolset
 .. date: 2023-03-24 11:32:20 UTC
-.. tags: bytedelta, filter, blosc2
+.. tags: bytedelta, filter, Blosc2
 .. category:
 .. link:
 .. description:
@@ -141,7 +141,7 @@ Let's first represent the compression ratio versus compression speed:
   :width: 100%
   :align: center
 
-As we can see, the shuffle filter is typically found on the Pareto frontier (in this case, the point furthest to the right and top; see [https://en.wikipedia.org/wiki/Pareto_front](https://en.wikipedia.org/wiki/Pareto_front)). Bytedelta comes next.  In contrast, not using a filter at all is on the opposite side.  This is typically the case for most real-world numerical datasets.
+As we can see, the shuffle filter is typically found on the Pareto frontier (in this case, the point furthest to the right and top; see `https://en.wikipedia.org/wiki/Pareto_front <https://en.wikipedia.org/wiki/Pareto_front>`_. Bytedelta comes next.  In contrast, not using a filter at all is on the opposite side.  This is typically the case for most real-world numerical datasets.
 
 Let's now group filters and datasets and calculate the mean values of combining
 (in this case, multiplying) the compression ratio and compression speed for all codecs.
