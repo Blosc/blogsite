@@ -2,7 +2,7 @@
 .. author: Francesc Alted
 .. slug: bytedelta-enhance-compression-toolset
 .. date: 2023-03-24 11:32:20 UTC
-.. tags: bytedelta, filter, Blosc2
+.. tags: bytedelta, filter, blosc2
 .. category:
 .. link:
 .. description:
@@ -90,7 +90,7 @@ Now, let's see how bytedelta affects performance for different codecs and compre
   :width: 100%
   :align: center
 
-Interestingly, on average bytedelta proves most useful for ZSTD and higher compression levels of ZLIB (Blosc2 comes with `ZLIB-NG <https://github.com/zlib-ng/zlib-ng>`_. On the other hand, the fastest codecs (LZ4, BLOSCLZ) seem to benefit more from bitshuffle instead.
+Interestingly, on average bytedelta proves most useful for ZSTD and higher compression levels of ZLIB (Blosc2 comes with `ZLIB-NG <https://github.com/zlib-ng/zlib-ng>`_). On the other hand, the fastest codecs (LZ4, BLOSCLZ) seem to benefit more from bitshuffle instead.
 
 Regarding compression speed, in general we can see that bytedelta has little effect on performance:
 
@@ -197,6 +197,17 @@ If we group by compression levels:
   :align: center
 
 Overall, we see LZ4 as the clear winner at any level, especially when combined with shuffle. On the other hand, bytedelta did not win in any scenario here.
+
+Benchmarks for other computers
+------------------------------
+
+We have run the benchmarks presented here in an assortment of different boxes:
+
+- `MacBook Air with M1 processor and 8 GB RAM. MacOSX 13.1. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-m1.html>`_
+- `AMD Ryzen 9 5950X processor and 32 GB RAM. Debian 22.04. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-m1.html>`_
+- `Intel i9-10940X processor and 64 GB RAM. Debian 22.04. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-i10k.html>`_
+- `Intel i9-13900K processor and 32 GB RAM. Clear Linux. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-i13k.html>`_
+
 
 Conclusion
 ----------
