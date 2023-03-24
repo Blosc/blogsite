@@ -2,7 +2,7 @@
 .. author: Francesc Alted
 .. slug: bytedelta-enhance-compression-toolset
 .. date: 2023-03-24 11:32:20 UTC
-.. tags: bytedelta, filter, blosc2
+.. tags: bytedelta, filter, Blosc2
 .. category:
 .. link:
 .. description:
