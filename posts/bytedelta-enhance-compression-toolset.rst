@@ -26,12 +26,9 @@ then compute the difference for each byte in the byte streams (also called split
   :width: 75%
   :align: center
 
-As real-world data typically shows continuity, this often leads to more zeros in data streams. More zeros mean more duplicates that the codec can eliminate later on.
+The key insight enabling the bytedelta algorithm lies in its implementation, especially the use of SIMD on Intel/AMD and ARM NEON CPUs, making the filter overhead minimal.
 
-Although Aras's original code implemented shuffle and bytedelta together, it was limited to a specific item size (4 bytes). Making it more general would require significant effort.
-Instead, for Blosc we built on the existing shuffle filter and created a new one that just does bytedelta. When we insert both in the Blosc filter pipeline, it leads to a completely general filter that works for any type size supported by existing shuffle filter.
-
-The key insight enabling the byte delta algorithm lies in its inspiration and implementation, especially the use of SIMD on Intel/AMD and ARM NEON CPUs.
+Although Aras's original code implemented shuffle and bytedelta together, it was limited to a specific item size (4 bytes). Making it more general would require significant effort.  Instead, for Blosc2 we built on the existing shuffle filter and created a new one that just does bytedelta. When we insert both in the `Blosc2 filter pipeline <https://www.blosc.org/docs/Blosc2-Intro-PyData-Global-2021.pdf>`_ (the pipeline supports up to 6 chained filters, so having 2 used here is not an issue at all), it leads to a completely general filter that works for any type size supported by existing shuffle filter.
 
 Compressing ERA5 datasets
 -------------------------
@@ -141,7 +138,7 @@ Let's first represent the compression ratio versus compression speed:
   :width: 100%
   :align: center
 
-As we can see, the shuffle filter is typically found on the Pareto frontier (in this case, the point furthest to the right and top; see `https://en.wikipedia.org/wiki/Pareto_front <https://en.wikipedia.org/wiki/Pareto_front>`_. Bytedelta comes next.  In contrast, not using a filter at all is on the opposite side.  This is typically the case for most real-world numerical datasets.
+As we can see, the shuffle filter is typically found on the `Pareto frontier <https://en.wikipedia.org/wiki/Pareto_front>`_ (in this case, the point furthest to the right and top). Bytedelta comes next.  In contrast, not using a filter at all is on the opposite side.  This is typically the case for most real-world numerical datasets.
 
 Let's now group filters and datasets and calculate the mean values of combining
 (in this case, multiplying) the compression ratio and compression speed for all codecs.
@@ -208,6 +205,7 @@ We have run the benchmarks presented here in an assortment of different boxes:
 - `Intel i9-10940X processor and 64 GB RAM. Debian 22.04. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-i10k.html>`_
 - `Intel i9-13900K processor and 32 GB RAM. Clear Linux. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-i13k.html>`_
 
+Reproducing the benchmarks is straightforward. First, `download the data <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/download_data.py>`_; the downloaded files will be in the new `era5_pds/` directory.  Then perform `the series of benchmarks <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/transcode_data.py>`_; this is takes time, so grab coffee and wait 30 min (fast workstations) to 6 hours (slow laptops).  Finally, run the `plotting Jupyter notebook <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/plot_transcode_data.ipynb>`_ to explore your results.  If you wish to share your results with the `Blosc development team <contact@blosc.org>`_, we will appreciate hearing from you!
 
 Conclusion
 ----------
