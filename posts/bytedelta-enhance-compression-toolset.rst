@@ -220,7 +220,7 @@ We've learned that no single codec/filter combination is best for all datasets:
 - LZ4 + shuffle is well-balanced for all metrics (compression ratio, speed, decompression speed).
 - LZ4 (clevel 6) and ZSTD (clevel 1) + shuffle strike a good balance of compression ratio and speed.
 - LZ4HC (clevel 6 and 9) + shuffle balances well compression ratio and decompression speed.
-- BLOSCLZ without filters achieves phenomenal decompression speed in one of the instances (with small complexity), reaching up to 4x faster speeds than using uncompressed data.
+- BLOSCLZ without filters achieves phenomenal decompression speed in one instance (with small complexity), reaching up to 180 GB/s, which is certainly far more than the memory speed of this machine (which is about 34 GB/s).
 
 In summary, the optimal choice depends on your priorities.
 
