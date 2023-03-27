@@ -28,7 +28,7 @@ then compute the difference for each byte in the byte streams (also called split
 
 The key insight enabling the bytedelta algorithm lies in its implementation, especially the use of SIMD on Intel/AMD and ARM NEON CPUs, making the filter overhead minimal.
 
-Although Aras's original code implemented shuffle and bytedelta together, it was limited to a specific item size (4 bytes). Making it more general would require significant effort.  Instead, for Blosc2 we built on the existing shuffle filter and created a new one that just does bytedelta. When we insert both in the `Blosc2 filter pipeline <https://www.blosc.org/docs/Blosc2-Intro-PyData-Global-2021.pdf>`_ (the pipeline supports up to 6 chained filters, so having 2 used here is not an issue at all), it leads to a completely general filter that works for any type size supported by existing shuffle filter.
+Although Aras's original code implemented shuffle and bytedelta together, it was limited to a specific item size (4 bytes). Making it more general would require significant effort.  Instead, for Blosc2 we built on the existing shuffle filter and created a new one that just does bytedelta. When we insert both in the `Blosc2 filter pipeline <https://www.blosc.org/docs/Blosc2-Intro-PyData-Global-2021.pdf>`_ (it supports up to 6 chained filters), it leads to a completely general filter that works for any type size supported by existing shuffle filter.
 
 Compressing ERA5 datasets
 -------------------------
@@ -239,4 +239,4 @@ We've learned that no single codec/filter combination is best for all datasets:
 
 In summary, the optimal choice depends on your priorities.
 
-As a final note, the Blosc development team is working on BTune, a new deep learning tuner for Blosc2. BTune can be trained to automatically recognize different kinds of datasets and choose the optimal codec and filters to achieve the best balance, based on the user's needs. This would create a much more intelligent compressor that can adapt itself to your data faster, without requiring time-consuming manual tuning. If interested, `contact us <contact@blosc.org>`_; we are looking for beta testers now.
+As a final note, the Blosc development team is working on BTune, a new deep learning tuner for Blosc2. BTune can be trained to automatically recognize different kinds of datasets and choose the optimal codec and filters to achieve the best balance, based on the user's needs. This would create a much more intelligent compressor that can adapt itself to your data faster, without requiring time-consuming manual tuning. If interested, `contact us <contact@blosc.org>`_; we are looking for beta testers!
