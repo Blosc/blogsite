@@ -70,13 +70,23 @@ Let's see how different filters behave on various datasets:
   :width: 100%
   :align: center
 
-Here we see that, for datasets that compress easily (precip, snow), the behavior is quite different from those that are less compressible. For precip, bytedelta actually worsens results, whereas for snow, it slightly improves them. For less compressible datasets, the trend is more apparent:
+Here we see that, for datasets that compress easily (precip, snow), the behavior is quite different from those that are less compressible. For precip, bytedelta actually worsens results, whereas for snow, it slightly improves them. For less compressible datasets, the trend is more apparent, as can be seen in this zoomed in image:
 
 .. image:: /images/bytedelta-enhance-compression-toolset/cratio-vs-dset-zoom.png
   :width: 100%
   :align: center
 
 In these cases, bytedelta clearly provides a better compression ratio, most specifically with the pressure dataset, where compression ratio by using bytedelta has increased by 25% compared to the second best, bitshuffle (5.0x vs 4.0x, using ZSTD clevel 9). Overall, only one dataset (precip) shows an actual decrease. This is good news for bytedelta indeed.
+
+Furthermore, Blosc2 supports another compression parameter for splitting the compressed streams into bytes with the same significance. Normally, this leads to better speed but less compression ratio, so this is automatically activated for faster codecs, whereas it is disabled for slower ones. However, it turns out that, when we activate splitting for all the codecs, we find a welcome surprise: bytedelta enables ZSTD to find significantly better compression paths, resulting in higher compression ratios.
+
+.. image:: /images/bytedelta-enhance-compression-toolset/cratio-vs-dset-always-split-zoom.png
+  :width: 100%
+  :align: center
+
+As can be seen, in general ZSTD + bytedelta can compress these datasets better. For the pressure dataset in particular, it goes up to 5.7x, 40% more than the second best, bitshuffle (5.7x vs 4.1x, using ZSTD clevel 9).  Note also that this new highest is 14% more than without splitting (the default).
+
+This shows that when compressing, you cannot just trust your intuition for setting compression parameters - there is no substitute for experimentation.
 
 Effects on different codecs
 ---------------------------
@@ -205,6 +215,11 @@ We have run the benchmarks presented here in an assortment of different boxes:
 - `Intel i9-10940X processor and 64 GB RAM. Debian 22.04. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-i10k.html>`_
 - `Intel i9-13900K processor and 32 GB RAM. Clear Linux. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-i13k.html>`_
 
+Also, find here a couple of runs using the i9-13900K box above, but with the always split and never split settings:
+
+- `Intel i9-13900K. Always Split. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-i13k-always-split.html>`_
+- `Intel i9-13900K. Never Split. <https://www.blosc.org/docs/era5-pds/plot_transcode_data-i13k-never-split.html>`_
+
 Reproducing the benchmarks is straightforward. First, `download the data <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/download_data.py>`_; the downloaded files will be in the new `era5_pds/` directory.  Then perform `the series of benchmarks <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/transcode_data.py>`_; this is takes time, so grab coffee and wait 30 min (fast workstations) to 6 hours (slow laptops).  Finally, run the `plotting Jupyter notebook <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/plot_transcode_data.ipynb>`_ to explore your results.  If you wish to share your results with the `Blosc development team <contact@blosc.org>`_, we will appreciate hearing from you!
 
 Conclusion
@@ -216,7 +231,7 @@ On the other hand, while bytedelta excels at achieving high compression ratios, 
 
 We've learned that no single codec/filter combination is best for all datasets:
 
-- ZSTD (clevel 9) + bytedelta can get better absolute compression ratio for most of the datasets (up to 25% more for complex datasets).
+- ZSTD (clevel 9) + bytedelta can get better absolute compression ratio for most of the datasets (up to 40% more for complex datasets).
 - LZ4 + shuffle is well-balanced for all metrics (compression ratio, speed, decompression speed).
 - LZ4 (clevel 6) and ZSTD (clevel 1) + shuffle strike a good balance of compression ratio and speed.
 - LZ4HC (clevel 6 and 9) + shuffle balances well compression ratio and decompression speed.
