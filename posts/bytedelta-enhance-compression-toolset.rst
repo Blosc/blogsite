@@ -225,17 +225,17 @@ Reproducing the benchmarks is straightforward. First, `download the data <https:
 Conclusion
 ----------
 
-Bytedelta can achieve higher compression ratios in most datasets, specially in combination with capable codecs like ZSTD, with a maximum gain of 25% (pressure) over other codecs; only in one case (precip) compression ratio decreases. By compressing data more efficiently, bytedelta can reduce file sizes even more, accelerating transfer and storage.
+Bytedelta can achieve higher compression ratios in most datasets, specially in combination with capable codecs like ZSTD, with a maximum gain of 40% (pressure) over other codecs; only in one case (precip) compression ratio decreases. By compressing data more efficiently, bytedelta can reduce file sizes even more, accelerating transfer and storage.
 
 On the other hand, while bytedelta excels at achieving high compression ratios, this requires more computing power. We have found that for striking a good balance between high compression and fast compression/decompression, other filters, particularly shuffle, are superior overall.
 
 We've learned that no single codec/filter combination is best for all datasets:
 
-- ZSTD (clevel 9) + bytedelta can get better absolute compression ratio for most of the datasets (up to 40% more for complex datasets).
+- ZSTD (clevel 9) + bytedelta can get better absolute compression ratio for most of the datasets.
 - LZ4 + shuffle is well-balanced for all metrics (compression ratio, speed, decompression speed).
 - LZ4 (clevel 6) and ZSTD (clevel 1) + shuffle strike a good balance of compression ratio and speed.
 - LZ4HC (clevel 6 and 9) + shuffle balances well compression ratio and decompression speed.
-- BLOSCLZ without filters achieves phenomenal decompression speed in one instance (with small complexity), reaching up to 180 GB/s, which is certainly far more than the memory speed of this machine (which is about 40 GB/s).
+- BLOSCLZ without filters achieves best decompression speed (at least in one instance).
 
 In summary, the optimal choice depends on your priorities.
 
