@@ -220,8 +220,8 @@ We've learned that no single codec/filter combination is best for all datasets:
 - LZ4 + shuffle is well-balanced for all metrics (compression ratio, speed, decompression speed).
 - LZ4 (clevel 6) and ZSTD (clevel 1) + shuffle strike a good balance of compression ratio and speed.
 - LZ4HC (clevel 6 and 9) + shuffle balances well compression ratio and decompression speed.
-- BLOSCLZ without filters achieves phenomenal decompression speed in one instance (with small complexity), reaching up to 180 GB/s, which is certainly far more than the memory speed of this machine (which is about 34 GB/s).
+- BLOSCLZ without filters achieves phenomenal decompression speed in one instance (with small complexity), reaching up to 180 GB/s, which is certainly far more than the memory speed of this machine (which is about 40 GB/s).
 
 In summary, the optimal choice depends on your priorities.
 
-As a final note, the Blosc development team is working on BTune, a new deep learning tuner for Blosc2. BTune can be trained to automatically recognize different kinds of datasets and choose the optimal codec and filters to achieve the best balance, based on the user's needs. This would create a much more intelligent compressor that can adapt itself to your data without requiring time-consuming manual tuning. We will announce this soon. Stay tuned!
+As a final note, the Blosc development team is working on BTune, a new deep learning tuner for Blosc2. BTune can be trained to automatically recognize different kinds of datasets and choose the optimal codec and filters to achieve the best balance, based on the user's needs. This would create a much more intelligent compressor that can adapt itself to your data faster, without requiring time-consuming manual tuning. If interested, `contact us <contact@blosc.org>`_; we are looking for beta testers now.
