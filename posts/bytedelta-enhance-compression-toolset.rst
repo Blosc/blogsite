@@ -84,7 +84,7 @@ Furthermore, Blosc2 supports another compression parameter for splitting the com
   :width: 100%
   :align: center
 
-As can be seen, in general ZSTD + bytedelta can compress these datasets better. For the pressure dataset in particular, it goes up to 5.7x, 40% more than the second best, bitshuffle (5.7x vs 4.1x, using ZSTD clevel 9).  Note also that this new highest is 14% more than without splitting (the default).
+As can be seen, in general ZSTD + bytedelta can compress these datasets better. For the pressure dataset in particular, it goes up to 5.7x, 37% more than the second best, bitshuffle (5.7x vs 4.1x, using ZSTD clevel 9).  Note also that this new highest is 14% more than without splitting (the default).
 
 This shows that when compressing, you cannot just trust your intuition for setting compression parameters - there is no substitute for experimentation.
 
@@ -225,7 +225,7 @@ Reproducing the benchmarks is straightforward. First, `download the data <https:
 Conclusion
 ----------
 
-Bytedelta can achieve higher compression ratios in most datasets, specially in combination with capable codecs like ZSTD, with a maximum gain of 40% (pressure) over other codecs; only in one case (precip) compression ratio decreases. By compressing data more efficiently, bytedelta can reduce file sizes even more, accelerating transfer and storage.
+Bytedelta can achieve higher compression ratios in most datasets, specially in combination with capable codecs like ZSTD, with a maximum gain of 37% (pressure) over other codecs; only in one case (precip) compression ratio decreases. By compressing data more efficiently, bytedelta can reduce file sizes even more, accelerating transfer and storage.
 
 On the other hand, while bytedelta excels at achieving high compression ratios, this requires more computing power. We have found that for striking a good balance between high compression and fast compression/decompression, other filters, particularly shuffle, are superior overall.
 
