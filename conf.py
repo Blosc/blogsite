@@ -135,7 +135,6 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
       #  ("/archive.html", "Archive"),
-        ("/categories/", "Tags"),
       #  ("/rss.xml", "RSS feed"),
         ("/pages/blosc-in-depth/", "Blosc In Depth"),
         # ("/pages/synthetic-benchmarks/", "Benchmarks"),
@@ -143,13 +142,15 @@ NAVIGATION_LINKS = {
         ("/python-blosc/python-blosc.html", "Python-Blosc"),
         ("/python-blosc2/python-blosc2.html", "Python-Blosc2"),
         # ("/pages/professional-services/", "Professional Services"),
+        ("/categories/", "Tags"),
         ("/pages/donate/", "Donate to Blosc"),
         # ("/blog/", "Blog"),
     ),
 }
 
 # Name of the theme to use.
-THEME = "bootstrap3"
+#THEME = "bootstrap3"
+THEME = "bootblog4"
 
 # Primary color of your theme. This will be used to customize your theme and
 # auto-generate related colors in POSTS_SECTION_COLORS. Must be a HEX value.
