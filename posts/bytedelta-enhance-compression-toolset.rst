@@ -14,6 +14,9 @@ in a data stream.  Combined with the shuffle filter, it can improve compression
 for some datasets.  Bytedelta is based on `initial work by Aras Pranckevičius
 <https://aras-p.info/blog/2023/03/01/Float-Compression-7-More-Filtering-Optimization/>`_.
 
+**TL;DR**: We have a brief introduction to bytedelta in the 3rd section of
+`this presentation <https://www.blosc.org/docs/Blosc2-WP7-LEAPS-Innov-2023.pdf>`_.
+
 The basic concept is simple: after applying the shuffle filter,
 
 .. image:: /images/bytedelta-enhance-compression-toolset/shuffle-filter.png
