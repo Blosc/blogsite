@@ -33,6 +33,8 @@ The key insight enabling the bytedelta algorithm lies in its implementation, esp
 
 Although Aras's original code implemented shuffle and bytedelta together, it was limited to a specific item size (4 bytes). Making it more general would require significant effort.  Instead, for Blosc2 we built on the existing shuffle filter and created a new one that just does bytedelta. When we insert both in the `Blosc2 filter pipeline <https://www.blosc.org/docs/Blosc2-Intro-PyData-Global-2021.pdf>`_ (it supports up to 6 chained filters), it leads to a completely general filter that works for any type size supported by existing shuffle filter.
 
+With that said, the `implementation of the bytedelta filter <https://github.com/Blosc/c-blosc2/pull/456>`_ has been a breeze thanks to the `plugin support in C-Blosc2 <https://www.blosc.org/posts/registering-plugins/>`_. You can also implement your own filters and codecs on your own, or if you are too busy, `we will be happy to assist you <contact@blosc.org>`_.
+
 Compressing ERA5 datasets
 -------------------------
 
