@@ -126,6 +126,4 @@ Conclusions
 
 C-Blosc2's ability to support dynamically loaded plugins allows the library to grow in features without increasing the size of the library itself. For more information about user-defined plugins, refer to this `blog entry <https://www.blosc.org/posts/registering-plugins/>`_.
 
-We appreciate your interest in our project! If you find our work useful and valuable, we would be grateful if you could support us by `making a donation <https://www.blosc.org/pages/donate/>`_. Your contribution will help us continue to develop and improve our technology, making it more accessible and useful for everyone.
-
-By donating to our project, you will be helping us to fund new features, cover maintenance costs, and invest in research and development. Our team is dedicated to creating high-quality, efficient software that meets the needs of our users, and your support will help us to achieve this goal.
+We appreciate your interest in our project! If you find our work useful and valuable, we would be grateful if you could support us by `making a donation <https://www.blosc.org/pages/donate/>`_. Your contribution will help us continue to develop and improve our technology, making it more accessible and useful for everyone.  Our team is dedicated to creating high-quality, efficient software that meets the needs of our users, and your support will help us to achieve this goal.
