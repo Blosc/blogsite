@@ -58,6 +58,9 @@ jobs:
     # blosc.org/python-blosc2
     - name: Check out Python-Blosc2
       run: git clone --recurse-submodules https://github.com/Blosc/python-blosc2.git
+    - name: Install pandoc
+      run: sudo apt install pandoc
+      shell: bash -l {0}
     - name: Install Python-Blosc2 doc dependencies
       run: cd python-blosc2 && pip install -r requirements-doc.txt
       shell: bash -l {0}
