@@ -1,11 +1,11 @@
 title: Btune: Making Compression Better
 
 
-<a href="/btune-state-explorer/main.html"> <img src="/btune-state-explorer/btune-preview-running.png" alt="Btune Free in action" width="400" align="right"/>
-
 ## What is Btune?
 
-Btune is a dynamic plugin for Blosc2 that can help you find the optimal combination of compression parameters for your datasets. Depending on your needs, Btune has three different operating modes (see below for more details and pricing):
+<a href="/btune-state-explorer/main.html"> <img src="/btune-state-explorer/btune-preview-running.png" alt="Btune Free in action" width="400" align="right"/></a>
+
+[Btune is a dynamic plugin for Blosc2](https://github.com/Blosc/blosc2_btune) that can help you find the optimal combination of compression parameters for your datasets. Depending on your needs, Btune has three different operating modes (see below for more details and pricing):
 
 - **Genetic (Btune Free)**: This genetic algorithm tests different combinations of compression parameters to meet the user's requirements for both compression ratio and speed for each chunk in the dataset. It assigns a score to each combination and, after a number of iterations, the software stops and uses the best score (minimal value) found for the rest of the dataset. For a graphical visualization, click on the image, select an example, and click on the 'play' button (it may require clicking twice). This is best suited for personal use.
 - **Trained (Btune Model)**: The user sends a representative sample of datasets to the Blosc development team and receives back a trained neural network model that enables Btune to predict the best compression parameters for similar/related datasets. This approach is best for work-groups that need to optimize for a limited variety of datasets.
