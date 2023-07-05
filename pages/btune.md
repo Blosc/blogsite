@@ -1,19 +1,17 @@
-title: BTune: Making Compression Better
+title: Btune: Making Compression Better
 
-<!---
-![Btune Free in action](/btune-state-explorer/btune-preview-running.png "")
-{align=left}
--->
 
-<a href="/btune-state-explorer/main.html"> <img src="/btune-state-explorer/btune-preview-running.png" alt="Btune Free in action" width="300" align="right"/>
+<a href="/btune-state-explorer/main.html"> <img src="/btune-state-explorer/btune-preview-running.png" alt="Btune Free in action" width="400" align="right"/>
 
 ## What is Btune?
 
 Btune is a dynamic plugin for Blosc2 that can help you find the optimal combination of compression parameters for your datasets. Depending on your needs, Btune has three different operating modes (see below for more details and pricing):
 
-- **Genetic (Btune Free)**: This genetic algorithm tests different combinations of compression parameters to meet the user's requirements for both compression ratio and speed for each chunk in the dataset. It assigns a score to each combination and, after a number of iterations, the software stops and uses the best score (minimal value) found for the rest of the dataset. For a graphical visualization, click on the graphic, select an example, and clik on the 'play' button (it may require clicking twice). This is best suited for personal use.
-- **Trained (Btune Model)**: The user sends a representative sample of datasets to the Blosc development team and receives back a trained neural network model that enables Btune to predict the best compression parameters for similar/related datasets. This approach is best for workgroups that need to optimize for a limited variety of datasets.
+- **Genetic (Btune Free)**: This genetic algorithm tests different combinations of compression parameters to meet the user's requirements for both compression ratio and speed for each chunk in the dataset. It assigns a score to each combination and, after a number of iterations, the software stops and uses the best score (minimal value) found for the rest of the dataset. For a graphical visualization, click on the image, select an example, and click on the 'play' button (it may require clicking twice). This is best suited for personal use.
+- **Trained (Btune Model)**: The user sends a representative sample of datasets to the Blosc development team and receives back a trained neural network model that enables Btune to predict the best compression parameters for similar/related datasets. This approach is best for work-groups that need to optimize for a limited variety of datasets.
 - **Fully managed (Btune Studio)**: The user gets a license to use our training software, allowing on-site training for an unlimited number of datasets. The license also includes a specified number of training/consultancy hours to help the user get the most out of the training process.
+
+For usage details, see the [README of the Btune plugin](https://github.com/Blosc/blosc2_btune#readme).
 
 ## Why Btune?
 
@@ -30,10 +28,14 @@ Finally, for those who need to train various datasets, **Btune Studio** provides
 ## Licenses and Pricing
 
 - **Btune Free** is free to use. Please note that it is licensed under an [Affero GPLv3 license] (https://www.gnu.org/licenses/agpl-3.0.en.html).
-- The **Btune Model** requires a donation of $1500 USD (or 1500 EUR) per trained model per year. You can ask to train a different model on a yearly basis. Additionally, we offer an optional support pack that includes up to 10 hours of support per year for a monthly fee of $250 (or 250 EUR).
-- **Btune Studio** requires a donation of $7500 USD (or 7500 EUR) per year, or $750 (or 750 EUR) per month for at least 1 year, whichever fits best for you. This includes 25 hours of support per year that can be used for training in the use of the software or for consultation on compression or big data handling in general.
+- The **Btune Model** requires a donation of $1500 USD (or 1500 EUR) per trained model per year, including 5 hours of support. You can ask to train a different model on a yearly basis.
+- **Btune Studio** requires a donation of $7500 USD (or 7500 EUR) per year, or $750 (or 750 EUR) per month for at least 1 year, whichever fits best for you. This includes 35 hours of support per year, or up to 4 hours of support per month when using the monthly fee.
 
-To do the donations to the Blosc project, visit https://www.blosc.org/pages/donate/ and specify the kind of license you are interested in.
+Additionally, for all licenses we offer an optional support pack that includes up to 3 hours of support per month for a monthly fee of $250 (or 250 EUR). 
+
+** Note **: The contracted support can be used for training in the use of the software or for consultation on compression for big data in general.
+
+If interested, you can do the [donations via the Blosc project](https://www.blosc.org/pages/donate/) where, at the end of the form, you can specify the kind of license and support you are interested in.
 
 ## Why Donations via NumFOCUS?
 
