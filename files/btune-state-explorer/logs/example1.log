@@ -1,0 +1,207 @@
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+python-blosc2 version: 2.0.0.a1
+Blosc version: 2.0.0a4.dev ($Date:: 2016-08-04 #$)
+Compressors available: ['blosclz', 'lz4', 'lz4hc', 'lizard', 'zstd']
+Compressor library versions:
+  BloscLZ: 1.1.0
+  LZ4: 1.8.0
+  Lizard: 1.0.0
+  Zstd: 1.3.3
+Python version: 3.6.3 |Anaconda, Inc.| (default, Oct 27 2017, 12:22:41) [MSC v.1900 64 bit (AMD64)]
+Platform: Windows-10-AMD64 (10.0.15063)
+Processor: Intel64 Family 6 Model 60 Stepping 3, GenuineIntel
+Byte-ordering: little
+Detected cores: 4
+Number of threads to use by default: 4
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+BTune version: 1.0.0.
+Perfomance Mode: BALANCED, Compression Mode: BALANCED, Bandwidth: 10 GB/s.
+Behaviour: Waits - 0, Softs - 10, Hards - 3, Repeat Mode - STOP.
+|    Codec   | Filter | C.Level | Blocksize | Shufflesize | C.Threads | D.Threads |   Score   |  C.Ratio   |   BTune State   | Readapt | Winner
+|    lz4     |      0 |       7 |       256 |           8 |         4 |         4 |   0.00447 |         1x |  CODEC_FILTER   |  HARD   | W
+|    lz4     |      1 |       7 |       256 |           8 |         4 |         4 |   0.00238 |      71.9x |  CODEC_FILTER   |  HARD   | W
+|    lz4     |      2 |       7 |       256 |           8 |         4 |         4 |    0.0051 |      34.8x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      0 |       7 |       256 |           8 |         4 |         4 |   0.00593 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       7 |       256 |           8 |         4 |         4 |   0.00412 |      8.39x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      2 |       7 |       256 |           8 |         4 |         4 |   0.00554 |      35.6x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      0 |       3 |       256 |           8 |         4 |         4 |    0.0341 |      1.49x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       3 |       256 |           8 |         4 |         4 |   0.00695 |       216x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      2 |       3 |       256 |           8 |         4 |         4 |   0.00747 |       281x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      1 |       7 |       256 |          16 |         4 |         4 |     0.002 |      42.3x |  SHUFFLE_SIZE   |  HARD   | -
+|    lz4     |      1 |       7 |       256 |           4 |         4 |         4 |   0.00146 |       112x |  SHUFFLE_SIZE   |  HARD   | W
+|    lz4     |      1 |       7 |       256 |           2 |         4 |         4 |   0.00144 |       101x |  SHUFFLE_SIZE   |  HARD   | -
+|    lz4     |      1 |       7 |       256 |           4 |         3 |         4 |   0.00556 |       112x |  THREADS_COMP   |  HARD   | -
+|    lz4     |      1 |       7 |       256 |           4 |         4 |         3 |   0.00322 |       112x | THREADS_DECOMP  |  HARD   | -
+|    lz4     |      1 |       5 |       256 |           4 |         4 |         4 |   0.00303 |       112x |     CLEVEL      |  HARD   | -
+|    lz4     |      1 |       7 |      1024 |           4 |         4 |         4 |   0.00955 |       123x |    BLOCKSIZE    |  HARD   | -
+|    lz4     |      1 |       7 |        64 |           4 |         4 |         4 |    0.0036 |      81.8x |    BLOCKSIZE    |  HARD   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |   0.00223 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00628 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00317 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00256 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00297 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |   0.00628 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00335 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00213 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |   0.00199 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00715 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00234 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00311 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00469 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |    0.0047 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00368 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00215 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |    0.0064 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00308 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00301 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00244 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00788 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |   0.00187 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00304 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00294 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |   0.00707 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00208 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |     0.002 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00253 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00802 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |   0.00184 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00347 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00642 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |    0.0035 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00254 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00181 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00341 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       8 |       256 |           4 |         4 |         4 |   0.00635 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       6 |       256 |           4 |         4 |         4 |   0.00209 |       112x |     CLEVEL      |  SOFT   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00325 |       119x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |    0.0043 |      99.7x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      0 |       7 |       128 |           4 |         4 |         4 |   0.00533 |         1x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00181 |      99.7x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      2 |       7 |       128 |           4 |         4 |         4 |   0.00587 |      34.7x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      0 |       7 |       128 |           4 |         4 |         4 |    0.0101 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       7 |       128 |           4 |         4 |         4 |   0.00345 |      4.48x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      2 |       7 |       128 |           4 |         4 |         4 |    0.0107 |      90.4x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      0 |       7 |       128 |           4 |         4 |         4 |     0.108 |      1.49x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00215 |       234x |  CODEC_FILTER   |  HARD   | W
+|    zstd    |      2 |       7 |       128 |           4 |         4 |         4 |   0.00541 |       827x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       7 |       128 |           2 |         4 |         4 |    0.0037 |       196x |  SHUFFLE_SIZE   |  HARD   | -
+|    zstd    |      1 |       7 |       128 |           8 |         4 |         4 |   0.00303 |       243x |  SHUFFLE_SIZE   |  HARD   | -
+|    zstd    |      1 |       7 |       128 |           4 |         3 |         4 |   0.00681 |       234x |  THREADS_COMP   |  HARD   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         3 |   0.00487 |       234x | THREADS_DECOMP  |  HARD   | -
+|    zstd    |      1 |       5 |       128 |           4 |         4 |         4 |   0.00727 |       234x |     CLEVEL      |  HARD   | -
+|    zstd    |      1 |       7 |        32 |           4 |         4 |         4 |   0.00535 |      78.6x |    BLOCKSIZE    |  HARD   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |     0.015 |       399x |    BLOCKSIZE    |  HARD   | -
+|    zstd    |      1 |       6 |       128 |           4 |         4 |         4 |   0.00533 |       234x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       128 |           4 |         4 |         4 |    0.0195 |       232x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       256 |           4 |         4 |         4 |   0.00823 |       319x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |        64 |           4 |         4 |         4 |    0.0043 |       151x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       128 |           4 |         4 |         4 |    0.0143 |       232x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       128 |           4 |         4 |         4 |    0.0086 |       234x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |        64 |           4 |         4 |         4 |   0.00402 |       151x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       256 |           4 |         4 |         4 |   0.00407 |       319x |    BLOCKSIZE    |  SOFT   | W
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0121 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00674 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |     0.021 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00732 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00591 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0208 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00454 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00399 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00758 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00685 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |     0.021 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |     0.008 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00417 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0183 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00695 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00422 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00571 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |    0.0075 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0221 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00787 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00428 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0218 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00465 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |    0.0038 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0113 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00657 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0213 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00734 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00882 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0192 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |    0.0114 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00297 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |     0.006 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      0 |       7 |       512 |           4 |         4 |         4 |   0.00333 |         1x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      1 |       7 |       512 |           4 |         4 |         4 |   0.00187 |       119x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      2 |       7 |       512 |           4 |         4 |         4 |   0.00781 |      36.1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      0 |       7 |       512 |           4 |         4 |         4 |    0.0118 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       7 |       512 |           4 |         4 |         4 |   0.00356 |      8.54x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      2 |       7 |       512 |           4 |         4 |         4 |    0.0132 |       123x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      0 |       7 |       512 |           4 |         4 |         4 |    0.0785 |      1.49x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00537 |       399x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      2 |       7 |       512 |           4 |         4 |         4 |    0.0124 |       778x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       7 |       256 |           8 |         4 |         4 |   0.00502 |       341x |  SHUFFLE_SIZE   |  HARD   | -
+|    zstd    |      1 |       7 |       256 |           2 |         4 |         4 |   0.00279 |       285x |  SHUFFLE_SIZE   |  HARD   | -
+|    zstd    |      1 |       7 |       256 |           4 |         3 |         4 |   0.00821 |       319x |  THREADS_COMP   |  HARD   | -
+|    zstd    |      1 |       7 |       256 |           4 |         4 |         3 |   0.00837 |       319x | THREADS_DECOMP  |  HARD   | -
+|    zstd    |      1 |       5 |       256 |           4 |         4 |         4 |   0.00842 |       319x |     CLEVEL      |  HARD   | -
+|    zstd    |      1 |       7 |      1024 |           4 |         4 |         4 |    0.0167 |       448x |    BLOCKSIZE    |  HARD   | -
+|    zstd    |      1 |       7 |        64 |           4 |         4 |         4 |   0.00436 |       151x |    BLOCKSIZE    |  HARD   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00578 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0213 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00297 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0118 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0213 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |    0.0109 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00597 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00338 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00498 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0223 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00411 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0116 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0203 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |    0.0109 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0122 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00693 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |    0.0114 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0173 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00358 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00744 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0218 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00661 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0109 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00441 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00779 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0184 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00411 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0121 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0178 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00988 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |   0.00797 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00337 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |   0.00724 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0181 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00312 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0122 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       8 |       256 |           4 |         4 |         4 |    0.0212 |       316x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       6 |       256 |           4 |         4 |         4 |    0.0133 |       319x |     CLEVEL      |  SOFT   | -
+|    zstd    |      1 |       7 |       512 |           4 |         4 |         4 |    0.0115 |       399x |    BLOCKSIZE    |  SOFT   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00385 |       234x |    BLOCKSIZE    |  SOFT   | -
+|    lz4     |      0 |       7 |       128 |           4 |         4 |         4 |   0.00316 |         1x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      1 |       7 |       128 |           4 |         4 |         4 |   0.00625 |      99.7x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      2 |       7 |       128 |           4 |         4 |         4 |   0.00534 |      34.7x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      0 |       7 |       128 |           4 |         4 |         4 |   0.00762 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       7 |       128 |           4 |         4 |         4 |   0.00277 |      4.48x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      2 |       7 |       128 |           4 |         4 |         4 |   0.00604 |      90.4x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      0 |       7 |       128 |           4 |         4 |         4 |     0.101 |      1.49x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       7 |       128 |           4 |         4 |         4 |   0.00303 |       234x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      2 |       7 |       128 |           4 |         4 |         4 |   0.00462 |       827x |  CODEC_FILTER   |  HARD   | W
+|    zstd    |      2 |       7 |       128 |           2 |         4 |         4 |   0.00459 |       789x |  SHUFFLE_SIZE   |  HARD   | -
+|    zstd    |      2 |       7 |       128 |           8 |         4 |         4 |   0.00422 |       849x |  SHUFFLE_SIZE   |  HARD   | W
+|    zstd    |      2 |       7 |       128 |          16 |         4 |         4 |    0.0139 |       812x |  SHUFFLE_SIZE   |  HARD   | -
+|    zstd    |      2 |       7 |       128 |           8 |         3 |         4 |    0.0129 |       849x |  THREADS_COMP   |  HARD   | -
+|    zstd    |      2 |       7 |       128 |           8 |         4 |         3 |    0.0124 |       849x | THREADS_DECOMP  |  HARD   | -
+|    zstd    |      2 |       6 |       128 |           8 |         4 |         4 |    0.0114 |       538x |     CLEVEL      |  HARD   | -
+|    zstd    |      2 |       8 |       128 |           8 |         4 |         4 |    0.0196 |       602x |     CLEVEL      |  HARD   | -
+|    zstd    |      2 |       7 |        64 |           8 |         4 |         4 |   0.00605 |       474x |    BLOCKSIZE    |  HARD   | -

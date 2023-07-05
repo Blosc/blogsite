@@ -1,0 +1,131 @@
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+python-blosc2 version: 2.0.0.a1
+Blosc version: 2.0.0a4.dev ($Date:: 2016-08-04 #$)
+Compressors available: ['blosclz', 'lz4', 'lz4hc', 'lizard', 'zstd']
+Compressor library versions:
+  BloscLZ: 1.1.0
+  LZ4: 1.8.0
+  Lizard: 1.0.0
+  Zstd: 1.3.3
+Python version: 3.6.3 |Anaconda, Inc.| (default, Oct 27 2017, 12:22:41) [MSC v.1900 64 bit (AMD64)]
+Platform: Windows-10-AMD64 (10.0.15063)
+Processor: Intel64 Family 6 Model 60 Stepping 3, GenuineIntel
+Byte-ordering: little
+Detected cores: 4
+Number of threads to use by default: 4
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+BTune version: 1.0.0.
+Perfomance Mode: DECOMP, Compression Mode: BALANCED, Bandwidth: 10 GB/s.
+Behaviour: Waits - 1, Softs - 3, Hards - 3, Repeat Mode - STOP.
+|    Codec   | Filter | C.Level | Blocksize | Shufflesize | C.Threads | D.Threads |   Score   |  C.Ratio   |   BTune State   | Readapt | Winner
+|    lz4     |      0 |       7 |       256 |           8 |         4 |         4 |   0.00209 |         1x |  CODEC_FILTER   |  HARD   | W
+|    lz4     |      1 |       7 |       256 |           8 |         4 |         4 |   0.00381 |      1.14x |  CODEC_FILTER   |  HARD   | W
+|    lz4     |      2 |       7 |       256 |           8 |         4 |         4 |   0.00837 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      0 |       7 |       256 |           8 |         4 |         4 |   0.00221 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      1 |       7 |       256 |           8 |         4 |         4 |   0.00224 |      1.14x |  CODEC_FILTER   |  HARD   | W
+|   lz4hc    |      2 |       7 |       256 |           8 |         4 |         4 |   0.00805 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      0 |       7 |       256 |           8 |         4 |         4 |   0.00284 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       7 |       256 |           8 |         4 |         4 |   0.00241 |      1.14x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      2 |       7 |       256 |           8 |         4 |         4 |   0.00484 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      0 |       7 |       256 |           8 |         4 |         4 |     0.014 |      1.06x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       7 |       256 |           8 |         4 |         4 |   0.00889 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      2 |       7 |       256 |           8 |         4 |         4 |   0.00661 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      1 |       7 |       256 |          16 |         4 |         4 |   0.00332 |      1.14x |  SHUFFLE_SIZE   |  HARD   | -
+|   lz4hc    |      1 |       7 |       256 |           4 |         4 |         4 |    0.0024 |      1.03x |  SHUFFLE_SIZE   |  HARD   | -
+|   lz4hc    |      1 |       7 |       256 |           8 |         4 |         3 |   0.00312 |      1.14x | THREADS_DECOMP  |  HARD   | -
+|   lz4hc    |      1 |       5 |       256 |           8 |         4 |         4 |    0.0036 |      1.14x |     CLEVEL      |  HARD   | -
+|   lz4hc    |      1 |       7 |      1024 |           8 |         4 |         4 |   0.00393 |      1.14x |    BLOCKSIZE    |  HARD   | -
+|   lz4hc    |      1 |       7 |        64 |           8 |         4 |         4 |    0.0029 |      1.14x |    BLOCKSIZE    |  HARD   | -
+|   lz4hc    |      1 |       6 |       256 |           8 |         4 |         4 |    0.0032 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lz4hc    |      1 |       8 |       256 |           8 |         4 |         4 |   0.00245 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lz4hc    |      1 |       7 |       128 |           8 |         4 |         4 |   0.00311 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lz4hc    |      1 |       7 |       512 |           8 |         4 |         4 |   0.00384 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lz4hc    |      1 |       7 |       256 |           8 |         4 |         4 |   0.00313 |      1.14x |     WAITING     |  WAIT   | W
+|   lz4hc    |      1 |       8 |       256 |           8 |         4 |         4 |   0.00228 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lz4hc    |      1 |       6 |       256 |           8 |         4 |         4 |   0.00223 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lz4hc    |      1 |       7 |       512 |           8 |         4 |         4 |   0.00344 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lz4hc    |      1 |       7 |       128 |           8 |         4 |         4 |   0.00344 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lz4hc    |      1 |       7 |       256 |           8 |         4 |         4 |   0.00253 |      1.14x |     WAITING     |  WAIT   | W
+|   lz4hc    |      1 |       6 |       256 |           8 |         4 |         4 |   0.00224 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lz4hc    |      1 |       8 |       256 |           8 |         4 |         4 |   0.00262 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lz4hc    |      1 |       7 |       128 |           8 |         4 |         4 |    0.0029 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lz4hc    |      1 |       7 |       512 |           8 |         4 |         4 |    0.0034 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lz4hc    |      1 |       7 |       256 |           8 |         4 |         4 |   0.00373 |      1.14x |     WAITING     |  WAIT   | W
+|    lz4     |      0 |       7 |       256 |           8 |         4 |         4 |   0.00237 |         1x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      1 |       7 |       256 |           8 |         4 |         4 |   0.00249 |      1.14x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      2 |       7 |       256 |           8 |         4 |         4 |    0.0052 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      0 |       7 |       256 |           8 |         4 |         4 |    0.0024 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      1 |       7 |       256 |           8 |         4 |         4 |   0.00255 |      1.14x |  CODEC_FILTER   |  HARD   | W
+|   lz4hc    |      2 |       7 |       256 |           8 |         4 |         4 |   0.00704 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      0 |       7 |       256 |           8 |         4 |         4 |   0.00224 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       7 |       256 |           8 |         4 |         4 |   0.00235 |      1.14x |  CODEC_FILTER   |  HARD   | W
+|   lizard   |      2 |       7 |       256 |           8 |         4 |         4 |   0.00564 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      0 |       7 |       256 |           8 |         4 |         4 |    0.0134 |      1.06x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       7 |       256 |           8 |         4 |         4 |   0.00508 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      2 |       7 |       256 |           8 |         4 |         4 |   0.00478 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       7 |       256 |           4 |         4 |         4 |   0.00236 |         1x |  SHUFFLE_SIZE   |  HARD   | -
+|   lizard   |      1 |       7 |       256 |          16 |         4 |         4 |   0.00325 |      1.14x |  SHUFFLE_SIZE   |  HARD   | -
+|   lizard   |      1 |       7 |       256 |           8 |         4 |         3 |    0.0034 |      1.14x | THREADS_DECOMP  |  HARD   | -
+|   lizard   |      1 |       5 |       256 |           8 |         4 |         4 |   0.00385 |      1.14x |     CLEVEL      |  HARD   | -
+|   lizard   |      1 |       7 |      1024 |           8 |         4 |         4 |   0.00453 |      1.14x |    BLOCKSIZE    |  HARD   | -
+|   lizard   |      1 |       7 |        64 |           8 |         4 |         4 |   0.00411 |      1.14x |    BLOCKSIZE    |  HARD   | -
+|   lizard   |      1 |       6 |       256 |           8 |         4 |         4 |   0.00347 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lizard   |      1 |       8 |       256 |           8 |         4 |         4 |    0.0024 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lizard   |      1 |       7 |       128 |           8 |         4 |         4 |   0.00345 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       7 |       512 |           8 |         4 |         4 |     0.004 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       7 |       256 |           8 |         4 |         4 |   0.00286 |      1.14x |     WAITING     |  WAIT   | W
+|   lizard   |      1 |       8 |       256 |           8 |         4 |         4 |   0.00268 |      1.14x |     CLEVEL      |  SOFT   | W
+|   lizard   |      1 |       8 |       512 |           8 |         4 |         4 |   0.00359 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       8 |       128 |           8 |         4 |         4 |   0.00344 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       8 |       256 |           8 |         4 |         4 |   0.00299 |      1.14x |     WAITING     |  WAIT   | W
+|   lizard   |      1 |       7 |       256 |           8 |         4 |         4 |   0.00357 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lizard   |      1 |       8 |       128 |           8 |         4 |         4 |   0.00253 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       8 |       512 |           8 |         4 |         4 |   0.00353 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       8 |       256 |           8 |         4 |         4 |   0.00293 |      1.14x |     WAITING     |  WAIT   | W
+|    lz4     |      0 |       8 |       256 |           8 |         4 |         4 |   0.00245 |         1x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      1 |       8 |       256 |           8 |         4 |         4 |   0.00317 |      1.14x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      2 |       8 |       256 |           8 |         4 |         4 |   0.00524 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      0 |       8 |       256 |           8 |         4 |         4 |    0.0023 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      1 |       8 |       256 |           8 |         4 |         4 |   0.00236 |      1.14x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      2 |       8 |       256 |           8 |         4 |         4 |   0.00581 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      0 |       8 |       256 |           8 |         4 |         4 |   0.00238 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       8 |       256 |           8 |         4 |         4 |   0.00297 |      1.14x |  CODEC_FILTER   |  HARD   | W
+|   lizard   |      2 |       8 |       256 |           8 |         4 |         4 |   0.00741 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      0 |       8 |       256 |           8 |         4 |         4 |   0.00974 |      1.06x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       8 |       256 |           8 |         4 |         4 |   0.00375 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      2 |       8 |       256 |           8 |         4 |         4 |   0.00516 |      1.17x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       8 |       256 |          16 |         4 |         4 |    0.0034 |      1.14x |  SHUFFLE_SIZE   |  HARD   | -
+|   lizard   |      1 |       8 |       256 |           4 |         4 |         4 |   0.00226 |         1x |  SHUFFLE_SIZE   |  HARD   | -
+|   lizard   |      1 |       8 |       256 |           8 |         4 |         3 |   0.00369 |      1.14x | THREADS_DECOMP  |  HARD   | -
+|   lizard   |      1 |       6 |       256 |           8 |         4 |         4 |   0.00379 |      1.14x |     CLEVEL      |  HARD   | -
+|   lizard   |      1 |       8 |      1024 |           8 |         4 |         4 |   0.00534 |      1.14x |    BLOCKSIZE    |  HARD   | -
+|   lizard   |      1 |       8 |        64 |           8 |         4 |         4 |   0.00427 |      1.14x |    BLOCKSIZE    |  HARD   | -
+|   lizard   |      1 |       7 |       256 |           8 |         4 |         4 |   0.00404 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lizard   |      1 |       8 |       128 |           8 |         4 |         4 |   0.00441 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       8 |       512 |           8 |         4 |         4 |   0.00516 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       8 |       256 |           8 |         4 |         4 |   0.00502 |      1.14x |     WAITING     |  WAIT   | W
+|   lizard   |      1 |       7 |       256 |           8 |         4 |         4 |   0.00497 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lizard   |      1 |       8 |       512 |           8 |         4 |         4 |   0.00491 |      1.14x |    BLOCKSIZE    |  SOFT   | W
+|   lizard   |      1 |       8 |      1024 |           8 |         4 |         4 |   0.00598 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       8 |       512 |           8 |         4 |         4 |   0.00532 |      1.14x |     WAITING     |  WAIT   | W
+|   lizard   |      1 |       7 |       512 |           8 |         4 |         4 |   0.00582 |      1.14x |     CLEVEL      |  SOFT   | -
+|   lizard   |      1 |       8 |      1024 |           8 |         4 |         4 |   0.00437 |      1.14x |    BLOCKSIZE    |  SOFT   | W
+|   lizard   |      1 |       8 |      2048 |           8 |         4 |         4 |   0.00672 |      1.14x |    BLOCKSIZE    |  SOFT   | -
+|   lizard   |      1 |       8 |      1024 |           8 |         4 |         4 |   0.00757 |      1.14x |     WAITING     |  WAIT   | W
+|    lz4     |      0 |       8 |      1024 |           8 |         4 |         4 |   0.00203 |         1x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      1 |       8 |      1024 |           8 |         4 |         4 |   0.00859 |      1.14x |  CODEC_FILTER   |  HARD   | -
+|    lz4     |      2 |       8 |      1024 |           8 |         4 |         4 |   0.00978 |      1.15x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      0 |       8 |      1024 |           8 |         4 |         4 |   0.00213 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      1 |       8 |      1024 |           8 |         4 |         4 |   0.00412 |      1.14x |  CODEC_FILTER   |  HARD   | -
+|   lz4hc    |      2 |       8 |      1024 |           8 |         4 |         4 |    0.0103 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      0 |       8 |      1024 |           8 |         4 |         4 |   0.00206 |         1x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       8 |      1024 |           8 |         4 |         4 |   0.00383 |      1.14x |  CODEC_FILTER   |  HARD   | W
+|   lizard   |      2 |       8 |      1024 |           8 |         4 |         4 |    0.0105 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      0 |       8 |      1024 |           8 |         4 |         4 |   0.00931 |      1.07x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      1 |       8 |      1024 |           8 |         4 |         4 |    0.0104 |      1.19x |  CODEC_FILTER   |  HARD   | -
+|    zstd    |      2 |       8 |      1024 |           8 |         4 |         4 |   0.00987 |      1.16x |  CODEC_FILTER   |  HARD   | -
+|   lizard   |      1 |       8 |      1024 |           4 |         4 |         4 |   0.00423 |      1.01x |  SHUFFLE_SIZE   |  HARD   | -
+|   lizard   |      1 |       8 |      1024 |          16 |         4 |         4 |   0.00784 |      1.14x |  SHUFFLE_SIZE   |  HARD   | -
+|   lizard   |      1 |       8 |      1024 |           8 |         4 |         3 |   0.00736 |      1.14x | THREADS_DECOMP  |  HARD   | -
+|   lizard   |      1 |       7 |      1024 |           8 |         4 |         4 |    0.0053 |      1.14x |     CLEVEL      |  HARD   | -
+|   lizard   |      1 |       8 |      2048 |           8 |         4 |         4 |   0.00792 |      1.14x |    BLOCKSIZE    |  HARD   | -

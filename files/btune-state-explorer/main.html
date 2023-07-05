@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>BTune State Explorer</title>
+</head>
+  <style>* {padding: 0; margin: 0 auto; font-size: 20px;}</style>
+  <script src="pixi/pixi.min.js"></script>
+<body>
+  <div style="font-family: Arial; margin-top: 30px; width:750px">
+    <select id="mySelect" onchange="loadExample()">
+      <option disabled selected value>Select an example</option>
+      <option value="example1.log">Example 1</option>
+      <option value="example2.log">Example 2</option>
+      <option value="example3.log">Example 3</option>
+    </select>
+    <br>Or select your own log:
+    <input type="file" id="file-input" style="margin-top: 5px"/>
+  </div>
+  <pre id="btune-config" style="width: 800px; margin-top:10px"></pre>
+  <script src="btune_state_explorer.js">
+  </script>
+</body>
+</html>
