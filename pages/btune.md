@@ -33,7 +33,7 @@ Finally, for those who need to train various datasets, **Btune Studio** provides
 
 Additionally, for all licenses we offer an optional support pack that includes up to 3 hours of support per month for a monthly fee of $250 (or 250 EUR). 
 
-** Note **: The contracted support can be used for training in the use of the software or for consultation on compression for big data in general.
+**Note**: The contracted support can be used for training in the use of the software or for consultation on compression for big data in general.
 
 If interested, you can do the [donations via the Blosc project](https://www.blosc.org/pages/donate/) where, at the end of the form, you can specify the kind of license and support you are interested in.
 
