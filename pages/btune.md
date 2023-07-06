@@ -9,7 +9,7 @@ title: Btune: Making Compression Better
 
 - **Genetic (Btune Free)**: This genetic algorithm tests different combinations of compression parameters to meet the user's requirements for both compression ratio and speed for each chunk in the dataset. It assigns a score to each combination and, after a number of iterations, the software stops and uses the best score (minimal value) found for the rest of the dataset. For a graphical visualization, click on the image, select an example, and click on the 'play' button (it may require clicking twice). This is best suited for personal use.
 
-- **Trained (Btune Model)**: The user sends a representative sample of datasets to the Blosc development team and receives back a trained neural network model that enables Btune to predict the best compression parameters for similar/related datasets. The neural network model is serialized as a small number of files (in JSON and TensorFlow format) that can be [dropped anywhere in your filesystem for Btune to use](https://github.com/Blosc/blosc2_btune#btune-model). This approach is best for work-groups that need to optimize for a limited variety of datasets.
+- **Trained (Btune Models)**: The user sends a representative sample of datasets to the Blosc development team and receives back trained neural network models that enables Btune to predict the best compression parameters for similar/related datasets. This approach is best for work-groups that need to optimize for a limited variety of datasets.
 
 - **Fully managed (Btune Studio)**: The user gets a license to use our training software, allowing on-site training for an unlimited number of datasets. The license also includes a specified number of training/consultancy hours to help the user get the most out of the training process.  See below for more details.  This approach is best for organizations that need to optimize for a wide variety of datasets.
 
@@ -23,15 +23,27 @@ There are different licenses available for Btune.
 
 **Btune Free** enables you to explore compression parameters that better adapt to your datasets. However, this process can be slow and may require a large number of iterations before finding the best combination. Moreover, it is possible that some chunks in the same dataset would benefit more from a certain combination, while others would benefit more from a different one.
 
-The **Btune Model** addresses the limitations of Btune Free by finding the best combination for chunks in a dataset automatically, without requiring any manual operation. This is possible because a pre-trained neural network model is provided, allowing the best combination to be found on a chunk-by-chunk basis, increasing the effectiveness of the compression process.
+The **Btune Models** addresses the limitations of Btune Free by finding the best combination for chunks in a dataset automatically, without requiring any manual operation. This is possible because a pre-trained neural network models are provided, allowing the best combination to be found on a chunk-by-chunk basis, increasing the effectiveness of the compression process.
 
 Finally, for those who need to train a wide diversity of datasets, **Btune Studio** provides access to the software to train the datasets yourself. With this, you have control over all the necessary components for finding optimal compression parameters and avoiding external dependencies.
+
+## How to get Btune?
+
+Btune is available as a plugin for Blosc2.  You can get it by following the instructions in the [Btune README](https://github.com/Blosc/blosc2_btune/#readme). The plugin is available for Linux and macOS, and just for Intel architecture.  We will be adding support for other architectures in the future.
+
+The Btune plugin above can be used for both Btune Free and Btune Models.  For Btune Studio, you will need to contact us to get the software.
+
+## What's in a Model?
+
+A neural network is a simplified abstraction of the way the human brain processes information. It works by simulating a large number of interconnected processing units that resemble abstract versions of neurons. The processing units are arranged in layers. The layers are connected by weights that are adjusted during the training process.  The training process is done by feeding the network with a large number of examples, and adjusting the weights to minimize the error between the expected output and the actual output.  Once the training is done, the network can be used to predict the output for new inputs.
+
+In our context, the model is the serialization of the layers and the weights of the trained neural network. It is delivered to you as a number of small files (in JSON and TensorFlow format) that can be [dropped anywhere in your filesystem for Btune to use](https://github.com/Blosc/blosc2_btune/blob/main/README.md#btune-models). This model can be used by Btune to predict the best combination of compression parameters for a given chunk of data.  The inference process is very fast, which makes it suitable for choosing the right compression parameters, chunk by chunk, while consolidating large amounts of data.
 
 ## Licenses and Pricing
 
 - **Btune Free** is free to use. Please note that it is licensed under an [Affero GPLv3 license](https://www.gnu.org/licenses/agpl-3.0.en.html). This license comes with limited support, as it is mostly a community-driven project.
 
-- The **Btune Model** requires a fee of $1500 USD (or 1500 EUR) for up to 3 trained models per year, including 3 hours of support. You can ask to re-train models for the same or a different set of datasets on a yearly basis.  The renewal is $1200 USD (or 1200 EUR) per year.  If you don't renew, you keep the right to use the models you already have forever, but you will not be able to ask for training new models.
+- The **Btune Models** requires a fee of $1500 USD (or 1500 EUR) for up to 3 trained models per year, including 3 hours of support. You can ask to re-train models for the same or a different set of datasets on a yearly basis.  The renewal is $1200 USD (or 1200 EUR) per year.  If you don't renew, you keep the right to use the models you already have forever, but you will not be able to ask for training new models.
 
 - **Btune Studio** requires a fee of $7500 USD (or 7500 EUR) per year, or $750 USD (or 750 EUR) per month for at least 1 year, whichever fits best for you. This includes 25 hours of support per year, or up to 3 hours of support per month when using the monthly fee. The renewal is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly after the 1st year.  If you don't renew, you keep the right to use Btune Studio for producing models internally in your organization forever, but you will not have access to newer versions.
 
