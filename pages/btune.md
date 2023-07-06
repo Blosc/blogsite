@@ -27,12 +27,6 @@ The **Btune Models** addresses the limitations of Btune Free by finding the best
 
 Finally, for those who need to train a wide diversity of datasets, **Btune Studio** provides access to the software to train the datasets yourself. With this, you have control over all the necessary components for finding optimal compression parameters and avoiding external dependencies.
 
-## How to get Btune?
-
-Btune is available as a plugin for Blosc2.  You can get it by following the instructions in the [Btune README](https://github.com/Blosc/blosc2_btune/#readme). The plugin is available for Linux and macOS, and just for Intel architecture.  We will be adding support for other architectures in the future.
-
-The Btune plugin above can be used for both Btune Free and Btune Models.  For Btune Studio, you will need to contact us to get the software.
-
 ## What's in a Model?
 
 <img src="/btune/NN-simple-model.png" alt="Simple Neural Network Model" width="250" align="right"/>
@@ -41,31 +35,56 @@ A neural network is a simplified abstraction of the way the human brain processe
 
 In our context, the model is the serialization of the layers and the weights of the trained neural network. It is delivered to you as a number of small files (in JSON and TensorFlow format) that can be [dropped anywhere in your filesystem for Btune to use](https://github.com/Blosc/blosc2_btune/blob/main/README.md#btune-models). This model can be used by Btune to predict the best combination of compression parameters for a given chunk of data.  The inference process is very fast, which makes it suitable for choosing the right compression parameters, chunk by chunk, while consolidating large amounts of data.
 
+## How to use Btune?
+
+Btune is available as a plugin for Blosc2.  You can get it and read about using it in the [Btune README](https://github.com/Blosc/blosc2_btune/#readme). The plugin is available for Linux and macOS, and just for Intel architecture.  We will be adding support for other architectures in the future.
+
+The Btune plugin above can be used for both Btune Free and Btune Models.  For Btune Studio, you will need to contact us to get the software.
+
 ## Licenses and Pricing
 
-- **Btune Free** is free to use. Please note that it is licensed under an [Affero GPLv3 license](https://www.gnu.org/licenses/agpl-3.0.en.html). This license comes with limited support, as it is mostly a community-driven project.
+### Btune Free
+It is free to use. Please note that it is licensed under an [Affero GPLv3 license](https://www.gnu.org/licenses/agpl-3.0.en.html). This license comes with limited support, as it is mostly a community-driven project.
 
-- The **Btune Models** requires a fee of $1500 USD (or 1500 EUR) for up to 3 trained models per year, including 3 hours of support. You can ask to re-train models for the same or a different set of datasets on a yearly basis.
+### Btune Models
+Requires a fee of $1500 USD (or 1500 EUR) for up to 3 trained models per year, including 3 hours of support. You can ask to re-train models for the same or a different set of datasets on a yearly basis. If you need more than 3 models, you can ask for a quote.
 
-  *Renewal* is $1200 USD (or 1200 EUR) per year.  If you don't renew, you keep the right to use the models you already have forever, but you will not be able to ask for training new models.
+*Renewal* is $1200 USD (or 1200 EUR) per year.  If you don't renew, you keep the right to use the models you already have forever, but you will not be able to ask for training new models.
 
-- **Btune Studio** requires a fee of $7500 USD (or 7500 EUR) per year, or $750 USD (or 750 EUR) per month for at least 1 year, whichever fits best for you. This includes 25 hours of support per year, or up to 3 hours of support per month when using the monthly fee.
+### Btune Studio
+Requires a fee of $7500 USD (or 7500 EUR) per year, or $750 USD (or 750 EUR) per month for at least 1 year, whichever fits best for you. This includes 25 hours of support per year, or up to 3 hours of support per month when using the monthly fee.
 
-  *Renewal* is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly after the 1st year.  If you don't renew, you keep the right to use Btune Studio for producing models internally in your organization forever, but you will not have access to newer versions.
+*Renewal* is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly after the 1st year.  If you don't renew, you keep the right to use Btune Studio for producing models internally in your organization forever, but you will not have access to newer versions.
 
 **Note**: Btune Studio is not open source software, but we deliver sources with it so that you can build/fix it yourself.  However, you cannot include it in your own software and distribute it without permission.
 
+### Support
 For all licenses we offer an optional support pack that includes up to 3 hours of support per month for a monthly fee of $250 (or 250 EUR).  For more support hours, please [contact us](mailto:contact@blosc.org). The contracted support can be used for training in the use of the software, or for consultation on compression for big data in general.
 
+### How to pay?
 You can do the payments via [the donations form for the Blosc project](https://www.blosc.org/pages/donate/) where, at the end of the form, you can specify the kind of license and support you are interested in.  If for some reason, you cannot (or you don't want to) donate via NumFOCUS, please [contact us](mailto:contact@blosc.org); we can invoice you directly as well.
 
-## Why donations via NumFOCUS?
+### Why donations via NumFOCUS?
 
 [NumFOCUS](https://numfocus.org/community/mission) is a non-profit organization with a mission to promote open practices in research, data, and scientific computing. They serve as a fiscal sponsor for open-source projects and organize community-driven educational programs.
 
 The Blosc project has benefited significantly from NumFOCUS [Small Development Grant Program](https://numfocus.org/programs/small-development-grants), and they have been instrumental in helping us to channel donations. When you pay Btune fees by donating to the Blosc project via NumFOCUS, 15% of the amount goes to them as a fee. We believe this fee is fair and helps repay NumFOCUS for the services, support, and love they have shown us over the years. Your donation will not only strengthen the Blosc project, but also many other open-source projects.
 
 If you or your organization encounter issues donating via NumFOCUS, the Blosc development team can also produce invoices directly.
+
+## Practical Example
+
+In the figure below, you can see the most predicted combinations of codecs and filters after training for getting maximum **decompression** performance for the Gaia dataset, an array of shape (20_000, 20_000, 20_000) of `uint8` for a total of 7.4 TB of uncompressed size.
+
+<img src="/btune/Gaia-3D-model-decomp.png" alt="Most predicted codecs/filters for decompression" width="400" align="center"/>
+
+The next figure shows the speed that can be achieved from getting multiple multidimensional slices of the dataset along different axis, using the most predicted codecs and filters for different tradeoffs.  The speed is measured in GB/s, so the higher, the better.
+
+<img src="/btune/slicing-speed-filters.png" alt="Slicing speed for different codecs/filters" width="800" align="center"/>
+
+It can be seen how the predictions are right, and that the fastest combination is BloscLZ (compression level 5), although Zstd (compression level 9) gets a good mark too.  While it is true that decompression speed is not the only metric to consider (e.g. getting completely general multidimensional slices is a costly operation in general), it is a good indicator of the overall performance of the decompression process.
+
+You can read more context about this example in [our forthcoming article for SciPy 2023](https://procbuild.scipy.org/download/Blosc-2023).
 
 ## Testimonials
 
