@@ -35,6 +35,8 @@ The Btune plugin above can be used for both Btune Free and Btune Models.  For Bt
 
 ## What's in a Model?
 
+<img src="/btune/NN-simple-model.png" alt="Simple Neural Network Model" width="250" align="right"/>
+
 A neural network is a simplified abstraction of the way the human brain processes information. It works by simulating a large number of interconnected processing units that resemble abstract versions of neurons. The processing units are arranged in layers. The layers are connected by weights that are adjusted during the training process.  The training process is done by feeding the network with a large number of examples, and adjusting the weights to minimize the error between the expected output and the actual output.  Once the training is done, the network can be used to predict the output for new inputs.
 
 In our context, the model is the serialization of the layers and the weights of the trained neural network. It is delivered to you as a number of small files (in JSON and TensorFlow format) that can be [dropped anywhere in your filesystem for Btune to use](https://github.com/Blosc/blosc2_btune/blob/main/README.md#btune-models). This model can be used by Btune to predict the best combination of compression parameters for a given chunk of data.  The inference process is very fast, which makes it suitable for choosing the right compression parameters, chunk by chunk, while consolidating large amounts of data.
