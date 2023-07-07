@@ -9,37 +9,35 @@ title: Btune: Making Compression Better
 
 - **Genetic (Btune Free)**: This genetic algorithm tests different combinations of compression parameters to meet the user's requirements for both compression ratio and speed for each chunk in the dataset. It assigns a score to each combination and, after a number of iterations, the software stops and uses the best score (minimal value) found for the rest of the dataset. For a graphical visualization, click on the image, select an example, and click on the 'play' button (it may require clicking twice). This is best suited for personal use.
 
-- **Trained (Btune Models)**: The user sends a representative sample of datasets to the Blosc development team and receives back trained neural network models that enables Btune to predict the best compression parameters for similar/related datasets. This approach is best for work-groups that need to optimize for a limited variety of datasets.
+- **Trained (Btune Models)**: With this approach, the user sends a representative sample of datasets to the Blosc development team and receives back trained neural network models that enable Btune to predict the best compression parameters for similar or related datasets. This approach is best for workgroups that need to optimize for a limited variety of datasets.
 
-- **Fully managed (Btune Studio)**: The user gets a license to use our training software, allowing on-site training for an unlimited number of datasets. The license also includes a specified number of training/consultancy hours to help the user get the most out of the training process.  See below for more details.  This approach is best for organizations that need to optimize for a wide variety of datasets.
-
-For usage details, see the [README of the Btune plugin](https://github.com/Blosc/blosc2_btune#readme).
+- **Fully managed (Btune Studio)**: The user receives a license to use our training software, which enables on-site training for an unlimited number of datasets. The license also includes a specified number of training/consultancy hours to help the user get the most out of the training process. Refer to the details below for more information. This approach is best suited for organizations that need to optimize for a wide range of datasets.
 
 ## Why Btune?
 
-Finding the optimal compression parameters in Blosc2 can be a slow process. Due to the large number of combinations of compression parameters (codec, compression level, filter, split mode, number of threads, etc.), it may require a significant amount of manual trial and error to find the best combinations. However, you can significantly accelerate this process by using Btune while compressing your datasets.
+Finding the optimal compression parameters in Blosc2 can be a slow process due to the large number of combinations of compression parameters (codec, compression level, filter, split mode, number of threads, etc.), and it may require a significant amount of manual trial and error to find the best combinations. However, you can significantly speed up this process by using Btune while compressing your datasets.
 
 There are different licenses available for Btune.
 
-**Btune Free** enables you to explore compression parameters that better adapt to your datasets. However, this process can be slow and may require a large number of iterations before finding the best combination. Moreover, it is possible that some chunks in the same dataset would benefit more from a certain combination, while others would benefit more from a different one.
+**Btune Free** allows you to explore compression parameters that are better suited to your datasets. However, this process can be slow and may require a large number of iterations before finding the best combination. Additionally, certain chunks in the same dataset may benefit more from a particular combination, while others may benefit more from a different one.
 
-The **Btune Models** addresses the limitations of Btune Free by finding the best combination for chunks in a dataset automatically, without requiring any manual operation. This is possible because a pre-trained neural network models are provided, allowing the best combination to be found on a chunk-by-chunk basis, increasing the effectiveness of the compression process.
+**Btune Models** addresses the limitations of Btune Free by automatically finding the best combination for chunks in a dataset, without requiring any manual operation. This is made possible by using pre-trained neural network models, which allow the best combination to be found on a chunk-by-chunk basis, thereby increasing the effectiveness of the compression process.
 
-Finally, for those who need to train a wide diversity of datasets, **Btune Studio** provides access to the software to train the datasets yourself. With this, you have control over all the necessary components for finding optimal compression parameters and avoiding external dependencies.
+Finally, for those who need to train a wide range of datasets, **Btune Studio** provides access to the software necessary for training the datasets yourself. In this way, you have control over all the necessary components to find optimal compression parameters and avoid external dependencies.
 
 ## What's in a Model?
 
 <img src="/btune/NN-simple-model.png" alt="Simple Neural Network Model" width="250" align="right"/>
 
-A neural network is a simplified abstraction of the way the human brain processes information. It works by simulating a large number of interconnected processing units that resemble abstract versions of neurons. The processing units are arranged in layers. The layers are connected by weights that are adjusted during the training process.  The training process is done by feeding the network with a large number of examples, and adjusting the weights to minimize the error between the expected output and the actual output.  Once the training is done, the network can be used to predict the output for new inputs.
+A neural network is a simplified model of the way the human brain processes information. It simulates a large number of interconnected processing units that resemble abstract versions of neurons. These processing units are arranged in layers, which are connected by weights that are adjusted during the training process. To train the network, a large number of examples are fed into it, and the weights are adjusted to minimize the difference between the expected output and the actual output. Once training is complete, the network can be used to predict the output for new inputs.
 
-In our context, the model is the serialization of the layers and the weights of the trained neural network. It is delivered to you as a number of small files (in JSON and TensorFlow format) that can be [dropped anywhere in your filesystem for Btune to use](https://github.com/Blosc/blosc2_btune/blob/main/README.md#btune-models). This model can be used by Btune to predict the best combination of compression parameters for a given chunk of data.  The inference process is very fast, which makes it suitable for choosing the right compression parameters, chunk by chunk, while consolidating large amounts of data.
+In our context, the "model" refers to the serialization of the layers and weights of the trained neural network. It is delivered to you as a set of small files (in JSON and TensorFlow format) that can be [placed anywhere in your filesystem for Btune to access](https://github.com/Blosc/blosc2_btune/blob/main/README.md#btune-models). By using this model, Btune can predict the optimal combination of compression parameters for a given chunk of data. The inference process is very fast, making it suitable for selecting the appropriate compression parameters on a chunk-by-chunk basis while consolidating large amounts of data.
 
 ## How to use Btune?
 
-Btune is available as a plugin for Blosc2.  You can get it and read about using it in the [Btune README](https://github.com/Blosc/blosc2_btune/#readme). The plugin is available for Linux and macOS, and just for Intel architecture.  We will be adding support for other architectures in the future.
+Btune is a plugin for Blosc2 that can be obtained from the [PyPI repository](https://pypi.org/project/blosc2-btune/). You can learn how to use it in the [Btune README](https://github.com/Blosc/blosc2_btune/#readme). The plugin is currently only available for Linux and macOS, and only for Intel architecture. However, we plan to add support for other architectures in the future.
 
-The Btune plugin above can be used for both Btune Free and Btune Models.  For Btune Studio, you will need to contact us to get the software.
+The Btune plugin above can be used for both Btune Free and Btune Models.  For Btune Studio, you will need to contact us to get the additional software for training the models.
 
 ## Licenses and Pricing
 
@@ -74,21 +72,21 @@ If you or your organization encounter issues donating via NumFOCUS, the Blosc de
 
 ## Practical Example
 
-In the figure below, you can see the most predicted combinations of codecs and filters after training for getting maximum **decompression** performance for the Gaia dataset, an array of shape (20_000, 20_000, 20_000) of `uint8` for a total of 7.4 TB of uncompressed size.
+In the figure below, you can see the most predicted combinations of codecs and filters when optimizing for **decompression** performance on a subset of the [Gaia dataset](https://gea.esac.esa.int/archive/). The subset contains stars that are less than 10,000 light years away from our Sun (around 500 millions). The data is stored in an array of shape (20,000, 20,000, 20,000), with the number of stars in every cubic light year cell, resulting in a total uncompressed size of 7.3 TB.
 
 <img src="/btune/Gaia-3D-model-decomp.png" alt="Most predicted codecs/filters for decompression" width="400" align="center"/>
 
-The next figure shows the speed that can be achieved from getting multiple multidimensional slices of the dataset along different axis, using the most predicted codecs and filters for different tradeoffs.  The speed is measured in GB/s, so the higher, the better.
+The following figure displays the speed that can be achieved by obtaining multiple multidimensional slices of the dataset along different axes, using the most efficient codecs and filters for various tradeoffs. The speed is measured in GB/s, so a higher value is better.
 
 <img src="/btune/slicing-speed-filters.png" alt="Slicing speed for different codecs/filters" width="800" align="center"/>
 
-It can be seen how the predictions are right, and that the fastest combination is BloscLZ (compression level 5), although Zstd (compression level 9) gets a good mark too.  While it is true that decompression speed is not the only metric to consider (e.g. getting completely general multidimensional slices is a costly operation in general), it is a good indicator of the overall performance of the decompression process.
+The results indicate that the fastest compression combination is BloscLZ (compression level 5), closely followed by Zstd (compression level 9). While decompression speed is not the only metric to consider for fast operation, as obtaining completely general multidimensional slices can be costly due to internal copies, it does provide a good indication of the overall performance of the decompression process.
 
-Finally, it is also important to compare the compression ratio achieved by the different codecs and filters.  In the next figure, we can see the file sizes achieved by the most predicted codecs and filters for different tradeoffs.
+Finally, it is important to compare the compression ratios achieved by different codecs and filters. In the following figure, we can see the file sizes created when using the most commonly predicted codecs and filters for various trade-offs. The file sizes are measured in GB, so the lower, the better.
 
 <img src="/btune/filesizes-filters.png" alt="File sizes for different codecs/filters" width="800" align="center"/>
 
-In this case, the trained model is predicting Zstd (compression level 9) for a good balance, and BloscLZ (compression level 5) for best decompression speed. BitShuffle + Zstd (compression level 9) is not a good option, unless you are looking for extreme compression ratios.
+In this case, the trained model recommends using Zstd (compression level 9) for a good balance between compression and decompression speed. If you are looking for the best decompression speed, it is recommended to use BloscLZ (compression level 5). However, note that BitShuffle + Zstd (compression level 9) is not a good option unless you are looking for the absolute best compression ratio.
 
 You can read more context about this example in [our forthcoming article for SciPy 2023](https://procbuild.scipy.org/download/Blosc-2023).
 
