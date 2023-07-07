@@ -44,17 +44,17 @@ The Btune plugin above can be used for both Btune Free and Btune Models.  For Bt
 ## Licenses and Pricing
 
 ### Btune Free
-It is free to use. Please note that it is licensed under an [Affero GPLv3 license](https://www.gnu.org/licenses/agpl-3.0.en.html). This license comes with limited support, as it is mostly a community-driven project.
+It is free to use. Please note that it is licensed under an [Affero GPLv3 license](https://www.gnu.org/licenses/agpl-3.0.en.html). This license comes with limited support, as it is mostly a community-supported project.
 
 ### Btune Models
 Requires a fee of $1500 USD (or 1500 EUR) for up to 3 trained models per year, including 3 hours of support. You can ask to re-train models for the same or a different set of datasets on a yearly basis. If you need more than 3 models, you can ask for a quote.
 
-*Renewal* is $1200 USD (or 1200 EUR) per year.  If you don't renew, you keep the right to use the models you already have forever, but you will not be able to ask for training new models.
+Renewal is $1200 USD (or 1200 EUR) per year.  If you don't renew, you keep the right to use the models you already have forever, but you will not be able to ask for training new models.
 
 ### Btune Studio
 Requires a fee of $7500 USD (or 7500 EUR) per year, or $750 USD (or 750 EUR) per month for at least 1 year, whichever fits best for you. This includes 25 hours of support per year, or up to 3 hours of support per month when using the monthly fee.
 
-*Renewal* is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly after the 1st year.  If you don't renew, you keep the right to use Btune Studio for producing models internally in your organization forever, but you will not have access to newer versions.
+Renewal is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly after the 1st year.  If you don't renew, you keep the right to use Btune Studio for producing models internally in your organization forever, but you will not have access to newer versions.
 
 **Note**: Btune Studio is not open source software, but we deliver sources with it so that you can build/fix it yourself.  However, you cannot include it in your own software and distribute it without permission.
 
