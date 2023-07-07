@@ -84,6 +84,12 @@ The next figure shows the speed that can be achieved from getting multiple multi
 
 It can be seen how the predictions are right, and that the fastest combination is BloscLZ (compression level 5), although Zstd (compression level 9) gets a good mark too.  While it is true that decompression speed is not the only metric to consider (e.g. getting completely general multidimensional slices is a costly operation in general), it is a good indicator of the overall performance of the decompression process.
 
+Finally, it is also important to compare the compression ratio achieved by the different codecs and filters.  In the next figure, we can see the file sizes achieved by the most predicted codecs and filters for different tradeoffs.
+
+<img src="/btune/filesizes-filters.png" alt="File sizes for different codecs/filters" width="800" align="center"/>
+
+In this case, the trained model is predicting Zstd (compression level 9) for a good balance, and BloscLZ (compression level 5) for best decompression speed. BitShuffle + Zstd (compression level 9) is not a good option, unless you are looking for extreme compression ratios.
+
 You can read more context about this example in [our forthcoming article for SciPy 2023](https://procbuild.scipy.org/download/Blosc-2023).
 
 ## Testimonials
