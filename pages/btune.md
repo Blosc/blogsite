@@ -1,21 +1,5 @@
 title: Btune: Making Compression Better
 
-## Compression Is Not a One-Codec-Fits-All Problem
-
-Compressing data involves a trade-off between compression ratio and speed. A higher compression ratio results in a slower compression process. Depending on your needs, you may want to prioritize one over the other.
-
-For instance, if you are storing data from high-speed data acquisition systems, you may want to prioritize *compression* speed over compression ratio. This is because you will be writing data at speeds near the capacity of your systems. On the other hand, if the goal is to access the data repeatedly from a file system, you may want to prioritize *decompression* speed over compression ratio for optimal performance.
-
-<!-- <a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-cspeed.png" alt="Compression ratio vs compression speed" width="600" align="center"/></a> -->
-
-<a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-dspeed.png" alt="Compression ratio vs compression speed" width="600" align="center"/></a>
-
-Finally, if you are storing data in the cloud, you may want to prioritize *compression ratio* over speed. This is because you pay for the storage (and potentially upload/download costs) of data.
-
-<a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-codec.png" alt="Compression ratio vs codec" width="600" align="center"/></a>
-
-Btune can help you find the optimal combination of compression parameters for your datasets.  
-
 ## What is Btune?
 
 <a href="/btune-state-explorer/main.html"> <img src="/btune-state-explorer/btune-preview-running.png" alt="Btune Free in action" width="400" align="right"/></a>
@@ -30,15 +14,19 @@ Btune can help you find the optimal combination of compression parameters for yo
 
 ## Why Btune?
 
+Essentially, because compression is not a one-codec-fits-all problem. Compressing data involves a trade-off between compression ratio and speed. A higher compression ratio results in a slower compression process. Depending on your needs, you may want to prioritize one over the other.
+
+For instance, if you are storing data from high-speed data acquisition systems, you may want to prioritize *compression* speed over compression ratio. This is because you will be writing data at speeds near the capacity of your systems. On the other hand, if the goal is to access the data repeatedly from a file system, you may want to prioritize *decompression* speed over compression ratio for optimal performance.
+
+Finally, if you are storing data in the cloud, you may want to prioritize *compression ratio* over speed. This is because you pay for the storage (and potentially upload/download costs) of data.
+
+<!-- <a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-cspeed.png" alt="Compression ratio vs compression speed" width="800" align="center"/></a> -->
+
+<a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-dspeed.png" alt="Compression ratio vs compression speed" width="800" align="center"/></a>
+
+<!-- <a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-codec.png" alt="Compression ratio vs codec" width="800" align="center"/></a> -->
+
 Finding the optimal compression parameters in Blosc2 can be a slow process due to the large number of combinations of compression parameters (codec, compression level, filter, split mode, number of threads, etc.), and it may require a significant amount of manual trial and error to find the best combinations. However, you can significantly speed up this process by using Btune while compressing your datasets.
-
-There are different licenses available for Btune.
-
-**Btune Free** allows you to explore compression parameters that are better suited to your datasets. However, this process can be slow and may require a large number of iterations before finding the best combination. Additionally, certain chunks in the same dataset may benefit more from a particular combination, while others may benefit more from a different one.
-
-**Btune Models** addresses the limitations of Btune Free by automatically finding the best combination for chunks in a dataset, without requiring any manual operation. This is made possible by using pre-trained neural network models, which allow the best combination to be found on a chunk-by-chunk basis, thereby increasing the effectiveness of the compression process.
-
-Finally, for those who need to train a wide range of datasets, **Btune Studio** provides access to the software necessary for training the datasets yourself. In this way, you have control over all the necessary components to find optimal compression parameters and avoid external dependencies.
 
 ## What's in a Model?
 
@@ -54,7 +42,17 @@ Btune is a plugin for Blosc2 that can be obtained from the [PyPI repository](htt
 
 The Btune plugin above can be used for both Btune Free and Btune Models.  For Btune Studio, you will need to contact us to get the additional software for training the models.
 
-## Licenses and Pricing
+## Licensing Model
+
+There are different licenses available for Btune.
+
+**Btune Free** allows you to explore compression parameters that are better suited to your datasets. However, this process can be slow and may require a large number of iterations before finding the best combination. Additionally, certain chunks in the same dataset may benefit more from a particular combination, while others may benefit more from a different one.
+
+**Btune Models** addresses the limitations of Btune Free by automatically finding the best combination for chunks in a dataset, without requiring any manual operation. This is made possible by using pre-trained neural network models, which allow the best combination to be found on a chunk-by-chunk basis, thereby increasing the effectiveness of the compression process.
+
+Finally, for those who need to train a wide range of datasets, **Btune Studio** provides access to the software necessary for training the datasets yourself. In this way, you have control over all the necessary components to find optimal compression parameters and avoid external dependencies.
+
+## Pricing
 
 ### Btune Free
 It is free to use. Please note that it is licensed under an [Affero GPLv3 license](https://www.gnu.org/licenses/agpl-3.0.en.html). This license comes with limited support, as it is mostly a community-supported project.
@@ -69,7 +67,7 @@ Requires a fee of $7500 USD (or 7500 EUR) per year, or $750 USD (or 750 EUR) per
 
 Renewal is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly after the 1st year.  If you don't renew, you keep the right to use Btune Studio for producing models internally in your organization forever, but you will not have access to newer versions.
 
-**Note**: Btune Studio is not open source software, but we deliver sources with it so that you can build/fix it yourself.  However, you cannot include it in your own software and distribute it without permission.
+**Note**: Btune Studio is not open source software, but we deliver sources with it, so that you can build/fix it yourself.  However, you cannot include it in your own software and distribute it without permission.
 
 ### Support
 For all licenses we offer an optional support pack that includes up to 3 hours of support per month for a monthly fee of $250 (or 250 EUR).  For more support hours, please [contact us](mailto:contact@blosc.org). The contracted support can be used for training in the use of the software, or for consultation on compression for big data in general.
@@ -99,9 +97,9 @@ The results indicate that the fastest compression combination is BloscLZ (compre
 
 Finally, it is important to compare the compression ratios achieved by different codecs and filters. In the following figure, we can see the file sizes created when using the most commonly predicted codecs and filters for various trade-offs. The file sizes are measured in GB, so the lower, the better.
 
-<img src="/btune/filesizes-filters.png" alt="File sizes for different codecs/filters" width="800" align="center"/>
+<img src="/btune/filesizes-filters.png" alt="File sizes for different codecs/filters" width="600" align="center"/>
 
-In this case, the trained model recommends using Zstd (compression level 9) for a good balance between compression and decompression speed. If you are looking for the best decompression speed, it is recommended to use BloscLZ (compression level 5). However, note that BitShuffle + Zstd (compression level 9) is not a good option unless you are looking for the absolute best compression ratio.
+In this case, the trained model recommends using Zstd (compression level 9) for a good balance between compression ratio and decompression speed. If you are looking for the best decompression speed, Btune recommends to use BloscLZ (compression level 5), but at the cost of more storage. However, note that BitShuffle + Zstd (compression level 9) is not a good option in general, unless you are looking for the absolute best compression ratio.
 
 You can read more context about this example in [our forthcoming article for SciPy 2023](https://procbuild.scipy.org/download/Blosc-2023).
 
