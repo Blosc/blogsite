@@ -93,13 +93,13 @@ The following figure displays the speed that can be achieved by obtaining multip
 
 <img src="/btune/slicing-speed-filters.png" alt="Slicing speed for different codecs/filters" width="800" align="center"/>
 
-The results indicate that the fastest compression combination is BloscLZ (compression level 5), closely followed by Zstd (compression level 9). While decompression speed is not the only metric to consider for fast operation, as obtaining completely general multidimensional slices can be costly due to internal copies, it does provide a good indication of the overall performance of the decompression process.
+The results indicate that the fastest compression combination is BloscLZ (compression level 5), closely followed by Zstd (compression level 9). Also, note how the fastest codecs, BloscLZ and also Zstd, are not affected very much by the number of threads used, which means that they are not CPU-bound, so small computers or laptops with low core counts will be able to reach good speeds.
 
 Finally, it is important to compare the compression ratios achieved by different codecs and filters. In the following figure, we can see the file sizes created when using the most commonly predicted codecs and filters for various trade-offs. The file sizes are measured in GB, so the lower, the better.
 
 <img src="/btune/filesizes-filters.png" alt="File sizes for different codecs/filters" width="600" align="center"/>
 
-In this case, the trained model recommends using Zstd (compression level 9) for a good balance between compression ratio and decompression speed. If you are looking for the best decompression speed, Btune recommends to use BloscLZ (compression level 5), but at the cost of more storage. However, note that BitShuffle + Zstd (compression level 9) is not a good option in general, unless you are looking for the absolute best compression ratio.
+In this case, the trained model recommends using Zstd (compression level 9) for a good balance between compression ratio and decompression speed, and that can be confirmed by seeing the large difference in size. However, note that BitShuffle + Zstd (compression level 9) is not a good option in general, unless you are looking for the absolute best compression ratio.
 
 You can read more context about this example in [our forthcoming article for SciPy 2023](https://procbuild.scipy.org/download/Blosc-2023).
 
