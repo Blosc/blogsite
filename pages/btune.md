@@ -1,5 +1,20 @@
 title: Btune: Making Compression Better
 
+## Compression Is Not a One-Codec-Fits-All Problem
+
+Compressing data involves a trade-off between compression ratio and speed. A higher compression ratio results in a slower compression process. Depending on your needs, you may want to prioritize one over the other.
+
+For instance, if you are storing data from high-speed data acquisition systems, you may want to prioritize *compression* speed over compression ratio. This is because you will be writing data at speeds near the capacity of your systems. On the other hand, if the goal is to access the data repeatedly from a file system, you may want to prioritize *decompression* speed over compression ratio for optimal performance.
+
+<!-- <a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-cspeed.png" alt="Compression ratio vs compression speed" width="600" align="center"/></a> -->
+
+<a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-dspeed.png" alt="Compression ratio vs compression speed" width="600" align="center"/></a>
+
+Finally, if you are storing data in the cloud, you may want to prioritize *compression ratio* over speed. This is because you pay for the storage (and potentially upload/download costs) of data.
+
+<a href="https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/"> <img src="/btune/cratio-vs-codec.png" alt="Compression ratio vs codec" width="600" align="center"/></a>
+
+Btune can help you find the optimal combination of compression parameters for your datasets.  
 
 ## What is Btune?
 
@@ -33,7 +48,7 @@ A neural network is a simplified model of the way the human brain processes info
 
 In our context, the "model" refers to the serialization of the layers and weights of the trained neural network. It is delivered to you as a set of small files (in JSON and TensorFlow format) that can be [placed anywhere in your filesystem for Btune to access](https://github.com/Blosc/blosc2_btune/blob/main/README.md#btune-models). By using this model, Btune can predict the optimal combination of compression parameters for a given chunk of data. The inference process is very fast, making it suitable for selecting the appropriate compression parameters on a chunk-by-chunk basis while consolidating large amounts of data.
 
-## How to use Btune?
+## How To Use Btune?
 
 Btune is a plugin for Blosc2 that can be obtained from the [PyPI repository](https://pypi.org/project/blosc2-btune/). You can learn how to use it in the [Btune README](https://github.com/Blosc/blosc2_btune/#readme). The plugin is currently only available for Linux and macOS, and only for Intel architecture. However, we plan to add support for other architectures in the future.
 
@@ -59,7 +74,7 @@ Renewal is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly af
 ### Support
 For all licenses we offer an optional support pack that includes up to 3 hours of support per month for a monthly fee of $250 (or 250 EUR).  For more support hours, please [contact us](mailto:contact@blosc.org). The contracted support can be used for training in the use of the software, or for consultation on compression for big data in general.
 
-### How to pay?
+### How To Pay?
 You can do the payments via [the donations form for the Blosc project](https://www.blosc.org/pages/donate/) where, at the end of the form, you can specify the kind of license and support you are interested in.  If for some reason, you cannot (or you don't want to) donate via NumFOCUS, please [contact us](mailto:contact@blosc.org); we can invoice you directly as well.
 
 ### Why donations via NumFOCUS?
