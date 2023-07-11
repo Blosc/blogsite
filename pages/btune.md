@@ -69,8 +69,8 @@ Renewal is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly af
 
 **Note**: Btune Studio is not open source software, but we deliver sources with it, so that you can build/fix it yourself.  However, you cannot include it in your own software and distribute it without permission.
 
-### Support
-For all licenses we offer an optional support pack that includes up to 3 hours of support per month for a monthly fee of $250 (or 250 EUR).  For more support hours, please [contact us](mailto:contact@blosc.org). The contracted support can be used for training in the use of the software, or for consultation on compression for big data in general.
+### Priority Support
+For all licenses we offer an optional priority support pack that includes up to 3 hours of support per month for a monthly fee of $250 (or 250 EUR).  For more support hours, please [contact us](mailto:contact@blosc.org). The contracted support can be used for training in the use of the software, or for consultation on compression for big data in general.
 
 ### How To Pay?
 You can do the payments via [the donations form for the Blosc project](https://www.blosc.org/pages/donate/) where, at the end of the form, you can specify the kind of license and support you are interested in.  If for some reason, you cannot (or you don't want to) donate via NumFOCUS, please [contact us](mailto:contact@blosc.org); we can invoice you directly as well.
@@ -111,7 +111,7 @@ You can read more context about this example in [our forthcoming article for Sci
 
 > Btune is a simple and highly effective tool. We tried this out with @LEAPSinitiative data and found some super useful spots in the parameter space of Blosc2 compression arguments! Awesome work, @Blosc2 team!
 
--- Peter Steinbach, Helmholtz AI Consultants Team Lead for Matter Research @HZDR_Dresden.
+-- Peter Steinbach, Helmholtz AI Consultants Team Lead for Matter Research @HZDR_Dresden
 
 ## Contact
 
