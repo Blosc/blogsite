@@ -114,7 +114,7 @@ Provided that data is compressible enough, applications that use Blosc are expec
 
 Blosc2 also adds support for sparse and multi-dimensional datasets, which are common in scientific applications.  See an example on how Blosc can make an `efficient access to much larger datasets than the available memory <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023.pdf>`_.
 
-Currently, there is support for using Blosc in `Zarr <https://zarr.readthedocs.io>`_, h5py (via `hdf5plugin <https://github.com/silx-kit/hdf5plugin>`_ or `PyTables <http://www.pytables.org>`_; all of these projects have binary packages, so it is easy to start using it.
+Currently, there is support for using Blosc in `Zarr <https://zarr.readthedocs.io>`_, h5py (via `hdf5plugin <https://github.com/silx-kit/hdf5plugin>`_) or `PyTables <http://www.pytables.org>`_; all of these projects have binary packages, so it is easy to start using it.
 
 Adapt Blosc to your needs
 --------------------------
