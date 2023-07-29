@@ -119,7 +119,7 @@ To see a full usage example, refer to `<https://github.com/Blosc/blosc2_plugin_e
   :width: 100%
   :alt: Dynamically loading filter
 
-Once you are satisfied with your plugin, you may choose to request the Blosc Development Team to register it as a global plugin. The only difference (aside from its ID number) is that instead of registering it locally, you will only need to call the `blosc2_init()` function before using a dynamically loaded plugin. This will register all globally registered plugins. However, the plugin will not be loaded until it is requested by any compression or decompression function.
+Once you are satisfied with your plugin, you may choose to request the Blosc Development Team to register it as a global plugin. The only difference (aside from its ID number) is that users won't need to register it locally anymore. However, the plugin will not be loaded until it is requested by any compression or decompression function.
 
 Conclusions
 -----------
