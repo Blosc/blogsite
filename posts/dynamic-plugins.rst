@@ -113,7 +113,7 @@ To use the plugin, simply set the filter ID in the filters pipeline, as you woul
     blosc2_storage storage = {.cparams=&cparams, .dparams=&dparams};
     schunk = blosc2_schunk_new(&storage);
 
-To see a full usage example, refer to `<https://github.com/Blosc/blosc2_plugin_example/blob/main/src/test_plugin.c>`_. Keep in mind that the executable using the plugin must be launched from the virtual environment where the plugin wheel was installed. When compressing or decompressing, C-Blosc2 will dynamically load the library and call its functions (as depicted below).
+To see a full usage example, refer to `<https://github.com/Blosc/blosc2_plugin_example/blob/main/examples/test_plugin.c>`_. Keep in mind that the executable using the plugin must be launched from the virtual environment where the plugin wheel was installed. When compressing or decompressing, C-Blosc2 will dynamically load the library and call its functions (as depicted below).
 
 .. image:: /images/dynamic-plugins/dynamic-plugin.png
   :width: 100%
