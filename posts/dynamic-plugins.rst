@@ -8,8 +8,8 @@
 .. description:
 .. type: text
 
-**Updated: 2021-08-03**
-We have added a new example of a dynamic filter for Python. Also, we have improved the content so that it can work more as a tutorial on how to make dynamic plugins for Blosc2. Finally, we have added support for dynamic plugins on Windows and MacOS/ARM64. Enjoy!
+**Updated: 2023-08-03**
+Added a new example of a dynamic filter for Python. Also, we have improved the content so that it can work more as a tutorial on how to make dynamic plugins for Blosc2. Finally, there is support now for dynamic plugins on Windows and MacOS/ARM64. Enjoy!
 
 The Blosc Development Team is excited to announce that the latest version of `C-Blosc2 <https://github.com/Blosc/c-blosc2>`_ and `Python-Blosc2 <https://github.com/Blosc/python-blosc2>`_
 include a great new feature: the ability to dynamically load plugins, such as codecs and filters. This means that these codecs
