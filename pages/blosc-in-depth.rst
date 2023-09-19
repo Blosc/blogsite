@@ -67,7 +67,7 @@ Blosc2 also applies more advanced techniques to improve the compression ratio on
 Performance
 -----------
 
-`Blosc2 CFrame format <https://github.com/Blosc/c-blosc2/blob/main/README_CFRAME_FORMAT.rst>`_ is also designed to be efficient when retrieving blocks and chunks in multidimensional datasets.  For comparison purposes, see below the speed that BloscLZ, one of the fastest codecs available in Blosc, can achieve when combined with different libraries supporting Blosc(1)/Blosc2 when accessing a 7.3 TB dataset:
+Blosc2 is also designed to be efficient when retrieving blocks and chunks in multidimensional datasets.  For comparison purposes, see below the speed that BloscLZ, one of the fastest codecs available in Blosc, can achieve when combined with different libraries supporting Blosc(1)/Blosc2 when accessing a 7.3 TB dataset:
 
 .. figure:: /images/slicing-speed-blosclz-libraries.png
    :width: 75%
@@ -128,7 +128,7 @@ Is Blosc Ready for Production Use?
 
 Yes, it is!
 
-Blosc is currently being used in various libraries and is able to compress data at a rate that exceeds several petabytes per month worldwide. Fortunately, there haven't been many reports of failures caused by Blosc itself, but we strive to `respond as quickly as possible when such issues do arise <https://www.blosc.org/posts/new-forward-compat-policy/>`_. 
+Blosc is currently being used in various libraries and is able to compress data at a rate that exceeds several petabytes per month worldwide. Fortunately, there haven't been many reports of failures caused by Blosc itself, but we strive to `respond as quickly as possible when such issues do arise <https://www.blosc.org/posts/new-forward-compat-policy/>`_.
 
 After a long period of testing, C-Blosc2 has entered the production stage in version 2.0.0. Additionally, all new releases are guaranteed to read from persistent storage generated from previous releases (as of 2.0.0).
 
