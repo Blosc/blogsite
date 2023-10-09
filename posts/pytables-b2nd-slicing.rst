@@ -30,7 +30,7 @@ Now, you may have also read the post by the Blosc Development Team about `Blosc2
   :width: 66%
   :align: center
 
-This `b2nd` support was the missing piece to extend the chunking and slicing optimizations from tables to uniform arrays.
+This `b2nd` support was the missing piece to extend PyTables' chunking and slicing optimizations from tables to uniform arrays.
 
 Choosing adequate chunk and block sizes
 ---------------------------------------
