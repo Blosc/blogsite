@@ -1,4 +1,4 @@
-.. title: Optimized hyper-slicing in PyTables with Blosc2 NDim
+.. title: Optimized Hyper-slicing in PyTables with Blosc2 NDim
 .. author: Ivan Vilata-i-Balaguer
 .. slug: pytables-b2nd-slicing
 .. TODO use actual date
