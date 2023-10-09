@@ -13,6 +13,9 @@ The recent and long-awaited PyTables 3.9 release carries many goodies, including
 
 I (Ivan) carried on with the work that Marta started, with very valuable help from her and Francesc. I was in fact a core PyTables developer quite a few years ago (2004-2008) while working with Francesc and Vicent at Cárabos Coop. V. (see the `20 year anniversary post <https://www.blosc.org/posts/pytables-20years/>`_ for more info), and it was an honour and a pleasure to be back at the project. It took me a while to get back to grips with development, but it was a nice surprise to see the code that we worked so hard upon live through the years and get better and more popular. My heartfelt thanks to everybody who made that possible!
 
+Direct chunk access and two-level partitioning
+----------------------------------------------
+
 You may remember that the previous version of PyTables (3.8.0) already got support for optimized access to Blosc2-compressed chunks (bypassing the HDF5 filter pipeline), with two-level partitioning of chunks into smaller blocks (allowing for fast access to small slices with big chunks). You may want to read Óscar and Francesc's post `Blosc2 Meets PyTables <https://www.blosc.org/posts/blosc2-pytables-perf/>`_ to see the great performance gains provided by these techniques.
 
 .. image:: /images/blosc2_pytables/block-slice.png
@@ -28,5 +31,8 @@ Now, you may have also read the post by the Blosc Development Team about `Blosc2
   :align: center
 
 This `b2nd` support was the missing piece to extend the chunking and slicing optimizations from tables to uniform arrays.
+
+Choosing adequate chunk and block sizes
+---------------------------------------
 
 TODO
