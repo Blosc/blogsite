@@ -24,7 +24,7 @@ You may remember that the previous version of PyTables (3.8.0) already got suppo
 
 However, these enhancements only applied to tabular datasets, i.e. one-dimensional arrays of a uniform, fixed set of fields (columns) with heterogeneous data types as illustrated above. Multi-dimensional compressed arrays of homogeneous data (another popular feature of PyTables) still used plain chunking going through the HDF5 filter pipeline, and flat chunk compression. Thus, they suffered from the high overhead of the very generic pipeline and the inefficient decompression of small slices in the case of big chunks.
 
-Now, you may have also read the post by the Blosc Development Team about `Blosc2 NDim support <https://www.blosc.org/posts/blosc2-ndim-intro/>`_ (`b2nd`), first included in C-Blosc 2.7.0. It introduces the generalization of Blosc2's two-level partitioning to multi-dimensional arrays as shown below. This makes arbitrary slicing of such arrays across any dimension very efficient, when the right chunk and block sizes are chosen.
+Now, you may have also read the post by the Blosc Development Team about `Blosc2 NDim support <https://www.blosc.org/posts/blosc2-ndim-intro/>`_ (`b2nd`), first included in C-Blosc 2.7.0. It introduces the generalization of Blosc2's two-level partitioning to multi-dimensional arrays as shown below. This makes arbitrary slicing of such arrays across any dimension very efficient (as better explained in the post about `Caterva <https://www.blosc.org/posts/caterva-slicing-perf/>`_, the origin of `b2nd`), when the right chunk and block sizes are chosen.
 
 .. image:: /images/blosc2-ndim-intro/b2nd-2level-parts.png
   :width: 66%
