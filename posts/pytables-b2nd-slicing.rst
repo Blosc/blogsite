@@ -37,4 +37,12 @@ Choosing adequate chunk and block sizes
 
 Let us try a benchmark very similar to that in the post introducing `Blosc2 NDim support`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time using PyTables with flat slicing (via the HDF5 filter mechanism), PyTables with b2nd slicing (optimized via direct chunk access), and h5py (which also uses the HDF5 filter).
 
+According to the post, Blosc2 works better when blocks have a size which allows them to fit both compressed and uncompressed in each CPU core’s L2 cache. This of course depends on the data itself and the compression algorithm and parameters chosen. Let us choose LZ4 since it offers a reasonable speed/size trade-off, and use the program `get_blocksize.c <https://github.com/Blosc/c-blosc2/blob/main/examples/get_blocksize.c>`_ from C-Blosc2 to get the compression level which implies the desired blocksize (2MB for compression level 8 in our case).
+
+With the benchmark's default 10x25x50x50 chunk shape, we obtain the results shown below:
+
+.. image:: /images/pytables-b2nd-slicing//b2nd_getslice_small.png
+  :width: 75%
+  :align: center
+
 TODO
