@@ -35,4 +35,6 @@ This `b2nd` support was the missing piece to extend PyTables' chunking and slici
 Choosing adequate chunk and block sizes
 ---------------------------------------
 
+Let us try a benchmark very similar to that in the post introducing `Blosc2 NDim support`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time using PyTables with flat slicing (via the HDF5 filter mechanism), PyTables with b2nd slicing (optimized via direct chunk access), and h5py (which also uses the HDF5 filter).
+
 TODO
