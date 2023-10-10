@@ -53,4 +53,6 @@ Let us raise the chunkshape to 10x25x150x100 (28.6MB) and repeat the benchmark:
   :width: 75%
   :align: center
 
+Choosing a better chunkshape not just provides up to 5x speedup for the PyTables optimized case, it also results in 3x-4x speedups compared to the performance of the HDF5 filter.
+
 TODO
