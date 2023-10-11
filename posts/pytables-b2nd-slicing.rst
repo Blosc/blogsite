@@ -37,7 +37,7 @@ Choosing adequate chunk and block sizes
 
 Let us try a benchmark very similar to the one in the post introducing `Blosc2 NDim`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time using PyTables with flat slicing (via the HDF5 filter pipeline), PyTables with b2nd slicing (optimized, via direct chunk access), and h5py (which also uses the HDF5 filter pipeline).
 
-According to the post, Blosc2 works better when blocks have a size which allows them to fit both compressed and uncompressed in each CPU core’s L2 cache. This of course depends on the data itself and the compression algorithm and parameters chosen. Let us choose LZ4 since it offers a reasonable speed/size trade-off, and try to find the different compression levels that work well with our CPU (level 8 seems best in our case).
+According to the post, Blosc2 works better when blocks have a size which allows them to fit both compressed and uncompressed in each CPU core’s L2 cache. This of course depends on the data itself and the compression algorithm and parameters chosen. Let us choose LZ4+shuffle since it offers a reasonable speed/size trade-off, and try to find the different compression levels that work well with our CPU (level 8 seems best in our case).
 
 With the benchmark's default 10x25x50x50 chunk shape, and after experimenting with the ``BLOSC_NTHREADS`` environment variable to find the number of threads that better exploit Blosc2's parallelism (6 for our CPU), we obtain the results shown below:
 
