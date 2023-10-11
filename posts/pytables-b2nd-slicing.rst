@@ -16,7 +16,7 @@ I (Ivan) carried on with the work that Marta started, with very valuable help fr
 Direct chunk access and two-level partitioning
 ----------------------------------------------
 
-You may remember that the previous version of PyTables (3.8.0) already got support for optimized access to Blosc2-compressed chunks (bypassing the HDF5 filter pipeline), with two-level partitioning of chunks into smaller blocks (allowing for fast access to small slices with big chunks). You may want to read Óscar and Francesc's post `Blosc2 Meets PyTables <https://www.blosc.org/posts/blosc2-pytables-perf/>`_ to see the great performance gains provided by these techniques.
+You may remember that the previous version of PyTables (3.8.0) already got support for direct access to Blosc2-compressed chunks (bypassing the HDF5 filter pipeline), with two-level partitioning of chunks into smaller blocks (allowing for fast access to small slices with big chunks). You may want to read Óscar and Francesc's post `Blosc2 Meets PyTables <https://www.blosc.org/posts/blosc2-pytables-perf/>`_ to see the great performance gains provided by these techniques.
 
 .. image:: /images/blosc2_pytables/block-slice.png
   :width: 66%
@@ -35,7 +35,7 @@ This `b2nd` support was the missing piece to extend PyTables' chunking and slici
 Choosing adequate chunk and block sizes
 ---------------------------------------
 
-Let us try a benchmark very similar to that in the post introducing `Blosc2 NDim`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time using PyTables with flat slicing (via the HDF5 filter pipeline), PyTables with b2nd slicing (optimized via direct chunk access), and h5py (which also uses HDF5 filters).
+Let us try a benchmark very similar to that in the post introducing `Blosc2 NDim`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time using PyTables with flat slicing (via the HDF5 filter pipeline), PyTables with b2nd slicing (optimized, via direct chunk access), and h5py (which also uses HDF5 filters).
 
 According to the post, Blosc2 works better when blocks have a size which allows them to fit both compressed and uncompressed in each CPU core’s L2 cache. This of course depends on the data itself and the compression algorithm and parameters chosen. Let us choose LZ4 since it offers a reasonable speed/size trade-off, and use the program `get_blocksize.c <https://github.com/Blosc/c-blosc2/blob/main/examples/get_blocksize.c>`_ from C-Blosc2 to get the compression level which implies the desired blocksize (2MB for compression level 8 in our case).
 
@@ -58,7 +58,7 @@ Choosing a better chunkshape not just provides up to 5x speedup for the PyTables
 Conclusions and future work
 ---------------------------
 
-The benchmarks above show how Blosc2 NDim's two-level partitioning, in combination with optimized, direct HDF5 chunk access can yield considerable performance increases when slicing multi-dimensional Blosc2-compressed arrays under PyTables. However, the usual advice holds to invest some effort into fine-tuning some of the parameters used for compression and chunking for better results. We hope that this article also helps readers find those parameters.
+The benchmarks above show how optimized Blosc2 NDim's two-level partitioning combined with direct HDF5 chunk access can yield considerable performance increases when slicing multi-dimensional Blosc2-compressed arrays under PyTables. However, the usual advice holds to invest some effort into fine-tuning some of the parameters used for compression and chunking for better results. We hope that this article also helps readers find those parameters.
 
 It is worth noticing that these techniques still have some limitations: they only work with contiguous slices (that is, with step 1 on every dimension), and on datasets with the same byte ordering as the host machine. Also, although results are good indeed, there may still be room for implementation improvement: for instance, the case of PyTables flat slicing via HDF5 filters (no `b2nd`) still looks strangely slow in comparison with the equivalent h5py's access; these future enhancements might as well carry over to the `b2nd` case for even better results.
 
