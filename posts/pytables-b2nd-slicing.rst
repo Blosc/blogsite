@@ -41,7 +41,7 @@ According to the post, Blosc2 works better when blocks have a size which allows 
 
 With the benchmark's default 10x25x50x50 chunk shape, and after experimenting with the ``BLOSC_NTHREADS`` environment variable to find the number of threads that better exploit Blosc2's parallelism (6 for our CPU), we obtain the results shown below:
 
-.. image:: /images/pytables-b2nd-slicing//b2nd_getslice_small.png
+.. image:: /images/pytables-b2nd-slicing/b2nd_getslice_small.png
   :width: 75%
   :align: center
 
@@ -49,7 +49,7 @@ The optimized b2nd slicing of PyTables already provides some speedups in compari
 
 Let us raise the chunkshape to 10x25x150x100 (28.6MB) and repeat the benchmark (again with 6 Blosc2 threads):
 
-.. image:: /images/pytables-b2nd-slicing//b2nd_getslice_big.png
+.. image:: /images/pytables-b2nd-slicing/b2nd_getslice_big.png
   :width: 75%
   :align: center
 
