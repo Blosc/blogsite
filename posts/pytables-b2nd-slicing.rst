@@ -55,4 +55,11 @@ Let us raise the chunkshape to 10x25x150x100 (28.6MB) and repeat the benchmark (
 
 Choosing a better chunkshape not just provides up to 5x speedup for the PyTables optimized case, it also results in 3x-4x speedups compared to the performance of the HDF5 filter pipeline.
 
-TODO
+Conclusions and future work
+---------------------------
+
+The benchmarks above show how Blosc2 NDim's two-level partitioning, in combination with optimized, direct HDF5 chunk access can yield considerable performance increases when slicing multi-dimensional Blosc2-compressed arrays under PyTables. However, the usual advice holds to invest some effort into fine-tuning some of the parameters used for compression and chunking for better results. We hope that this article also helps readers find those parameters.
+
+It is worth noticing that these techniques still have some limitations: they only work with contiguous slices (that is, with step 1 on every dimension), and on datasets with the same byte ordering as the host machine. Also, although results are good indeed, there may still be room for implementation improvement: for instance, the case of PyTables flat slicing via HDF5 filters (no `b2nd`) still looks strangely slow in comparison with the equivalent h5py's access; these future enhancements might as well carry over to the `b2nd` case for even better results.
+
+Finally, as mentioned in the `Blosc2 NDim`_ post, if you need help in finding the best parameters for your use case, feel free to reach out to the Blosc team at `contact (at) blosc.org`.  Enjoy data!
