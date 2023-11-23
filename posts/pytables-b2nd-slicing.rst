@@ -12,6 +12,8 @@ The recent and long-awaited `PyTables 3.9 release <https://groups.google.com/g/p
 
 I (Ivan) carried on with the work that Marta started, with very valuable help from her and Francesc. I was in fact a core PyTables developer quite a few years ago (2004-2008) while working with Francesc and Vicent at Cárabos Coop. V. (see the `20 year anniversary post <https://www.blosc.org/posts/pytables-20years/>`_ for more information), and it was an honour and a pleasure to be back at the project. It took me a while to get back to grips with development, but it was a nice surprise to see the code that we worked so hard upon live through the years and get better and more popular. My heartfelt thanks to everybody who made that possible!
 
+**Update (2023-11-23):** We redid the benchmarks described further below with some fixes and the same versions of Blosc2 HDF5 filter code for both PyTables and h5py. Results are more consistent and easier to interpret now.
+
 Direct chunk access and two-level partitioning
 ----------------------------------------------
 
