@@ -46,7 +46,7 @@ With the benchmark's default 10x25x50x50 chunk shape, and after experimenting wi
   :width: 75%
   :align: center
 
-The optimized b2nd slicing of PyTables already provides some speedups in comparison with flat slicing based on the HDF5 filter pipeline in the inner dimensions, but not that impressive. As explained in `Blosc2 Meets PyTables`_, HDF5 handling of chunked datasets favours big chunks that reduce in-memory structures, while Blosc2 can further exploit parallel threads to handle the increased number of blocks. Our CPU's L3 cache is 36MB big, so we may still grow the chunksize to reduce HDF5 overhead (without hurting Blosc2 parallelism).
+The optimized b2nd slicing of PyTables already provides some speedups (although not that impressive) in the inner dimensions, in comparison with flat slicing based on the HDF5 filter pipeline (which performs similarly for PyTables and h5py). As explained in `Blosc2 Meets PyTables`_, HDF5 handling of chunked datasets favours big chunks that reduce in-memory structures, while Blosc2 can further exploit parallel threads to handle the increased number of blocks. Our CPU's L3 cache is 36MB big, so we may still grow the chunksize to reduce HDF5 overhead (without hurting Blosc2 parallelism).
 
 Let us raise the chunkshape to 10x25x150x100 (28.6MB) and repeat the benchmark (again with 6 Blosc2 threads):
 
