@@ -14,6 +14,8 @@ I (Ivan) carried on with the work that Marta started, with very valuable help fr
 
 **Update (2023-11-23):** We redid the benchmarks described further below with some fixes and the same versions of Blosc2 HDF5 filter code for both PyTables and h5py. Results are more consistent and easier to interpret now.
 
+**Update (2023-12-04):** We extended benchmark results with the experimental application of a similar optimization technique to h5py.
+
 Direct chunk access and two-level partitioning
 ----------------------------------------------
 
@@ -36,9 +38,11 @@ This b2nd support was the missing piece to extend PyTables' chunking and slicing
 Choosing adequate chunk and block sizes
 ---------------------------------------
 
-Let us try a benchmark very similar to the one in the post introducing `Blosc2 NDim`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time using PyTables 3.9 with flat slicing (via the HDF5 filter pipeline), PyTables 3.9 with b2nd slicing (optimized, via direct chunk access), and h5py 3.10 (with support for Blosc2 in the HDF5 filter pipeline via hdf5plugin 4.3).
+Let us try a benchmark very similar to the one in the post introducing `Blosc2 NDim`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time with 64-bit integers, and using PyTables 3.9 with flat slicing (via the HDF5 filter pipeline), PyTables 3.9 with b2nd slicing (optimized, via direct chunk access implemented in C), h5py 3.10 with flat slicing (via hdf5plugin 4.3's support for Blosc2 in the HDF5 filter pipeline), and h5py with b2nd slicing (via the experimental b2h5py_ package using direct chunk access implemented in Python through h5py).
 
-According to the post, Blosc2 works better when blocks have a size which allows them to fit both compressed and uncompressed in each CPU core’s L2 cache. This of course depends on the data itself and the compression algorithm and parameters chosen. Let us choose LZ4+shuffle since it offers a reasonable speed/size trade-off, and try to find the different compression levels that work well with our CPU (level 8 seems best in our case).
+.. _b2h5py: https://github.com/Blosc/b2h5py
+
+According to the aforementioned post, Blosc2 works better when blocks have a size which allows them to fit both compressed and uncompressed in each CPU core’s L2 cache. This of course depends on the data itself and the compression algorithm and parameters chosen. Let us choose LZ4+shuffle since it offers a reasonable speed/size trade-off, and try to find the different compression levels that work well with our CPU (level 8 seems best in our case).
 
 With the benchmark's default 10x25x50x50 chunk shape, and after experimenting with the ``BLOSC_NTHREADS`` environment variable to find the number of threads that better exploit Blosc2's parallelism (6 for our CPU), we obtain the results shown below:
 
@@ -54,12 +58,12 @@ Let us raise the chunkshape to 10x25x150x100 (28.6MB) and repeat the benchmark (
   :width: 75%
   :align: center
 
-Much better! Choosing a better chunkshape not just provides up to 5x speedup for the PyTables optimized case, it also results in 3x-5x speedups compared to the performance of the HDF5 filter pipeline.
+Much better! Choosing a better chunkshape not just provides up to 10x speedup for the PyTables optimized case, it also results in 4x-5x speedups compared to the performance of the HDF5 filter pipeline. The optimizations applied to h5py also yield considerable speedups (for an initial, Python-based implementation).
 
 Conclusions and future work
 ---------------------------
 
-The benchmarks above show how optimized Blosc2 NDim's two-level partitioning combined with direct HDF5 chunk access can yield considerable performance increases when slicing multi-dimensional Blosc2-compressed arrays under PyTables. However, the usual advice holds to invest some effort into fine-tuning some of the parameters used for compression and chunking for better results. We hope that this article also helps readers find those parameters.
+The benchmarks above show how optimized Blosc2 NDim's two-level partitioning combined with direct HDF5 chunk access can yield considerable performance increases when slicing multi-dimensional Blosc2-compressed arrays under PyTables (and h5py). However, the usual advice holds to invest some effort into fine-tuning some of the parameters used for compression and chunking for better results. We hope that this article also helps readers find those parameters.
 
 It is worth noting that these techniques still have some limitations: they only work with contiguous slices (that is, with step 1 on every dimension), and on datasets with the same byte ordering as the host machine. Also, although results are good indeed, there may still be room for implementation improvement, but that will require extra code profiling and parameter adjustments.
 
