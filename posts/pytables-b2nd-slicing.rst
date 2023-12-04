@@ -36,7 +36,7 @@ This b2nd support was the missing piece to extend PyTables' chunking and slicing
 Choosing adequate chunk and block sizes
 ---------------------------------------
 
-Let us try a benchmark very similar to the one in the post introducing `Blosc2 NDim`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time using PyTables 3.9 with flat slicing (via the HDF5 filter pipeline), PyTables 3.9 with b2nd slicing (optimized, via direct chunk access), and h5py 3.10 (with support for Blosc2 in the HDF5 filter pipeline via hdf5plugin 4.3).
+Let us try a benchmark very similar to the one in the post introducing `Blosc2 NDim`_, which slices a 50x100x300x250 floating-point array (2.8 GB) along its four dimensions, but this time with 64-bit integers, and using PyTables 3.9 with flat slicing (via the HDF5 filter pipeline), PyTables 3.9 with b2nd slicing (optimized, via direct chunk access), and h5py 3.10 (with support for Blosc2 in the HDF5 filter pipeline via hdf5plugin 4.3).
 
 According to the post, Blosc2 works better when blocks have a size which allows them to fit both compressed and uncompressed in each CPU core’s L2 cache. This of course depends on the data itself and the compression algorithm and parameters chosen. Let us choose LZ4+shuffle since it offers a reasonable speed/size trade-off, and try to find the different compression levels that work well with our CPU (level 8 seems best in our case).
 
