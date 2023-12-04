@@ -14,6 +14,8 @@ I (Ivan) carried on with the work that Marta started, with very valuable help fr
 
 **Update (2023-11-23):** We redid the benchmarks described further below with some fixes and the same versions of Blosc2 HDF5 filter code for both PyTables and h5py. Results are more consistent and easier to interpret now.
 
+**Update (2023-12-04):** We extended benchmark results with the experimental application of a similar optimization technique to h5py.
+
 Direct chunk access and two-level partitioning
 ----------------------------------------------
 
