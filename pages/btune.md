@@ -52,25 +52,21 @@ There are different licenses available for Btune.
 
 Finally, for those who need to train a wide range of datasets, **Btune Studio** provides access to the software necessary for training the datasets yourself. In this way, you have control over all the necessary components to find optimal compression parameters and avoid external dependencies.
 
-## Pricing
+## Donation fees
 
 ### Btune Free
-It is free to use. Please note that it is licensed under an [Affero GPLv3 license](https://www.gnu.org/licenses/agpl-3.0.en.html). This license comes with limited support, as it is mostly a community-supported project.
+It is free to use (but hey, if you like the project, please consider [donating](https://www.blosc.org/pages/donate/) too!). Please note that it is licensed under an [Affero GPLv3 license](https://www.gnu.org/licenses/agpl-3.0.en.html). This license comes with limited support, as it is mostly a community-supported project.
 
 ### Btune Models
-Requires a fee of $1500 USD (or 1500 EUR) for up to 3 trained models per year, including 3 hours of support. You can ask to re-train models for the same or a different set of datasets on a yearly basis. If you need more than 3 models, you can ask for a quote.
-
-Renewal is $1200 USD (or 1200 EUR) per year.  If you don't renew, you keep the right to use the models you already have forever, but you will not be able to ask for training new models.
+Requires a donation of $1500 USD (or 1500 EUR) for up to 3 trained models. If you need more than 3 models, ask for a quote.
 
 ### Btune Studio
-Requires a fee of $7500 USD (or 7500 EUR) per year, or $750 USD (or 750 EUR) per month for at least 1 year, whichever fits best for you. This includes 25 hours of support per year, or up to 3 hours of support per month when using the monthly fee.
+Requires a donation of $7500 USD (or 7500 EUR) for the first year, or $750 USD (or 750 EUR) per month for at least 1 year, whichever fits best for you.  Renewal is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly after the 1st year.  If you don't renew, you keep the right to use Btune Studio for producing models internally in your organization forever, but you will not have access to newer versions.
 
-Renewal is $6000 USD (or 6000 EUR) per year, or $600 USD (or 600 EUR) monthly after the 1st year.  If you don't renew, you keep the right to use Btune Studio for producing models internally in your organization forever, but you will not have access to newer versions.
-
-**Note**: Btune Studio is not open source software, but we deliver sources with it, so that you can build/fix it yourself.  However, you cannot include it in your own software and distribute it without permission.
+**Note**: With Btune Studio we deliver sources of it, so that you can build/fix it yourself.  However, you cannot include it in your own software and distribute it without permission.
 
 ### Priority Support
-For all licenses we offer an optional priority support pack that includes up to 3 hours of support per month for a monthly fee of $250 (or 250 EUR).  For more support hours, please [contact us](mailto:contact@blosc.org). The contracted support can be used for training in the use of the software, or for consultation on compression for big data in general.
+For support hours, please [contact us](mailto:contact@blosc.org).  Our donation fee is typically $100 USD (or 100 EUR) per hour. The support can be used for training in the use of the software, or for consultation on compression for big data in general.
 
 ### How To Pay?
 You can do the payments via [the donations form for the Blosc project](https://www.blosc.org/pages/donate/) where, at the end of the form, you can specify the kind of license and support you are interested in.  If for some reason, you cannot (or you don't want to) donate via NumFOCUS, please [contact us](mailto:contact@blosc.org); we can invoice you directly as well.
@@ -81,7 +77,7 @@ You can do the payments via [the donations form for the Blosc project](https://w
 
 The Blosc project has benefited significantly from NumFOCUS [Small Development Grant Program](https://numfocus.org/programs/small-development-grants), and they have been instrumental in helping us to channel donations. When you pay Btune fees by donating to the Blosc project via NumFOCUS, 15% of the amount goes to them as a fee. We believe this fee is fair and helps repay NumFOCUS for the services, support, and love they have shown us over the years. Your donation will not only strengthen the Blosc project, but also many other open-source projects.
 
-If you or your organization encounter issues donating via NumFOCUS, the Blosc development team can also produce invoices directly.
+If you (or your organization) have issues donating via NumFOCUS, the Blosc development team can also produce invoices directly.
 
 ## Practical Example
 
