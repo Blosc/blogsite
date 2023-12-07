@@ -12,6 +12,19 @@ title: Btune: Making Compression Better
 
 - **Fully managed (Btune Studio)**: The user receives a license to use our training software, which enables on-site training for an unlimited number of datasets. The license also includes a specified number of training/consultancy hours to help the user get the most out of the training process. Refer to the details below for more information. This approach is best suited for organizations that need to optimize for a wide range of datasets.
 
+## How To Use Btune?
+
+Btune is a plugin for Blosc2 that can be obtained from the [PyPI repository](https://pypi.org/project/blosc2-btune/). You can learn how to use it in the [Btune README](https://github.com/Blosc/blosc2_btune/#readme). The plugin is currently only available for Linux and macOS, and only for Intel architecture. However, we plan to add support for other architectures in the future.
+
+The Btune plugin above can be used for both Btune Free and Btune Models.  For Btune Studio, you will need to contact us to get the additional software for training the models.
+
+Also, there are a couple of tutorials about different aspects of Btune.  You can find them here:
+
+- [Btune Genetic & Trained](https://github.com/Blosc/Btune-Genetic-tutorial)
+- [Btune Studio](https://github.com/Blosc/Btune-tutorial)
+
+For completing the Studio version, you will need to contact us to get the additional software for training the models.
+
 ## Why Btune?
 
 Essentially, because compression is not a one-codec-fits-all problem. Compressing data involves a trade-off between compression ratio and speed. A higher compression ratio results in a slower compression process. Depending on your needs, you may want to prioritize one over the other.
@@ -35,12 +48,6 @@ Finding the optimal compression parameters in Blosc2 can be a slow process due t
 A neural network is a simplified model of the way the human brain processes information. It simulates a large number of interconnected processing units that resemble abstract versions of neurons. These processing units are arranged in layers, which are connected by weights that are adjusted during the training process. To train the network, a large number of examples are fed into it, and the weights are adjusted to minimize the difference between the expected output and the actual output. Once training is complete, the network can be used to predict the output for new inputs.
 
 In our context, the "model" refers to the serialization of the layers and weights of the trained neural network. It is delivered to you as a set of small files (in JSON and TensorFlow format) that can be [placed anywhere in your filesystem for Btune to access](https://github.com/Blosc/blosc2_btune/blob/main/README.md#btune-models). By using this model, Btune can predict the optimal combination of compression parameters for a given chunk of data. The inference process is very fast, making it suitable for selecting the appropriate compression parameters on a chunk-by-chunk basis while consolidating large amounts of data.
-
-## How To Use Btune?
-
-Btune is a plugin for Blosc2 that can be obtained from the [PyPI repository](https://pypi.org/project/blosc2-btune/). You can learn how to use it in the [Btune README](https://github.com/Blosc/blosc2_btune/#readme). The plugin is currently only available for Linux and macOS, and only for Intel architecture. However, we plan to add support for other architectures in the future.
-
-The Btune plugin above can be used for both Btune Free and Btune Models.  For Btune Studio, you will need to contact us to get the additional software for training the models.
 
 ## Licensing Model
 
