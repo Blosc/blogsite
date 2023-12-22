@@ -48,7 +48,7 @@ To tell Blosc2 to use it, you only need to use the same id in the codec field of
 
 It is important to disable any filter or splitmode, since we don't want the data to be modified before proceeding to the compression using grok.
 
-Now, imagine you have an image as a NumPy array (let's say, created using [pillow](https://pillow.readthedocs.io/en/stable/)). But first, you will need to tell blosc2-grok which format to use among the available ones in the grok library (we will get through the different parameters later)::
+Now, imagine you have an image as a NumPy array (let's say, created using `pillow <https://pillow.readthedocs.io/en/stable/>`_). But first, you will need to tell blosc2-grok which format to use among the available ones in the grok library (we will get through the different parameters later)::
 
     # Set the parameters that will be used by the codec
     kwargs = {'cod_format': blosc2_grok.GrkFileFmt.GRK_FMT_JP2}
@@ -144,4 +144,4 @@ The addition of the grok plugin to Blosc2 opens many possibilities for compressi
 
 Although fully usable, this plugin is still in its early stages, so we encourage you to try it out and give us feedback; we will be happy to hear from you!
 
-Thanks to the [LEAPS consortium](https://www.leaps-innov.eu) and NumFOCUS for sponsoring this work. Providing the funding for this project has allowed us to develop this plugin and make it available to the community.
+Thanks to the `LEAPS consortium <https://www.leaps-innov.eu>`_ and `NumFOCUS <https://numfocus.org>`_ for sponsoring this work. Providing the funding for this project has allowed us to develop this plugin and make it available to the community.
