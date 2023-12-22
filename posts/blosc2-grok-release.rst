@@ -99,16 +99,16 @@ Visual example
 
 Below we did a total of 3 different compressions.  First an image using lossless compression showing the original image:
 
-.. image:: images/blosc2-grok-release/kodim23.png
+.. image:: /images/blosc2-grok-release/kodim23.png
   :width: 50%
   :alt: Lossless compression
 
 Then, a couple of images using lossy compression: one with 10x for `rates` quality mode (left) and another with 45dB for `dB` quality mode (right):
 
-.. image:: images/blosc2-grok-release/kodim23rates.png
+.. image:: /images/blosc2-grok-release/kodim23rates.png
   :width: 45%
   :alt: Compression with quality mode rates
-.. image:: images/blosc2-grok-release/kodim23dB.png
+.. image:: /images/blosc2-grok-release/kodim23dB.png
   :width: 45%
   :alt: Compression with quality mode dB
 
@@ -119,11 +119,11 @@ A glimpse on performance
 
 The combination of the great implementation of the JPEG2000 codec in grok and the multithreading capabilities of Blosc2 allow to compress, but specially decompress, the image very fast (`benchmark <https://github.com/Blosc/blosc2_grok/blob/main/bench/encode-chunking-i13900K.ipynb>`_ run on an Intel i9-13900K CPU):
 
-.. image:: images/blosc2-grok-release/comp-speed-mt.png
+.. image:: /images/blosc2-grok-release/comp-speed-mt.png
   :width: 45%
   :alt: Compression speed using multithreading
 
-.. image:: images/blosc2-grok-release/decomp-speed-mt.png
+.. image:: /images/blosc2-grok-release/decomp-speed-mt.png
   :width: 45%
   :alt: Decompression speed using multithreading
 
@@ -131,7 +131,7 @@ One can see that the compression speed is quite good (around 140 MB/s), but that
 
 Besides, both grok and OpenJPEG can achieve very similar quality when using similar compression ratios:
 
-.. image:: images/blosc2-grok-release/blosc2-grok-quality.png
+.. image:: /images/blosc2-grok-release/blosc2-grok-quality.png
   :width: 50%
   :alt: Compression speed using multithreading
 
