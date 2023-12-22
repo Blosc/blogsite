@@ -129,7 +129,7 @@ The combination of the great implementation of the JPEG2000 codec in grok and th
 
 One can see that the compression speed is quite good (around 140 MB/s), but that the decompression speed is much faster (up to 800 MB/s).  See how, in comparison, the compression speed of the JPEG2000 in Pillow (via the  `OpenJPEG codec <https://github.com/uclouvain/openjpeg>`_) is much slower (around 4.5 MB/s max.) and so is the decompression speed (around 16 MB/s max.).
 
-Besides, both grok and OpenJPEG can achieve very similar quality when using similar compression ratios:
+Besides, both grok and OpenJPEG can achieve very similar quality when using similar compression ratios. For example, when using the `structural similarity index measure <https://en.wikipedia.org/wiki/Structural_similarity>`_ (SSIM) to compare the original image with the decompressed one, we get the following results:
 
 .. image:: /images/blosc2-grok-release/blosc2-grok-quality.png
   :width: 50%
