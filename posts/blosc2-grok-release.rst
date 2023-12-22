@@ -2,7 +2,7 @@
 .. author: Marta Iborra, Francesc Alted
 .. slug: blosc2-grok-release
 .. date: 2023-12-22 12:32:20 UTC
-.. tags: plugin, grok, jpeg2000, blosc2
+.. tags: plugin, grok, JPEG2000, Blosc2
 .. category: blog
 .. link:
 .. description:
@@ -12,6 +12,13 @@
 The Blosc Development Team is happy to announce that the first public release (0.1.0) of `blosc2-grok <https://github.com/Blosc/blosc2_grok>`_ is available for testing. This dynamic plugin is meant for using the JPEG2000 codec from the `grok library <https://github.com/GrokImageCompression/grok>`_ as another codec inside Blosc2 (both from C and Python).
 
 In this blog we will see how to use it as well as the functionality of some parameters. To do so, we will depict `an already created example <https://github.com/Blosc/blosc2_grok/blob/main/examples/params.py>`_. Let's get started!
+
+Why JPEG2000?
+-------------
+
+It can be stated that currently the best compromise between image quality and compression factor is JPEG2000. This image compression standard has been in use for over 20 years and is widely accepted in the imaging community due to its ability to achieve a compression factor of approximately 10x without significant loss of information.
+
+JPEG2000 has been implemented in many libraries, but the one that stands out is the grok library because of its speed and completeness. This is why we have chosen it to be the first image codec to be added to Blosc2.
 
 Installing the plugin
 ---------------------
