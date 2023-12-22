@@ -1,7 +1,15 @@
-Blosc2-grok plugin for Blosc2
-=============================
+.. title: New grok plugin for Blosc2
+.. author: Marta Iborra, Francesc Alted
+.. slug: blosc2-grok-release
+.. date: 2023-12-22 12:32:20 UTC
+.. tags: plugin, grok, jpeg2000, blosc2
+.. category: blog
+.. link:
+.. description:
+.. type: text
 
-The Blosc Development Team is happy to announce that the first public release (0.1.0) of `blosc2-grok <https://github.com/Blosc/blosc2_grok>`_ is available for testing. This dynamic plugin is meant for using the JPEG2000 codec from the `grok library <https://github.com/GrokImageCompression/grok>`_.
+
+The Blosc Development Team is happy to announce that the first public release (0.1.0) of `blosc2-grok <https://github.com/Blosc/blosc2_grok>`_ is available for testing. This dynamic plugin is meant for using the JPEG2000 codec from the `grok library <https://github.com/GrokImageCompression/grok>`_ as another codec inside Blosc2 (both from C and Python).
 
 In this blog we will see how to use it as well as the functionality of some parameters. To do so, we will depict `an already created example <https://github.com/Blosc/blosc2_grok/blob/main/examples/params.py>`_. Let's get started!
 
@@ -46,7 +54,7 @@ And finally, you are able to compress the image with::
         chunks=np_array.shape,
         blocks=np_array.shape,
         cparams=cparams,
-        urlpath=urlpath,
+        urlpath="myfile.b2nd",
         mode="w",
     )
 
@@ -66,9 +74,7 @@ For example, let's see how to set the `quality_mode` and `quality_layers` params
     kwargs['quality_layers'] = np.array([10], dtype=np.float64)
     blosc2_grok.set_params_defaults(**kwargs)
 
-With that, you will be able to store the same image than before, but with a compression ratio of 10x.  Please note that the `quality_layers` parameter is a numpy array; specifying more than one element here will produce different layers of quality of the original image. Above we only wanted one layer, but if you want to specify more, you can do it like this::
-
-    kwargs['quality_layers'] = np.array([10, 20, 30], dtype=np.float64)
+With that, you will be able to store the same image than before, but with a compression ratio of 10x.  Please note that the `quality_layers` parameter is a numpy array. By the way, specifying more than one element here will produce different layers of quality of the original image, but this has little use in Blosc2, since it is better to store different layers in different `NDArray` objects (or files).
 
 Now, just like in Pillow, `quality_mode` can also be expressed in `dB`, which indicates that you want to specify the quality as the peak signal-to-noise ratio (PSNR) in decibels. For example, let's set a PSNR of 45 dB (which will give us a compression of 9x)::
 
@@ -84,25 +90,51 @@ For example, in a MacBook Air laptop with Apple M2 CPU (8-core), the speed diffe
 Visual example
 --------------
 
-Below we did a total of 3 different compressions: a lossless compression, a lossy with 10x for `rates` quality mode and another lossy with 45dB for `dB` quality mode (generated above), from left to right.
+Below we did a total of 3 different compressions.  First an image using lossless compression showing the original image:
 
-.. image:: files/images/blosc2-grok-release/kodim23.png
-  :width: 30%
+.. image:: images/blosc2-grok-release/kodim23.png
+  :width: 50%
   :alt: Lossless compression
-.. image:: files/images/blosc2-grok-release/kodim23rates.png
-  :width: 30%
+
+Then, a couple of images using lossy compression: one with 10x for `rates` quality mode (left) and another with 45dB for `dB` quality mode (right):
+
+.. image:: images/blosc2-grok-release/kodim23rates.png
+  :width: 45%
   :alt: Compression with quality mode rates
-.. image:: files/images/blosc2-grok-release/kodim23dB.png
-  :width: 30%
+.. image:: images/blosc2-grok-release/kodim23dB.png
+  :width: 45%
   :alt: Compression with quality mode dB
 
-As can be seen, the lossy images have lost some quality which is to be expected when using this level of compression (around 10x cratios). But the great quality of the JPEG2000 codec allows us to still see the image quite well. Furthermore, the combination of grok and Blosc2 allows us to compress the image in a very fast way, but we will leave this for another blog.
+As can be seen, the lossy images have lost some quality which is to be expected when using this level of compression (around 10x), but the great quality of the JPEG2000 codec allows us human beings to still perceive the image quite well.
 
-Conclusions
------------
+A glimpse on performance
+------------------------
+
+The combination of the great implementation of the JPEG2000 codec in grok and the multithreading capabilities of Blosc2 allow to compress, but specially decompress, the image very fast (`benchmark <https://github.com/Blosc/blosc2_grok/blob/main/bench/encode-chunking-i13900K.ipynb>`_ run on an Intel i9-13900K CPU):
+
+.. image:: images/blosc2-grok-release/comp-speed-mt.png
+  :width: 45%
+  :alt: Compression speed using multithreading
+
+.. image:: images/blosc2-grok-release/decomp-speed-mt.png
+  :width: 45%
+  :alt: Decompression speed using multithreading
+
+One can see that the compression speed is quite good (around 140 MB/s), but that the decompression speed is much faster (up to 800 MB/s).  See how, in comparison, the compression speed of the JPEG2000 in Pillow (via the  `OpenJPEG codec <https://github.com/uclouvain/openjpeg>`_) is much slower (around 4.5 MB/s max.) and so is the decompression speed (around 16 MB/s max.).
+
+Besides, both grok and OpenJPEG can achieve very similar quality when using similar compression ratios:
+
+.. image:: images/blosc2-grok-release/blosc2-grok-quality.png
+  :width: 50%
+  :alt: Compression speed using multithreading
+
+Actually, the flexibility of the double partitioning in Blosc2 allows for quite a few ways to divide the workload during compression/decompression, affecting both speed and quality, but we will leave this discussion for another blog.  If you are interested in this topic, you can have a look at the `blosc2-grok benchmarks <https://github.com/Blosc/blosc2_grok/tree/main/bench>`_.
+
+Conclusion
+----------
 
 The addition of the grok plugin to Blosc2 opens many possibilities for compressing images. In the example we used a RGB image, but grayscale images, up to 16-bit of precision, can also be compressed without any problem.
 
-Although fully usable, this plugin is still in its early stages, so we encourage you to try it out and give us feedback. We will be happy to hear from you!
+Although fully usable, this plugin is still in its early stages, so we encourage you to try it out and give us feedback; we will be happy to hear from you!
 
 Thanks to the [LEAPS consortium](https://www.leaps-innov.eu) and NumFOCUS for sponsoring this work. Providing the funding for this project has allowed us to develop this plugin and make it available to the community.
