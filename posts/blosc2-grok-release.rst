@@ -144,4 +144,4 @@ The addition of the grok plugin to Blosc2 opens many possibilities for compressi
 
 Although fully usable, this plugin is still in its early stages, so we encourage you to try it out and give us feedback; we will be happy to hear from you!
 
-Thanks to the `LEAPS consortium <https://www.leaps-innov.eu>`_ and `NumFOCUS <https://numfocus.org>`_ for sponsoring this work. Providing the funding for this project has allowed us to develop this plugin and make it available to the community.
+Thanks to the `LEAPS consortium <https://www.leaps-innov.eu>`_ for sponsoring this work, and `NumFOCUS <https://numfocus.org>`_ for their continuous support through the past years. Thanks also to Aaron Boxer, for the excellent `grok <https://github.com/GrokImageCompression/grok>`_ library, and for his help in making this plugin possible.  If you like what we are doing in the Blosc world, please consider `donating <https://numfocus.org/donate-to-blosc>`_ to the project.
