@@ -9,7 +9,9 @@
 .. type: text
 
 
-The Blosc Development Team is happy to announce that the first public release (0.1.0) of `blosc2-grok <https://github.com/Blosc/blosc2_grok>`_ is available for testing. This dynamic plugin is meant for using the JPEG2000 codec from the `grok library <https://github.com/GrokImageCompression/grok>`_ as another codec inside Blosc2 (both from C and Python).
+**Update 2024-01-04:** Use the new global plugin ID for the grok codec in the examples.
+
+The Blosc Development Team is happy to announce that the first public release (0.2.0) of `blosc2-grok <https://github.com/Blosc/blosc2_grok>`_ is available for testing. This dynamic plugin is meant for using the JPEG2000 codec from the `grok library <https://github.com/GrokImageCompression/grok>`_ as another codec inside Blosc2 (both from C and Python).
 
 In this blog we will see how to use it as well as the functionality of some parameters. To do so, we will depict `an already created example <https://github.com/Blosc/blosc2_grok/blob/main/examples/params.py>`_. Let's get started!
 
@@ -32,16 +34,12 @@ That's it! You are ready to use it.
 Registering and using the codec
 -------------------------------
 
-Blosc2-grok codec plugin has not been yet registered as a global dynamically loaded plugin of Blosc2 (we will be doing that shortly, so you would be able to skip this step soon), so you will need to register it locally with its name and id::
-
-    blosc2.register_codec('grok', 160)
-
-To tell Blosc2 to use it, you only need to use the same id in the codec field of the cparams::
+The grok codec plugin has been registered as a global plugin for Blosc2, so to use it, you only need to use its plugin id (`blosc2.Codec.GROK`) in the codec field of the cparams::
 
     # Define the compression parameters. Disable the filters and the
     # splitmode, because these don't work with the codec.
     cparams = {
-        'codec': 160,
+        'codec': blosc2.Codec.GROK,
         'filters': [],
         'splitmode': blosc2.SplitMode.NEVER_SPLIT,
     }
@@ -65,7 +63,7 @@ And finally, you are able to compress the image with::
         mode="w",
     )
 
-We already compressed our first image with blosc2-grok!
+We already have compressed our first image with blosc2-grok!
 
 In this case, the `chunks` and `blocks` params of Blosc2 have been set to the shape of the image (including the number of components) so that grok receives the image as a whole and therefore, can find more opportunities to compress better.
 
@@ -92,7 +90,7 @@ Another useful parameter if you want to speed things up is the `num_threads` par
 
     kwargs['num_threads'] = 1
 
-For example, in a MacBook Air laptop with Apple M2 CPU (8-core), the speed difference when performing lossless compression between the single thread setting and the default thread value is around 6x, so expect quite large accelerations.
+For example, in a MacBook Air laptop with Apple M2 CPU (8-core), the speed difference when performing lossless compression between the single thread setting and the default thread value is around 6x, so expect quite large accelerations by leveraging multithreading.
 
 Visual example
 --------------
