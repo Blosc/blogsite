@@ -31,10 +31,10 @@ First of all, you will need to install the blosc2-grok plugin. You can do it wit
 
 That's it! You are ready to use it.
 
-Registering and using the codec
--------------------------------
+Using the grok codec via the plugin
+-----------------------------------
 
-The grok codec plugin has been registered as a global plugin for Blosc2, so to use it, you only need to use its plugin id (`blosc2.Codec.GROK`) in the codec field of the cparams::
+The grok codec has been already registered as a global plugin for Blosc2, so you only need to use its plugin id (`blosc2.Codec.GROK`) in the codec field of the cparams::
 
     # Define the compression parameters. Disable the filters and the
     # splitmode, because these don't work with the codec.
@@ -46,7 +46,7 @@ The grok codec plugin has been registered as a global plugin for Blosc2, so to u
 
 It is important to disable any filter or splitmode, since we don't want the data to be modified before proceeding to the compression using grok.
 
-Now, imagine you have an image as a NumPy array (let's say, created using `pillow <https://pillow.readthedocs.io/en/stable/>`_). But first, you will need to tell blosc2-grok which format to use among the available ones in the grok library (we will get through the different parameters later)::
+Now, imagine you have an image as a NumPy array (let's say, created using `pillow <https://pillow.readthedocs.io/en/stable/>`_), and you want to compress via `blosc2_grok`. Before, you will need to tell blosc2-grok which format to use among the available ones in the grok library (we will get through the different parameters later)::
 
     # Set the parameters that will be used by the codec
     kwargs = {'cod_format': blosc2_grok.GrkFileFmt.GRK_FMT_JP2}
