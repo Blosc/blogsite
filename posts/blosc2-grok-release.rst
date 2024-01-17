@@ -103,12 +103,17 @@ Below we did a total of 3 different compressions.  First an image using lossless
 
 Then, a couple of images using lossy compression: one with 10x for `rates` quality mode (left) and another with 45dB for `dB` quality mode (right):
 
-.. image:: /images/blosc2-grok-release/kodim23rates.png
+.. |rates| image:: /images/blosc2-grok-release/kodim23rates.png
   :width: 45%
   :alt: Compression with quality mode rates
-.. image:: /images/blosc2-grok-release/kodim23dB.png
+
+.. |dB| image:: /images/blosc2-grok-release/kodim23dB.png
   :width: 45%
   :alt: Compression with quality mode dB
+
++----------+-------+
+| |rates|  | |dB|  |
++----------+-------+
 
 As can be seen, the lossy images have lost some quality which is to be expected when using this level of compression (around 10x), but the great quality of the JPEG2000 codec allows us human beings to still perceive the image quite well.
 
