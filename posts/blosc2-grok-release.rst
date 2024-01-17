@@ -104,11 +104,11 @@ Below we did a total of 3 different compressions.  First an image using lossless
 Then, a couple of images using lossy compression: one with 10x for `rates` quality mode (left) and another with 45dB for `dB` quality mode (right):
 
 .. |rates| image:: /images/blosc2-grok-release/kodim23rates.png
-  :width: 45%
+  :width: 100%
   :alt: Compression with quality mode rates
 
 .. |dB| image:: /images/blosc2-grok-release/kodim23dB.png
-  :width: 45%
+  :width: 100%
   :alt: Compression with quality mode dB
 
 +----------+-------+
