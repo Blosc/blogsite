@@ -75,7 +75,24 @@ jobs:
       run: sphinx-build python-blosc2/doc _site/python-blosc2
       shell: bash -l {0}
 
-    # upload artifact
+    # blosc.org/Caterva2
+    - name: Check out Caterva2
+      run: git clone --recurse-submodules https://github.com/Blosc/Caterva2.git
+    - name: Install pandoc
+      run: sudo apt install pandoc
+      shell: bash -l {0}
+    - name: Install Caterva2 doc dependencies
+      run: cd Caterva2 && pip install -r doc/requirements.txt --upgrade
+      shell: bash -l {0}
+    - name: Install Caterva2
+      run: pip install -e $(pwd)/Caterva2/
+      shell: bash -l {0}
+    - name: Build Caterva2 docs
+      # TODO: Fix warnings in the build and restore `-W` parameter
+      run: sphinx-build Caterva2/doc _site/Caterva2
+      shell: bash -l {0}
+
+      # upload artifact
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v1
 

@@ -142,6 +142,7 @@ NAVIGATION_LINKS = {
         ("/c-blosc2/c-blosc2.html", "C-Blosc2"),
         ("/python-blosc/python-blosc.html", "Python-Blosc"),
         ("/python-blosc2/python-blosc2.html", "Python-Blosc2"),
+        ("/Caterva2/Caterva2.html", "Caterva2"),
         ("/pages/btune/", "Btune"),
         # ("/pages/professional-services/", "Professional Services"),
         #("/categories/", "Tags"),
@@ -152,7 +153,8 @@ NAVIGATION_LINKS = {
 
 # Name of the theme to use.
 #THEME = "bootstrap3"
-THEME = "bootstrap4"
+#THEME = "bootstrap4"
+THEME = "bootstrap5"
 #THEME = "bootblog4"
 
 # Primary color of your theme. This will be used to customize your theme and
