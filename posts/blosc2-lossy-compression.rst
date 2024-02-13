@@ -1,4 +1,4 @@
-.. title: Exploring Lossy Compression with Blosc2
+.. title: Exploring lossy compression with Blosc2
 .. author: Francesc Alted
 .. slug: blosc2-lossy-compression
 .. date: 2024-02-13 01:32:20 UTC
@@ -11,7 +11,7 @@
 
 In the realm of data compression, efficiency is key. Whether you're dealing with massive datasets or simply aiming to optimize storage space and transmission speeds, the choice of compression algorithm can make a significant difference.  In this blog post, we'll delve into the world of lossy compression using Blosc2, exploring its capabilities, advantages, and potential applications.
 
-Understanding Lossy Compression
+Understanding lossy compression
 ===============================
 Unlike lossless compression, where the original data can be perfectly reconstructed from the compressed version, lossy compression involves discarding some information to achieve higher compression ratios. While this inevitably results in a loss of fidelity, the trade-off is often justified by the significant reduction in storage size.
 
@@ -47,7 +47,7 @@ Finally, you may want to experiment with some filters and codecs that were mainl
 
 For more info on how to implement (and register) your own filters, see `this blog. <https://www.blosc.org/posts/registering-plugins/>`_
 
-Applications and Use Cases
+Applications and use cases
 ==========================
 The versatility of Blosc2's lossy compression capabilities opens up a myriad of applications across different domains. In scientific computing, for example, where large volumes of data are generated and analyzed, lossy compression can significantly reduce storage requirements without significantly impacting the accuracy of results.
 
@@ -84,5 +84,3 @@ Addendum: Special thanks to sponsors and developers
 Gratitude goes out to our sponsors over the years, with special recognition to the `LEAPS collaboration <https://www.leaps-innov.eu/>`_ and `NumFOCUS <https://numfocus.org>`_, whose support has been instrumental in advancing the lossy compression capabilities within Blosc2.
 
 The Blosc2 project is the outcome of the work of `many developers <https://github.com/Blosc/c-blosc2/graphs/contributors>`_.
-
--- The Blosc Development Team
