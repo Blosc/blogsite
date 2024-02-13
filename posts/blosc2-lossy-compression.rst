@@ -43,9 +43,9 @@ Finally, you may want to experiment with some filters and codecs that were mainl
 
 - `NDCELL <https://github.com/Blosc/c-blosc2/tree/main/plugins/filters/ndcell>`_: A filter that groups data in multidimensional cells, reordering them so that the codec can find better repetition patterns on a cell by cell basis.
 - `NDMEAN <https://github.com/Blosc/c-blosc2/tree/main/plugins/filters/ndmean>`_: A multidimensional filter for lossy compression in multidimensional cells, replacing all elements in a cell by the mean of the cell.  This allows for better compressions by the actual compression codec (e.g. NDLZ).
-- `NDLZ <https://github.com/Blosc/c-blosc2/tree/main/plugins/codecs/ndlz>`_: A compressor based on the Lempel-Ziv algorithm for 2-dim datasets.  Although this is actually a lossless compressor, it is actually meant to be used in combination with the NDCELL and NDMEAN above, providing lossy compression for the latter case.  Again, this is mainly meant for teaching purposes.
+- `NDLZ <https://github.com/Blosc/c-blosc2/tree/main/plugins/codecs/ndlz>`_: A compressor based on the Lempel-Ziv algorithm for 2-dim datasets.  Although this is a lossless compressor, it is actually meant to be used in combination with the NDCELL and NDMEAN above, providing lossy compression for the latter case.
 
-For more info on how to implement (and register) your own filters, see `this blog. <https://www.blosc.org/posts/registering-plugins/>`_
+Again, the codecs in this section are not specially efficient, but can used for learning about the compression pipeline in Blosc2.  For more info on how to implement (and register) your own filters, see `this blog. <https://www.blosc.org/posts/registering-plugins/>`_
 
 Applications and use cases
 ==========================
