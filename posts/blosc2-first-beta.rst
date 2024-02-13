@@ -1,7 +1,7 @@
 .. title: C-Blosc2 Enters Beta Stage
 .. author: Francesc Alted
 .. slug: blosc2-first-beta
-.. date: 2019-08-14 01:32:20 UTC
+.. date: 2019-08-13 01:32:20 UTC
 .. tags: blosc2 beta
 .. category:
 .. link:
