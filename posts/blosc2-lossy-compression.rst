@@ -53,6 +53,8 @@ The versatility of Blosc2's lossy compression capabilities opens up a myriad of 
 
 Similarly, in multimedia applications, such as image and video processing, lossy compression can help minimize bandwidth usage and storage costs while maintaining perceptual quality within acceptable limits.
 
+Compressing images with JPEG 2000 and with INT_TRUNC
+----------------------------------------------------
 As an illustration, a recent study involved the compression of substantial volumes of 16-bit grayscale images sourced from different `synchrotron facilities in Europe <https://www.leaps-innov.eu/>`_. While achieving efficient compression ratios necessitates the use of lossy compression techniques, it is essential to exercise caution to preserve key features for clear visual examination and accurate numerical analysis. Below, we provide an overview of how Blosc2 can employ various codecs and quality settings within filters to accomplish this task.
 
 .. image:: /images/blosc2-lossy-compression/SSIM-cratio-MacOS-M1.png
@@ -69,7 +71,14 @@ In terms of performance, each of these compression methods also showcases signif
 
 A pivotal benefit of Blosc2's strategy for lossy compression lies in its adaptability and configurability. This enables tailoring to unique needs and limitations, guaranteeing optimal performance across various scenarios.
 
-Finally, there are ongoing efforts towards integrating fidelity into our `BTune AI tool <http://btune.blosc.org/>`_. This enhancement will empower the tool to autonomously identify the most suitable codecs and filters, balancing compression level, precision, and **fidelity** according to user-defined preferences. Keep an eye out for updates!
+Using Blosc2 within HDF5
+------------------------
+HDF5 is a widely used data format, and both major Python wrappers, h5py (via hdf5plugin) and PyTables, offer basic support for Blosc2. However, accessing the full capabilities of the Blosc2 compression pipeline is somewhat restricted because the current `hdf5-blosc2 filter <https://github.com/PyTables/PyTables/tree/master/hdf5-blosc2/src>`_, available in PyTables (and used by hdf5plugin), is not yet equipped to transmit all the necessary parameters to the HDF5 data pipeline.
+
+Thankfully, HDF5 includes support for the `direct chunking mechanism <https://docs.hdfgroup.org/archive/support/HDF5/doc1.8/Advanced/DirectChunkWrite/UsingDirectChunkWrite.pdf>`_, which enables the direct transmission of pre-compressed chunks to HDF5, bypassing its standard data pipeline. Since h5py also offers this functionality, it's entirely feasible to leverage all the advanced features of Blosc2, including lossy compression. Below are a couple of examples illustrating how this process operates:
+
+* https://github.com/Blosc/blosc2_grok/blob/main/bench/encode-hdf5.ipynb
+* https://gist.github.com/t20100/80960ec46abd3a863e85876c013834bb
 
 Conclusion
 ==========
@@ -77,10 +86,12 @@ Lossy compression is a powerful tool for optimizing storage space, reducing band
 
 With its advanced compression methodologies and adept memory management, Blosc2 empowers users to strike a harmonious balance between compression ratio, speed, and fidelity. This attribute renders it especially suitable for scenarios where resource limitations or performance considerations hold significant weight.
 
+Finally, there are ongoing efforts towards integrating fidelity into our `BTune AI tool <http://btune.blosc.org/>`_. This enhancement will empower the tool to autonomously identify the most suitable codecs and filters, balancing compression level, precision, and **fidelity** according to user-defined preferences. Keep an eye out for updates!
+
 Whether you're working with scientific data, multimedia content, or large-scale datasets, Blosc2 offers a comprehensive solution for efficient data compression and handling.
 
-Addendum: Special thanks to sponsors and developers
----------------------------------------------------
+Special thanks to sponsors and developers
+-----------------------------------------
 Gratitude goes out to our sponsors over the years, with special recognition to the `LEAPS collaboration <https://www.leaps-innov.eu/>`_ and `NumFOCUS <https://numfocus.org>`_, whose support has been instrumental in advancing the lossy compression capabilities within Blosc2.
 
 The Blosc2 project is the outcome of the work of `many developers <https://github.com/Blosc/c-blosc2/graphs/contributors>`_.

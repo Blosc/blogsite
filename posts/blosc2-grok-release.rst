@@ -3,7 +3,7 @@
 .. slug: blosc2-grok-release
 .. date: 2023-12-22 12:32:20 UTC
 .. tags: plugin, grok, JPEG2000, Blosc2
-.. category: blog
+.. category:
 .. link:
 .. description:
 .. type: text
