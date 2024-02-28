@@ -61,7 +61,7 @@ As an illustration, a recent study involved the compression of substantial volum
   :width: 50%
   :alt: Lossy compression (quality)
 
-The SSIM index, derived from the `Structural Similarity Measure <https://en.wikipedia.org/wiki/Structural_similarity>`_, gauges the perceived quality of an image, with values closer to 1 indicating higher fidelity. The following displays the varying levels of fidelity achievable through the utilization of different filters and codecs.
+The SSIM index, derived from the `Structural Similarity Measure <https://en.wikipedia.org/wiki/Structural_similarity>`_, gauges the perceived quality of an image, with values closer to 1 indicating higher fidelity. You can appreciate the varying levels of fidelity achievable through the utilization of different filters and codecs.
 
 In terms of performance, each of these compression methods also showcases significantly varied speeds (tested on a MacBook Air with an M1 processor):
 
