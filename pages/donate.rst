@@ -9,7 +9,5 @@
 
 .. raw:: html
  
-    <div id="04b06c85-cda6-401d-8489-9bae3de80bfc">
-    <iframe src="https://app.hubspot.com/payments/GmbjrPWrD9?referrer=PAYMENT_LINK" ></iframe>
-    </div>
+<iframe src="https://app.hubspot.com/payments/GmbjrPWrD9?referrer=PAYMENT_LINK" ></iframe>
 
