@@ -8,6 +8,7 @@
 
 
 .. raw:: html
- 
-<iframe src="https://app.hubspot.com/payments/GmbjrPWrD9?referrer=PAYMENT_LINK" ></iframe>
 
+<div>
+<iframe src="https://app.hubspot.com/payments/GmbjrPWrD9?referrer=PAYMENT_LINK" ></iframe>
+</div>
