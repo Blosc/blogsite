@@ -146,7 +146,7 @@ NAVIGATION_LINKS = {
         ("https://ironarray.io/btune/", "Btune"),
         # ("/pages/professional-services/", "Professional Services"),
         #("/categories/", "Tags"),
-        ("/pages/donate/", "Donate to Blosc"),
+        ("https://numfocus.org/donate-to-blosc", "Donate to Blosc"),
         # ("/blog/", "Blog"),
     ),
 }
