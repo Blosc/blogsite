@@ -143,7 +143,7 @@ NAVIGATION_LINKS = {
         ("/python-blosc/python-blosc.html", "Python-Blosc"),
         ("/python-blosc2/python-blosc2.html", "Python-Blosc2"),
         ("/Caterva2/index.html", "Caterva2"),
-        ("/pages/btune/", "Btune"),
+        ("https://ironarray.io/btune/", "Btune"),
         # ("/pages/professional-services/", "Professional Services"),
         #("/categories/", "Tags"),
         ("/pages/donate/", "Donate to Blosc"),
