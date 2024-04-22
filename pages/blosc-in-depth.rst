@@ -73,7 +73,7 @@ Fully Documented Format
 
 Blosc2 is an `open and fully documented format <https://github.com/Blosc/c-blosc2/blob/main/README.rst#open-format>`_.  All the documentation take less than 1000 lines of text, and it should be easy to understand and implement, so you are not locked-in to a proprietary (or difficult to replicate) format.
 
- `Blosc1 is also documented <https://github.com/Blosc/c-blosc/blob/main/README_CHUNK_FORMAT.rst>`_, although it is kind of legacy, and all the action and development efforts are now mostly happening in Blosc2.  If you are looking for a stable and long-term solution, Blosc2 is the way to go.
+`Blosc1 is also completely documented <https://github.com/Blosc/c-blosc/blob/main/README_CHUNK_FORMAT.rst>`_, although all the action and development efforts are now mostly happening in Blosc2.  If you are looking for a stable and long-term solution, Blosc2 is the way to go.
 
 Blosc as a Meta-Compressor
 --------------------------
@@ -177,6 +177,8 @@ Blosc is a free software released under the permissive `BSD license <https://en.
 
 Sponsors
 --------
+
+Blosc and Blosc2 have been developed with the support of several organizations.  We would like to thank them for their support.  Right now, you can send a donation to `NumFOCUS <https://numfocus.org/project/blosc>`_ to support our efforts:
 
 .. raw:: html
 
