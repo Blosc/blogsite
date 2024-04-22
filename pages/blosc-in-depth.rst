@@ -40,34 +40,6 @@ Blosc2 also includes `NDim, a container with multi-dimensional capabilities <htt
    :width: 75%
    :align: center
 
-
-Sponsors
---------
-
-.. raw:: html
-
-   <hr width=50 size=10>
-
-.. figure:: /images/numfocus-sponsored-project.png
-   :width: 40%
-   :align: center
-
-   Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_,
-   a nonprofit dedicated to supporting the open source scientific computing community.
-   If you like Blosc and want to support our mission, please consider making a
-   `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
-
-`ironArray SLU <https://ironarray.io>`_ is a proud sponsor of Blosc.  ironArray is a company that provides data-driven solutions and consulting services on compression for binary data.  Contact them if you need help with your data compression/management needs.
-
-Cooperation with Other Libraries
---------------------------------
-
-Blosc2 is designed to be used either alone, or in combination with other libraries.  For instance, when used with HDF5/PyTables, Blosc2 can help to query tables with `100 trillion rows in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.  Or, it can be used with `Zarr <https://zarr.readthedocs.io/en/stable/>`_ (it is its default codec, actually), a Python library that provides an implementation of chunked, compressed, N-dimensional arrays.
-
-Here you can check how Blosc2 can be used to compress and store persistently different kind of data coming from 500 million of stars in the Milky Way in just 8 GB, and then query it in a `very efficient way <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023-paper.pdf>`_.  8 GB means that data can be stored in RAM on modern laptops, so it is possible to query it in real time.
-
-Read more on Blosc2/HDF5 integration and other bells and whistles in this `report <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_.
-
 Why It Works?
 -------------
 
@@ -99,10 +71,9 @@ You can find more benchmarks on `our blog <https://www.blosc.org>`_.  Additional
 Fully Documented Format
 -----------------------
 
-Blosc2 is an [open and fully documented format](https://github.com/Blosc/c-blosc2/blob/main/README.rst#open-format).  All the documentation take less than 1000 lines of text, so it is easy to understand and implement, so you are not locked-in to a proprietary (or difficult to replicate) format.
+Blosc2 is an `open and fully documented format <https://github.com/Blosc/c-blosc2/blob/main/README.rst#open-format>`_.  All the documentation take less than 1000 lines of text, and it should be easy to understand and implement, so you are not locked-in to a proprietary (or difficult to replicate) format.
 
-[Blosc1 is also documented](https://github.com/Blosc/c-blosc/blob/main/README_CHUNK_FORMAT.rst), although it is kind of legacy, and all the action and development efforts are now mostly happening in Blosc2.  So, if you are looking for a long-term solution, Blosc2 is the way to go.
-
+ `Blosc1 is also documented <https://github.com/Blosc/c-blosc/blob/main/README_CHUNK_FORMAT.rst>`_, although it is kind of legacy, and all the action and development efforts are now mostly happening in Blosc2.  If you are looking for a stable and long-term solution, Blosc2 is the way to go.
 
 Blosc as a Meta-Compressor
 --------------------------
@@ -126,14 +97,23 @@ Other Advantages over Existing Compressors
 
 However, there is much more to Blosc. For an updated list of features, please refer to our `ROADMAP <https://github.com/Blosc/c-blosc2/blob/main/ROADMAP.rst>`_ and recent `progress reports <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_. When combined, these features distinguish Blosc from other similar solutions.
 
+Cooperation with Other Libraries
+--------------------------------
+
+Although Blosc2 is designed to be used alone, its comprehensive C and Python APIs makes easy to be used in combination with other libraries as well.
+
+For instance, when used with HDF5/PyTables, Blosc2 can help to query tables with `100 trillion rows in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.  Also, its integration with PyTables allows to compress and store persistently 7.3 TB of data coming from 500 million of stars in the Milky Way in just 8 GB (yes, almost a compress ratio of 1000x), and query it in a `very efficient way <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023-paper.pdf>`_.
+
+Currently, there is support for using Blosc in `Zarr <https://zarr.readthedocs.io>`_, Blosc/Blosc2 from h5py (via `hdf5plugin <https://github.com/silx-kit/hdf5plugin>`_) or `PyTables <http://www.pytables.org>`_. Also, there is `b2h5py <https://github.com/Blosc/b2h5py>`_, which seeks a tighter integration og Blosc2 and h5py.  All of these projects come with binary packages, so it is easy to start hacking with it.
+
+As you can see, the cooperation of Blosc2 and HDF5 is particularly strong. Read more on this integration and other bells and whistles in this `report <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_.
+
 Where Can Blosc Be Used?
 ------------------------
 
 Provided that data is compressible enough, applications that use Blosc are expected to surpass expected physical limits for I/O performance, either for network, disk, or in-memory storage, simply because applications needs to transmit less (compressed) data, and compression/decompression is very fast and usually happens entirely in CPU caches. For instance, see `how Blosc can break down memory walls <https://www.blosc.org/posts/posts/breaking-down-memory-walls/>`_.
 
 Blosc2 also adds support for sparse and multi-dimensional datasets, which are common in scientific applications.  See an example on how Blosc can make an `efficient access to much larger datasets than the available memory <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023.pdf>`_.
-
-Currently, there is support for using Blosc in `Zarr <https://zarr.readthedocs.io>`_, h5py (via `hdf5plugin <https://github.com/silx-kit/hdf5plugin>`_) or `PyTables <http://www.pytables.org>`_; all of these projects have binary packages, so it is easy to start using it.
 
 Adapting Blosc to your needs
 ----------------------------
@@ -194,6 +174,24 @@ Blosc License
 -------------
 
 Blosc is a free software released under the permissive `BSD license <https://en.wikipedia.org/wiki/BSD_licenses>`_. This means that you can use it in almost any way you want!
+
+Sponsors
+--------
+
+.. raw:: html
+
+   <hr width=50 size=10>
+
+.. figure:: /images/numfocus-sponsored-project.png
+   :width: 40%
+   :align: center
+
+   Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_,
+   a nonprofit dedicated to supporting the open source scientific computing community.
+   If you like Blosc and want to support our mission, please consider making a
+   `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
+
+`ironArray SLU <https://ironarray.io>`_ is a proud sponsor of Blosc.  ironArray is a company that provides data-driven solutions and consulting services on compression for binary data.  Contact them if you need help with your data compression/management needs.
 
 Commercial Support
 ------------------
