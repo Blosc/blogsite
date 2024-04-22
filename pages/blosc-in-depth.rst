@@ -40,9 +40,9 @@ Blosc2 also includes `NDim, a container with multi-dimensional capabilities <htt
    :width: 75%
    :align: center
 
-You can also check out the `slides that explain the highlights of Blosc2 NDim <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023.pdf>`_ (`paper version here <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023-paper.pdf>`_), specially when dealing with highly sparse, multidimensional datasets that appear when exploring the Milky Way.  There it is also discussed `Btune <https://ironarray.io/btune>`_, a tool that helps you finding the best Blosc2 configuration for your data.
 
-When Blosc2 is used in combination with other libraries, magic can happen. For example, when used with HDF5/PyTables, Blosc2 can help to query tables with `100 trillion rows in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.  Read more on Blosc2/HDF5 integration and other bells and whistles in this `report <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_.
+Sponsors
+--------
 
 .. raw:: html
 
@@ -59,7 +59,16 @@ When Blosc2 is used in combination with other libraries, magic can happen. For e
 
 `ironArray SLU <https://ironarray.io>`_ is a proud sponsor of Blosc.  ironArray is a company that provides data-driven solutions and consulting services on compression for binary data.  Contact them if you need help with your data compression/management needs.
 
-Why it works?
+Cooperation with Other Libraries
+--------------------------------
+
+Blosc2 is designed to be used either alone, or in combination with other libraries.  For instance, when used with HDF5/PyTables, Blosc2 can help to query tables with `100 trillion rows in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.  Or, it can be used with `Zarr <https://zarr.readthedocs.io/en/stable/>`_ (it is its default codec, actually), a Python library that provides an implementation of chunked, compressed, N-dimensional arrays.
+
+Here you can check how Blosc2 can be used to compress and store persistently different kind of data coming from 500 million of stars in the Milky Way in just 8 GB, and then query it in a `very efficient way <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023-paper.pdf>`_.  8 GB means that data can be stored in RAM on modern laptops, so it is possible to query it in real time.
+
+Read more on Blosc2/HDF5 integration and other bells and whistles in this `report <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_.
+
+Why It Works?
 -------------
 
 Blosc uses the **blocking technique** (as `described here <http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf>`_) to reduce activity on the memory bus as much as possible.  The blocking technique divides datasets into blocks small enough to fit in the caches of modern processors and performs compression/decompression there. It also leverages SIMD (SSE2) and multi-threading capabilities present in modern multi-core processors to accelerate the compression/decompression process to the maximum.
@@ -86,6 +95,14 @@ And below is the compression ratio that BloscLZ, and also Zstd (the codec that c
 See how Blosc2 can make better use of the space required to store the compressed data and internal indices, specially when dealing with sparse datasets (as is the case above).  More info in `these slides <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023.pdf>`_.
 
 You can find more benchmarks on `our blog <https://www.blosc.org>`_.  Additionally, you may be interested in reading this article on `Breaking Down Memory Walls <http://www.blosc.org/docs/Breaking-Down-Memory-Walls.pdf>`_.  Finally, make sure to check out `Blosc2 <https://github.com/Blosc/c-blosc2>`_, the next generation of Blosc, with support for n-dimensional data as well as more efficient handling of sparse data.
+
+Fully Documented Format
+-----------------------
+
+Blosc2 is an [open and fully documented format](https://github.com/Blosc/c-blosc2/blob/main/README.rst#open-format).  All the documentation take less than 1000 lines of text, so it is easy to understand and implement, so you are not locked-in to a proprietary (or difficult to replicate) format.
+
+[Blosc1 is also documented](https://github.com/Blosc/c-blosc/blob/main/README_CHUNK_FORMAT.rst), although it is kind of legacy, and all the action and development efforts are now mostly happening in Blosc2.  So, if you are looking for a long-term solution, Blosc2 is the way to go.
+
 
 Blosc as a Meta-Compressor
 --------------------------
@@ -118,8 +135,8 @@ Blosc2 also adds support for sparse and multi-dimensional datasets, which are co
 
 Currently, there is support for using Blosc in `Zarr <https://zarr.readthedocs.io>`_, h5py (via `hdf5plugin <https://github.com/silx-kit/hdf5plugin>`_) or `PyTables <http://www.pytables.org>`_; all of these projects have binary packages, so it is easy to start using it.
 
-Adapt Blosc to your needs
---------------------------
+Adapting Blosc to your needs
+----------------------------
 
 We understand that every user has unique needs, so we have made it possible to `register your own codecs and filters <https://www.blosc.org/posts/registering-plugins/>`_ to better adapt Blosc to different scenarios. Additionally, you can request that they be included in the main C-Blosc2 library, which not only allows for easier deployment, but also contributes to creating a richer and more useful ecosystem.
 
@@ -145,7 +162,7 @@ https://github.com/Blosc
 You can download the sources and file tickets there too.
 
 Mastodon feed
-------------
+-------------
 
 Keep informed about the latest developments by following the @Blosc2 mastodon account:
 
