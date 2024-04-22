@@ -189,7 +189,7 @@ Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_, a n
 .. figure:: /images/numfocus-sponsored-project.png
    :width: 40%
    :align: center
-   :url: https://numfocus.org/project/blosc
+   :target: https://numfocus.org/project/blosc
 
 Commercial Support
 ------------------
