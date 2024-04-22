@@ -1,6 +1,6 @@
 .. title: What Is Blosc?
 .. slug: blosc-in-depth
-.. date: 2021-05-06 06:43:07 UTC
+.. date: 2024-04-22 06:43:07 UTC
 .. tags:
 .. link:
 .. description:
@@ -104,7 +104,7 @@ Although Blosc2 is designed to be used alone, its comprehensive C and Python API
 
 For instance, when used with HDF5/PyTables, Blosc2 can help to query tables with `100 trillion rows in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.  Also, its integration with PyTables allows to compress and store persistently 7.3 TB of data coming from 500 million of stars in the Milky Way in just 8 GB (yes, almost a compress ratio of 1000x), and query it in a `very efficient way <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023-paper.pdf>`_.
 
-Currently, there is support for using Blosc in `Zarr <https://zarr.readthedocs.io>`_, Blosc/Blosc2 from h5py (via `hdf5plugin <https://github.com/silx-kit/hdf5plugin>`_) or `PyTables <http://www.pytables.org>`_. Also, there is `b2h5py <https://github.com/Blosc/b2h5py>`_, which seeks a tighter integration og Blosc2 and h5py.  All of these projects come with binary packages, so it is easy to start hacking with it.
+Currently, there is support for using Blosc in `Zarr <https://zarr.readthedocs.io>`_, Blosc/Blosc2 can also be used from HDF5 with `PyTables <https://www.blosc.org/posts/blosc2-pytables-perf/>`_ and `h5py <https://www.h5py.org>`_ (via `hdf5plugin <http://www.silx.org/doc/hdf5plugin/latest/usage.html#blosc2>`_). Also, there is `b2h5py <https://github.com/Blosc/b2h5py>`_, which seeks a tighter integration og Blosc2 and h5py.  All of these projects come with binary packages, so it is easy to start hacking with it.
 
 As you can see, the cooperation of Blosc2 and HDF5 is particularly strong. Read more on this integration and other bells and whistles in this `report <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_.
 
@@ -178,7 +178,9 @@ Blosc is a free software released under the permissive `BSD license <https://en.
 Sponsors
 --------
 
-Blosc and Blosc2 have been developed with the support of several organizations.  We would like to thank them for their support.  Right now, you can send a donation to `NumFOCUS <https://numfocus.org/project/blosc>`_ to support our efforts:
+Blosc and Blosc2 have been developed with the support of several organizations.  We would like to thank them for their support.
+
+Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_, a nonprofit dedicated to supporting the open source scientific computing community.  If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
 
 .. raw:: html
 
@@ -187,17 +189,12 @@ Blosc and Blosc2 have been developed with the support of several organizations. 
 .. figure:: /images/numfocus-sponsored-project.png
    :width: 40%
    :align: center
-
-   Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_,
-   a nonprofit dedicated to supporting the open source scientific computing community.
-   If you like Blosc and want to support our mission, please consider making a
-   `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
-
-`ironArray SLU <https://ironarray.io>`_ is a proud sponsor of Blosc.  ironArray is a company that provides data-driven solutions and consulting services on compression for binary data.  Contact them if you need help with your data compression/management needs.
+   :url: https://numfocus.org/project/blosc
 
 Commercial Support
 ------------------
 
-If you need commercial support for Blosc, please contact `ironArray SLU <https://ironarray.io>`_.  They provide data-driven solutions and consulting services on compression for binary data, and are the main sponsor of Blosc so far.
+`ironArray SLU <https://ironarray.io>`_ provides data-driven solutions and consulting services around compression for binary data and is a principal and proud sponsor of Blosc. The ironArray team is mostly the same creators of the Blosc, PyTables and `numexpr <https://github.com/pydata/numexpr/blob/master/README.rst>`_ projects.  Contact them if you need help with your data compression/management needs.
+
 
 -- The Blosc Development Team
