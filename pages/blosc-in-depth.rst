@@ -100,13 +100,13 @@ However, there is much more to Blosc. For an updated list of features, please re
 Cooperation with Other Libraries
 --------------------------------
 
-Although Blosc2 is designed to be used alone, its comprehensive C and Python APIs makes easy to be used in combination with other libraries as well.
+Although Blosc is designed to be used alone, its comprehensive C and Python APIs makes it easy to be used in combination with other libraries as well. Actually, the Blosc development team has been working hard to make Blosc2 a very versatile compressor that can be used in a wide range of situations.
 
-For instance, when used with HDF5/PyTables, Blosc2 can help to query tables with `100 trillion rows in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.  Also, its integration with PyTables allows to compress and store persistently 7.3 TB of data coming from 500 million of stars in the Milky Way in just 8 GB (yes, almost a compress ratio of 1000x), and query it in a `very efficient way <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023-paper.pdf>`_.
+For instance, when used with HDF5/PyTables, Blosc2 can help to query tables with `100 trillion rows in human time frames <https://www.blosc.org/posts/100-trillion-baby/>`_.  Also, its integration with PyTables allows to compress and store persistently 7.3 TB of data coming from 500 million of stars in the Milky Way in just 8 GB (yes, a compress ratio of almost 1000x), and query it in a `very efficient way <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023-paper.pdf>`_.
 
-Currently, there is support for using Blosc in `Zarr <https://zarr.readthedocs.io>`_, Blosc/Blosc2 can also be used from HDF5 with `PyTables <https://www.blosc.org/posts/blosc2-pytables-perf/>`_ and `h5py <https://www.h5py.org>`_ (via `hdf5plugin <http://www.silx.org/doc/hdf5plugin/latest/usage.html#blosc2>`_). Also, there is `b2h5py <https://github.com/Blosc/b2h5py>`_, which seeks a tighter integration og Blosc2 and h5py.  All of these projects come with binary packages, so it is easy to start hacking with it.
+Moreover, `h5py <https://www.h5py.org>`_ can use Blosc/Blosc2 too via `hdf5plugin <http://www.silx.org/doc/hdf5plugin/latest/usage.html#blosc2>`_. In particular, there is `b2h5py <https://github.com/Blosc/b2h5py>`_, which seeks a tighter integration of Blosc2 and h5py.  All of these projects come with binary wheels, so it is easy to start hacking with them.  As you can see, the cooperation of Blosc and HDF5 formats is particularly strong. Read more on this integration (besides other bells and whistles) in this `report <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_.
 
-As you can see, the cooperation of Blosc2 and HDF5 is particularly strong. Read more on this integration and other bells and whistles in this `report <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_.
+Other projects that benefit from using Blosc are `Zarr <https://zarr.readthedocs.io>`_, `ADIOS2 <https://adios2.readthedocs.io/en/v2.10.0/introduction/whatsnew.html#file-i-o>`_ and `JNifti <https://github.com/NeuroJSON/jnifti>`_, a NIfTI JSON-wrapper for storing neuroimaging data. This is just a small sample of the many projects that can benefit from using Blosc/Blosc2.
 
 Where Can Blosc Be Used?
 ------------------------
