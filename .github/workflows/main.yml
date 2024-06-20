@@ -55,8 +55,28 @@ jobs:
       run: cd python-blosc && sphinx-build doc ../_site/python-blosc
       shell: bash -l {0}
 
-    # blosc.org/python-blosc2
-    - name: Check out Python-Blosc2
+    # blosc.org/python-blosc2-2.x
+    - name: Check out Python-Blosc2-2.x
+      run: git clone -b v2.x --recurse-submodules https://github.com/Blosc/python-blosc2.git python-blosc2-2.x
+    - name: Install pandoc
+      run: sudo apt install pandoc
+      shell: bash -l {0}
+    - name: Install Python-Blosc2 doc dependencies
+      run: cd python-blosc2-2.x && pip install -r requirements-doc.txt --upgrade
+      shell: bash -l {0}
+    - name: Build Python-Blosc2
+      run: cd python-blosc2-2.x && python setup.py build_ext --inplace
+      shell: bash -l {0}
+    - name: Install Python-Blosc2
+      run: pip install -e $(pwd)/python-blosc2-2.x/
+      shell: bash -l {0}
+    - name: Build Python-Blosc2 docs
+      # TODO: Fix warnings in the build and restore `-W` parameter
+      run: sphinx-build python-blosc2-2.x/doc _site/python-blosc2-2.x
+      shell: bash -l {0}
+
+    # blosc.org/python-blosc2-3.x
+    - name: Check out Python-Blosc2-3.x
       run: git clone --recurse-submodules https://github.com/Blosc/python-blosc2.git
     - name: Install pandoc
       run: sudo apt install pandoc
@@ -73,23 +93,6 @@ jobs:
     - name: Build Python-Blosc2 docs
       # TODO: Fix warnings in the build and restore `-W` parameter
       run: sphinx-build python-blosc2/doc _site/python-blosc2
-      shell: bash -l {0}
-
-    # blosc.org/Caterva2
-    - name: Check out Caterva2
-      run: git clone --recurse-submodules https://github.com/Blosc/Caterva2.git
-    - name: Install pandoc
-      run: sudo apt install pandoc
-      shell: bash -l {0}
-    - name: Install Caterva2 doc dependencies
-      run: cd Caterva2 && pip install -r doc/requirements.txt --upgrade
-      shell: bash -l {0}
-    - name: Install Caterva2
-      run: pip install -e $(pwd)/Caterva2/
-      shell: bash -l {0}
-    - name: Build Caterva2 docs
-      # TODO: Fix warnings in the build and restore `-W` parameter
-      run: sphinx-build Caterva2/doc _site/Caterva2
       shell: bash -l {0}
 
       # upload artifact
