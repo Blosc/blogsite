@@ -61,16 +61,16 @@ jobs:
     - name: Install pandoc
       run: sudo apt install pandoc
       shell: bash -l {0}
-    - name: Install Python-Blosc2 doc dependencies
+    - name: Install Python-Blosc2-2.x doc dependencies
       run: cd python-blosc2-2.x && pip install -r requirements-doc.txt --upgrade
       shell: bash -l {0}
-    - name: Build Python-Blosc2
+    - name: Build Python-Blosc2-2.x
       run: cd python-blosc2-2.x && python setup.py build_ext --inplace
       shell: bash -l {0}
-    - name: Install Python-Blosc2
+    - name: Install Python-Blosc2-2.x
       run: pip install -e $(pwd)/python-blosc2-2.x/
       shell: bash -l {0}
-    - name: Build Python-Blosc2 docs
+    - name: Build Python-Blosc2-2.x docs
       # TODO: Fix warnings in the build and restore `-W` parameter
       run: sphinx-build python-blosc2-2.x/doc _site/python-blosc2-2.x
       shell: bash -l {0}
