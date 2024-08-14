@@ -16,4 +16,39 @@ However, there are many reasons to exploit direct chunk access in your own code,
 
 PyTables' new direct chunking API is the machinery that gives you access to these possibilities.  Keep in mind though that this is a very low-level functionality that may help you largely customize and accelerate access to your datasets, but may also break them.  In this post we'll try to show how to use it to get the best results.
 
+Using the API
+-------------
+
+The direct chunking API consists of three operations: get information about a chunk (`chunk_info()`), write a raw chunk (`write_chunk()`), and read a raw chunk (`read_chunk()`).  They are supported by chunked datasets (`CArray`, `EArray` and `Table`), which have their data split into fixed-size chunks of the same dimensionality as the dataset (maybe padded at its boundaries) that are processed by filters like compressors.
+
+`chunk_info()` returns an object with useful information about the chunk containing the item at the given coordinates.  Let's create a simple 100x100 array with 10x100 chunks compressed with Blosc2+Zstd and get info about a chunk::
+
+    >>> import tables, numpy
+    >>> h5f = tables.open_file('test.h5', mode='w')
+    >>> filters = tables.Filters(complib='blosc2:zstd', complevel=5)
+    >>> data = numpy.arange(100 * 100).reshape((100, 100))
+    >>> carray = h5f.create_carray('/', 'carray', chunkshape=(10, 100),
+                                   obj=data, filters=filters)
+    >>> coords = (42, 23)
+    >>> cinfo = carray.chunk_info(coords)
+    >>> cinfo
+    ChunkInfo(start=(40, 0), filter_mask=0, offset=6807, size=615)
+
+So the item at coordinates (42, 23) is stored in a chunk of 615 bytes (compressed) which starts at coordinates (40, 0) in the array and byte 6807 in the file.  The latter offset may be used to let other code access the chunk directly on storage.  For instance, since Blosc2 was the only filter used to process the chunk, let's open it directly::
+
+    >>> import blosc2
+    >>> h5f.flush()
+    >>> b2chunk = blosc2.open(h5f.filename, mode='r', offset=cinfo.offset)
+    >>> b2chunk.shape, b2chunk.dtype, data.itemsize
+    ((10, 100), dtype('V8'), 8)
+
+Since Blosc2 does understand the structure of data (thanks to `b2nd <https://www.blosc.org/posts/blosc2-ndim-intro/>`_), we can even see that the chunk shape and the data item size are correct.  The data type is opaque to the HDF5 filter which wrote the chunk, hence the `V8` dtype.  Let's check that the item at (42, 23) is indeed in that chunk::
+
+    >>> chunk = numpy.ndarray(b2chunk.shape, buffer=b2chunk[:], dtype=data.dtype)
+    >>> ccoords = tuple(numpy.subtract(coords, cinfo.start))
+    >>> bool(data[coords] == chunk[ccoords])
+    True
+
+This is actually what b2nd optimized slicing performs internally.  Please note that neither PyTables nor HDF5 were involved at all in the actual reading of the chunk (Blosc2 just got a file name and an offset).  It's difficult to cut more overhead than that!
+
 TODO
