@@ -98,4 +98,6 @@ Still, the Blosc2 HDF5 filter plugin included with PyTables is able to read the 
     True
     >>> h5f.close()
 
+You may find a more elaborate example of using direct chunking `in the PyTables repository <https://github.com/PyTables/PyTables/blob/master/examples/direct-chunking.py>`_.
+
 TODO
