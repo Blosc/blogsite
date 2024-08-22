@@ -44,12 +44,13 @@ So the item at coordinates (42, 23) is stored in a chunk of 615 bytes (compresse
 
 Since Blosc2 does understand the structure of data (thanks to `b2nd <https://www.blosc.org/posts/blosc2-ndim-intro/>`_), we can even see that the chunk shape and the data item size are correct.  The data type is opaque to the HDF5 filter which wrote the chunk, hence the `V8` dtype.  Let's check that the item at (42, 23) is indeed in that chunk::
 
-    >>> chunk = numpy.ndarray(b2chunk.shape, buffer=b2chunk[:], dtype=data.dtype)
+    >>> chunk = numpy.ndarray(b2chunk.shape, buffer=b2chunk[:],
+                              dtype=data.dtype)  # Use the right type.
     >>> ccoords = tuple(numpy.subtract(coords, cinfo.start))
     >>> bool(data[coords] == chunk[ccoords])
     True
 
-This is actually what b2nd optimized slicing performs internally.  Please note that neither PyTables nor HDF5 were involved at all in the actual reading of the chunk (Blosc2 just got a file name and an offset).  It's difficult to cut more overhead than that!
+This offset-based access is actually what b2nd optimized slicing performs internally.  Please note that neither PyTables nor HDF5 were involved at all in the actual reading of the chunk (Blosc2 just got a file name and an offset).  It's difficult to cut more overhead than that!
 
 It won't always be the case that you can (or want to) read a chunk in that way.  The `read_chunk()` method allows you to read a raw chunk as a new byte string or into an existing buffer, given the chunk's start coordinates (which you may compute yourself or get via `chunk_info()`).  Let's use `read_chunk()` to redo the reading that we just did above::
 
@@ -58,9 +59,10 @@ It won't always be the case that you can (or want to) read a chunk in that way. 
         ...
     tables.exceptions.NotChunkAlignedError: Coordinates are not multiples
         of chunk shape: (42, 23) !* (np.int64(10), np.int64(100))
-    >>> rchunk = carray.read_chunk(cinfo.start)  # ok, do use chunk start
+    >>> rchunk = carray.read_chunk(cinfo.start)  # Always use chunk start!
     >>> b2chunk = blosc2.ndarray_from_cframe(rchunk)
-    >>> chunk = numpy.ndarray(b2chunk.shape, buffer=b2chunk[:], dtype=data.dtype)
+    >>> chunk = numpy.ndarray(b2chunk.shape, buffer=b2chunk[:],
+                              dtype=data.dtype)  # Use the right type.
     >>> bool(data[coords] == chunk[ccoords])
     True
 
