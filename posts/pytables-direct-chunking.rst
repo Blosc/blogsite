@@ -21,20 +21,20 @@ Using the API
 
 The direct chunking API consists of three operations: get information about a chunk (`chunk_info()`), write a raw chunk (`write_chunk()`), and read a raw chunk (`read_chunk()`).  They are supported by chunked datasets (`CArray`, `EArray` and `Table`), which have their data split into fixed-size chunks of the same dimensionality as the dataset (maybe padded at its boundaries) that are processed by filters like compressors.
 
-`chunk_info()` returns an object with useful information about the chunk containing the item at the given coordinates.  Let's create a simple 100x100 array with 10x100 chunks compressed with Blosc2+Zstd and get info about a chunk::
+`chunk_info()` returns an object with useful information about the chunk containing the item at the given coordinates.  Let's create a simple 100x100 array with 10x100 chunks compressed with Blosc2+LZ4 and get info about a chunk::
 
     >>> import tables, numpy
-    >>> h5f = tables.open_file('test.h5', mode='w')
-    >>> filters = tables.Filters(complib='blosc2:zstd', complevel=5)
+    >>> h5f = tables.open_file('direct-example.h5', mode='w')
+    >>> filters = tables.Filters(complib='blosc2:lz4', complevel=2)
     >>> data = numpy.arange(100 * 100).reshape((100, 100))
     >>> carray = h5f.create_carray('/', 'carray', chunkshape=(10, 100),
                                    obj=data, filters=filters)
     >>> coords = (42, 23)
     >>> cinfo = carray.chunk_info(coords)
     >>> cinfo
-    ChunkInfo(start=(40, 0), filter_mask=0, offset=6807, size=615)
+    ChunkInfo(start=(40, 0), filter_mask=0, offset=6779, size=608)
 
-So the item at coordinates (42, 23) is stored in a chunk of 615 bytes (compressed) which starts at coordinates (40, 0) in the array and byte 6807 in the file.  The latter offset may be used to let other code access the chunk directly on storage.  For instance, since Blosc2 was the only filter used to process the chunk, let's open it directly::
+So the item at coordinates (42, 23) is stored in a chunk of 608 bytes (compressed) which starts at coordinates (40, 0) in the array and byte 6779 in the file.  The latter offset may be used to let other code access the chunk directly on storage.  For instance, since Blosc2 was the only filter used to process the chunk, let's open it directly::
 
     >>> import blosc2
     >>> h5f.flush()
