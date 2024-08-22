@@ -66,4 +66,36 @@ It won't always be the case that you can (or want to) read a chunk in that way. 
     >>> bool(data[coords] == chunk[ccoords])
     True
 
+The `write_chunk()` method allows you to write a byte string into a raw chunk.  Please note that you must first apply any filters manually, and that you can't write chunks beyond the dataset's current shape.  However, remember that enlargeable datasets may be grown or shrunk in an efficient manner using the `truncate()` method, which doesn't write new chunk data.  Let's use that to create an `EArray` with the same data as the previous `CArray`, chunk by chunk::
+
+    >>> earray = h5f.create_earray('/', 'earray', chunkshape=carray.chunkshape,
+                                   atom=carray.atom, shape=(0, 100),  # Empty.
+                                   filters=filters)  # Just to hint readers.
+    >>> earray.write_chunk((0, 0), b'whatever')
+    Traceback (most recent call last):
+        ...
+    IndexError: Chunk coordinates not within dataset shape:
+        (0, 0) <> (np.int64(0), np.int64(100))
+    >>> earray.truncate(len(carray))  # Grow the array (cheaply) first!
+    >>> for cstart in range(0, len(carray), carray.chunkshape[0]):
+    ...     chunk = carray[cstart:cstart + carray.chunkshape[0]]
+    ...     b2chunk = blosc2.asarray(chunk)  # May be customized.
+    ...     wchunk = b2chunk.to_cframe()  # Serialize.
+    ...     earray.write_chunk((cstart, 0), wchunk)
+
+You can see that such low-level writing is more involved than usual.  Though we used default Blosc2 parameters here, the explicit compression step allows you to fine-tune it in ways not available through PyTables like setting internal chunk and block sizes or even using Blosc2 compression plugins like Grok/JPEG2000.  In fact, the filters given on dataset creation are only used as a hint, since each Blosc2 container holding a chunk includes enough metadata to process it independently.  In the example, the default chunk compression parameters don't even match dataset filters (using Zstd instead of LZ4)::
+
+    >>> carray.filters
+    Filters(complevel=2, complib='blosc2:lz4', ...)
+    >>> earray.filters
+    Filters(complevel=2, complib='blosc2:lz4', ...)
+    >>> b2chunk.schunk.cparams['codec']
+    <Codec.ZSTD: 5>
+
+Still, the Blosc2 HDF5 filter plugin included with PyTables is able to read the data just fine::
+
+    >>> bool((carray[:] == earray[:]).all())
+    True
+    >>> h5f.close()
+
 TODO
