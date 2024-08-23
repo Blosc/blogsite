@@ -123,4 +123,9 @@ In this case direct chunking yields 4.5x write and 1.9x read speedups, with writ
 
 The write speedup in this case raised to 4.6x, reaching an awesome speed of 2.6 GB/s.  All in all, it's clear that bypassing the HDF5 filter pipeline results in immediate I/O speedups.  You may find a Jupyter notebook with the benchmark code and AMD CPU data `in PyTables' benchmarks <https://github.com/PyTables/PyTables/blob/master/bench/direct-chunking-AMD-7800X3D.ipynb>`_.
 
-TODO
+Conclusions
+-----------
+
+First of all, we (Ivan Vilata and Francesc Alted) want to thank everyone who made this new 3.10 release of PyTables possible, especially Antonio Valentino for his role of project maintainer, and the many code and issue contributors.  Trying the new direct chunking API is much easier because of them.  And of course, a big thank you to the NumFOCUS Foundation for making this whole new feature possible by funding its development!
+
+In this post we saw how PyTables' direct chunking API allows one to squeeze the extra drop of performance that the most demanding scenarios require, when adjusting chunking and compression parameters in PyTables itself can't go any further.  Of course, its low-level nature makes its use less convenient and safe than higher-level mechanisms, so you should evaluate whether the extra effort pays off.  If used carefully with robust filters like Blosc2, the direct chunking API should shine the most in the case of large datasets with sustained I/O throughput demands, while retaining compatibility with other HDF5-based tools.
