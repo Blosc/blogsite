@@ -6,6 +6,7 @@ import time
 # !! This is the configuration of Nikola. !! #
 # !!  You should edit it to your liking.  !! #
 
+# Just a comment to trigger a new build :-)
 
 # ! Some settings can be different in different languages.
 # ! A comment stating (translatable) is used to denote those.
