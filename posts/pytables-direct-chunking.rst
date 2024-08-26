@@ -1,7 +1,7 @@
 .. title: Peaking compression performance in PyTables with direct chunking
 .. author: Ivan Vilata-i-Balaguer
 .. slug: pytables-direct-chunking
-.. date: 2024-08-26 11:00:00 UTC
+.. date: 2024-08-26 09:20:00 UTC
 .. tags: pytables performance
 .. category:
 .. link:
