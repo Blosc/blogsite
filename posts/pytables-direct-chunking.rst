@@ -14,12 +14,12 @@ In a `previous post about optimized slicing <https://www.blosc.org/posts/pytable
 
 However, there are many reasons to exploit direct chunk access in your own code, from customizing compression with parameters not allowed by the PyTables `Filters` class, to using yet-unsupported compressors or even helping you develop new plugins for HDF5 to support them (you may write compressed chunks in Python while decompressing transparently in a C filter plugin, or vice versa).  And of course, as we will see, skipping the HDF5 filter pipeline with direct chunking may be instrumental to reach the extreme I/O performance required in scenarios like continuous collection or extraction of data.
 
-PyTables' new direct chunking API is the machinery that gives you access to these possibilities.  Keep in mind though that this is a very low-level functionality that may help you largely customize and accelerate access to your datasets, but may also break them.  In this post we'll try to show how to use it to get the best results.
+PyTables' new direct chunking API is the machinery that gives you access to these possibilities.  Keep in mind though that this is a low-level functionality that may help you largely customize and accelerate access to your datasets, but may also break them.  In this post we'll try to show how to use it to get the best results.
 
 Using the API
 -------------
 
-The direct chunking API consists of three operations: get information about a chunk (`chunk_info()`), write a raw chunk (`write_chunk()`), and read a raw chunk (`read_chunk()`).  They are supported by chunked datasets (`CArray`, `EArray` and `Table`), which have their data split into fixed-size chunks of the same dimensionality as the dataset (maybe padded at its boundaries) that are processed by filters like compressors.
+The direct chunking API consists of three operations: get information about a chunk (`chunk_info()`), write a raw chunk (`write_chunk()`), and read a raw chunk (`read_chunk()`).  They are supported by chunked datasets (`CArray`, `EArray` and `Table`), i.e. those whose data is split into fixed-size chunks of the same dimensionality as the dataset (maybe padded at its boundaries), with HDF5 pipeline filters like compressors optionally processing them on read/write.
 
 `chunk_info()` returns an object with useful information about the chunk containing the item at the given coordinates.  Let's create a simple 100x100 array with 10x100 chunks compressed with Blosc2+LZ4 and get info about a chunk::
 
@@ -34,7 +34,7 @@ The direct chunking API consists of three operations: get information about a ch
     >>> cinfo
     ChunkInfo(start=(40, 0), filter_mask=0, offset=6779, size=608)
 
-So the item at coordinates (42, 23) is stored in a chunk of 608 bytes (compressed) which starts at coordinates (40, 0) in the array and byte 6779 in the file.  The latter offset may be used to let other code access the chunk directly on storage.  For instance, since Blosc2 was the only filter used to process the chunk, let's open it directly::
+So the item at coordinates (42, 23) is stored in a chunk of 608 bytes (compressed) which starts at coordinates (40, 0) in the array and byte 6779 in the file.  The latter offset may be used to let other code access the chunk directly on storage.  For instance, since Blosc2 was the only HDF5 filter used to process the chunk, let's open it directly::
 
     >>> import blosc2
     >>> h5f.flush()
