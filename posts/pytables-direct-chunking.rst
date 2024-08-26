@@ -115,13 +115,9 @@ We can see that direct chunking yields 3.75x write and 4.4x read speedups, reach
   :width: 75%
   :align: center
 
-In this case direct chunking yields 4.5x write and 1.9x read speedups, with write/read speeds of 0.8 GB/s and 1.6 GB/s.  The absolute numbers are of course not as impressive, but the performance is still much better than that of the regular mechanism, especially when writing.  Please note that the M1 CPU has a hybrid efficiency+performance core configuration.  We also run the tests on another hybrid CPU of the high-performance range, in this case an Intel Core i9-13900K CPU with 8+16 cores and 32 MB L2 cache, clocked at 5.7 GHz:
+In this case direct chunking yields 4.5x write and 1.9x read speedups, with write/read speeds of 0.8 GB/s and 1.6 GB/s.  The absolute numbers are of course not as impressive, but the performance is still much better than that of the regular mechanism, especially when writing.  Please note that the M1 CPU has a hybrid efficiency+performance core configuration; as an aside, running the benchmark on a high-range Intel Core i9-13900K CPU also with a hybrid 8+16 core configuration (32 MB L2, 5.7 GHz) raised the write speedup to 4.6x, reaching an awesome write speed of 2.6 GB/s.
 
-.. image:: /images/pytables-direct-chunking/i13900K.png
-  :width: 75%
-  :align: center
-
-The write speedup in this case raised to 4.6x, reaching an awesome speed of 2.6 GB/s.  All in all, it's clear that bypassing the HDF5 filter pipeline results in immediate I/O speedups.  You may find a Jupyter notebook with the benchmark code and AMD CPU data `in PyTables' benchmarks <https://github.com/PyTables/PyTables/blob/master/bench/direct-chunking-AMD-7800X3D.ipynb>`_.
+All in all, it's clear that bypassing the HDF5 filter pipeline results in immediate I/O speedups.  You may find a Jupyter notebook with the benchmark code and AMD CPU data `in PyTables' benchmarks <https://github.com/PyTables/PyTables/blob/master/bench/direct-chunking-AMD-7800X3D.ipynb>`_.
 
 Conclusions
 -----------
