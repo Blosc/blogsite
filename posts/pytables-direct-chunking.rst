@@ -106,13 +106,13 @@ Benchmarks
 `b2nd optimized slicing <https://www.blosc.org/posts/pytables-b2nd-slicing/>`_ shows us that removing the HDF5 filter pipeline from the I/O path can result in sizable performance increases, if the right chunking and compression parameters are chosen.  To check the impact of using the new direct chunking API, we ran some benchmarks that compare regular and direct read/write speeds.  On an AMD Ryzen 7 7800X3D CPU with 8 cores, 96 MB L3 cache and 8 MB L2 cache, clocked at 4.2 GHz, we got the following results:
 
 .. image:: /images/pytables-direct-chunking/AMD-7800X3D.png
-  :width: 75%
+  :width: 50%
   :align: center
 
 We can see that direct chunking yields 3.75x write and 4.4x read speedups, reaching write/read speeds of 1.7 GB/s and 5.2 GB/s.  These are quite impressive numbers, though the base equipment is already quite powerful.  Thus we also tried the same benchmark on a consumer-level MacBook Air laptop with an Apple M1 CPU with 4+4 cores and 12 MB L2 cache, clocked at 3.2 GHz, with the following results:
 
 .. image:: /images/pytables-direct-chunking/MacAir-M1.png
-  :width: 75%
+  :width: 50%
   :align: center
 
 In this case direct chunking yields 4.5x write and 1.9x read speedups, with write/read speeds of 0.8 GB/s and 1.6 GB/s.  The absolute numbers are of course not as impressive, but the performance is still much better than that of the regular mechanism, especially when writing.  Please note that the M1 CPU has a hybrid efficiency+performance core configuration; as an aside, running the benchmark on a high-range Intel Core i9-13900K CPU also with a hybrid 8+16 core configuration (32 MB L2, 5.7 GHz) raised the write speedup to 4.6x, reaching an awesome write speed of 2.6 GB/s.
