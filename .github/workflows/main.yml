@@ -78,14 +78,8 @@ jobs:
     # blosc.org/python-blosc2-3.x
     - name: Check out Python-Blosc2-3.x
       run: git clone --recurse-submodules https://github.com/Blosc/python-blosc2.git
-    - name: Install pandoc
-      run: sudo apt install pandoc
-      shell: bash -l {0}
-    - name: Install Python-Blosc2 doc dependencies
-      run: cd python-blosc2 && pip install -r requirements-doc.txt --upgrade
-      shell: bash -l {0}
     - name: Install Python-Blosc2
-      run: pip install -e $(pwd)/python-blosc2/
+      run: pip install -e $(pwd)/python-blosc2/[doc]
       shell: bash -l {0}
     - name: Build Python-Blosc2 docs
       # TODO: Fix warnings in the build and restore `-W` parameter
