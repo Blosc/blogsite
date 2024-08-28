@@ -98,18 +98,19 @@ Let's try to improve the performance by manually setting the chunk size. In the 
 
 In this case, performance in the X axis is already faster than Y and Z axes for Blosc2. Interestingly, performance is also faster than NumPy in X axis, while being very similar in Y and Z axis.
 
-Fine tuning chunks
-~~~~~~~~~~~~~~~~~~
+We could proceed further and try to fine tune the chunk size to get even better performance, but this is out of the scope of this blog. Instead, we will try to make some sense on the results above; see below.
 
-Now, provided that our processor (Intel 13900K) has a L3 cache of 36 MB, let's try to fine tune and change the chunk size to (100, 100, 200); this is 16 MB, which still fits comfortably in the L3 cache.
+Why Blosc2 can be faster than NumPy?
+------------------------------------
 
-.. image:: /images/ndim-reductions/plot_fine_tuning_chunking.png
-  :width: 50%
+Blosc2 splits data into chunks and blocks to compress and decompress data efficiently. When accessing data, a full chunk is fetched from memory and decompressed by the CPU. If the chunk size is small enough to fit in the CPU cache, the CPU can write the data faster, as it does not need to travel back to the main memory. Later, when NumPy is called to perform the reduction on the decompressed data, it can access the data faster, as it is already in the CPU cache. So, it is not that Blosc2 is faster than NumPy, but rather that it is allowing NumPy to leverage the CPU cache more efficiently, and hence, the overall performance is better.
 
-Now the results are worse along all the axis. This is because Blosc2 needs to handle several (3 or 4) chunks simultaneously, so using a chunk size that is a fraction (1/3, 1/4) of L3 is normally a good thing for performance. One side effect of this chunk configuration is that compression ratios are larger, so you can choose what you prefer: more speed or more compression ratio.
+To achieve Blosc2 and NumPy working in parallel, Blosc2 needs to decompress several chunks prior to NumPy performing the reduction operation. The decompressed chunks are stored on a queue, waiting for furthre processing; this is why Blosc2 needs to handle several (3 or 4) chunks simultaneously, so using a chunk size that is a fraction (1/3, 1/4) of L3 is normally a good thing for performance. In the case above, Blosc2 has chosen 8 MB for the chunk size, which is a good compromise for the L3 cache size (36 MB) of the Intel 13900K CPU.  Also, when we have chosen the chunk size to be (100, 100, 100), the chunk size continued to be 8 MB, which is near to 1/4 of the L3 cache size, and hence, optimal for performance.
+
+Having said this, we still need some explanation on why the performance can be so different along the X, Y, and Z axes.  Let's see this in the next section.
 
 Performing reductions on 3D arrays
-------------------------------------
+----------------------------------
 
 .. image:: /images/ndim-reductions/3D-cube-plane.png
   :width: 45%
