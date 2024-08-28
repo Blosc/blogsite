@@ -107,7 +107,7 @@ Blosc2 splits data into chunks and blocks to compress and decompress data effici
 
 +----------------------------------------------------------+-----------------------------------------------------+
 | .. image:: /images/ndim-reductions/Blosc2-decompress.png | .. image:: /images/ndim-reductions/Blosc2-NumPy.png |
-|   :width: 50%                                            |    :width: 50%                                      |
+|   :width: 75%                                            |    :width: 75%                                      |
 |   :align: center                                         |    :align: center                                   |
 +----------------------------------------------------------+-----------------------------------------------------+
 
