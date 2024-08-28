@@ -105,11 +105,11 @@ Why Blosc2 can be faster than NumPy?
 
 Blosc2 splits data into chunks and blocks to compress and decompress data efficiently. When accessing data, a full chunk is fetched from memory and decompressed by the CPU (as seen in the image below, left side). If the chunk size is small enough to fit in the CPU cache, the CPU can write the data faster, as it does not need to travel back to the main memory. Later, when NumPy is called to perform the reduction on the decompressed data, it can access the data faster, as it is already in the CPU cache (image below, right side). So, it is not that Blosc2 is faster than NumPy, but rather that it is allowing NumPy to leverage the CPU cache more efficiently.
 
-+---------------------------------------------------------+----------------------------------------------------+
-| .. image:: images/ndim-reductions/Blosc2-decompress.png | .. image:: images/ndim-reductions/Blosc2-NumPy.png |
-|   :width: 50%                                           |    :width: 50%                                     |
-|   :align: center                                        |    :align: center                                  |
-+---------------------------------------------------------+----------------------------------------------------+
++----------------------------------------------------------+-----------------------------------------------------+
+| .. image:: /images/ndim-reductions/Blosc2-decompress.png | .. image:: /images/ndim-reductions/Blosc2-NumPy.png |
+|   :width: 25%                                            |    :width: 25%                                      |
+|   :align: center                                         |    :align: center                                   |
++----------------------------------------------------------+-----------------------------------------------------+
 
 To achieve Blosc2 and NumPy working in parallel, Blosc2 needs to decompress several chunks prior to NumPy performing the reduction operation. The decompressed chunks are stored on a queue, waiting for further processing; this is why Blosc2 needs to handle several (3 or 4) chunks simultaneously, so using a chunk size that is a fraction (1/3, 1/4) of L3 is normally a good thing for performance. In the case above, Blosc2 has chosen 8 MB for the chunk size, which is near to 1/4 of the L3 cache size and hence, a good compromise for the L3 cache size (36 MB) of our CPU (Intel 13900K).  Also, when we have chosen the chunk size to be (100, 100, 100), the chunk size continued to be 8 MB, so size is still optimal for the L3 cache.
 
