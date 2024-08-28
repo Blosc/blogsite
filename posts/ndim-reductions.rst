@@ -103,9 +103,15 @@ We could proceed further and try to fine tune the chunk size to get even better 
 Why Blosc2 can be faster than NumPy?
 ------------------------------------
 
-Blosc2 splits data into chunks and blocks to compress and decompress data efficiently. When accessing data, a full chunk is fetched from memory and decompressed by the CPU. If the chunk size is small enough to fit in the CPU cache, the CPU can write the data faster, as it does not need to travel back to the main memory. Later, when NumPy is called to perform the reduction on the decompressed data, it can access the data faster, as it is already in the CPU cache. So, it is not that Blosc2 is faster than NumPy, but rather that it is allowing NumPy to leverage the CPU cache more efficiently, and hence, the overall performance is better.
+Blosc2 splits data into chunks and blocks to compress and decompress data efficiently. When accessing data, a full chunk is fetched from memory and decompressed by the CPU (as seen in the image below, left side). If the chunk size is small enough to fit in the CPU cache, the CPU can write the data faster, as it does not need to travel back to the main memory. Later, when NumPy is called to perform the reduction on the decompressed data, it can access the data faster, as it is already in the CPU cache (image below, right side). So, it is not that Blosc2 is faster than NumPy, but rather that it is allowing NumPy to leverage the CPU cache more efficiently.
 
-To achieve Blosc2 and NumPy working in parallel, Blosc2 needs to decompress several chunks prior to NumPy performing the reduction operation. The decompressed chunks are stored on a queue, waiting for furthre processing; this is why Blosc2 needs to handle several (3 or 4) chunks simultaneously, so using a chunk size that is a fraction (1/3, 1/4) of L3 is normally a good thing for performance. In the case above, Blosc2 has chosen 8 MB for the chunk size, which is a good compromise for the L3 cache size (36 MB) of the Intel 13900K CPU.  Also, when we have chosen the chunk size to be (100, 100, 100), the chunk size continued to be 8 MB, which is near to 1/4 of the L3 cache size, and hence, optimal for performance.
++---------------------------------------------------------+----------------------------------------------------+
+| .. image:: images/ndim-reductions/Blosc2-decompress.png | .. image:: images/ndim-reductions/Blosc2-NumPy.png |
+|   :width: 50%                                           |    :width: 50%                                     |
+|   :align: center                                        |    :align: center                                  |
++---------------------------------------------------------+----------------------------------------------------+
+
+To achieve Blosc2 and NumPy working in parallel, Blosc2 needs to decompress several chunks prior to NumPy performing the reduction operation. The decompressed chunks are stored on a queue, waiting for further processing; this is why Blosc2 needs to handle several (3 or 4) chunks simultaneously, so using a chunk size that is a fraction (1/3, 1/4) of L3 is normally a good thing for performance. In the case above, Blosc2 has chosen 8 MB for the chunk size, which is near to 1/4 of the L3 cache size and hence, a good compromise for the L3 cache size (36 MB) of our CPU (Intel 13900K).  Also, when we have chosen the chunk size to be (100, 100, 100), the chunk size continued to be 8 MB, so size is still optimal for the L3 cache.
 
 Having said this, we still need some explanation on why the performance can be so different along the X, Y, and Z axes.  Let's see this in the next section.
 
@@ -134,7 +140,6 @@ Tweaking the chunk size
 
 .. image:: /images/ndim-reductions/3D-cube.png
   :width: 40%
-
 
 However, when Blosc2 is instructed to create chunks that are the same size for all the axes (chunks=(100, 100, 100)), the situation changes. In this case, an accumulator is needed for each subcube, but it is smaller (`100 * 100 * 8 = 80 KB`) and fits in L2, which is faster than L3 (scenario above); as the same size is used for all the axes hence the performance is similar for all of them.
 
