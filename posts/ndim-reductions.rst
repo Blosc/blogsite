@@ -102,8 +102,9 @@ We could proceed further and try to fine tune the chunk size to get even better 
 
 Why Blosc2 can be faster than NumPy?
 ------------------------------------
+As it turns out that Blosc2 is using NumPy machinery for computing reductions behind the scenes, why is Blosc2 faster than NumPy in the case shown above? The answer lies in the way Blosc2 and NumPy access data in memory.
 
-Blosc2 splits data into chunks and blocks to compress and decompress data efficiently. When accessing data, a full chunk is fetched from memory and decompressed by the CPU (as seen in the image below, left side). If the chunk size is small enough to fit in the CPU cache, the CPU can write the data faster, as it does not need to travel back to the main memory. Later, when NumPy is called to perform the reduction on the decompressed data, it can access the data faster, as it is already in the CPU cache (image below, right side). So, it is not that Blosc2 is faster than NumPy, but rather that it is allowing NumPy to leverage the CPU cache more efficiently.
+Blosc2 splits data into chunks and blocks to compress and decompress data efficiently. When accessing data, a full chunk is fetched from memory and decompressed by the CPU (as seen in the image below, left side). If the chunk size is small enough to fit in the CPU cache, the CPU can write the decompressed chunk faster, as it does not need to travel back to the main memory. Later, when NumPy is called to perform the reduction on the decompressed chunk, it can access the data faster, as it is already in the CPU cache (image below, right side).
 
 +----------------------------------------------------------+-----------------------------------------------------+
 | .. image:: /images/ndim-reductions/Blosc2-decompress.png | .. image:: /images/ndim-reductions/Blosc2-NumPy.png |
@@ -113,7 +114,9 @@ Blosc2 splits data into chunks and blocks to compress and decompress data effici
 
 To achieve Blosc2 and NumPy working in parallel, Blosc2 needs to decompress several chunks prior to NumPy performing the reduction operation. The decompressed chunks are stored on a queue, waiting for further processing; this is why Blosc2 needs to handle several (3 or 4) chunks simultaneously, so using a chunk size that is a fraction (1/3, 1/4) of L3 is normally a good thing for performance. In the case above, Blosc2 has chosen 8 MB for the chunk size, which is near to 1/4 of the L3 cache size and hence, a good compromise for the L3 cache size (36 MB) of our CPU (Intel 13900K).  Also, when we have chosen the chunk size to be (100, 100, 100), the chunk size continued to be 8 MB, so size is still optimal for the L3 cache.
 
-Having said this, we still need some explanation on why the performance can be so different along the X, Y, and Z axes.  Let's see this in the next section.
+ So, it is not that Blosc2 is faster than NumPy, but rather that *it is allowing NumPy to leverage the CPU cache more efficiently*.
+
+Having said this, we still need some explanation on why the performance can be so different along the X, Y, and Z axes, specially for the first chunk shape (automatic) above.  Let's see this in the next section.
 
 Performing reductions on 3D arrays
 ----------------------------------
@@ -141,9 +144,9 @@ Tweaking the chunk size
 .. image:: /images/ndim-reductions/3D-cube.png
   :width: 40%
 
-However, when Blosc2 is instructed to create chunks that are the same size for all the axes (chunks=(100, 100, 100)), the situation changes. In this case, an accumulator is needed for each subcube, but it is smaller (`100 * 100 * 8 = 80 KB`) and fits in L2, which is faster than L3 (scenario above); as the same size is used for all the axes hence the performance is similar for all of them.
+However, when Blosc2 is instructed to create chunks that are the same size for all the axes (chunks=(100, 100, 100)), the situation changes. In this case, an accumulator is needed for each chunk (sub-cube in figure above), but as it is relatively small (`100 * 100 * 8 = 80 KB`), and fits in L2, accumulation in the X axis is faster than in the previous scenario (where it needs to do the accumulation in L3).
 
-It is interesting to stress out that, in this case, and when using compression, performance is similar than NumPy in *all* axes, except for the X axis, where performance is up to 1.5x better. This fact is even more interesting when you know that Blosc2 is using the very same NumPy reduction machinery behind the scenes. This is a nice side effect of compression; see below.
+In this case, Blosc2 performance along X axis is even better than in the Y and Z axes, as the CPU can access data in a more efficient way. Actually, Blosc2 performance is up to 1.5x better than NumPy in the X axis (while being similar, or even a bit better along Y and Z axes), which is quite remarkable feat.
 
 Effect of using different codecs in Python-Blosc2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -156,11 +159,10 @@ In the plots above, we can see how using the LZ4 codec is striking such a balanc
 
 We have just scraped the surface for some of the compression parameters that can be tuned in Blosc2. You can use the `cparams` dict with the different parameters in  `blosc2.compress2() <https://www.blosc.org/python-blosc2/reference/autofiles/top_level/blosc2.compress2.html#blosc2>`_  to set the compression level, `codec <https://www.blosc.org/python-blosc2/reference/autofiles/top_level/blosc2.Codec.html>`_ , `filters <https://www.blosc.org/python-blosc2/reference/autofiles/top_level/blosc2.Filter.html>`_ and other parameters.
 
-A better way to tune compression parameters is the `Btune tool <https://ironarray.io/btune>`_  that, depending on your requirements for how fast you want compression/decompression, the desired degree of compression ratio, or how similar your compressed data would be with respect to the original data (i.e. using lossy compression), it will find the best parameters for the task.
+A better way to tune the compression parameters is to use the `Btune tool <https://ironarray.io/btune>`_  that, depending on your requirements (how fast you want compression/decompression, the desired degree of compression ratio, or how similar your compressed data would be with respect to the original data, i.e. using lossy compression), it will automatically find the best parameters for you.
 
 Conclusion
 ----------
-
 Understanding the balance between space savings and the additional time required to process the data is important. Testing different compression settings can help finding the method that offers the best trade-off between reduced size and processing time. The fact that Blosc2 automatically chooses the chunk shape, makes it easy for the user to get a decently good performance, without having to worry about the details of the CPU cache. In addition, as we have shown, we can fine tune the chunk shape in case it does not fit our needs (e.g. we need more uniform performance along all axes).
 
 Besides the sum() reduction exercised here, Blosc2 supports a fair range of reduction operators (mean, std, min, max, all, any, etc.), and you are invited to `explore them <https://www.blosc.org/python-blosc2/reference/reduction_functions.html>`_.
