@@ -143,7 +143,7 @@ NAVIGATION_LINKS = {
         ("/c-blosc2/c-blosc2.html", "C-Blosc2"),
         ("/python-blosc/python-blosc.html", "Python-Blosc"),
         ("/python-blosc2-2.x/python-blosc2.html", "Python-Blosc2-2.x"),
-        ("/python-blosc2/python-blosc2.html", "Python-Blosc2-3.x"),
+        ("/python-blosc2/index.html", "Python-Blosc2-3.x"),
         # ("/pages/professional-services/", "Professional Services"),
         #("/categories/", "Tags"),
         ("https://numfocus.org/donate-to-blosc", "Donate to Blosc"),
