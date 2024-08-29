@@ -130,7 +130,7 @@ Reduction along the X axis: When accessing a row (red line), the CPU can access 
 .. image:: /images/ndim-reductions/memory-access-2D-y.png
   :width: 55%
 
-Reducing along the Y axis: When accessing a row (green line), the CPU can access these values (green points) from memory sequentially but, contrarily to the case above, they don't need an accumulator and the sum of the row (marked as an `*`) is final.  So, although the number of sum operations is the same as above, the required time is smaller because there is no need of updating *all* the values of the accumulator per row, but only one at a time, which is more efficient in modern CPUs.
+Reducing along the Y axis: When accessing a row (green line), the CPU can access these values (green points) from memory sequentially but, contrarily to the case above, they don't even need an accumulator, and the sum of the row (marked as an `*`) is final.  So, although the number of sum operations is the same as above, the required time is smaller because there is no need of updating *all* the values of the accumulator per row, but only one at a time, which is faster in modern CPUs.
 
 Tweaking the chunk size
 ~~~~~~~~~~~~~~~~~~~~~~~
