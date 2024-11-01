@@ -13,7 +13,7 @@ dependencies:
   - sphinx>=8.0.0
   - pydata-sphinx-theme
   - doxygen
-  - breathe
+  - breathe>=4.35.0
   - numpydoc
   - myst-parser
   - pygments
