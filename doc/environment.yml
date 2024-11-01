@@ -10,7 +10,7 @@ dependencies:
   - msgpack-python
   - httpx
 
-  - sphinx
+  - sphinx>=8.0.0
   - pydata-sphinx-theme
   - doxygen=1.9
   - breathe
