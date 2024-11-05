@@ -10,10 +10,11 @@ dependencies:
   - msgpack-python
   - httpx
 
-  - sphinx
+# Sphinx should be >= 6.2 and < 7.2 (because of breathe)
+  - sphinx>=6.2,<7.2
   - pydata-sphinx-theme
-  - doxygen=1.9
-  - breathe
+  - doxygen
+  - breathe>=4.35.0
   - numpydoc
   - myst-parser
-  - pygments=2.11.2  # Sphinx fails without this: 'HtmlFormatter' object has no attribute 'get_linenos_style_defs' with newer versions
+  - pygments

@@ -135,8 +135,8 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-      #  ("/archive.html", "Archive"),
-      #  ("/rss.xml", "RSS feed"),
+        # ("/archive.html", "Archive"),
+        # ("/rss.xml", "RSS feed"),
         ("/categories/cat_posts/", "All Posts"),
         ("/pages/blosc-in-depth/", "Blosc In Depth"),
         # ("/pages/synthetic-benchmarks/", "Benchmarks"),

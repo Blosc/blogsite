@@ -10,9 +10,11 @@
 
 NumPy is widely recognized for its ability to perform efficient computations and manipulations on multidimensional arrays. This library is fundamental for many aspects of data analysis and science due to its speed and flexibility in handling numerical data. However, when datasets reach considerable sizes, working with uncompressed data can result in prolonged access times and intensive memory usage, which can negatively impact overall performance.
 
-Python-Blosc2 leverages the power of NumPy to perform reductions on compressed multidimensional arrays. But, by compressing data with Blosc2, it is possible to reduce the memory and storage space required to store large datasets, while maintaining fast reduction times. This is especially beneficial for systems with memory constraints, as it allows for faster data access and operation.
+`Python-Blosc2 <https://www.blosc.org/python-blosc2>`_ leverages the power of NumPy to perform reductions on compressed multidimensional arrays. But, by compressing data with Blosc2, it is possible to reduce the memory and storage space required to store large datasets, while maintaining fast reduction times. This is especially beneficial for systems with memory constraints, as it allows for faster data access and operation.
 
-In this blog, we will explore how Python-Blosc2 can perform data reductions in in-memory `NDArray <https://www.blosc.org/python-blosc2/reference/ndarray.html>`_ objects (or any other object fulfilling the `LazyArray interface <https://www.blosc.org/python-blosc2/reference/lazyarray.html>`_) and how the speed of these operations can be optimized by using different chunk shapes, compression levels and codecs. We will then compare the performance of Python-Blosc2 with NumPy.
+In this blog, we will explore how Python-Blosc2 can perform data reductions with in-memory `NDArray <https://www.blosc.org/python-blosc2/reference/ndarray.html>`_ objects (or any other object fulfilling the `LazyArray interface <https://www.blosc.org/python-blosc2/reference/lazyarray.html>`_) and how the speed of these operations can be optimized by using different chunk shapes, compression levels and codecs. We will then compare the performance of Python-Blosc2 with NumPy.
+
+**Note**: The code snippets shown in this blog are part of a `Jupyter notebook <https://github.com/Blosc/python-blosc2/blob/main/doc/getting_started/tutorials/04.reductions.ipynb>`_ that you can run on your own machine. For that, you will need to install a recent version of Python-Blosc2: `pip install 'blosc2>=3.0.0b3'`; feel free to experiment with different parameters and share your results with us!
 
 The 3D array
 ------------
@@ -83,7 +85,7 @@ Let's plot the results for the X, Y, and Z axes, comparing the performance of Py
 .. image:: /images/ndim-reductions/plot_automatic_chunking.png
   :width: 50%
 
-We can see that reduction along the X axis is much slower than those along the Y and Z axis for the Blosc2 case. This is because the automatically computed chunk shape is (1, 1000, 1000) making the overhead of partial sums larger. In addition, we see that, when reducing in all axes, as well as in Y and Z axes, Blosc2+LZ4+SHUFFLE actually achieves far better performance than NumPy.  Finally, when not using compression inside Blosc2, we never see an advantage. See later for a discussion on these results.
+We can see that reduction along the X axis is much slower than those along the Y and Z axis for the Blosc2 case. This is because the automatically computed chunk shape is (1, 1000, 1000) making the overhead of partial sums larger. In addition, we see that, with the exception of the X axis, Blosc2+LZ4+SHUFFLE actually achieves far better performance than NumPy.  Finally, when not using compression inside Blosc2, we never see an advantage. See later for a discussion on these results.
 
 Manual chunking
 ~~~~~~~~~~~~~~~
@@ -130,7 +132,7 @@ Reduction along the X axis: When accessing a row (red line), the CPU can access 
 .. image:: /images/ndim-reductions/memory-access-2D-y.png
   :width: 55%
 
-Reducing along the Y axis: When accessing a row (green line), the CPU can access these values (green points) from memory sequentially but, contrarily to the case above, they don't need an accumulator and the sum of the row (marked as an `*`) is final.  So, although the number of sum operations is the same as above, the required time is smaller because there is no need of updating *all* the values of the accumulator per row, but only one at a time, which is more efficient in modern CPUs.
+Reducing along the Y axis: When accessing a row (green line), the CPU can access these values (green points) from memory sequentially but, contrarily to the case above, they don't even need an accumulator, and the sum of the row (marked as an `*`) is final.  So, although the number of sum operations is the same as above, the required time is smaller because there is no need of updating *all* the values of the accumulator per row, but only one at a time, which is faster in modern CPUs.
 
 Tweaking the chunk size
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,7 +149,7 @@ Effect of using different codecs in Python-Blosc2
 
 Compression and decompression consume CPU and memory resources. Differentiating between various codecs and configurations allows for evaluating how each option impacts the use of these resources, helping to choose the most efficient option for the operating environment. Finding the right balance between compression ratio and speed is crucial for optimizing performance.
 
-In the plots above, we can see how using the LZ4 codec is striking such a balance, as it achieves the best performance in general, even above a non-compressed scenario. This is because LZ4 is tuned towards speed, and the time to compress and decompress the data is very low. On the other hand, ZSTD is a codec that is optimized for compression ratio (although not shown, in this case it typically compresses between 2x and x more than LZ4), and hence it is a bit slower.  However, it is still faster than the non-compressed case, as compression requires reduced memory transmission, and this compensates for the additional CPU time required for compression and decompression.
+In the plots above, we can see how using the LZ4 codec is striking such a balance, as it achieves the best performance in general, even above a non-compressed scenario. This is because LZ4 is tuned towards speed, and the time to compress and decompress the data is very low. On the other hand, ZSTD is a codec that is optimized for compression ratio (although not shown, in this case it typically compresses between 2x and 3x more than LZ4), and hence it is a bit slower.  However, it is still faster than the non-compressed case, as compression requires reduced memory transmission, and this compensates for the additional CPU time required for compression and decompression.
 
 We have just scraped the surface for some of the compression parameters that can be tuned in Blosc2. You can use the `cparams` dict with the different parameters in `blosc2.compress2() <https://www.blosc.org/python-blosc2/reference/autofiles/top_level/blosc2.compress2.html#blosc2>`_  to set the compression level, `codec <https://www.blosc.org/python-blosc2/reference/autofiles/top_level/blosc2.Codec.html>`_ , `filters <https://www.blosc.org/python-blosc2/reference/autofiles/top_level/blosc2.Filter.html>`_ and other parameters.
 
@@ -156,7 +158,5 @@ Conclusion
 Understanding the balance between space savings and the additional time required to process the data is important. Testing different compression settings can help finding the method that offers the best trade-off between reduced size and processing time. The fact that Blosc2 automatically chooses the chunk shape, makes it easy for the user to get a decently good performance, without having to worry about the details of the CPU cache. In addition, as we have shown, we can fine tune the chunk shape in case the default one does not fit our needs (e.g. we need more uniform performance along all axes).
 
 Besides the sum() reduction exercised here, Blosc2 supports a fair range of reduction operators (mean, std, min, max, all, any, etc.), and you are invited to `explore them <https://www.blosc.org/python-blosc2/reference/reduction_functions.html>`_.  Moreover, it is also possible to use reductions even for very large arrays that are stored on disk. This opens the door to a wide range of possibilities for data analysis and science, allowing for efficient reductions on large datasets that are compressed on-disk and with minimal memory usage. We will explore this in a forthcoming blog.
-
-Finally, you can find the code for this blog on a `notebook in the Blosc2 repository <https://github.com/Blosc/python-blosc2/blob/main/doc/getting_started/tutorials/04.reductions.ipynb>`_.  Feel free to experiment with different parameters and share your results with us!
 
 We would like to thank `ironArray <https://ironarray.io>`_ for supporting the development of the computing capabilities of Blosc2.  Then, to NumFOCUS for recently providing a small grant that is helping us to improve the documentation for the project.  Last but not least, we would like to thank the Blosc community for providing so many valuable insights and feedback that have helped us to improve the performance and usability of Blosc2.
