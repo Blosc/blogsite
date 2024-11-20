@@ -2,7 +2,7 @@
 .. author: Oumaima Ech Chdig, Francesc Alted
 .. slug: persistent-reductions
 .. date: 2024-11-05 12:58:20 UTC
-.. tags: blosc2, lazy-expressions, persistent-reduction, data-processing, large-datasets
+.. tags: lazy-expressions, persistent-reduction, data-processing, large-datasets
 .. category:
 .. link:
 .. description:
