@@ -43,6 +43,7 @@ Imagine you need to perform a calculation like `sum(a, axis=0) + b * sin(c)`. Ra
 Let's see how that works with a little more complex expression:
 
 .. code-block:: python
+
     # Create arrays with specific dimensions and values
     a = blosc2.full((2, 3, 4), 1, urlpath="a.b2nd", mode="w")
     b = blosc2.full((2, 4), 2, urlpath="b.b2nd", mode="w")
@@ -64,6 +65,7 @@ Another big advantage of Blosc2 is its ability to compute persistent expressions
 For instance, if you have an expression stored, and only part of your dataset changes, Blosc2 can apply reductions dynamically to efficiently update the sum:
 
 .. code-block:: python
+
     # Resizing arrays and updating values
     a.resize((30, 30, 40))
     a[20:30] = 5
