@@ -1,6 +1,6 @@
 .. title: What Is Blosc?
 .. slug: blosc-in-depth
-.. date: 2024-04-22 06:43:07 UTC
+.. date: 2024-12-12 11:43:07 UTC
 .. tags:
 .. link:
 .. description:
@@ -40,6 +40,15 @@ Blosc2 also includes `NDim, a container with multi-dimensional capabilities <htt
    :width: 75%
    :align: center
 
+Finally, `Python-Blosc2 <https://github.com/Blosc/python-blosc2>`_ is not only a Python wrapper for C-Blosc2, but also a powerful computing engine that can perform advanced computations on compressed data.  It is designed to work transparently with NumPy arrays, while leveraging both NumPy and numexpr for achieving great performance.  Among the main differences between the new computing engine and NumPy or numexpr, you can find:
+
+* Support for ndarrays that are compressed in-memory, on-disk or `on the network <https://github.com/ironArray/Caterva2>`_.
+* Can perform many kind of math expressions, including reductions, indexing, filters and more.
+* Support for NumPy ufunc mechanism, allowing to mix and match NumPy and Blosc2 computations.
+* Excellent integration with Numba and Cython via User Defined Functions.
+
+Find more information in the `Python-Blosc2 documentation <https://www.blosc.org/python-blosc2>`_.
+
 Why It Works?
 -------------
 
@@ -50,7 +59,7 @@ Blosc2 also applies more advanced techniques to improve the compression ratio on
 Performance
 -----------
 
-Blosc2 is also designed to be efficient when retrieving blocks and chunks in multidimensional datasets.  For comparison purposes, see below the speed that BloscLZ, one of the fastest codecs available in Blosc, can achieve when combined with different libraries supporting Blosc(1)/Blosc2 when accessing a 7.3 TB dataset:
+Blosc2 is designed to efficiently retrieve blocks and chunks in multidimensional datasets.  For comparison purposes, see below the speed that BloscLZ, one of the fastest codecs available in Blosc, can achieve when combined with different libraries supporting Blosc(1)/Blosc2 when accessing a 7.3 TB dataset:
 
 .. figure:: /images/slicing-speed-blosclz-libraries.png
    :width: 75%
@@ -115,6 +124,8 @@ Provided that data is compressible enough, applications that use Blosc are expec
 
 Blosc2 also adds support for sparse and multi-dimensional datasets, which are common in scientific applications.  See an example on how Blosc can make an `efficient access to much larger datasets than the available memory <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023.pdf>`_.
 
+And if you use the `Python-Blosc2 <https://github.com/Blosc/python-blosc2>`_ wrapper, you can also leverage the `lazy expressions <https://www.blosc.org/posts/persistent-reductions/>`_ feature, which allows you to store complex mathematical formulas for later execution. This is highly advantageous for large computations that might not be needed right away or that may depend on evolving data.
+
 Adapting Blosc to your needs
 ----------------------------
 
@@ -178,9 +189,9 @@ Blosc is a free software released under the permissive `BSD license <https://en.
 Sponsors
 --------
 
-Blosc and Blosc2 have been developed with the support of several organizations.  We would like to thank them for their support.
+Blosc and Blosc2 have been developed with the support of several organizations like `NumFOCUS <https://numfocus.org>`_, `ironArray SLU <https://ironarray.io>`_ and others.  We would like to thank them for their support.
 
-Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_, a nonprofit dedicated to supporting the open source scientific computing community.  If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
+Blosc is a fiscally sponsored project of NumFOCUS, a nonprofit dedicated to supporting the open source scientific computing community.  If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
 
 .. raw:: html
 
@@ -194,7 +205,7 @@ Blosc is a fiscally sponsored project of `NumFOCUS <https://numfocus.org>`_, a n
 Commercial Support
 ------------------
 
-`ironArray SLU <https://ironarray.io>`_ provides data-driven solutions and consulting services around compression for binary data and is a principal and proud sponsor of Blosc. The ironArray team is mostly the same creators of the Blosc, PyTables and `numexpr <https://github.com/pydata/numexpr/blob/master/README.rst>`_ projects.  Contact them if you need help with your data compression/management needs.
+`ironArray <https://ironarray.io>`_ provides data-driven solutions and consulting services around compression for binary data and is a principal and proud sponsor of Blosc. The ironArray team is mostly the same creators of the Blosc, PyTables and `numexpr <https://github.com/pydata/numexpr/blob/master/README.rst>`_ projects.  Contact them if you need help with your data compression/computation/management needs.
 
 
 -- The Blosc Development Team
