@@ -55,13 +55,14 @@ jobs:
       run: cd python-blosc && sphinx-build doc ../_site/python-blosc
       shell: bash -l {0}
 
+    - name: Install pandoc
+      run: sudo apt install pandoc
+      shell: bash -l {0}
+
 # With forthcoming 3.0, Python-Blosc2-2.x docs are not needed anymore
 #    # blosc.org/python-blosc2-2.x
 #    - name: Check out Python-Blosc2-2.x
 #      run: git clone -b v2.x --recurse-submodules https://github.com/Blosc/python-blosc2.git python-blosc2-2.x
-#    - name: Install pandoc
-#      run: sudo apt install pandoc
-#      shell: bash -l {0}
 #    - name: Install Python-Blosc2-2.x doc dependencies
 #      run: cd python-blosc2-2.x && pip install -r requirements-doc.txt --upgrade
 #      shell: bash -l {0}
