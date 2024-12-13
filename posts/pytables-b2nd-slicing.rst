@@ -67,6 +67,6 @@ The benchmarks above show how optimized Blosc2 NDim's two-level partitioning com
 
 It is worth noting that these techniques still have some limitations: they only work with contiguous slices (that is, with step 1 on every dimension), and on datasets with the same byte ordering as the host machine. Also, although results are good indeed, there may still be room for implementation improvement, but that will require extra code profiling and parameter adjustments.
 
-Finally, as mentioned in the `Blosc2 NDim`_ post, if you need help in `finding the best parameters <http://btune.blosc.org/>`_ for your use case, feel free to reach out to the Blosc team at `contact (at) blosc.org`.
+Finally, as mentioned in the `Blosc2 NDim`_ post, if you need help in `finding the best parameters <https://ironarray.io/btune>`_ for your use case, feel free to reach out to the Blosc team at `contact (at) blosc.org`.
 
 Enjoy data!

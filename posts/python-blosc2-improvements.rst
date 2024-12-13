@@ -18,7 +18,7 @@ Continue reading for knowing the new features a bit more in depth.
 Retrieve data with `__getitem__` and `get_slice`
 ------------------------------------------------
 
-The most general way to store data in Python-Blosc2 is through a `SChunk` (super-chunk) object. Here the data is split into chunks of the same size. So until now, the only way of working with it was chunk by chunk (see `the basics tutorial <https://github.com/Blosc/python-blosc2/blob/main/examples/tutorial-basics.ipynb>`_).
+The most general way to store data in Python-Blosc2 is through a `SChunk` (super-chunk) object. Here the data is split into chunks of the same size. So until now, the only way of working with it was chunk by chunk (see `tutorial <https://www.blosc.org/python-blosc2/getting_started/tutorials/07.schunk-basics.html>`_).
 
 With the new version, you can get general data slices with the handy `__getitem__()` method without having to mess with chunks manually.  The only inconvenience is that this returns a bytes object, which is difficult to read by humans.  To overcome this, we have also implemented the `get_slice()` method; it comes with two optional params: `start` and `stop` for selecting the slice you are interested in.  Also, you can pass to `out` any Python object supporting the `Buffer Protocol <http://jakevdp.github.io/blog/2014/05/05/introduction-to-the-python-buffer-protocol/>`_ and it will be filled with the data slice.  One common example is to pass a NumPy array in the `out` argument::
 

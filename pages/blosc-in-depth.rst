@@ -40,12 +40,7 @@ Blosc2 also includes `NDim, a container with multi-dimensional capabilities <htt
    :width: 75%
    :align: center
 
-Finally, `Python-Blosc2 <https://github.com/Blosc/python-blosc2>`_ is not only a Python wrapper for C-Blosc2, but also a powerful computing engine that can perform advanced computations on compressed data.  It is designed to work transparently with NumPy arrays, while leveraging both NumPy and numexpr for achieving great performance.  Among the main differences between the new computing engine and NumPy or numexpr, you can find:
-
-* Support for ndarrays that are compressed in-memory, on-disk or `on the network <https://github.com/ironArray/Caterva2>`_.
-* Can perform many kind of math expressions, including reductions, indexing, filters and more.
-* Support for NumPy ufunc mechanism, allowing to mix and match NumPy and Blosc2 computations.
-* Excellent integration with Numba and Cython via User Defined Functions.
+Finally, there is `Python-Blosc2 <https://github.com/Blosc/python-blosc2>`_ which, besides being a Python wrapper for C-Blosc2, also brings a `powerful computing engine <https://www.blosc.org/python-blosc2/getting_started/overview.html#operating-with-ndarrays>`_ that can perform advanced computations on compressed data that can be arbitrarily large and potentially `distributed <https://ironarray.io/caterva2>`_.
 
 Find more information in the `Python-Blosc2 documentation <https://www.blosc.org/python-blosc2>`_.
 
