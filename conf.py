@@ -153,6 +153,9 @@ NAVIGATION_LINKS = {
         #("/categories/", "Tags"),
         ("https://numfocus.org/donate-to-blosc", "Donate to Blosc"),
         # ("/blog/", "Blog"),
+        ("https://github.com/Blosc", '<i class="fab fa-github-square"></i> GitHub'),
+        ("https://fosstodon.org/@Blosc2", '<i class="fab fa-mastodon"></i> Mastodon'),
+        ("https://bsky.app/profile/blosc.org", '<i class="fas fa-cloud-sun"></i> Bluesky'),
     ),
 }
 
