@@ -108,6 +108,11 @@ TRANSLATIONS = {
 
 TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
+# Add Font Awesome to the head of your site
+EXTRA_HEAD_DATA = """
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+"""
+
 # Links for the sidebar / navigation bar.  (translatable)
 # This is a dict.  The keys are languages, and values are tuples.
 #
@@ -141,9 +146,9 @@ NAVIGATION_LINKS = {
         ("/pages/blosc-in-depth/", "Blosc In Depth"),
         # ("/pages/synthetic-benchmarks/", "Benchmarks"),
         ("/c-blosc2/c-blosc2.html", "C-Blosc2"),
-        ("/python-blosc/python-blosc.html", "Python-Blosc"),
+        # ("/python-blosc/python-blosc.html", "Python-Blosc"),
         # ("/python-blosc2-2.x/python-blosc2.html", "Python-Blosc2-2.x"),
-        ("/python-blosc2/index.html", "Python-Blosc2"),
+        ("/python-blosc2/", "Python-Blosc2"),
         # ("/pages/professional-services/", "Professional Services"),
         #("/categories/", "Tags"),
         ("https://numfocus.org/donate-to-blosc", "Donate to Blosc"),

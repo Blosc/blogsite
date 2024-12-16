@@ -77,8 +77,8 @@ jobs:
 #      run: sphinx-build python-blosc2-2.x/doc _site/python-blosc2-2.x
 #      shell: bash -l {0}
 
-    # blosc.org/python-blosc2-3.x
-    - name: Check out Python-Blosc2-3.x
+    # blosc.org/python-blosc2
+    - name: Check out Python-Blosc2
       run: git clone --recurse-submodules https://github.com/Blosc/python-blosc2.git
     - name: Install Python-Blosc2
       run: pip install -e $(pwd)/python-blosc2/[doc]
