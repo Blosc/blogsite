@@ -94,4 +94,4 @@ Conclusion
 
 Blosc2’s features offer a way to make data processing smarter and faster. If you work with large arrays or require adaptable workflows, Blosc2 can help you make the most of your data processing resources.
 
-For more in-depth guidance, visit the `full tutorial on Blosc2 <https://www.blosc.org/python-blosc2/getting_started/tutorials/04.persistent-reductions.html>`_.
+For more in-depth guidance, visit the `full tutorial on Blosc2 <https://www.blosc.org/python-blosc2/getting_started/tutorials/05.persistent-reductions.html>`_.
