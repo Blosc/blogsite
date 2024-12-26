@@ -22,7 +22,7 @@ ARM Plans for Improving CPU Performance
 So with ARM CPUs dominating the world of mobile and embedded, the question is whether ARM would be interested in having a stab at the client market (laptops and PC desktops) and, by extension, to the server computing market during the 2020s decade or they would renounce to that because they comfortable enough with the current situation?  In 2018 ARM provided an important hint to answer this question: they really want to push hard for the client market with the `introduction of the Cortex A76 CPU <https://www.anandtech.com/show/13226/arm-unveils-client-cpu-performance-roadmap>`_ which aspires to redefine the capability of ARM to compete with Intel at its own game:
 
 .. image:: /images/arm-memory-walls-followup/arm-compute-plans.png
-   :scale: 75 %
+   :width: 75%
    :align: center
 
 On the other hand, the fact that ARM is not just providing licenses to use its IP cores, but also the possibility to buy an architectural licence for vendors to design their own CPU cores using the ARM instruction sets makes possible that other players like Apple, AppliedMicro, Broadcom, Cavium (now Marvell), Nvidia, Qualcomm, and Samsung Electronics can produce ARM CPUs that can be adapted to be used in different scenarios.  One example that is interesting for this discussion is Marvell who, with its ThunderX2 CPU, is already entering into the computing servers market --actually, a new super-computer with more than 100,000 ThunderX2 cores has recently entered into the `TOP500 ranking <https://t.co/LM2wXQrXm8>`_; this is the first time that an ARM-based computer enters that list, overwhelmingly dominated by Intel architectures for almost two decades now.
@@ -38,10 +38,10 @@ Here we are going to analyze `Huawei's Kirin 980 CPU <https://www.anandtech.com/
 ARM is saying that they designed the `A76 to be a competitor of the Intel Skylake Core i5 <https://arstechnica.com/gadgets/2018/06/arm-promises-laptop-level-performance-in-2019/>`_, so this is what we are going to check here.  For this, we are going to compare a Kirin 980 in a Huawei Mate 20 phone against a Core i5 included in a MacBook Pro (late 2016).  Here it is the side-by-side performance for the precipitation dataset that I used in the `previous blog <http://blosc.org/posts/breaking-memory-walls/>`_:
 
 .. |rainfall-kirin980| image:: /images/arm-memory-walls-followup/kirin980-rainfall-lz4-9.png
-   :scale: 70 %
+   :width: 70%
 
 .. |rainfall-i5laptop| image:: /images/arm-memory-walls-followup/i5laptop-lz4-9.png
-   :scale: 70 %
+   :width: 70%
 
 +---------------------+---------------------+
 | |rainfall-kirin980| | |rainfall-i5laptop| |
@@ -62,10 +62,10 @@ The second way in which ARM sells licenses is the so-called *architectural licen
 So as to check how powerful a ThunderX2 can be, we are going to compare `ThunderX2 CN9975 <https://en.wikichip.org/wiki/cavium/thunderx2/cn9975>`_ (actually a box with 2 instances of it, each containing 28 cores) against one of its natural competitor, the Intel Scalable Gold 5120 (actually a box with 2 instances of it, each containing 14 cores):
 
 .. |rainfall-thunderx2| image:: /images/arm-memory-walls-followup/thunderx2-rainfall-lz4-9.png
-   :scale: 70 %
+   :width: 70%
 
 .. |rainfall-scalable| image:: /images/arm-memory-walls-followup/scalable-rainfall-lz4-9.png
-   :scale: 70 %
+   :width: 70%
 
 +----------------------+---------------------+
 | |rainfall-thunderx2| | |rainfall-scalable| |

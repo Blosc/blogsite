@@ -65,7 +65,7 @@ If you are curious on how the super-chunk can be created and used, just check th
 Regarding the computing algorithm, I will use one that follows the principles of the blocking computing technique:  for every chunk, bring it to the CPU, decompress it (so that it stays in cache), run all the necessary operations on it, and then proceed to the next chunk:
 
 .. image:: /images/breaking-down-memory-walls/blocking-technique.png
-   :scale: 25 %
+   :width: 25%
    :align: center
 
 For implementation details, have a look at the `benchmark sources <https://github.com/Blosc/c-blosc2/blob/master/bench/sum_openmp.c#L191-L209>`_.
@@ -89,10 +89,10 @@ Choosing the Compression Codec
 When determining the best codec to use inside Blosc2 (it has support for BloscLZ, LZ4, LZ4HC, Zstd, Zlib and Lizard), it turns out that they behave quite differently, both in terms of compression and speed, with the dataset they have to compress *and* with the CPU architecture in which they run.  This is quite usual, and the reason why you should always try to find the best codec for your use case.  Here we have how the different codecs behaves for our precipitation dataset in terms of decompression speed for our reference platform (Intel Xeon E3-1245):
 
 .. |i7server-codecs| image:: /images/breaking-down-memory-walls/i7server-rainfall-codecs.png
-   :scale: 70 %
+   :width: 70%
 
 .. |rainfall-cr| image:: /images/breaking-down-memory-walls/rainfall-cr.png
-   :scale: 70 %
+   :width: 70%
 
 +-------------------+-------------------+
 | |i7server-codecs| | |rainfall-cr|     |
@@ -115,7 +115,7 @@ Reference CPU: Intel Xeon E3-1245 v5 4-Core processor @ 3.50GHz
 This is a mainstream, somewhat 'small' processor for servers that has an excellent price/performance ratio.  Its main virtue is that, due to its small core count, the CPU can be run at considerably high clock speeds which, combined with a high IPC (Instructions Per Clock) count, delivers considerable computational power.  These results are a good baseline reference point for comparing other CPUs packing a larger number of cores (and hence, lower clock speeds).  Here it is how it performs:
 
 .. image:: /images/breaking-down-memory-walls/i7server-rainfall-lz4hc-9.png
-   :scale: 75 %
+   :width: 75%
    :align: center
 
 We see here that, even though the uncompressed dataset does not scale too well, the compressed dataset shows a nice scalability even when using using hyperthreading (> 4 threads); this is a remarkable fact for a feature (hyperthreading) that, despite marketing promises, does not always deliver 2x the performance of the physical cores.  With that, the performance peak for the compressed precipitation dataset (22 GB/s, using LZ4HC) is really close to the uncompressed one (27 GB/s); quite an achievement for a CPU with just 4 physical cores.
@@ -127,7 +127,7 @@ AMD EPYC 7401P 24-Core Processor @ 2.0GHz
 This CPU implements EPYC, one of the most powerful architectures ever created by AMD.  It packs 24 physical cores, although internally they are split into 2 blocks with 12 cores each.  Here is how it behaves:
 
 .. image:: /images/breaking-down-memory-walls/epyc-rainfall-lz4-9.png
-   :scale: 75 %
+   :width: 75%
    :align: center
 
 Stalling at 4/8 threads, the EPYC scalability for the uncompressed dataset is definitely not good.  On its hand, the compressed dataset behaves quite differently: it shows a nice scalability through the whole range of cores in the CPU (again, even when using hyperthreading), achieving the best performance (45 GB/s, using LZ4) at precisely 48 threads, well above the maximum performance reached by the uncompressed dataset (30 GB/s).
@@ -139,7 +139,7 @@ Intel Scalable Gold 5120 2x 14-Core Processor @ 2.2GHz
 Here we have one of the latest and most powerful CPU architectures developed by Intel.  We are testing it here within a machine with 2 CPUs, each containing 14 cores.  Here’s it how it performed:
 
 .. image:: /images/breaking-down-memory-walls/scalable-rainfall-lz4-9.png
-   :scale: 75 %
+   :width: 75%
    :align: center
 
 In this case, and stalling at 24/28 threads, the Intel Scalable shows a quite remarkable scalability for the uncompressed dataset (apparently, Intel has finally chosen a good name for an architecture; well done guys!).  More importantly, it also reveals an even nicer scalability on the compressed dataset, all the way up to 56 threads (which is expected provided the 2x 14-core CPUs with hyperthreading); this is a remarkable feat for such a memory bandwidth beast.  In absolute terms, the compressed dataset achieves a performance (68 GB/s, using LZ4) that is very close to the uncompressed one (72 GB/s).
@@ -150,7 +150,7 @@ Cavium ARMv8 2x 48-Core
 We are used to seeing ARM architectures powering most of our phones and tablets, but seeing them performing computational duties is far more uncommon.  This does not mean that there are not ARM implementations that cannot power big servers.  Cavium, with its 48-core in a single CPU, is an example of a server-grade chip.  In this case we are looking at a machine with two of these CPUs:
 
 .. image:: /images/breaking-down-memory-walls/cavium-rainfall-blosclz-9.png
-   :scale: 75 %
+   :width: 75%
    :align: center
    
 Again, we see a nice scalability (while a bit bumpy) for the uncompressed dataset, reaching its maximum (35 GB/s) at 40 threads.  Regarding the compressed dataset, it scales much more smoothly, and we see how the performance peaks at 64 threads (15 GB/s, using BloscLZ) and then drops significantly after that point (even if the CPU still has enough cores to continue the scaling; I am not sure why is that).  Incidentally, the BloscLZ codec being the best performer here is not a coincidence as it recently received a lot of fine-tuning for ARM.
@@ -161,7 +161,7 @@ What We Learned
 
 We have explored how to use compression in an nearly optimal way to perform a very simple task: compute an aggregation out of a large dataset.  With a basic understanding of the cache and memory subsystem, and by using appropriate compressed data structures (the super-chunk), we have seen how we can easily produce code that enables modern CPUs to perform operations on compressed data at a speed that approaches the speed of the same operations on uncompressed data (and sometimes exceeding it).  More in particular:
 
-1. Performance for the compressed dataset scales very well on the number of threads for all the CPUs (even hyperthreading seems very beneficial at that, which is a welcome surprise).
+1. Performance for the compressed dataset scales very well on the number of threads for all the CPUs (even hyper-threading seems very beneficial at that, which is a welcome surprise).
 
 2. The CPUs that benefit the most from compression are those with relatively low memory bandwidth and CPUs with many cores.  In particular, the EPYC architecture is a good example and we have shown how the compressed dataset can operate 50% faster that the uncompressed one.
 
