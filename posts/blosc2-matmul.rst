@@ -1,4 +1,4 @@
-.. title: Optimizing chunks for matrix multiplication. A new approach to matrix processing
+.. title: Optimizing chunks for matrix multiplication in Blosc2
 .. author: Ricardo Sales Piquer
 .. slug: optimizing-chunks-blosc2
 .. date: 2025-03-12 9:00:00 UTC
@@ -54,9 +54,9 @@ The image illustrates a **blocked matrix multiplication** approach. The key idea
 is to divide matrices into smaller blocks (or chunks) to optimize memory
 access and computational efficiency.
 
-In the image, matrix :math:`A (M \times K`) and matrix :math:`B (K \times N`)
+In the image, matrix `A (M x K)` and matrix `B (K x N)`
 are partitioned into chunks, and these are partitioned into blocks. The resulting
-matrix :math:`C (M \times N`) is computed as a sum of block-wise multiplication.
+matrix `C (M x N)` is computed as a sum of block-wise multiplication.
 
 This method significantly improves cache utilization by ensuring that only the
 necessary parts of the matrices are loaded into memory at any given time. In
