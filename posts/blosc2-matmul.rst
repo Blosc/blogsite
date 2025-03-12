@@ -1,7 +1,7 @@
 .. title: Optimizing chunks for matrix multiplication. A new approach to matrix processing
 .. author: Ricardo Sales Piquer
 .. slug: optimizing-chunks-blosc2
-.. date: 2025-04-12 9:00:00 UTC
+.. date: 2025-03-12 9:00:00 UTC
 .. tags: blosc2 optimization matrix multiplication matmul compression
 .. category:
 .. link:
