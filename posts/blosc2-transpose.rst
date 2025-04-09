@@ -1,6 +1,6 @@
-.. title:
+.. title: Transposing Compressed Matrices
 .. author: Ricardo Sales Piquer
-.. slug: optimizing-chunks-blosc2
+.. slug: transpose-compressed-matrices
 .. date: 2025-04-09 9:00:00 UTC
 .. tags: blosc2 optimization matrix transposition matmul compression numpy
 .. category:
