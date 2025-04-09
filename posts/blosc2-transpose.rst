@@ -142,8 +142,8 @@ Appendix: Unexpected behaviour in NumPy
 ---------------------------------------
 
 While running the benchmarks, two unusual spikes were consistently observed in
-the performance of NumPy around matrices of approximately **5000 MB** and
-**2000 MB** in size. This can be clearly seen in the plot below:
+the performance of NumPy around matrices of approximately **500 MB**,
+**1100 MB** and **1900 MB** in size. This can be clearly seen in the plot below:
 
 .. image:: /images/blosc2-transpose/only-numpy.png
    :alt: NumPy transposition performance anomaly
