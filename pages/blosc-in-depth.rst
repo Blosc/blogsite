@@ -1,6 +1,6 @@
 .. title: What Is Blosc?
 .. slug: blosc-in-depth
-.. date: 2024-12-12 11:43:07 UTC
+.. date: 2025-14-04 11:43:07 UTC
 .. tags:
 .. link:
 .. description:
@@ -8,7 +8,7 @@
 .. .. template: story.tmpl
 
 
-Blosc is a high-performance compressor that has been optimized for binary data. Its design allows for faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach through an `memcpy()` OS call. This can be useful not only in reducing the size of large datasets, but also in accelerating I/O, be either on-disk or in-memory (both are supported).
+Blosc2 is a high-performance compressors that has been optimized for binary data. Its design allows for faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach through an `memcpy()` OS call. This can be useful not only in reducing the size of large datasets, but also in accelerating I/O, be either on-disk or in-memory (both are supported).
 
 Watch this introductory video to learn more about the main features of Blosc:
 
@@ -27,7 +27,7 @@ Watch this introductory video to learn more about the main features of Blosc:
 
 Blosc2 is the new iteration of the Blosc 1.x series, which adds more features and `better documentation <https://www.blosc.org/c-blosc2/c-blosc2.html>`_. You can also check out the `slides that explain the highlights of Blosc2 <https://www.blosc.org/docs/blosc2-intro-LEAPS-Innov-2021.pdf>`_.
 
-Blosc2 also includes `NDim, a container with multi-dimensional capabilities <https://www.blosc.org/posts/blosc2-ndim-intro/>`_. In particular, Blosc2 NDim excels at reading multi-dimensional slices, thanks to its innovative pineapple-style partitioning. To learn more, watch the video `Why slicing in a pineapple-style is useful <https://www.youtube.com/watch?v=LvP9zxMGBng>`_.
+Blosc2 includes `NDim, a container with multi-dimensional capabilities <https://www.blosc.org/posts/blosc2-ndim-intro/>`_. In particular, Blosc2 NDim excels at reading multi-dimensional slices, thanks to its innovative pineapple-style partitioning. To learn more, watch the video `Why slicing in a pineapple-style is useful <https://www.youtube.com/watch?v=LvP9zxMGBng>`_.
 
 .. Although this is nice, the format below shows the video in a more consistent way with the above one
 .. .. image:: /images/slicing-pineapple-style.png
@@ -47,9 +47,9 @@ Find more information in the `Python-Blosc2 documentation <https://www.blosc.org
 Why It Works?
 -------------
 
-Blosc uses the **blocking technique** (as `described here <http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf>`_) to reduce activity on the memory bus as much as possible.  The blocking technique divides datasets into blocks small enough to fit in the caches of modern processors and performs compression/decompression there. It also leverages SIMD (SSE2) and multi-threading capabilities present in modern multi-core processors to accelerate the compression/decompression process to the maximum.
+Blosc2 uses the **blocking technique** (as `described here <http://www.blosc.org/docs/StarvingCPUs-CISE-2010.pdf>`_) to reduce activity on the memory bus as much as possible.  The blocking technique divides datasets into blocks small enough to fit in the caches of modern processors and performs compression/decompression there. It also leverages SIMD (SSE2, AVX2, AVX512, NEON, ALTIVEC) and multi-threading capabilities present in modern multi-core processors to accelerate the compression/decompression process to the maximum.
 
-Blosc2 also applies more advanced techniques to improve the compression ratio on sparse datasets, and a larger diversity of filters such as `bytedelta <https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/>`_.  This makes Blosc2 a very versatile compressor that can be used in a wide range of situations.
+Blosc2 also applies advanced techniques to improve the compression ratio on sparse datasets, and a `large diversity of codecs and filters <https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/>`_.  This makes Blosc2 a very versatile compressor that can be used in a wide range of situations.
 
 Performance
 -----------
@@ -84,7 +84,7 @@ Blosc as a Meta-Compressor
 
 Blosc is not like other compressors; it should rather be called a *meta-compressor*. This is because it can use different codecs (libraries that reduce the size of inputs) and filters (libraries that improve compression ratio) under the hood. Nonetheless, it can still be referred to as a compressor because it includes several codecs conveniently packaged and made accessible for you.
 
-Currently, Blosc uses **BloscLZ** by default, a codec heavily based on `FastLZ <http://fastlz.org/>`_. Blosc also includes support for `LZ4 and LZ4HC <https://github.com/lz4/lz4>`_, `Zlib <https://github.com/zlib-ng/zlib-ng>`_ and `Zstd <https://github.com/facebook/zstd>`_ right out-of-the-box.  Also, it comes with highly optimized `shuffle, bitshuffle, bytedelta <https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/>`_ and precision **truncation** filters. These can use SSE2, AVX2 (Intel), NEON (ARM) or VMX/AltiVec/VSX (PowerPC) instructions (if available).
+Currently, Blosc uses **BloscLZ** by default, a codec heavily based on `FastLZ <http://fastlz.org/>`_. Blosc also includes support for `LZ4 and LZ4HC <https://github.com/lz4/lz4>`_, `Zlib <https://github.com/zlib-ng/zlib-ng>`_ and `Zstd <https://github.com/facebook/zstd>`_ right out-of-the-box.  Also, it comes with highly optimized `shuffle, bitshuffle, bytedelta <https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/>`_ and precision **truncation** filters. These can use SSE2, AVX2, AVX512 (Intel), NEON (ARM) or VMX/AltiVec/VSX (PowerPC) instructions (if available).
 
 Blosc is responsible for coordinating codecs and filters to leverage the blocking technique (described above) and multi-threaded execution (when several cores are available), while making minimal use of temporary buffers. This ensures that every codec and filter can operate at high speeds, even if it was not initially designed for blocking or multi-threading. For instance, Blosc allows the use of the LZ4 codec in a multi-threaded manner by default.
 
@@ -133,7 +133,7 @@ Is Blosc Ready for Production Use?
 
 Yes, it is!
 
-Blosc is currently being used in various libraries and is able to compress data at a rate that exceeds several petabytes per month worldwide. Fortunately, there haven't been many reports of failures caused by Blosc itself, but we strive to `respond as quickly as possible when such issues do arise <https://www.blosc.org/posts/new-forward-compat-policy/>`_.
+Blosc2 is currently being used in various libraries and is able to compress data at a rate that exceeds several petabytes per month worldwide. Fortunately, there haven't been many reports of failures caused by Blosc itself, but we strive to `respond as quickly as possible when such issues do arise <https://www.blosc.org/posts/new-forward-compat-policy/>`_.
 
 After a long period of testing, C-Blosc2 has entered the production stage in version 2.0.0. Additionally, all new releases are guaranteed to read from persistent storage generated from previous releases (as of 2.0.0).
 
@@ -147,12 +147,14 @@ https://github.com/Blosc
 
 You can download the sources and file tickets there too.
 
-Mastodon feed
--------------
+Social Networks Feeds
+---------------------
 
-Keep informed about the latest developments by following the @Blosc2 mastodon account:
+Keep informed about the latest developments by following us on our social networks:
 
-https://fosstodon.org/@Blosc2
+LinkedIn: https://www.linkedin.com/company/blosc
+Mastodon: https://fosstodon.org/@Blosc2
+BlueSky: https://bsky.app/@blosc.org
 
 Mailing list
 ------------
@@ -169,24 +171,15 @@ The official Python wrappers can be found at:
 http://github.com/Blosc/python-blosc
 http://github.com/Blosc/python-blosc2
 
-Want To Contribute?
--------------------
-
-Your contribution is crucial to making Blosc as solid as possible. If you detect a bug or wish to propose an enhancement, feel free to open a new ticket or make yourself heard on the mailing list. Also, please note that we have a `Code of Conduct <https://github.com/Blosc/community/blob/master/code_of_conduct.md>`_ that you should read before contributing in any way.
-
-If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
-
 Blosc License
 -------------
 
 Blosc is a free software released under the permissive `BSD license <https://en.wikipedia.org/wiki/BSD_licenses>`_. This means that you can use it in almost any way you want!
 
-Sponsors
---------
+Powered by NumFOCUS
+-------------------
 
-Blosc and Blosc2 have been developed with the support of several organizations like `NumFOCUS <https://numfocus.org>`_, `ironArray SLU <https://ironarray.io>`_ and others.  We would like to thank them for their support.
-
-Blosc is a fiscally sponsored project of NumFOCUS, a nonprofit dedicated to supporting the open source scientific computing community.  If you like Blosc and want to support our mission, please consider making a `donation <https://numfocus.org/project/blosc>`_ to support our efforts.
+The Blosc project is a proud member of the NumFOCUS family. NumFOCUS is a nonprofit organization that promotes open practices in research, data, and scientific computing. By supporting Blosc, you are also supporting the broader mission of NumFOCUS to foster open-source innovation and collaboration in the scientific computing community.
 
 .. raw:: html
 
@@ -197,10 +190,41 @@ Blosc is a fiscally sponsored project of NumFOCUS, a nonprofit dedicated to supp
    :align: center
    :target: https://numfocus.org/project/blosc
 
-Commercial Support
-------------------
 
-`ironArray <https://ironarray.io>`_ provides data-driven solutions and consulting services around compression for binary data and is a principal and proud sponsor of Blosc. The ironArray team is mostly the same creators of the Blosc, PyTables and `numexpr <https://github.com/pydata/numexpr/blob/master/README.rst>`_ projects.  Contact them if you need help with your data compression/computation/management needs.
+Want To Contribute?
+-------------------
 
+If you are interested in contributing to the development of Blosc, we welcome your input! You can help us by:
+
+1. Reporting bugs or issues you encounter while using Blosc.
+2. Suggesting new features or improvements.
+3. Contributing code, documentation, or examples.
+4. Participating in discussions on our mailing list or GitHub issues.
+5. Spreading the word about Blosc and its capabilities.
+6. Sharing your experiences and use cases with the community.
+7. Providing feedback on our documentation and tutorials.
+
+ Also, please note that we have a `Code of Conduct <https://github.com/Blosc/community/blob/master/code_of_conduct.md>`_ that you should read before contributing in any way.
+
+.. _support-blosc:
+
+Support Blosc for a Sustainable Future
+---------------------------------------
+
+Blosc and Blosc2 are the culmination of countless hours of effort by dedicated developers and the generous backing of organizations like `NumFOCUS <https://numfocus.org>`_ and `ironArray SLU <https://ironarray.io>`_. Open source software relies on the collective contributions of its community, and financial support plays a critical role in ensuring the long-term sustainability of projects like Blosc.
+
+Your financial contributions directly impact the continued development, maintenance, and innovation of Blosc. By supporting Blosc, you are not only helping to sustain a powerful tool for data compression and computation but also investing in a resource that benefits countless users worldwide.
+
+Here are some ways you can contribute financially:
+
+1. **NumFOCUS**: Blosc is a `fiscally sponsored project of NumFOCUS <https://numfocus.org/project/blosc>`_, a nonprofit organization that supports open source scientific computing. Donations through NumFOCUS help ensure the project's future.
+
+2. **ironArray**: `ironArray <https://ironarray.io>`_ has been instrumental in the development of Blosc2 and offers `commercial support and consulting services <https://ironarray.io/services>`_ to meet your specific needs.
+
+3. **GitHub Sponsorship**: You can also support Blosc by becoming a sponsor on GitHub. Visit our GitHub page and click the `"Sponsor" button <https://github.com/sponsors/FrancescAlted>`_.
+
+Your support creates a win-win situation: it empowers the Blosc team to continue innovating while providing you with a reliable, high-performance tool for your data needs. Together, we can ensure that Blosc remains a cutting-edge solution for years to come.
+
+Thank you for helping us build a sustainable future for Blosc!
 
 -- The Blosc Development Team
