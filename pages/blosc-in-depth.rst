@@ -1,6 +1,6 @@
 .. title: What Is Blosc?
 .. slug: blosc-in-depth
-.. date: 2025-14-04 11:43:07 UTC
+.. date: 2025-04-14 11:43:07 UTC
 .. tags:
 .. link:
 .. description:
