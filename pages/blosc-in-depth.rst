@@ -219,7 +219,7 @@ Here are some ways you can contribute financially:
 
 1. **NumFOCUS**: Blosc is a `fiscally sponsored project of NumFOCUS <https://numfocus.org/project/blosc>`_, a nonprofit organization that supports open source scientific computing. Donations through NumFOCUS help ensure the project's future.
 
-2. **ironArray**: `ironArray <https://ironarray.io>`_ has been instrumental in the development of Blosc2 and offers `commercial support and consulting services <https://ironarray.io/services>`_ to meet your specific needs.
+2. **ironArray**: `ironArray SLU <https://ironarray.io>`_ has been instrumental in the development of Blosc2 and offers `commercial support and consulting services <https://ironarray.io/services>`_ to meet your specific needs.
 
 3. **GitHub Sponsorship**: You can also support Blosc by becoming a sponsor on GitHub. Visit our GitHub page and click the `"Sponsor" button <https://github.com/sponsors/FrancescAlted>`_.
 
