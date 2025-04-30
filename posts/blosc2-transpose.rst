@@ -1,4 +1,4 @@
-.. title:
+.. title: Optimal Transposition of NDArrays with Blosc2
 .. author: Ricardo Sales Piquer
 .. slug: optimizing-chunks-transpose
 .. date: 2025-04-08 9:00:00 UTC
