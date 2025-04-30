@@ -1,8 +1,8 @@
 .. title:
 .. author: Ricardo Sales Piquer
-.. slug: optimizing-chunks-blosc2
+.. slug: optimizing-chunks-transpose
 .. date: 2025-04-08 9:00:00 UTC
-.. tags: blosc2 optimization matrix transposition matmul compression numpy
+.. tags: blosc2 optimization matrix transposition compression numpy
 .. category:
 .. link:
 .. description:
