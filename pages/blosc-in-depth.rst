@@ -126,7 +126,7 @@ Adapting Blosc to your needs
 
 We understand that every user has unique needs, so we have made it possible to `register your own codecs and filters <https://www.blosc.org/posts/registering-plugins/>`_ to better adapt Blosc to different scenarios. Additionally, you can request that they be included in the main C-Blosc2 library, which not only allows for easier deployment, but also contributes to creating a richer and more useful ecosystem.
 
-Additionally, `ironArray SLU <https://ironarray.io>`_ created `Btune <https://ironarray.io/btune>`_, an innovative deep learning tool that can automatically determine the best compression parameters for your specific use case. The ironArray team is continuously working on improving it, and provides commercial support to ensure that it meets your needs.
+Additionally, we created `Btune <https://blosc.org/btune>`_, an innovative machine learning tool that can automatically determine the best compression parameters for your specific use case. The Blosc team is continuously working on improving it, and provides commercial support to ensure that it meets your needs.
 
 Is Blosc Ready for Production Use?
 ----------------------------------

@@ -86,7 +86,7 @@ Lossy compression is a powerful tool for optimizing storage space, reducing band
 
 With its advanced compression methodologies and adept memory management, Blosc2 empowers users to strike a harmonious balance between compression ratio, speed, and fidelity. This attribute renders it especially suitable for scenarios where resource limitations or performance considerations hold significant weight.
 
-Finally, there are ongoing efforts towards integrating fidelity into our `BTune AI tool <https://ironarray.io/btune>`_. This enhancement will empower the tool to autonomously identify the most suitable codecs and filters, balancing compression level, precision, and **fidelity** according to user-defined preferences. Keep an eye out for updates!
+Finally, there are ongoing efforts towards integrating fidelity into our `BTune AI tool <https://blosc.org/btune>`_. This enhancement will empower the tool to autonomously identify the most suitable codecs and filters, balancing compression level, precision, and **fidelity** according to user-defined preferences. Keep an eye out for updates!
 
 Whether you're working with scientific data, multimedia content, or large-scale datasets, Blosc2 offers a comprehensive solution for efficient data compression and handling.
 
