@@ -24,12 +24,12 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="2.388"
-     inkscape:cx="250"
+     inkscape:cx="250.20938"
      inkscape:cy="60.092127"
-     inkscape:window-width="2136"
-     inkscape:window-height="1186"
-     inkscape:window-x="204"
-     inkscape:window-y="75"
+     inkscape:window-width="1712"
+     inkscape:window-height="1040"
+     inkscape:window-x="0"
+     inkscape:window-y="39"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg10" />
   <!-- Array A -->
@@ -499,7 +499,7 @@
      y="103.5"
      font-size="12px"
      font-family="monospace"
-     id="text8">misaligned</text>
+     id="text8">unaligned</text>
   <path
      style="fill:none;stroke:#000000;stroke-width:1.00157;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Dot);marker-end:url(#ConcaveTriangle)"
      d="m 94.5043,109.63317 c 148.2412,68.25795 259.63148,-5.86265 259.63148,-5.86265"

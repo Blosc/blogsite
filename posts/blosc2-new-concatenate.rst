@@ -40,9 +40,9 @@ Blosc2's concatenate function is smart. It processes your data in small pieces (
 
 Let's look at some pictures to see what "aligned" and "unaligned" concatenation means. "Aligned" is when your array sizes match up nicely with the chunk sizes. "Unaligned" is when they don't.
 
-.. image:: /images/blosc2-new-concatenate/concat-aligned.png
-
 .. image:: /images/blosc2-new-concatenate/concat-unaligned.png
+
+.. image:: /images/blosc2-new-concatenate/concat-aligned.png
 
 The images show why aligned concatenation is faster. When array sizes line up with Blosc2's chunk sizes ('aligned'), Blosc2 can join them very quickly and efficiently. This is especially true for large arrays you might be working with in memory. For 'unaligned' arrays, Blosc2 has to do extra work: decompressing and re-compressing data, which takes more time.
 
