@@ -10,7 +10,7 @@
 
 Blosc2 just got a cool new trick: super-efficient array concatenation! If you've ever needed to combine several arrays into one, especially when dealing with lots of data, this new feature is for you. It's built to be fast and use as little memory as possible. This is especially true if your array sizes line up nicely with Blosc2's internal "chunks" (think of these as the building blocks of your compressed data). When this alignment happens, concatenation is lightning-fast, making it perfect for demanding tasks.
 
-You can use this new concatenate feature whether you're `coding in C <https://www.blosc.org/c-blosc2/reference/b2nd.html#utilities>`_ or `Python <https://www.blosc.org/python-blosc2/reference/autofiles/ndarray/blosc2.concatenate.html>`_, and it works with any Blosc2 NDArray (Blosc2's way of handling multi-dimensional arrays).
+You can use this new concatenate feature whether you're `coding in C <https://www.blosc.org/c-blosc2/reference/b2nd.html#c.b2nd_concatenate>`_ or `Python <https://www.blosc.org/python-blosc2/reference/autofiles/ndarray/blosc2.concatenate.html>`_, and it works with any Blosc2 NDArray (Blosc2's way of handling multi-dimensional arrays).
 
 Let's see how easy it is to use in Python. If you're familiar with NumPy, the `blosc2.concatenate` function will feel very similar:
 
@@ -54,7 +54,6 @@ Performance
 To show you how much faster this new concatenate feature is, we did a speed test using LZ4 as the internal compressor in Blosc2. We compared it to the usual way of joining arrays with `numpy.concatenate`.
 
 .. image:: /images/blosc2-new-concatenate/benchmark-lz4-10k-zen4-16GB.png
-  :width: 50%
 
 The speed tests show that Blosc2's new concatenate is rather slow for small arrays (like 1,000x1,000). This is because it has to do a lot of work to set up the concatenation. But when you use larger arrays (like 10,000x10,000), that starts to exceed the memory limits of our test machine, which has 16 GB of RAM, Blosc2's new concatenate feature really shines, performing up to 10x faster than NumPy's concatenate.
 
@@ -63,7 +62,6 @@ However, if your array sizes line up well with Blosc2's internal chunks ("aligne
 Using the Zstd compressor with Blosc2 can make joining "aligned" arrays even quicker.
 
 .. image:: /images/blosc2-new-concatenate/benchmark-zstd-10k-zen4-16GB.png
-  :width: 50%
 
 Zstd is good at making data smaller. So, when arrays are aligned, there's less data to copy, which speeds things up. If arrays aren't aligned, Zstd is a bit slower than another compressor (LZ4) because it has to do more work decompressing and re-compressing. Pick the compressor that works best for what you're doing.
 
