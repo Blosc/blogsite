@@ -10,7 +10,7 @@
 
 Blosc2 just got a cool new trick: super-efficient array concatenation! If you've ever needed to combine several arrays into one, especially when dealing with lots of data, this new feature is for you. It's built to be fast and use as little memory as possible. This is especially true if your array sizes line up nicely with Blosc2's internal "chunks" (think of these as the building blocks of your compressed data). When this alignment happens, concatenation is lightning-fast, making it perfect for demanding tasks.
 
-You can use this new concatenate feature whether you're coding in C or Python, and it works with any Blosc2 NDArray (Blosc2's way of handling multi-dimensional arrays).
+You can use this new concatenate feature whether you're `coding in C <https://www.blosc.org/c-blosc2/reference/b2nd.html#utilities>`_ or `Python <https://www.blosc.org/python-blosc2/reference/autofiles/ndarray/blosc2.concatenate.html>`_, and it works with any Blosc2 NDArray (Blosc2's way of handling multi-dimensional arrays).
 
 Let's see how easy it is to use in Python. If you're familiar with NumPy, the `blosc2.concatenate` function will feel very similar:
 
@@ -31,14 +31,12 @@ Let's see how easy it is to use in Python. If you're familiar with NumPy, the `b
 
 The `blosc2.concatenate` function is pretty straightforward. You give it a list of the arrays you want to join together. You can also tell it which way to join them using the axis parameter (like joining them end-to-end or side-by-side).
 
-A really handy feature is that you can use urlpath and mode to save the combined array directly to a file. This is great when you're working with huge datasets because you don't have to load everything into memory at once. What you get back is a brand new Blosc2 NDArray with all your data combined.
+A really handy feature is that you can use urlpath and mode to save the combined array directly to a file. This is great when you're working with huge datasets because you don't have to load everything into memory at once. What you get back is a brand new, persistent Blosc2 NDArray with all your data combined.
 
 Aligned versus Non-Aligned Concatenation
 ----------------------------------------
 
-Blosc2's concatenate function is smart. It processes your data in small pieces (chunks). This means it can join very large arrays stored on your disk without using up all your computer's memory.
-
-Even better, if the arrays you're joining have sizes that are exact multiples of Blosc2's chunk size, the process is much faster. Why? Because Blosc2 can avoid a lot of extra work like moving uncompressed data around in memory, or decompressing and re-compressing it.
+Blosc2's concatenate function is smart. It processes your data in small pieces (chunks). This means it can join very large arrays stored on your disk without using up all your computer's memory. Even better, if the arrays you're joining have sizes that are exact multiples of Blosc2's chunk size, the process is much faster. Why? Because Blosc2 can avoid a lot of extra work like decompressing and re-compressing it.
 
 Let's look at some pictures to see what "aligned" and "unaligned" concatenation means. "Aligned" is when your array sizes match up nicely with the chunk sizes. "Unaligned" is when they don't.
 
@@ -55,28 +53,24 @@ Performance
 
 To show you how much faster this new concatenate feature is, we did a speed test using LZ4 as the internal compressor in Blosc2. We compared it to the usual way of joining arrays with `numpy.concatenate`.
 
-.. image:: /images/blosc2-new-concatenate/benchmark-lz4-20k.png
+.. image:: /images/blosc2-new-concatenate/benchmark-lz4-10k-zen4-16GB.png
   :width: 50%
 
-The speed tests show that Blosc2's new concatenate is quite fast with large arrays, performing similarly to NumPy. However, if your array sizes line up well with Blosc2's internal chunks ("aligned" arrays), Blosc2 becomes much faster—up to 10 times faster or even more than NumPy. This is because it can skip a lot of the work of decompressing and re-compressing data.
+The speed tests show that Blosc2's new concatenate is rather slow for small arrays (like 1,000x1,000). This is because it has to do a lot of work to set up the concatenation. But when you use larger arrays (like 10,000x10,000), that starts to exceed the memory limits of our test machine, which has 16 GB of RAM, Blosc2's new concatenate feature really shines, performing up to 10x faster than NumPy's concatenate.
+
+However, if your array sizes line up well with Blosc2's internal chunks ("aligned" arrays), Blosc2 becomes much faster—up to 1000x times faster than NumPy. This is because it can skip a lot of the work of decompressing and re-compressing data.
 
 Using the Zstd compressor with Blosc2 can make joining "aligned" arrays even quicker.
 
-.. image:: /images/blosc2-new-concatenate/benchmark-zstd-20k.png
+.. image:: /images/blosc2-new-concatenate/benchmark-zstd-10k-zen4-16GB.png
   :width: 50%
 
-Zstd is good at making data smaller. So, when arrays are aligned, there's less data to copy, which speeds things up. If arrays aren't aligned, Zstd is a bit slower than another compressor (LZ4) because it has to do more work decompressing and re-compressing. However, it still performs pretty well. Pick the compressor that works best for what you're doing, and Blosc2's new concatenate will help you handle large datasets more easily.
+Zstd is good at making data smaller. So, when arrays are aligned, there's less data to copy, which speeds things up. If arrays aren't aligned, Zstd is a bit slower than another compressor (LZ4) because it has to do more work decompressing and re-compressing. Pick the compressor that works best for what you're doing.
 
 Conclusion
 -----------
 
-The new concatenate feature in Blosc2 is a powerful addition that allows users to efficiently combine arrays along different axes while minimizing memory usage and maximizing speed. The performance benefits, especially when working with aligned arrays, make it an ideal choice for high-performance applications dealing with large datasets.
-
-We encourage you to try it out in your projects and see how it can improve your data processing workflows. If you have any questions or feedback, feel free to reach out to the Blosc2 community.
-
-Finally, if you like the work we are doing with Blosc2 and its ecosystem, please `consider supporting us <https://www.blosc.org/pages/blosc-in-depth/#support-blosc/>`_. Your contributions help us continue to develop and improve these tools for everyone.
-
-Blosc2's new concatenate feature is a great way to combine arrays quickly and without using too much memory. It's especially fast when your array sizes match Blosc2's "chunks" (aligned arrays), making it perfect for big data jobs.
+Blosc2's new concatenate feature is a great way to combine arrays quickly and without using too much memory. It's especially fast when your array sizes is an exact multiple of Blosc2's "chunks" (aligned arrays), making it perfect for big data jobs. It also works well for large arrays that don't fit into memory, as it processes data in small chunks. Finally, it supports both C and Python, so you can use it in your favorite programming language.
 
 Give it a try in your own projects! If you have questions, the Blosc2 community is there to help.
 
