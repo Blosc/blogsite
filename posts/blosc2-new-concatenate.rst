@@ -59,13 +59,13 @@ To show you how much faster this new concatenate feature is, we did a speed test
 
 The speed tests show that Blosc2's new concatenate is rather slow for small arrays (like 1,000 x 1,000). This is because it has to do a lot of work to set up the concatenation. But when you use larger arrays (like 20,000 x 20,000) that start to exceed the memory limits of our test machine (32 GB of RAM), Blosc2's new concatenate peformance is much better, and nearing the performance of NumPy's `concatenate` function.
 
-However, if your array sizes line up well with Blosc2's internal chunks ("aligned" arrays), Blosc2 becomes much faster—typically more than 10x times faster than NumPy for large arrays. This is because it can skip a lot of the work of decompressing and re-compressing data, and the cost of copying compressed data is also lower (as much as the achieved compression ratio, which for this case is around 20x).
+However, if your array sizes line up well with Blosc2's internal chunks ("aligned" arrays), Blosc2 becomes much faster—typically more than 10x times faster than NumPy for large arrays. This is because it can skip a lot of the work of decompressing and re-compressing data, and the cost of copying compressed data is also lower (as much as the achieved compression ratio, which for this case is around 10x).
 
 Using the Zstd compressor with Blosc2 can make joining "aligned" arrays even quicker, since Zstd is good at making data smaller.
 
 .. image:: /images/blosc2-new-concatenate/benchmark-zstd-20k-i13900K.png
 
- So, when arrays are aligned, there's less data to copy (compression ratios here are around 80x), which speeds things up. If arrays aren't aligned, Zstd is a bit slower than the previous compressor (LZ4) because its decompression and re-compression algorithm is slower. Conclusion? Pick the compressor that works best for what you're doing!
+So, when arrays are aligned, there's less data to copy (compression ratios here are around 20x), which speeds things up. If arrays aren't aligned, Zstd is a bit slower than the previous compressor (LZ4) because its decompression and re-compression algorithm is slower. Conclusion? Pick the compressor that works best for what you're doing!
 
 Conclusion
 -----------
