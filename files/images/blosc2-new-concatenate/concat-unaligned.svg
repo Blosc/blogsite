@@ -24,12 +24,12 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="2.388"
-     inkscape:cx="250.20938"
+     inkscape:cx="250"
      inkscape:cy="60.092127"
      inkscape:window-width="1712"
      inkscape:window-height="1040"
-     inkscape:window-x="0"
-     inkscape:window-y="39"
+     inkscape:window-x="204"
+     inkscape:window-y="25"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg10" />
   <!-- Array A -->
@@ -465,35 +465,49 @@
        id="path11-5-6-5-7"
        sodipodi:nodetypes="cc" />
   </g>
-  <rect
-     x="79.5"
-     y="85.5"
-     width="30"
-     height="30"
-     fill="#99cc99"
-     stroke="#333333"
-     fill-opacity="0.5"
-     id="rect6" />
-  <rect
-     x="109.54293"
-     y="85.542938"
-     width="59.126846"
-     height="29.914112"
-     fill="#ffcc99"
-     stroke="#333333"
-     fill-opacity="0.5"
-     id="rect7"
-     style="stroke-width:1.08588" />
-  <rect
-     x="168.65021"
-     y="85.437469"
-     width="30.493568"
-     height="30.125061"
-     fill="#ff9999"
-     stroke="#333333"
-     fill-opacity="0.5"
-     id="rect8"
-     style="stroke-width:0.874937" />
+  <g
+     id="g1"
+     transform="translate(-125.72194,140.70352)">
+    <rect
+       x="205.38947"
+       y="-53.938858"
+       width="30"
+       height="30"
+       fill="#99cc99"
+       stroke="#333333"
+       fill-opacity="0.5"
+       id="rect6-7" />
+    <rect
+       x="235.60875"
+       y="-54.057362"
+       width="28.880219"
+       height="30.236998"
+       fill="#ffcc99"
+       stroke="#333333"
+       fill-opacity="0.5"
+       id="rect7-9"
+       style="stroke-width:0.762994" />
+    <rect
+       x="264.94321"
+       y="-54.057362"
+       width="28.880219"
+       height="30.236998"
+       fill="#ffcc99"
+       stroke="#333333"
+       fill-opacity="0.5"
+       id="rect7-9-2"
+       style="fill:#ff9797;fill-opacity:0.501961;stroke-width:0.762994" />
+    <rect
+       x="294.12088"
+       y="-54.001389"
+       width="30.493568"
+       height="30.125061"
+       fill="#ff9999"
+       stroke="#333333"
+       fill-opacity="0.5"
+       id="rect8-3"
+       style="fill:#668000;stroke-width:0.874937" />
+  </g>
   <text
      x="87.5"
      y="103.5"
