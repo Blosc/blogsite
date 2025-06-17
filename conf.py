@@ -149,9 +149,9 @@ NAVIGATION_LINKS = {
         # ("/python-blosc/python-blosc.html", "Python-Blosc"),
         # ("/python-blosc2-2.x/python-blosc2.html", "Python-Blosc2-2.x"),
         ("/python-blosc2/", "Python-Blosc2"),
-        ("/pages/btune/", "Btune"),
+        # ("/pages/btune/", "Btune"),
         # ("/pages/professional-services/", "Professional Services"),
-        #("/categories/", "Tags"),
+        # ("/categories/", "Tags"),
         ("https://numfocus.org/donate-to-blosc", "Donate to Blosc"),
         # ("/blog/", "Blog"),
         ("https://github.com/Blosc", '<i class="fab fa-github-square"></i> GitHub'),
@@ -643,7 +643,7 @@ USE_BASE_TAG = False
 #
 # If you don't need any of these, just set to []
 REDIRECTIONS = [
-    # ("/pages/btune", "https://ironarray.io/btune"),
+    ("/pages/btune", "https://ironarray.io/btune"),
 ]
 
 # Presets of commands to execute to deploy. Can be anything, for
