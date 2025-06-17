@@ -70,8 +70,8 @@ So, when arrays are aligned, there's less data to copy (compression ratios here 
 Conclusion
 -----------
 
-Blosc2's new concatenate feature is a great way to combine arrays quickly and without using too much memory. It's especially fast when your array sizes is an exact multiple of Blosc2's "chunks" (aligned arrays), making it perfect for big data jobs. It also works well for large arrays that don't fit into memory, as it processes data in small chunks. Finally, it supports both C and Python, so you can use it in your favorite programming language.
+Blosc2's new concatenate feature is a great way to combine arrays quickly and without using too much memory. It's especially fast when your array sizes are an exact multiple of Blosc2's "chunks" (aligned arrays), making it perfect for big data jobs. It also works well for large arrays that don't fit into memory, as it processes data in small chunks. Finally, it supports both C and Python, so you can use it in your favorite programming language.
 
-Give it a try in your own projects! If you have questions, the Blosc2 community is there to help.
+Give it a try in your own projects! If you have questions, the Blosc2 community is here to help.
 
 If you appreciate what we're doing with Blosc2, please think about `supporting us <https://www.blosc.org/pages/blosc-in-depth/#support-blosc/>`_. Your help lets us keep making these tools better.
