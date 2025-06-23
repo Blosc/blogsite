@@ -99,7 +99,7 @@ And here are the results for the Zstd compressor.
 
 .. image:: /images/blosc2-new-concatenate/stack-zstd-20k-i13900K.png
 
-As can be seen, the `stack()` function is also very fast when the input arrays are aligned, and it performs well even for large arrays that don't fit into memory. Incidentally, the `blosc2.stack()` function is slightly faster than `numpy.stack()` even when the arrays are not aligned; we are not sure why this is the case, but we can reproduce that is probably a sign that NumPy can optimize this use case better (or that compression enables Blosc2 to be actually faster in this case).
+As can be seen, the `stack()` function is also very fast when the input arrays are aligned, and it performs well even for large arrays that don't fit into memory. Incidentally, when using the `blosc2.stack()` function in the last dim, it is slightly faster than `numpy.stack()` even when the arrays are not aligned; we are not sure why this is the case, but the fact that we can reproduces this behaviour is probably a sign that NumPy can optimize this use case better.
 
 Conclusion
 -----------
