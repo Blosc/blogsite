@@ -152,7 +152,7 @@ NAVIGATION_LINKS = {
         # ("/pages/btune/", "Btune"),
         # ("/pages/professional-services/", "Professional Services"),
         # ("/categories/", "Tags"),
-        ("https://numfocus.org/donate-to-blosc", "Donate to Blosc"),
+        ("https://www.blosc.org/pages/blosc-in-depth/#support-blosc", "Donate to Blosc"),
         # ("/blog/", "Blog"),
         ("https://github.com/Blosc", '<i class="fab fa-github-square"></i> GitHub'),
         ("https://fosstodon.org/@Blosc2", '<i class="fab fa-mastodon"></i> Mastodon'),
