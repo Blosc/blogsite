@@ -8,7 +8,7 @@
 .. .. template: story.tmpl
 
 
-Blosc2 is a high-performance compressor and data format optimized for binary data. As the successor to the original Blosc library, it is designed for speed by leveraging multi-threading and SIMD instructions (SSE2, AVX2, AVX512, NEON, ALTIVEC). It uses a **blocking technique** to divide datasets into blocks that fit in CPU caches, dramatically reducing memory bus activity and `breaking down memory walls <https://www.blosc.org/posts/posts/breaking-down-memory-walls/>`_.
+Blosc2 is a high-performance compressor and data format optimized for binary data. As the successor to the original Blosc library, it is designed for speed by leveraging multi-threading and SIMD instructions (SSE2, AVX2, AVX512, NEON, ALTIVEC). It uses a **blocking technique** to divide datasets into blocks that fit in CPU caches, dramatically reducing memory bus activity and `breaking down memory walls <https://www.blosc.org/posts/breaking-memory-walls/>`_.
 
 With a `large diversity of codecs and filters <https://www.blosc.org/posts/bytedelta-enhance-compression-toolset/>`_, Blosc2 allows developers to fine-tune the balance between compression speed and ratio. It is a mature, open-source project with over 60 contributors and 3500+ commits, and is integrated into many popular scientific computing libraries, such as `PyTables <https://www.pytables.org>`_, `h5py <https://www.h5py.org>`_ (via `hdf5plugin <https://hdf5plugin.readthedocs.io>`_), and `Zarr <https://zarr.dev>`_.
 
@@ -29,7 +29,7 @@ Blosc2 offers several advantages that make it a compelling choice for high-perfo
 
 * **Optimized for Binary Data**: Uses shuffle and bit-shuffle filters (among others) that leverage data type information to improve compression ratios. It also has minimal overhead (max 32 bytes per chunk) on non-compressible data.
 
-* **Multi-platform**: Supports a wide range of platforms, including Linux, macOS, Windows, and WebAssembly (WASM). It is `written in C <https://www.blosc.org/c-blosc2>`_, with `bindings available for Python <https://www.blosc.org/python-blosc2>`_.
+* **Multi-platform**: Supports a wide range of platforms, including Linux, macOS, Windows, and WebAssembly (WASM). It is `written in C <https://www.blosc.org/c-blosc2/c-blosc2.html>`_, with `bindings available for Python <https://www.blosc.org/python-blosc2/python-blosc2.html>`_.
 
 * **Multi-Dimensional Data (NDim)**: Provides native support for n-dimensional datasets through its `NDim container <https://www.blosc.org/posts/blosc2-ndim-intro/>`_. This container uses an innovative partitioning scheme that enables highly efficient slicing operations, even on `sparse datasets <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023.pdf>`_.
 
