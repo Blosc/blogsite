@@ -8,7 +8,9 @@
 .. .. template: story.tmpl
 
 
-Blosc2 is a high-performance compressors that has been optimized for binary data. Its design allows for faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach through an `memcpy()` OS call. This can be useful not only in reducing the size of large datasets, but also in accelerating I/O, be either on-disk or in-memory (both are supported).
+Blosc2 is a high-performance compressor designed specifically for binary data, such as numerical arrays/tensors, images, and other structured data formats. Via an assortment of filters and codecs, it can be optimized for both speed and compression ratio, making it suitable for a wide range of applications, from scientific computing to data storage and transmission.
+
+Blosc2 is the successor to Blosc, which was first released in 2010. Blosc/Blosc2 has been widely adopted in the scientific computing community and is used in various libraries and applications, including PyTables, h5py, Zarr, and more.
 
 Watch this introductory video to learn more about the main features of Blosc:
 
