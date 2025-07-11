@@ -41,7 +41,7 @@ Blosc2 offers several advantages that make it a compelling choice for high-perfo
 
 * **Persistent Storage**: Includes `Frames <https://github.com/Blosc/c-blosc2/blob/main/README_CFRAME_FORMAT.rst>`_, a container format for serializing data in-memory or on-disk.
 
-* **Advanced Computing with Python**: The `Python-Blosc2 <https://www.blosc.org/python-blosc2>`_ package is more than a wrapper. It provides a powerful computing engine for performing `lazy evaluations <https://ironarray.io/blog/compute-bigger/>`_ on compressed data, including reductions, broadcasting and support for many NumPy functions, avoiding the need to decompress data before processing. This is particularly useful for large datasets, as it allows you to work with data that doesn't fit in memory.
+* **Advanced Computing with Python**: The `Python-Blosc2 <https://www.blosc.org/python-blosc2>`_ package is more than a wrapper. It provides a powerful computing engine for performing `lazy evaluations <https://ironarray.io/blog/compute-bigger>`_ on compressed data, including reductions, broadcasting and support for many NumPy functions, avoiding the need to decompress data before processing. This is particularly useful for large datasets, as it allows you to work with data that doesn't fit in memory.
 
 .. figure:: /images/blosc2-vs-others-compute.png
    :width: 75%
