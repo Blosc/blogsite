@@ -14,10 +14,6 @@ With a `large diversity of codecs and filters <https://www.blosc.org/posts/byted
 
 Watch this introductory video to learn more about the main features of Blosc:
 
-.. raw:: html
-
-   <div style="height:200px; overflow:hidden;">
-
 .. youtube:: ER12R7FXosk
    :width: 50%
    :align: center
@@ -37,10 +33,6 @@ Blosc2 offers several advantages that make it a compelling choice for high-perfo
 
 * **Multi-Dimensional Data (NDim)**: Provides native support for n-dimensional datasets through its `NDim container <https://www.blosc.org/posts/blosc2-ndim-intro/>`_. This container uses an innovative partitioning scheme that enables highly efficient slicing operations, even on `sparse datasets <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023.pdf>`_.
 
-.. raw:: html
-
-   <div style="height:200px; overflow:hidden;">
-
 .. youtube:: LvP9zxMGBng
    :width: 50%
    :align: center
@@ -58,10 +50,22 @@ Blosc2 offers several advantages that make it a compelling choice for high-perfo
 
 * **Access Data in the Cloud**: Blosc2 supports accessing data stored in the cloud either `directly <https://www.blosc.org/python-blosc2/reference/autofiles/c2array/blosc2.C2Array.__getitem__.html>`_, via the `Caterva2 <https://github.com/ironArray/Caterva2>`_ library, or through `Cat2Cloud <https://ironarray.io/cat2cloud>`_, a cloud-native service that enables working with large datasets efficiently without downloading them to your local machine.
 
-.. figure:: /images/jupyterlite-cat2-blosc2.png
-   :width: 25%
-   :align: center
-   :target: https://cat2.cloud/demo/roots/@public/examples/large-dataset-indexing.ipynb?roots=%40public
+.. list-table::
+   :widths: 50 50
+   :header-rows: 0
+
+   * - .. figure:: /images/caterva2-screenshot.png
+         :width: 100%
+         :align: center
+
+     - .. figure:: /images/jupyterlite-cat2-blosc2.png
+         :width: 100%
+         :align: center
+
+.. .. figure:: /images/jupyterlite-cat2-blosc2.png
+..   :width: 25%
+..   :align: center
+..   :target: https://cat2.cloud/demo/roots/@public/examples/large-dataset-indexing.ipynb?roots=%40public
 
 For a complete list of features, please refer to our `ROADMAP <https://github.com/Blosc/c-blosc2/blob/main/ROADMAP.rst>`_ and recent `progress reports <https://www.blosc.org/docs/Blosc2-HDF5-LEAPS-INNOV-Meeting-2024-04-08.pdf>`_.
 
