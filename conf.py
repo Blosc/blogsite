@@ -143,7 +143,7 @@ NAVIGATION_LINKS = {
         # ("/archive.html", "Archive"),
         # ("/rss.xml", "RSS feed"),
         ("/categories/cat_posts/", "All Posts"),
-        #("/pages/blosc-in-depth/", "Blosc In Depth"),
+        ("/pages/blosc-in-depth/", "Blosc In Depth"),
         # ("/pages/synthetic-benchmarks/", "Benchmarks"),
         ("/c-blosc2/c-blosc2.html", "C-Blosc2"),
         # ("/python-blosc/python-blosc.html", "Python-Blosc"),
@@ -153,7 +153,7 @@ NAVIGATION_LINKS = {
         # ("/pages/professional-services/", "Professional Services"),
         # ("/categories/", "Tags"),
         ("https://www.blosc.org/pages/blosc-in-depth/#support-blosc", "Donate to Blosc"),
-        ("/blog/", "Blog"),
+        # ("/blog/", "Blog"),
         ("https://github.com/Blosc", '<i class="fab fa-github-square"></i> GitHub'),
         ("https://fosstodon.org/@Blosc2", '<i class="fab fa-mastodon"></i> Mastodon'),
         ("https://bsky.app/profile/blosc.org", '<i class="fas fa-cloud-sun"></i> Bluesky'),
@@ -573,8 +573,7 @@ HIDDEN_AUTHORS = ['Guest']
 # Final location for the main blog page and sibling paginated pages is
 # output / TRANSLATION[lang] / INDEX_PATH / index-*.html
 # (translatable)
-# INDEX_PATH = ""  # the default is "blog"
-INDEX_PATH = "pages/blosc-in-depth"
+INDEX_PATH = ""
 # INDEX_PATH = "blog"
 
 # Optional HTML that displayed on “main” blog index.html files.
