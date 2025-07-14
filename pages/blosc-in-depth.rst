@@ -14,8 +14,12 @@ With a `large diversity of codecs and filters <https://www.blosc.org/posts/byted
 
 Watch this introductory video to learn more about the main features of Blosc:
 
+.. raw:: html
+
+   <div style="height:200px; overflow:hidden;">
+
 .. youtube:: ER12R7FXosk
-   :width: 25%
+   :width: 50%
    :align: center
 
 .. raw:: html
@@ -33,8 +37,12 @@ Blosc2 offers several advantages that make it a compelling choice for high-perfo
 
 * **Multi-Dimensional Data (NDim)**: Provides native support for n-dimensional datasets through its `NDim container <https://www.blosc.org/posts/blosc2-ndim-intro/>`_. This container uses an innovative partitioning scheme that enables highly efficient slicing operations, even on `sparse datasets <https://www.blosc.org/docs/Exploring-MilkyWay-SciPy2023.pdf>`_.
 
+.. raw:: html
+
+   <div style="height:200px; overflow:hidden;">
+
 .. youtube:: LvP9zxMGBng
-   :width: 25%
+   :width: 50%
    :align: center
 
 * **Large Containers**: Supports data sizes up to 2^59 bytes (1/2 exabytes) through its super-chunk implementation, overcoming the 2 GB limitation of Blosc1.
