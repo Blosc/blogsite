@@ -51,7 +51,7 @@ Blosc2 offers several advantages that make it a compelling choice for high-perfo
 * **Access Data in the Cloud**: Blosc2 supports accessing data stored in the cloud either `directly <https://www.blosc.org/python-blosc2/reference/autofiles/c2array/blosc2.C2Array.__getitem__.html>`_, via the `Caterva2 <https://github.com/ironArray/Caterva2>`_ library, or through `Cat2Cloud <https://ironarray.io/cat2cloud>`_, a cloud-native service that enables working with large datasets efficiently without downloading them to your local machine.
 
 .. figure:: /images/jupyterlite-cat2-blosc2.png
-   :width: 50%
+   :width: 25%
    :align: center
    :target: https://cat2.cloud/demo/roots/@public/examples/large-dataset-indexing.ipynb?roots=%40public
 
