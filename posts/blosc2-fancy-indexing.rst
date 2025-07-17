@@ -85,6 +85,8 @@ Blosc2 is also as fast or faster than Zarr and HDF5 even for the limited use cas
 
 .. image:: ./images/blosc2-fancy-indexing/fancyIdxNumpyBlosc2ZarrHDF52D.png
 
+These plots have been generated using a Mac mini with the Apple M4 Pro processor. The benchmark is available on the Blosc2 github repo `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/fancy_index.py>_
+
 Conclusion
 ----------
 Blosc2 offers a powerful and flexible fancy indexing functionality that is more extensive than that of Zarr and H5Py, while also being able to handle large arrays on-disk without loading them into memory. This makes it a great choice for applications that require complex indexing operations on large datasets.
@@ -129,10 +131,12 @@ Numpy indexing treats non-slice indices differently, and will always put the axe
 The hypothesised Numpy ``vindex`` would eliminate this transposition behaviour, and be internally consistent, always putting the axes introduced by the index array first. Unfortunately, this is difficult and costly, and so the alternative is to simply not allow such indexing and throw an error, or force the user to be very specific.
 
 Blosc2 will throw an error when one inserts a slice between array indices::
+
     arr[:, 0, [0, 1]] -> shape (X, 2)
     arr.vindex[0, :, [0,1]] -> ERROR
 
 Zarr's ``vindex``, by requiring integer array indices for all dimensions, throws an error for all mixed indices of this type::
+
     arr.vindex[0, [0,1], :] -> ERROR
     arr.vindex[0, :, [0,1]] -> ERROR
 
