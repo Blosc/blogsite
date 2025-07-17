@@ -75,7 +75,7 @@ When implementing fancy indexing for Blosc2 we strove to match the functionality
 Results: Blosc2, Zarr, H5Py and Numpy
 -------------------------------------
 
-Hence, when averaging over the indexing cases above on 2D arrays of varying sizes, we observe only a minor slowdown for Blosc2 compared to Numpy when the array size is small compared to total memory (32GB), suggesting a small chunking-and-indexing overhead. As expected, when the array grows to an appreciable fraction of memory (16GB), loading the full Numpy array into memory starts to impact performance. The black error bars in the plots indicate the maximum and minimum times observed over the indexing cases (for which there is clearly a large variation).
+Hence, when averaging over the indexing cases above on 2D arrays of varying sizes, we observe only a minor slowdown for Blosc2 compared to Numpy when the array size is small compared to total memory (24GB), suggesting a small chunking-and-indexing overhead. As expected, when the array grows to an appreciable fraction of memory (16GB), loading the full Numpy array into memory starts to impact performance. The black error bars in the plots indicate the maximum and minimum times observed over the indexing cases (for which there is clearly a large variation).
 
 Note that for cases 4 and 6 with large ``row`` or ``col`` index arrays, broadcasting causes the resulting index (stored in memory) to be very large, and even for array sizes of 2GB computation is too slow. In the future, we would like to see if this can be improved.
 
