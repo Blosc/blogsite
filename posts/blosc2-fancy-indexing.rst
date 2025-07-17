@@ -13,7 +13,7 @@ In response to requests from our users, the Blosc2 team has introduced a fancy i
 What is Fancy Indexing?
 -----------------------
 
-In many array libraries, most famously ``Numpy``, *fancy indexing* refers to a vectorized indexing format which allows for simultaneous selection and reshaping of arrays (see `this excerpt <https://jakevdp.github.io/PythonDataScienceHandbook/02.07-fancy-indexing.html>`_). For example, one may wish to select three entries from a 1D array::
+In many array libraries, most famously ``NumPy``, *fancy indexing* refers to a vectorized indexing format which allows for simultaneous selection and reshaping of arrays (see `this excerpt <https://jakevdp.github.io/PythonDataScienceHandbook/02.07-fancy-indexing.html>`_). For example, one may wish to select three entries from a 1D array::
 
     arr = array([10, 11, 12])
 
@@ -46,7 +46,7 @@ Indeed one can output arbitrary shapes, for example via::
              [[10, 11],
               [12, 13]]])
 
-Numpy supports many different kinds of fancy indexing, a flavour of which can be seen from the following examples, where ``row`` and ``col`` are integer array objects. If they are not of the same shape then broadcasting conventions will be applied to try to massage the index into an understandable format.
+NumPy supports many different kinds of fancy indexing, a flavour of which can be seen from the following examples, where ``row`` and ``col`` are integer array objects. If they are not of the same shape then broadcasting conventions will be applied to try to massage the index into an understandable format.
 
 1. ``arr[row]``
 2. ``arr[[row, col]]``
@@ -63,27 +63,27 @@ where the ``mask`` must have the same length as the indexed dimension(s).
 Support for Fancy Indexing and ``ndindex``
 ------------------------------------------
 
-Other libraries for management of large arrays such as ``zarr`` and ``h5py`` offer fancy indexing support but neither are as comprehensive as Numpy. ``h5py``, which uses the HDF5 format, is quite limited in that one may only use one integer array, no repeated indices are allowed, and the array must be sorted in increasing order, although mixed slice and integer array indexing is possible.
+Other libraries for management of large arrays such as ``zarr`` and ``h5py`` offer fancy indexing support but neither are as comprehensive as NumPy. ``h5py``, which uses the HDF5 format, is quite limited in that one may only use one integer array, no repeated indices are allowed, and the array must be sorted in increasing order, although mixed slice and integer array indexing is possible.
 ``zarr``, via its ``vindex`` (for vectorized index), offers more support, but is rather limited when it comes to mixed indexing, as slices may not be used with integer arrays, and an integer array must be provided for every dimension of the array (i.e. ``arr[row]`` fails on any non-1D ``arr``).
 
 This makes it difficult (in the case of ``zarr``) or impossible (in the case of ``h5py``) to do the kind of reshaping we saw in the introduction (i.e. case 2 above ``arr[[[1,2],[0,1]]]``). This lack of support is due to a combination of: 1) the computational difficulty of many of these operations; and 2) the at times counter-intuitive behaviour of fancy indexing (see the end of this blog post for more details).
 
-When implementing fancy indexing for Blosc2 we strove to match the functionality of Numpy as closely as possible, and we have almost been able to do so — all the 6 cases mentioned above are perfectly feasible with this new Blosc2 release! There are only some minor edge cases which are not supported (see Example 2 in the Addendum). This would not have been possible without the excellent `ndindex library <https://quansight-labs.github.io/ndindex/index.html>`_, which offers many very useful, efficient functions for index conversion between different shapes and chunks. We can then call Numpy behind-the-scenes, chunk-by-chunk, and exploit its native support for fancy indexing, without having to load the entire array into memory.
+When implementing fancy indexing for Blosc2 we strove to match the functionality of NumPy as closely as possible, and we have almost been able to do so — all the 6 cases mentioned above are perfectly feasible with this new Blosc2 release! There are only some minor edge cases which are not supported (see Example 2 in the Addendum). This would not have been possible without the excellent `ndindex library <https://quansight-labs.github.io/ndindex/index.html>`_, which offers many very useful, efficient functions for index conversion between different shapes and chunks. We can then call NumPy behind-the-scenes, chunk-by-chunk, and exploit its native support for fancy indexing, without having to load the entire array into memory.
 
-Results: Blosc2, Zarr, H5Py and Numpy
+Results: Blosc2, Zarr, H5Py and NumPy
 -------------------------------------
 
-Hence, when averaging over the indexing cases above on 2D arrays of varying sizes, we observe only a minor slowdown for Blosc2 compared to Numpy when the array size is small compared to total memory (24GB), suggesting a small chunking-and-indexing overhead. As expected, when the array grows to an appreciable fraction of memory (16GB), loading the full Numpy array into memory starts to impact performance. The black error bars in the plots indicate the maximum and minimum times observed over the indexing cases (for which there is clearly a large variation).
+Hence, when averaging over the indexing cases above on 2D arrays of varying sizes, we observe only a minor slowdown for Blosc2 compared to NumPy when the array size is small compared to total memory (24GB), suggesting a small chunking-and-indexing overhead. As expected, when the array grows to an appreciable fraction of memory (16GB), loading the full NumPy array into memory starts to impact performance. The black error bars in the plots indicate the maximum and minimum times observed over the indexing cases (for which there is clearly a large variation).
 
 Note that for cases 4 and 6 with large ``row`` or ``col`` index arrays, broadcasting causes the resulting index (stored in memory) to be very large, and even for array sizes of 2GB computation is too slow. In the future, we would like to see if this can be improved.
 
-.. image:: /images/blosc2-fancy-indexing/fancyIdxNumpyBlosc22D.png
+.. image:: /images/blosc2-fancy-indexing/fancyIdxNumPyBlosc22D.png
 
 Blosc2 is also as fast or faster than Zarr and HDF5 even for the limited use cases that the latter two libraries both support. HDF5 in particular is especially slow when the indexing array is very large.
 
-.. image:: /images/blosc2-fancy-indexing/fancyIdxNumpyBlosc2ZarrHDF52D.png
+.. image:: /images/blosc2-fancy-indexing/fancyIdxNumPyBlosc2ZarrHDF52D.png
 
-These plots have been generated using a Mac mini with the Apple M4 Pro processor. The benchmark is available on the Blosc2 github repo `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/fancy_index.py>`_
+These plots have been generated using a Mac mini with the Apple M4 Pro processor. The benchmark is available on the Blosc2 github repo `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/fancy_index.py>`_.
 
 Conclusion
 ----------
@@ -113,20 +113,20 @@ However, one could understand this indexing as selecting rows 0 and 1 in the arr
     [[arr[0,2], arr[0,3]],
      [arr[1,2], arr[1,3]]]
 
-This is *oindexing*. Clearly, given the same index, the output is in general different; it is for this reason that the debate about fancy indexing can be quite polemical, and why there is a `movement <https://Numpy.org/neps/nep-0021-advanced-indexing.html>`_ to introduce the vindex/oindex duality in Numpy.
+This is *oindexing*. Clearly, given the same index, the output is in general different; it is for this reason that the debate about fancy indexing can be quite polemical, and why there is a `movement <https://NumPy.org/neps/nep-0021-advanced-indexing.html>`_ to introduce the vindex/oindex duality in NumPy.
 
 Example 2
 ~~~~~~~~~
 
-I have glossed over this until now, but vindex is *not* the same as fancy indexing. For this reason Zarr does not support all the functionality of fancy indexing, since it only supports vindex. The most important distinction between the two is that it seeks to avoid certain unexpected fancy indexing behaviour, as can be seen by considering a 3D Numpy array of shape ``(X, Y, Z)`` as in the `example here <https://Numpy.org/neps/nep-0021-advanced-indexing.html#mixed-indexing>`_. Consider the unexpected behaviour of::
+I have glossed over this until now, but vindex is *not* the same as fancy indexing. For this reason Zarr does not support all the functionality of fancy indexing, since it only supports vindex. The most important distinction between the two is that it seeks to avoid certain unexpected fancy indexing behaviour, as can be seen by considering a 3D NumPy array of shape ``(X, Y, Z)`` as in the `example here <https://NumPy.org/neps/nep-0021-advanced-indexing.html#mixed-indexing>`_. Consider the unexpected behaviour of::
 
     arr[:10, :, [0,1]] has shape (10, Y, 2).
 
     arr[0, :, [0, 1]] has shape (2, Y), not (Y, 2)!!
 
-Numpy indexing treats non-slice indices differently, and will always put the axes introduced by the index array first, unless the non-slice indexes are consecutive, in which case it will try to massage the result to something intuitive (which normally coincides with the result of an ``oindex``) — hence ``arr[:, 0, [0, 1]]`` has shape ``(X, 2)``, not ``(2, X)``.
+NumPy indexing treats non-slice indices differently, and will always put the axes introduced by the index array first, unless the non-slice indexes are consecutive, in which case it will try to massage the result to something intuitive (which normally coincides with the result of an ``oindex``) — hence ``arr[:, 0, [0, 1]]`` has shape ``(X, 2)``, not ``(2, X)``.
 
-The hypothesised Numpy ``vindex`` would eliminate this transposition behaviour, and be internally consistent, always putting the axes introduced by the index array first. Unfortunately, this is difficult and costly, and so the alternative is to simply not allow such indexing and throw an error, or force the user to be very specific.
+The hypothesised NumPy ``vindex`` would eliminate this transposition behaviour, and be internally consistent, always putting the axes introduced by the index array first. Unfortunately, this is difficult and costly, and so the alternative is to simply not allow such indexing and throw an error, or force the user to be very specific.
 
 Blosc2 will throw an error when one inserts a slice between array indices::
 
@@ -147,4 +147,4 @@ For both Blosc2 and Zarr, one must use an explicit index array like so for the s
 
     arr[0, np.arange(Y).reshape(-1,1), idx] -> shape (Y, 2)
 
-Hopefully you now understand why fancy indexing can be so tricky, and why few libraries seek to support it to the same extent as Numpy - some would say it is perhaps not even desirable to do so!
+Hopefully you now understand why fancy indexing can be so tricky, and why few libraries seek to support it to the same extent as NumPy - some would say it is perhaps not even desirable to do so!
