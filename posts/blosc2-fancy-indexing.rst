@@ -137,7 +137,7 @@ Blosc2 will throw an error when one inserts a slice between array indices::
 
 Zarr's ``vindex``, by requiring integer array indices for all dimensions, throws an error for all mixed indices of this type::
 
-    arr.vindex[0, [0,1], :] -> ERROR
+    arr.vindex[:, 0, [0, 1]] -> ERROR
     arr.vindex[0, :, [0,1]] -> ERROR
 
 and so one must use, for the second case for example ::
