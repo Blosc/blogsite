@@ -85,7 +85,7 @@ Blosc2 is also as fast or faster than Zarr and HDF5 even for the limited use cas
 
 .. image:: ./images/blosc2-fancy-indexing/fancyIdxNumpyBlosc2ZarrHDF52D.png
 
-These plots have been generated using a Mac mini with the Apple M4 Pro processor. The benchmark is available on the Blosc2 github repo `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/fancy_index.py>_
+These plots have been generated using a Mac mini with the Apple M4 Pro processor. The benchmark is available on the Blosc2 github repo `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/fancy_index.py>`_
 
 Conclusion
 ----------
