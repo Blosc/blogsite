@@ -79,11 +79,11 @@ Hence, when averaging over the indexing cases above on 2D arrays of varying size
 
 Note that for cases 4 and 6 with large ``row`` or ``col`` index arrays, broadcasting causes the resulting index (stored in memory) to be very large, and even for array sizes of 2GB computation is too slow. In the future, we would like to see if this can be improved.
 
-.. image:: ./images/blosc2-fancy-indexing/fancyIdxNumpyBlosc22D.png
+.. image:: /images/blosc2-fancy-indexing/fancyIdxNumpyBlosc22D.png
 
 Blosc2 is also as fast or faster than Zarr and HDF5 even for the limited use cases that the latter two libraries both support. HDF5 in particular is especially slow when the indexing array is very large.
 
-.. image:: ./images/blosc2-fancy-indexing/fancyIdxNumpyBlosc2ZarrHDF52D.png
+.. image:: /images/blosc2-fancy-indexing/fancyIdxNumpyBlosc2ZarrHDF52D.png
 
 These plots have been generated using a Mac mini with the Apple M4 Pro processor. The benchmark is available on the Blosc2 github repo `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/fancy_index.py>`_
 
