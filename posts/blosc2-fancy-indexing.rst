@@ -8,7 +8,7 @@
 .. description:
 .. type: text
 
-In response to requests from our users, the Blosc2 team has introduced a fancy indexing capability into the flagship Blosc2 ``ndarray`` object. In the future, this could be extended to other classes within the Blosc2 library, such as ``C2Array`` and ``LazyArray``.
+In response to requests from our users, the Blosc2 team has introduced a fancy indexing capability into the flagship Blosc2 ``NDArray`` object. In the future, this could be extended to other classes within the Blosc2 library, such as ``C2Array`` and ``LazyArray``.
 
 What is Fancy Indexing?
 -----------------------
