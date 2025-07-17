@@ -135,12 +135,18 @@ Blosc2 will throw an error when one inserts a slice between array indices::
     arr[:, 0, [0, 1]] -> shape (X, 2)
     arr.vindex[0, :, [0,1]] -> ERROR
 
-Zarr's ``vindex``, by requiring integer array indices for all dimensions, throws an error for all mixed indices of this type::
+Zarr's ``vindex`` (called by ``__getitem__``), by requiring integer array indices for all dimensions, throws an error for all mixed indices of this type::
 
-    arr.vindex[:, 0, [0, 1]] -> ERROR
-    arr.vindex[0, :, [0,1]] -> ERROR
+    arr[:, 0, [0, 1]] -> ERROR
+    arr[0, :, [0,1]] -> ERROR
 
-and so one must use, for the second case for example ::
+Thus to reproduce the result of Blosc2 for the first case, one must use an explicit index array::
 
     idx = np.array([0,1]).reshape(1,-1)
-    arr.vindex[0, np.arange(Y).reshape(-1,1), idx] -> shape (Y, 2)
+    arr[np.arange(X).reshape(-1,1), 0 , idx] -> shape (X, 2)
+
+For both Blosc2 and Zarr, one must use an explicit index array like so for the second case::
+
+    arr[0, np.arange(Y).reshape(-1,1), idx] -> shape (Y, 2)
+
+Hopefully you now understand why fancy indexing can be so tricky, and why few libraries seek to support it to the same extent as Numpy - some would say it is perhaps not even desirable to do so!
