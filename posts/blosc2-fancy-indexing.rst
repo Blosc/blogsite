@@ -1,4 +1,4 @@
-.. title: Blosc2 gets Fancy (Indexing)
+.. title: Blosc2 Gets Fancy (Indexing)
 .. author: Luke Shaw
 .. slug: blosc2-fancy-indexing
 .. date: 2025-07-16 13:33:20 UTC
@@ -8,7 +8,7 @@
 .. description:
 .. type: text
 
-In response to requests from our users, the Blosc2 team has introduced a fancy indexing capability into the flagship Blosc2 ``NDArray`` object. In the future, this could be extended to other classes within the Blosc2 library, such as ``C2Array`` and ``LazyArray``.
+In response to requests from our users, the Blosc2 team has `introduced a fancy indexing capability <https://www.blosc.org/python-blosc2/release_notes/index.html>`_ into the flagship Blosc2 ``NDArray`` object. In the future, this could be extended to other classes within the Blosc2 library, such as ``C2Array`` and ``LazyArray``.
 
 What is Fancy Indexing?
 -----------------------
