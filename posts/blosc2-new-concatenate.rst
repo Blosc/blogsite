@@ -27,11 +27,11 @@ Let's see how easy it is to use in Python. If you're familiar with NumPy, the `b
     b = blosc2.full((10, 20), 2, urlpath="arrayB.b2nd", mode="w")
     c = blosc2.full((10, 20), 3, urlpath="arrayC.b2nd", mode="w")
     # Concatenate the arrays along the first axis
-    result = blosc2.concatenate([a, b, c], axis=0, urlpath="destination.b2nd", mode="w")
+    result = blosc2.concat([a, b, c], axis=0, urlpath="destination.b2nd", mode="w")
     # The result is a new Blosc2 NDArray containing the concatenated data
     print(result.shape)  # Output: (30, 20)
     # You can also concatenate along other axes
-    result_axis1 = blosc2.concatenate([a, b, c], axis=1, urlpath="destination_axis1.b2nd", mode="w")
+    result_axis1 = blosc2.concat([a, b, c], axis=1, urlpath="destination_axis1.b2nd", mode="w")
     print(result_axis1.shape)  # Output: (10, 60)
 
 The `blosc2.concatenate` function is pretty straightforward. You give it a list of the arrays you want to join together. You can also tell it which way to join them using the axis parameter (like joining them end-to-end or side-by-side).
@@ -91,7 +91,7 @@ We've also added a new `stack()` function in Blosc2 that uses the concatenate fe
     stacked_result_axis1 = blosc2.stack([a, b, c], axis=1, urlpath="stacked_destination_axis1.b2nd", mode="w")
     print(stacked_result_axis1.shape)  # Output: (10, 3, 20)
 
-Benchmarks for the `stack()` function show that it performs similarly to the `concatenate()` function, especially when the input arrays are aligned.  Here are the results for the same data sizes and machine used in the previous benchmarks, and using the LZ4 compressor.
+Benchmarks for the `stack()` function show that it performs similarly to the `concat()` function, especially when the input arrays are aligned.  Here are the results for the same data sizes and machine used in the previous benchmarks, and using the LZ4 compressor.
 
 .. image:: /images/blosc2-new-concatenate/stack-lz4-20k-i13900K.png
 
