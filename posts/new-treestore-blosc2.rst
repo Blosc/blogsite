@@ -26,23 +26,24 @@ Creating a ``TreeStore`` is straightforward. You can use a ``with`` statement to
     import blosc2
     import numpy as np
 
-    # Create a new TreeStore in write mode ('w')
+    # Create a new TreeStore
     with blosc2.TreeStore("my_experiment.b2z", mode="w") as ts:
         # You can store numpy arrays, which are converted to blosc2.NDArray
-        ts["/group1/dataset1"] = np.arange(100)
+        ts["/dataset0"] = np.arange(100)
 
-        # You can also store blosc2 arrays directly
-        ts["/group1/dataset2"] = blosc2.full((5, 5), fill_value=3.14)
+        # Create a group with a dataset that can be a blosc2 NDArray
+        ts["/group1/dataset1"] = blosc2.zeros((10,))
 
-        # And external arrays with vlmeta attached (these are included internally too)
-        ext = blosc2.zeros((10,), urlpath="external_array.b2nd", mode="w")
-        ext.vlmeta["desc"] = "included array metadata"
-        ts["/group1/included_array"] = ext
+        # You can also store blosc2 arrays directly (vlmeta included)
+        ext = blosc2.linspace(0, 1, 10_000, dtype=np.float32)
+        ext.vlmeta["desc"] = "dataset2 metadata"
+        ts["/group1/dataset2"] = ext
 
-        # Create another group with a dataset
-        ts["/group2/another_dataset"] = blosc2.zeros((10,))
+In this example, we created a ``TreeStore`` in a file named ``my_experiment.b2z``.
 
-In this example, we created a ``TreeStore`` in a file named ``my_experiment.b2z``. It contains two groups, ``group1`` and ``group2``, each holding datasets.
+image:: /images/new-treestore-blosc2
+
+It contains two groups, ``root`` and ``group1``, each holding datasets.
 
 Reading from a TreeStore
 ------------------------
@@ -51,19 +52,27 @@ To access the data, you open the ``TreeStore`` in read mode (``'r'``) and use th
 
 .. code-block:: python
 
-    # Open the TreeStore in read mode ('r')
+    # Open the TreeStore in read-only mode ('r')
     with blosc2.TreeStore("my_experiment.b2z", mode="r") as ts:
         # Access a dataset
         dataset1 = ts["/group1/dataset1"]
         print("Dataset 1:", dataset1[:])  # Use [:] to decompress and get a NumPy array
 
-        # Access the external array that has been included internally
-        ext_array = ts["/group1/included_array"]
-        print("Included array:", ext_array[:])
-        print("Included array metadata:", ext_array.vlmeta[:])
+        # Access the external array that has been stored internally
+        dataset2 = ts["/group1/dataset2"]
+        print("Dataset 2", dataset2[:])
+        print("Dataset 2 metadata:", dataset2.vlmeta[:])
 
         # List all paths in the store
         print("Paths in TreeStore:", list(ts))
+
+.. code-block:: text
+
+    Dataset 1: [0 1 2 3 4 5 6 7 8 9]
+    Dataset 2 [0.0000000e+00 1.0001000e-04 2.0002000e-04 ... 9.9979997e-01 9.9989998e-01
+     1.0000000e+00]
+    Dataset 2 metadata: {b'desc': 'dataset2 metadata'}
+    Paths in TreeStore: ['/group1/dataset2', '/group2', '/group1', '/group2/another_dataset', '/group1/dataset1']
 
 Advanced Usage: Metadata and Subtrees
 -------------------------------------
@@ -77,10 +86,11 @@ You can attach variable-length metadata (``vlmeta``) to any group or to the root
 
 .. code-block:: python
 
-    with blosc2.TreeStore("my_experiment.b2z", mode="a") as ts: # 'a' for append/modify
+    # Appending metadata to the TreeStore
+    with blosc2.TreeStore("my_experiment.b2z", mode="a") as ts:  # 'a' for append/modify
         # Add metadata to the root
         ts.vlmeta["author"] = "The Blosc Team"
-        ts.vlmeta["date"] = "2025-07-10"
+        ts.vlmeta["date"] = "2025-08-17"
 
         # Add metadata to a group
         ts["/group1"].vlmeta["description"] = "Data from the first run"
@@ -89,6 +99,11 @@ You can attach variable-length metadata (``vlmeta``) to any group or to the root
     with blosc2.TreeStore("my_experiment.b2z", mode="r") as ts:
         print("Root metadata:", ts.vlmeta[:])
         print("Group 1 metadata:", ts["/group1"].vlmeta[:])
+
+.. code-block:: text
+
+    Root metadata: {'author': 'The Blosc Team', 'date': '2025-08-17'}
+    Group 1 metadata: {'description': 'Data from the first run'}
 
 Working with Subtrees (Groups)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -108,6 +123,12 @@ You can get a group object from the ``TreeStore`` and work with it as if it were
         # You can also list contents relative to the group
         print("Contents of group1:", list(group1))
 
+.. code-block:: text
+
+    Dataset 2 from group object: [0.0000000e+00 1.0001000e-04 2.0002000e-04 ... 9.9979997e-01 9.9989998e-01
+     1.0000000e+00]
+    Contents of group1: ['/dataset2', '/dataset1']
+
 Iterating Through a TreeStore
 -----------------------------
 
@@ -119,8 +140,15 @@ You can easily iterate through all the nodes in a ``TreeStore`` to inspect its c
         for path, node in ts.items():
             if isinstance(node, blosc2.NDArray):
                 print(f"Found dataset at '{path}' with shape {node.shape}")
-            else: # It's a group
+            else:  # It's a group
                 print(f"Found group at '{path}' with metadata: {node.vlmeta[:]}")
+
+.. code-block:: text
+
+    Found dataset at '/group1/dataset2' with shape (10000,)
+    Found group at '/group1' with metadata: {'description': 'Data from the first run'}
+    Found dataset at '/group1/dataset1' with shape (10,)
+    Found dataset at '/dataset0' with shape (100,)
 
 Some Benchmarks
 ---------------
