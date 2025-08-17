@@ -41,7 +41,7 @@ Creating a ``TreeStore`` is straightforward. You can use a ``with`` statement to
 
 In this example, we created a ``TreeStore`` in a file named ``my_experiment.b2z``.
 
-image:: /images/new-treestore-blosc2
+image:: /images/new-treestore-blosc2/tree-store-blog.png
 
 It contains two groups, ``root`` and ``group1``, each holding datasets.
 
@@ -150,12 +150,43 @@ You can easily iterate through all the nodes in a ``TreeStore`` to inspect its c
     Found dataset at '/group1/dataset1' with shape (10,)
     Found dataset at '/dataset0' with shape (100,)
 
+That's it for this introduction to ``blosc2.TreeStore``! You now know how to create, read, and manipulate a hierarchical data structure that can hold compressed datasets and metadata. You can find the source code for this example in the `blosc2 repository <https://github.com/Blosc/python-blosc2/blob/main/examples/tree-store-blog.py>`_.
+
 Some Benchmarks
 ---------------
 
-``TreeStore`` is based on powerful abstractions from the ``blosc2`` library, so it is very fast. Here are some benchmarks comparing ``TreeStore`` to other data storage formats, like HDF5 and Zarr.
+``TreeStore`` is based on powerful abstractions from the ``blosc2`` library, so it is very fast. Here are some benchmarks comparing ``TreeStore`` to other data storage formats, like HDF5 and Zarr. We have used two different configurations: one with small arrays, where sizes follow a gaussian distribution centered at 10 MB each, and the other with larger arrays, where sizes follow a gaussian distribution centered at 1 GB each. We have compared the performance of ``TreeStore`` against HDF5 and Zarr for both small and large arrays, measuring the time taken to create and read datasets.  For comparing apples with apples, we have used the same compression codec (``zstd``) and filter (``shuffle``) for all three formats.
+
+For assessing different platforms, we have used a desktop with an Intel i9-13900K CPU and 32 GB of RAM, running Ubuntu 25.04, and also a Mac mini with an Apple M4 Pro processor and 24 GB of RAM. The benchmarks were run using the `blosc2-benchmarks repository <https://github.com/Blosc/python-blosc2/blob/main/bench/large-tree-store.py>`_.
+
+Results for the Intel i9-13900K desktop
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: /images/new-store-blosc2/benchmark_comparison_b2z-i13900K-10M.png
+
+For the small arrays scenario, we can see that ``TreeStore`` is the fastest to create datasets (due to use of multi-threading), but it is slower than HDF5 and Zarr when reading datasets.  The reason for this is two-fold: first, ``TreeStore`` is designed to work using multi-threading, so it must setup the necessary threads at the beginning of the read operation, which takes some time; second, ``TreeStore`` is using NDArray objects internally, which are using a double partitioning scheme (chunks and blocks) to store the data, which adds some overhead when reading small slices of data. Regarding the space used, ``TreeStore`` is the most efficient, very close to HDF5, and significantly more efficient than Zarr, which is using quite a lot of space.
+
+.. image:: /images/new-store-blosc2/benchmark_comparison_b2z-i13900K-1G.png
+
+For the larger arrays scenario, ``TreeStore`` is again the fastest to create datasets, and it is also the fastest to read complete datasets. However, access time is still slower than HDF5 and Zarr when reading small slices of data. The space used is also the least, followed by HDF5, and Zarr is still the most inefficient in this regard.
+
+
+Results for the Apple M4 Pro Mac mini
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For the small arrays scenario.
+
+.. image:: /images/new-store-blosc2/benchmark_comparison_b2z-MacM4-10M.png
+
+For the large arrays scenario.
+
+.. image:: /images/new-store-blosc2/benchmark_comparison_b2z-MacM4-1G.png
+
+As before, ``TreeStore`` requires the least amount of space to store the data, and it is also the fastest to create and read datasets, especially for larger arrays.  The only metric where ``TreeStore`` is not the fastest is when reading small slices of data (access time), where it is significantly slower than HDF5 and Zarr.
+
+In general, it is pretty interesting to see that the Mac mini with the Apple M4 Pro processor is able to be competitive with the Intel i9-13900K CPU, which is a high-end desktop processor, consuming up to 8x more power than the M4 Pro. This is a testament to the efficiency of the ARM architecture in general and Apple silicon in particular.
 
 Conclusion
 ----------
 
-``blosc2.TreeStore`` provides a simple yet powerful way to organize compressed datasets hierarchically. By combining the high-performance compression of ``blosc2.NDArray`` with a flexible, filesystem-like structure and metadata support, ``TreeStore`` is an excellent choice for managing complex data projects.
+``blosc2.TreeStore`` provides a simple yet powerful way to organize compressed datasets hierarchically. By combining the high-performance compression of ``blosc2.NDArray`` with a flexible, filesystem-like structure and metadata support, ``TreeStore`` is an excellent choice for managing complex data projects.  ``TreeStore`` is still in beta, so we welcome any feedback or suggestions for improvement.  You can find more information on the documentation page for `blosc2.TreeStore <https://www.blosc.org/python-blosc2/reference/tree_store.html#blosc2.TreeStore>`_.
