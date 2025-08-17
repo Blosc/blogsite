@@ -41,7 +41,7 @@ Creating a ``TreeStore`` is straightforward. You can use a ``with`` statement to
 
 In this example, we created a ``TreeStore`` in a file named ``my_experiment.b2z``.
 
-image:: /images/new-treestore-blosc2/tree-store-blog.png
+.. image:: /images/new-treestore-blosc2/tree-store-blog.png
 
 It contains two groups, ``root`` and ``group1``, each holding datasets.
 
@@ -162,11 +162,11 @@ For assessing different platforms, we have used a desktop with an Intel i9-13900
 Results for the Intel i9-13900K desktop
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /images/new-store-blosc2/benchmark_comparison_b2z-i13900K-10M.png
+.. image:: /images/new-treestore-blosc2/benchmark_comparison_b2z-i13900K-10M.png
 
 For the small arrays scenario, we can see that ``TreeStore`` is the fastest to create datasets (due to use of multi-threading), but it is slower than HDF5 and Zarr when reading datasets.  The reason for this is two-fold: first, ``TreeStore`` is designed to work using multi-threading, so it must setup the necessary threads at the beginning of the read operation, which takes some time; second, ``TreeStore`` is using NDArray objects internally, which are using a double partitioning scheme (chunks and blocks) to store the data, which adds some overhead when reading small slices of data. Regarding the space used, ``TreeStore`` is the most efficient, very close to HDF5, and significantly more efficient than Zarr, which is using quite a lot of space.
 
-.. image:: /images/new-store-blosc2/benchmark_comparison_b2z-i13900K-1G.png
+.. image:: /images/new-treestore-blosc2/benchmark_comparison_b2z-i13900K-1G.png
 
 For the larger arrays scenario, ``TreeStore`` is again the fastest to create datasets, and it is also the fastest to read complete datasets. However, access time is still slower than HDF5 and Zarr when reading small slices of data. The space used is also the least, followed by HDF5, and Zarr is still the most inefficient in this regard.
 
@@ -176,11 +176,11 @@ Results for the Apple M4 Pro Mac mini
 
 For the small arrays scenario.
 
-.. image:: /images/new-store-blosc2/benchmark_comparison_b2z-MacM4-10M.png
+.. image:: /images/new-treestore-blosc2/benchmark_comparison_b2z-MacM4-10M.png
 
 For the large arrays scenario.
 
-.. image:: /images/new-store-blosc2/benchmark_comparison_b2z-MacM4-1G.png
+.. image:: /images/new-treestore-blosc2/benchmark_comparison_b2z-MacM4-1G.png
 
 As before, ``TreeStore`` requires the least amount of space to store the data, and it is also the fastest to create and read datasets, especially for larger arrays.  The only metric where ``TreeStore`` is not the fastest is when reading small slices of data (access time), where it is significantly slower than HDF5 and Zarr.
 
