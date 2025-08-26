@@ -8,6 +8,11 @@
 .. description:
 .. type: text
 
+Update (2025-08-26): After some further effort, the 1D fast path mentioned below has been extended to the multidimensional case, with consequent speedups in Blosc2 3.7.3! See below plot comparing maximum and minimum indexing times for the Blosc2-supported fancy indexing cases mentioned below.
+
+.. image:: /images/blosc2-fancy-indexing/newfancybench.png
+
+---
 In response to requests from our users, the Blosc2 team has `introduced a fancy indexing capability <https://www.blosc.org/python-blosc2/release_notes/index.html>`_ into the flagship Blosc2 ``NDArray`` object. In the future, this could be extended to other classes within the Blosc2 library, such as ``C2Array`` and ``LazyArray``.
 
 What is Fancy Indexing?
@@ -148,3 +153,4 @@ For both Blosc2 and Zarr, one must use an explicit index array like so for the s
     arr[0, np.arange(Y).reshape(-1,1), idx] -> shape (Y, 2)
 
 Hopefully you now understand why fancy indexing can be so tricky, and why few libraries seek to support it to the same extent as NumPy - some would say it is perhaps not even desirable to do so!
+
