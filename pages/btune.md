@@ -104,7 +104,7 @@ Finally, it is important to compare the compression ratios achieved by different
 
 In this case, the trained model recommends using Zstd (compression level 9) for a good balance between compression ratio and decompression speed, and that can be confirmed by seeing the large difference in size. However, note that BitShuffle + Zstd (compression level 9) is not a good option in general, unless you are looking for the absolute best compression ratio.
 
-You can read more context about this example in [our forthcoming article for SciPy 2023](https://procbuild.scipy.org/download/Blosc-2023).
+You can read more background for this example in [our forthcoming article for SciPy 2023](https://procbuild.scipy.org/download/Blosc-2023).
 
 ## Testimonials
 
