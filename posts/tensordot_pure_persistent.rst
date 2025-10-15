@@ -96,17 +96,17 @@ For each approach we plot the memory consumption vs. time for arrays of increasi
 *Results from a ``tensordot`` on two (600, 600, 600) float64 arrays (3 GB working set):*
 
 .. image:: /images/tensordot_pure_persistent/tensordot-600c-amd.png
-  :width: 50%
+  :width: 100%
 
 *Results from a ``tensordot`` on two (1200, 1200, 1200) float64 arrays (26 GB working set):*
 
 .. image:: /images/tensordot_pure_persistent/tensordot-1200c-amd.png
-  :width: 50%
+  :width: 100%
 
 *Results from a ``tensordot`` on two (1500, 1500, 1500) float64 arrays (50 GB working set):*
 
 .. image:: /images/tensordot_pure_persistent/tensordot-1500c-amd.png
-  :width: 50%
+  :width: 100%
 
 As can be seen, the amount of memory required by the different approaches is very different, although none requires more than a small fraction of the total working set (which is 3, 26 and 50 GB, respectively). This is because all approaches are out-of-core, and only load small chunks of data into memory at any given time.
 
