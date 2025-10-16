@@ -8,12 +8,13 @@
 .. description:
 .. type: text
 
+While compression is often seen merely as a way to save storage, the Blosc development team has long viewed it as a foundational element for high-performance computing. This philosophy is at the heart of Blosc2, which is not just a compression library but a powerful framework for handling large datasets. This post will highlight one of Python-Blosc2's most exciting capabilities: its lazy evaluation engine for array operations.
 
 Libraries optimised for computation on large datasets that don't fit in memory - such as Dask or Spark - often use lazy evaluation of computation expressions. This typically speeds up evaluation since one can build the full chain of computations and only execute them when the final result is needed. Consequently, Python-Blosc2's compute engine also uses the lazy imperative paradigm, which proves to be both `powerful and efficient <https://ironarray.io/blog/compute-bigger>`_.
 
 An additional benefit of the engine is its ability to act as a universal backend. Python-Blosc2 has a native ``blosc2.NDArray`` format, but it can also easily execute lazy operations on arrays from other popular libraries like NumPy, HDF5, Zarr, Xarray or TileDB - basically any array object which complies with a minimal protocol.
 
-In the recent [Python-Blosc2 3.10.x series](https://github.com/Blosc/python-blosc2/releases), we added support for lazy evaluation of eager functions, expanding the capabilities of the compute engine, and making interaction with other formats easier. Let's explore how this works using an out-of-core ``tensordot`` operation as an example.
+In the recent `Python-Blosc2 3.10.x series <https://github.com/Blosc/python-blosc2/releases>`_, we added support for lazy evaluation of eager functions, expanding the capabilities of the compute engine, and making interaction with other formats easier. Let's explore how this works using an out-of-core `tensordot <https://www.blosc.org/python-blosc2/reference/linalg.html#blosc2.linalg.tensordot>`_ operation as an example.
 
 From Eager to Lazy with ``blosc2.lazyexpr``
 -------------------------------------------
@@ -82,7 +83,7 @@ Performance Comparison
 
 As well as offering smooth integration, ``blosc2.evaluate`` is highly performant. Python-Blosc2 uses a lazy evaluation engine that integrates tightly with the Blosc2 format. This means that the computation is performed on-the-fly, without any intermediate copies. This is a huge advantage for large datasets, as it allows us to perform computations on arrays that don't fit in memory.  In addition, it actively tries to leverage the hierarchical memory layout in modern CPUs, so that it can use both private and shared caches in the best way possible.
 
-We ran a benchmark performing a ``tensordot`` operation (run over three different axis combinations) on two 3D arrays stored on disk; we then write the output to disk as well.
+We ran a `benchmark <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/tensordot_pure_persistent.ipynb>`_ performing a ``tensordot`` operation (run over three different axis combinations) on two 3D arrays stored on disk; we then write the output to disk as well.
 We consider four approaches:
 
 1. **Blosc2 Native**: Using ``blosc2.lazyexpr`` with ``blosc2.NDArray`` containers.
@@ -110,7 +111,7 @@ For each approach we plot the memory consumption vs. time for arrays of increasi
 
 As can be seen, the amount of memory required by the different approaches is very different, although none requires more than a small fraction of the total working set (which is 3, 26 and 50 GB, respectively). This is because all approaches are out-of-core, and only load small chunks of data into memory at any given time.
 
-The benchmarks were executed on an AMD Ryzen 9800X3D CPU, with 16 logical cores and 64GB of RAM, using Ubuntu Linux 25.04. We have used the following versions of the libraries: python-blosc2 3.10.1, h5py 3.14.0, zarr 3.1.3, 2025.9.1, and numpy 2.3.3.  All backends are using Blosc or Blosc2 as the compression backend, and using the same number of threads for compression and decompression.  You can find the notebook used for the benchmarks in the `Python-Blosc2 repository <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/tensordot_pure_persistent.ipynb>`_.
+The benchmarks were executed on an AMD Ryzen 9800X3D CPU, with 16 logical cores and 64GB of RAM, using Ubuntu Linux 25.04. We have used the following versions of the libraries: python-blosc2 3.10.1, h5py 3.14.0, zarr 3.1.3, 2025.9.1, and numpy 2.3.3.  All backends are using Blosc or Blosc2 as the compression backend, with same codecs and filters, and using the same number of threads for compression and decompression.
 
 Analysis
 ~~~~~~~~
@@ -121,13 +122,13 @@ The results are revealing:
 -   **Rapid computation time**: ``blosc2.evaluate`` delivers impressive speed when operating directly on HDF5 and Zarr files, outperforming the more complex Dask+HDF5 and Dask+Zarr stack. This is great news for anyone with existing HDF5/Zarr datasets.
 -   **Low memory usage**: While the memory consumption for the Blosc2+HDF5 combination is a bit high (we are still analyzing why), the memory usage for the Blosc2 native approach is pretty low, making it suitable for systems with limited RAM and/or operands not fitting in memory.
 
-This is not to say that Dask (or Spark) is an inferior choice for out-of-core computations. It's a great tool for large-scale data processing, especially when using clusters, is very flexible and offers a wide range of functions; it's certainly a first-class citizen in the PyData ecosystem. However, if your needs are more modest and you want a simple, efficient way to run computations on existing datasets, using a core of common functions, all without the overhead of a full Dask setup, ``blosc2.evaluate()`` is a fantastic alternative.
+This is not to say that Dask (or Spark) is an inferior choice for out-of-core computations. It's a great tool for large-scale data processing, especially when using clusters, is very flexible, and offers a wide range of functions; it's certainly a first-class citizen in the PyData ecosystem. However, if your needs are more modest and you want a simple, efficient way to run computations on existing datasets, using a core of common functions, and leveraging the full capabilities of modern multi-core systems, all without the overhead of a full Dask setup, ``blosc2.evaluate()`` is a fantastic alternative.
 
 Conclusion
 ----------
 
 Python-Blosc2 is more than just a compression library for storing data in ``blosc2.NDArray`` objects; it's a high-performance computing tool as well. Its lazy evaluation engine provides a simple yet powerful way to handle out-of-core operations. The computation engine is completely decoupled from the compression backend, and thus can easily work with many different array formats; however, the compute engine meshes most tightly with the Blosc2 native array format, achieving maximal performance (in terms of both computation time and memory usage).
 
-By adhering to the Array API standard, it acts as a universal engine that can work with different storage backends; we already implement `more than 100 functions that are required by the Array API standard <https://ironarray.io/blog/array-api>`_, and the number will only grow in the future. If you have existing datasets in HDF5 or Zarr or TileDB (and we are always looking forward to support even more formats), and need a lightweight, efficient way to run computations on them, ``blosc2.evaluate()`` is a fantastic tool to have in your arsenal. Of course, for maximum performance, the native Blosc2 format is a clear winner.
+By adhering to the `Array API standard <https://data-apis.org/array-api/>`_, it acts as a universal engine that can work with different storage backends; we already implement `more than 100 functions that are required by that standard <https://ironarray.io/blog/array-api>`_, and the number will only grow in the future. If you have existing datasets in HDF5 or Zarr or TileDB (and we are always looking forward to support even more formats), and need a lightweight, efficient way to run computations on them, ``blosc2.evaluate()`` is a fantastic tool to have in your arsenal. Of course, for maximum performance, the native Blosc2 format is a clear winner.
 
 Our work continues. We are committed to enhancing Python-Blosc2 by expanding its supported operations, improving performance across backends, and adding new ones. Stay tuned for more updates! If you found this post useful, please share it. For questions or comments, reach out to us on `GitHub <https://github.com/Blosc/python-blosc2/discussions>`_.
