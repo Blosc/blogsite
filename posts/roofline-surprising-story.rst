@@ -2,7 +2,7 @@
 .. author: Francesc Alted
 .. slug: roofline-analysis-blosc2
 .. date: 2025-11-27 08:05:21 UTC
-.. tags: roofline, performance, blosc2, numpy, numexpr, memory wall
+.. tags: roofline, performance, Blosc2, numpy, numexpr, memory wall
 .. category:
 .. link:
 .. description:
