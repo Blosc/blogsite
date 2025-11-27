@@ -94,9 +94,9 @@ However, while the in-memory results are revealing, they don't tell the whole st
 A Different Battlefield: Blosc2 Shines with On-Disk Data
 --------------------------------------------------------
 
-Blosc2's architecture extends its computational engine to operate seamlessly on data stored on disk, a significant advantage for large-scale analysis. Our on-disk benchmarks were designed to use datasets larger than the system's available memory to prevent filesystem caching from influencing the results.
+Blosc2's architecture extends its computational engine to operate seamlessly on data stored on disk, a significant advantage for large-scale analysis.  This is particularly relevant in scenarios where datasets exceed available memory, necessitating out-of-core processing, as commonly encountered in data science, machine learning workflows or `cloud computing environments <https://ironarray.io/cat2cloud>`_.
 
-To establish a baseline, we implemented an out-of-core solution for NumPy/NumExpr, leveraging memory-mapped files. Here Blosc2 has a performance edge, particularly for memory-bound operations on compressed data, being able to send and receive data faster to disk than the memory-mapped NumPy arrays.
+Our on-disk benchmarks were designed to use datasets larger than the system's available memory to prevent filesystem caching from influencing the results. To establish a baseline, we implemented an out-of-core solution for NumPy/NumExpr, leveraging memory-mapped files. Here Blosc2 has a performance edge, particularly for memory-bound operations on compressed data, being able to send and receive data faster to disk than the memory-mapped NumPy arrays.
 
 First, let's see the results for the AMD Ryzen 7800X3D system:
 
@@ -134,7 +134,7 @@ As with the AMD platform, CPU-bound operations exhibit similar performance for b
 Reproducibility
 ---------------
 
-All the `benchmarks <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-analysis.py>`_ and `plots <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-plot.py>`_ presented in this blog post can be reproduced using the `Python-Blosc2 <https://github.com/Blosc/python-blosc2/>`_ repository on GitHub. You are invited to run the scripts on your own hardware to explore the performance characteristics of Blosc2 in different environments.  In case you get interesting results, please consider sharing them with the community!
+All the `benchmarks <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-analysis.py>`_ and `plots <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-plot.py>`_ presented in this blog post can be reproduced using the `Python-Blosc2 <https://github.com/Blosc/python-blosc2/>`_ library. You are invited to run the scripts on your own hardware to explore the performance characteristics of Blosc2 in different environments. In case you get interesting results, please consider sharing them with the community!
 
 Conclusions
 -----------
