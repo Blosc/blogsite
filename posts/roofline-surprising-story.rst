@@ -40,7 +40,7 @@ Roofline Model: Understanding the Memory Wall
 
 Not all computations are equally affected by the memory wall; they can be either CPU-bound or memory-bound. To diagnose which resource is the limiting factor, the `Roofline model <https://en.wikipedia.org/wiki/Roofline_model>`_ provides an insightful analytical framework. This model `plots computational performance against arithmetic intensity <https://docs.nersc.gov/tools/performance/roofline/>`_ (the ratio of floating-point operations to memory accesses) to visually determine whether a task is constrained by CPU speed or memory bandwidth.
 
-.. image:: /images/roofline-surprising-story/roofline-intro.png
+.. image:: /images/roofline-surprising-story/roofline-intro.avif
 
 We will use Roofline plots to analyze Blosc2's performance against NumPy and Numexpr. NumPy, with its highly optimized linear algebra backends, and Numexpr, with its efficient evaluation of element-wise expressions, together form a strong performance baseline.
 
@@ -130,6 +130,11 @@ Apple Silicon M4 Pro
 In contrast to the AMD system, the Apple Silicon M4 Pro shows that Blosc2's on-disk operations are slower than in-memory, a difference that is most significant for memory-bound tasks. This performance disparity suggests that current on-disk optimizations may favor x86_64 architectures over ARM.
 
 As with the AMD platform, CPU-bound operations exhibit similar performance for both on-disk and in-memory contexts. The notable exception remains the small matrix multiplication (matmul0), which performs significantly worse on-disk. This recurring pattern pinpoints a clear opportunity for future optimization efforts.
+
+Reproducibility
+---------------
+
+All the `benchmarks <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-analysis.py>`_ and `plots <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-plot.py>`_ presented in this blog post can be reproduced using the `Python-Blosc2 <https://github.com/Blosc/python-blosc2/>`_ repository on GitHub. You are invited to run the scripts on your own hardware to explore the performance characteristics of Blosc2 in different environments.  In case you get interesting results, please consider sharing them with the community!
 
 Conclusions
 -----------
