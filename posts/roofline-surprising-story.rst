@@ -76,7 +76,7 @@ The performance characteristics of Blosc2 are rooted in its double partitioning 
 
 .. image:: /images/roofline-surprising-story/double-partition-b2nd.avif
 
-This design is crucial for both aligning with the CPU's memory hierarchy and enabling efficient multidimensional array representation. However, this structure introduces an inherent overhead from additional indexing logic. In memory-bound scenarios, this latency counteracts the performance gains from reduced memory traffic, explaining why Blosc2 does not surpass Numexpr.
+This design is crucial for both aligning with the CPU's memory hierarchy and enabling efficient multidimensional array representation, important for things like e.g. n-dimensional slicing. However, this structure introduces an inherent overhead from additional indexing logic. In memory-bound scenarios, this latency counteracts the performance gains from reduced memory traffic, explaining why Blosc2 does not surpass Numexpr.
 
 Conversely, as arithmetic intensity increases, the computational demands begin to dominate the total execution time. In these CPU-bound regimes, the partitioning overhead is effectively amortized, allowing Blosc2 to close the performance gap and eventually match NumPy's performance in tasks like large matrix multiplications.
 
