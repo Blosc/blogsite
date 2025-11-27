@@ -56,7 +56,7 @@ To cover a range of computational scenarios, our benchmarks include five operati
 
 .. image:: /images/roofline-surprising-story/roofline-mem-speed-AMD-7800X3D.png
 
-The Roofline plots confirm that increasing memory frequency only benefits memory-bound operations (low arithmetic intensity), while CPU-bound tasks (high arithmetic intensity) are unaffected, as expected. Although this might suggest the "memory wall" is not a major obstacle, low-intensity operations like element-wise calculations, reductions, and selections are extremely common and often create performance bottlenecks. Therefore, optimizing for memory performance remains crucial.
+This Roofline plot confirms that increasing memory frequency only benefits memory-bound operations (low arithmetic intensity), while CPU-bound tasks (high arithmetic intensity) are unaffected, as expected. Although this might suggest the "memory wall" is not a major obstacle, low-intensity operations like element-wise calculations, reductions, and selections are extremely common and often create performance bottlenecks. Therefore, optimizing for memory performance remains crucial.
 
 The In-Memory Surprise: Why Wasn't Compression Faster?
 ------------------------------------------------------
