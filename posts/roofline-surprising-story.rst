@@ -89,7 +89,7 @@ CPU architecture is a rapidly evolving field. To investigate how these changes i
 
 The results show that Blosc2 performs significantly better on this platform, narrowing the performance gap with NumPy/NumExpr, especially for operations on compressed data. While compute engines optimized for uncompressed data still hold an edge, these findings suggest that compression will play an increasingly important role in improving computational performance in the future.
 
-However, while the in-memory results are revealing, they don't tell the whole story. Blosc2 was designed not just to fight the memory wall, but to conquer an even greater bottleneck: disk I/O. Although compression has the benefit of fitting more data into RAM when used in-memory (which is per se extremely interesting in these times, where RAM prices skyrocketed), its true power is unleashed when computations move off-motherboard. Now, let's shift the battlefield to the disk and see how Blosc2 performs in its native territory.
+However, while the in-memory results are revealing, they don't tell the whole story. Blosc2 was designed not just to fight the memory wall, but to conquer an even greater bottleneck: disk I/O. Although compression has the benefit of fitting more data into RAM when used in-memory (which is per se extremely interesting in these times, where `RAM prices skyrocketed <https://arstechnica.com/gadgets/2025/11/spiking-memory-prices-mean-that-it-is-once-again-a-horrible-time-to-build-a-pc/>`_), its true power is unleashed when computations move off-motherboard. Now, let's shift the battlefield to the disk and see how Blosc2 performs in its native territory.
 
 A Different Battlefield: Blosc2 Shines with On-Disk Data
 --------------------------------------------------------
@@ -97,6 +97,8 @@ A Different Battlefield: Blosc2 Shines with On-Disk Data
 Blosc2's architecture extends its computational engine to operate seamlessly on data stored on disk, a significant advantage for large-scale analysis.  This is particularly relevant in scenarios where datasets exceed available memory, necessitating out-of-core processing, as commonly encountered in data science, machine learning workflows or `cloud computing environments <https://ironarray.io/cat2cloud>`_.
 
 Our on-disk benchmarks were designed to use datasets larger than the system's available memory to prevent filesystem caching from influencing the results. To establish a baseline, we implemented an out-of-core solution for NumPy/NumExpr, leveraging memory-mapped files. Here Blosc2 has a performance edge, particularly for memory-bound operations on compressed data, being able to send and receive data faster to disk than the memory-mapped NumPy arrays.
+
+In this case, we've used high-performance NVMe SSDs (NVMe 4.0) to minimize the impact of disk speed on the results.  We also switched to the ZSTD codec for Blosc2, as its superior compression ratio over LZ4 further minimizes data transfer to and from the disk.
 
 First, let's see the results for the AMD Ryzen 7800X3D system:
 
@@ -125,6 +127,8 @@ In contrast to the AMD system, the Apple Silicon M4 Pro shows that Blosc2's on-d
 
 As with the AMD platform, CPU-bound operations exhibit similar performance for both on-disk and in-memory contexts. The notable exception remains the small matrix multiplication (matmul0), which performs significantly worse on-disk. This recurring pattern pinpoints a clear opportunity for future optimization efforts.
 
+Finally, and in addition to its on-disk performance, Blosc2 offers a significant cost advantage. With the `recent rise in SSD prices <https://arstechnica.com/gadgets/2025/11/spiking-memory-prices-mean-that-it-is-once-again-a-horrible-time-to-build-a-pc/>`_, compressing data on disk becomes an economically attractive strategy, allowing you to store more data in less space and thereby reduce hardware expenses.
+
 Reproducibility
 ---------------
 
@@ -138,5 +142,7 @@ In this blog post, we explored the Roofline model to analyze the performance of 
 The situation changes dramatically for on-disk operations. Here, Blosc2 consistently outperforms NumPy and Numexpr, as the high latency of disk I/O (even if we used SSDs here) amortizes its internal overhead. This makes Blosc2 a compelling choice for out-of-core computations, one of its primary use cases.
 
 Overall, this analysis has provided valuable insights, highlighting the importance of the memory hierarchy. It has also exposed specific areas for improvement, such as the performance of small matrix multiplications. As Blosc2 continues to evolve, I am confident we can address these points and further enhance its performance, making it an even more powerful tool for numerical computations in Python.
+
+Last but not least, I would like to thank `ironArray SLU <https://ironarray.io>`_ for sponsoring most of the work behind Blosc2 and making this research possible. ironArray provides high-performance cloud computing and data storage built around Blosc2 and Caterva2 technologies.
 
 Compress Better, Compute Bigger!
