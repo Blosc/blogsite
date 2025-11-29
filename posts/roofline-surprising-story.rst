@@ -76,7 +76,7 @@ The performance characteristics of Blosc2 are rooted in its double partitioning 
 
 .. image:: /images/roofline-surprising-story/double-partition-b2nd.avif
 
-This design is crucial for both aligning with the CPU's memory hierarchy and enabling efficient multidimensional array representation, important for things like e.g. n-dimensional slicing. However, this structure introduces an inherent overhead from additional indexing logic. In memory-bound scenarios, this latency counteracts the performance gains from reduced memory traffic, explaining why Blosc2 does not surpass Numexpr.
+This design is crucial for both aligning with the CPU's memory hierarchy and enabling efficient multidimensional array representation (important for things like e.g. n-dimensional slicing). However, this structure introduces an inherent overhead from additional indexing logic. In memory-bound scenarios, this latency counteracts the performance gains from reduced memory traffic, explaining why Blosc2 does not surpass Numexpr.
 
 Conversely, as arithmetic intensity increases, the computational demands begin to dominate the total execution time. In these CPU-bound regimes, the partitioning overhead is effectively amortized, allowing Blosc2 to close the performance gap and eventually match NumPy's performance in tasks like large matrix multiplications.
 
@@ -89,7 +89,7 @@ CPU architecture is a rapidly evolving field. To investigate how these changes i
 
 The results show that Blosc2 performs significantly better on this platform, narrowing the performance gap with NumPy/NumExpr, especially for operations on compressed data. While compute engines optimized for uncompressed data still hold an edge, these findings suggest that compression will play an increasingly important role in improving computational performance in the future.
 
-However, while the in-memory results are revealing, they don't tell the whole story. Blosc2 was designed not just to fight the memory wall, but to conquer an even greater bottleneck: disk I/O. Although in-memory compression has the secondary benefit of fitting more data into RAM, its true power is unleashed when computations move off-chip. Now, let's shift the battlefield to the disk and see how Blosc2 performs in its native territory.
+However, while the in-memory results are revealing, they don't tell the whole story. Blosc2 was designed not just to fight the memory wall, but to conquer an even greater bottleneck: disk I/O. Although compression has the benefit of fitting more data into RAM when used in-memory, its true power is unleashed when computations move off-motherboard. Now, let's shift the battlefield to the disk and see how Blosc2 performs in its native territory.
 
 A Different Battlefield: Blosc2 Shines with On-Disk Data
 --------------------------------------------------------
@@ -117,15 +117,9 @@ To better understand the trade-offs between in-memory and on-disk processing wit
 
 .. image:: /images/roofline-surprising-story/roofline-mem-disk-def.png
 
-AMD Ryzen 7800X3D
-.................
-
 A notable finding for the AMD system is that Blosc2's on-disk operations are noticeably faster than its in-memory operations, especially for memory-bound tasks (low arithmetic intensity). This is likely due to two factors: first, the larger datasets used for on-disk tests allow Blosc2 to use more efficient internal partitions (chunks and blocks), and second, parallel data reads from disk further reduce bandwidth requirements.
 
 In contrast, for CPU-bound tasks (high arithmetic intensity), on-disk performance is comparable to, albeit slightly slower than, in-memory performance. The analysis also reveals a specific weakness: small matrix multiplications (matmul0) are significantly slower on-disk, identifying a clear target for future optimization.
-
-Apple Silicon M4 Pro
-....................
 
 In contrast to the AMD system, the Apple Silicon M4 Pro shows that Blosc2's on-disk operations are slower than in-memory, a difference that is most significant for memory-bound tasks. This performance disparity suggests that current on-disk optimizations may favor x86_64 architectures over ARM.
 
@@ -134,7 +128,7 @@ As with the AMD platform, CPU-bound operations exhibit similar performance for b
 Reproducibility
 ---------------
 
-All the `benchmarks <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-analysis.py>`_ and `plots <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-plot.py>`_ presented in this blog post can be reproduced using the `Python-Blosc2 <https://github.com/Blosc/python-blosc2/>`_ library. You are invited to run the scripts on your own hardware to explore the performance characteristics of Blosc2 in different environments. In case you get interesting results, please consider sharing them with the community!
+All the `benchmarks <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-analysis.py>`_ and `plots <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/roofline-plot.py>`_ presented in this blog post can be reproduced. You are invited to run the scripts on your own hardware to explore the performance characteristics of Blosc2 in different environments. In case you get interesting results, please consider sharing them with the community!
 
 Conclusions
 -----------
