@@ -89,7 +89,7 @@ CPU architecture is a rapidly evolving field. To investigate how these changes i
 
 The results show that Blosc2 performs significantly better on this platform, narrowing the performance gap with NumPy/NumExpr, especially for operations on compressed data. While compute engines optimized for uncompressed data still hold an edge, these findings suggest that compression will play an increasingly important role in improving computational performance in the future.
 
-However, while the in-memory results are revealing, they don't tell the whole story. Blosc2 was designed not just to fight the memory wall, but to conquer an even greater bottleneck: disk I/O. Although compression has the benefit of fitting more data into RAM when used in-memory, its true power is unleashed when computations move off-motherboard. Now, let's shift the battlefield to the disk and see how Blosc2 performs in its native territory.
+However, while the in-memory results are revealing, they don't tell the whole story. Blosc2 was designed not just to fight the memory wall, but to conquer an even greater bottleneck: disk I/O. Although compression has the benefit of fitting more data into RAM when used in-memory (which is per se extremely interesting in these times, where RAM prices skyrocketed), its true power is unleashed when computations move off-motherboard. Now, let's shift the battlefield to the disk and see how Blosc2 performs in its native territory.
 
 A Different Battlefield: Blosc2 Shines with On-Disk Data
 --------------------------------------------------------
