@@ -143,6 +143,8 @@ The situation changes dramatically for on-disk operations. Here, Blosc2 consiste
 
 Overall, this analysis has provided valuable insights, highlighting the importance of the memory hierarchy. It has also exposed specific areas for improvement, such as the performance of small matrix multiplications. As Blosc2 continues to evolve, I am confident we can address these points and further enhance its performance, making it an even more powerful tool for numerical computations in Python.
 
-Last but not least, I would like to thank `ironArray SLU <https://ironarray.io>`_ for sponsoring most of the work behind Blosc2 and making this research possible. ironArray provides high-performance cloud computing and data storage built around Blosc2 and Caterva2 technologies.
+----
+
+Read more about `ironArray SLU <https://ironarray.io>`_ — the company behind Blosc2, Caterva2, Numexpr and other high-performance data processing libraries.
 
 Compress Better, Compute Bigger!
