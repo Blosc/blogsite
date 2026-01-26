@@ -3,7 +3,7 @@
 .. slug: beast-release
 .. date: 2020-07-25 14:32:20 UTC
 .. tags: blosc performance tuning
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

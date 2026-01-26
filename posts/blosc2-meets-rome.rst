@@ -3,7 +3,7 @@
 .. slug: blosc2-meets-rome
 .. date: 2019-11-25 18:32:20 UTC
 .. tags: amd, rome, memory wall
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

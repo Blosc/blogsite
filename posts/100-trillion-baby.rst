@@ -3,7 +3,7 @@
 .. slug: 100-trillion-baby
 .. date: 2023-02-10 10:32:20 UTC
 .. tags: pytables blosc2 hdf5
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

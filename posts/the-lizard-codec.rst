@@ -3,7 +3,7 @@
 .. slug: new-lizard-codec
 .. date: 2017-07-31 17:32:20 UTC
 .. tags: Lizard
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

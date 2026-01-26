@@ -3,7 +3,7 @@
 .. slug: dynamic-plugins
 .. date: 2023-05-10 08:32:20 UTC
 .. tags: blosc2 plugin dynamic
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

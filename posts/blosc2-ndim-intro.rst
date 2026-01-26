@@ -3,7 +3,7 @@
 .. slug: blosc2-ndim-intro
 .. date: 2023-02-22 10:32:20 UTC
 .. tags: blosc2 ndim performance
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

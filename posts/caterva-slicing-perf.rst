@@ -3,7 +3,7 @@
 .. slug: caterva-slicing-perf
 .. date: 2021-07-26 4:32:20 UTC
 .. tags: caterva slicing perf
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

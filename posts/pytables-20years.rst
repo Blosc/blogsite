@@ -3,7 +3,7 @@
 .. slug: pytables-20years
 .. date: 2022-12-31 12:32:20 UTC
 .. tags: pytables 20years
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

@@ -3,7 +3,7 @@
 .. slug: python-blosc2-pipeline
 .. date: 2022-12-15 8:00:20 UTC
 .. tags: blosc2 python user-defined filters codecs
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

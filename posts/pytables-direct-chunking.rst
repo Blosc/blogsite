@@ -3,7 +3,7 @@
 .. slug: pytables-direct-chunking
 .. date: 2024-08-26 09:20:00 UTC
 .. tags: pytables performance
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

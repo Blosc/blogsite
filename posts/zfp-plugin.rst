@@ -3,7 +3,7 @@
 .. slug: support-lossy-zfp
 .. date: 2022-03-11 10:32:20 UTC
 .. tags: blosc plugins zfp lossy
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

@@ -3,7 +3,7 @@
 .. slug: ndim-reductions
 .. date: 2024-08-28 10:32:20 UTC
 .. tags: ndim, reductions, in-memory
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

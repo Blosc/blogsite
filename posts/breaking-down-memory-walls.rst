@@ -3,7 +3,7 @@
 .. slug: breaking-memory-walls
 .. date: 2018-06-25 18:32:20 UTC
 .. tags: caches, memory wall, tuning
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

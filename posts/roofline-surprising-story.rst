@@ -3,7 +3,7 @@
 .. slug: roofline-analysis-blosc2
 .. date: 2025-11-27 08:05:21 UTC
 .. tags: roofline, performance, Blosc2, numpy, numexpr, memory wall
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

@@ -3,7 +3,7 @@
 .. slug: blosc2-lossy-compression
 .. date: 2024-02-13 01:32:20 UTC
 .. tags: blosc2 lossy compression
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

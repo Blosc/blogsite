@@ -3,7 +3,7 @@
 .. slug: arm-memory-walls-followup
 .. date: 2019-01-07 10:12:20 UTC
 .. tags: ARM, memory wall, tuning
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

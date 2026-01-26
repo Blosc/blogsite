@@ -3,7 +3,7 @@
 .. slug: blosc-donation
 .. date: 2020-02-20 01:32:20 UTC
 .. tags: donation blosc2 caterva
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

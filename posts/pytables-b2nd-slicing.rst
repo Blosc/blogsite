@@ -3,7 +3,7 @@
 .. slug: pytables-b2nd-slicing
 .. date: 2023-10-11 11:00:00 UTC
 .. tags: pytables blosc2 ndim performance
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

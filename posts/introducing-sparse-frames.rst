@@ -3,7 +3,7 @@
 .. slug: introducing-sparse-frames
 .. date: 2021-02-08 7:32:20 UTC
 .. tags: blosc2 sparse frame format
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

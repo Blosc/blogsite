@@ -3,7 +3,7 @@
 .. slug: blosc2-new-concatenate
 .. date: 2025-06-16 13:33:20 UTC
 .. tags: blosc2 concatenate performance
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

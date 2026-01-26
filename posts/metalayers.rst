@@ -3,7 +3,7 @@
 .. slug: blosc-metalayers
 .. date: 2021-03-05 7:32:20 UTC
 .. tags: blosc2 metalayers
-.. category:
+.. category: posts
 .. link:
 .. status:
 .. description:

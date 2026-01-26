@@ -3,7 +3,7 @@
 .. slug: new-blosc-wheels
 .. date: 2021-01-18 12:32:20 UTC
 .. tags: wheels
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

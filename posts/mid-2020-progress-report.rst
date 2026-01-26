@@ -3,7 +3,7 @@
 .. slug: mid-2020-progress-report
 .. date: 2020-08-27 12:32:20 UTC
 .. tags: blosc progress report grants
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

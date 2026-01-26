@@ -3,7 +3,7 @@
 .. slug: python-blosc2-improvements
 .. date: 2022-10-06 10:32:20 UTC
 .. tags: blosc2 features performance
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

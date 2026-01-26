@@ -3,7 +3,7 @@
 .. slug: new-treestore-blosc2
 .. date: 2025-08-17 10:33:20 UTC
 .. tags: treestore hierarchical structure performance
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

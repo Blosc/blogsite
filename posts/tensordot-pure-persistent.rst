@@ -3,7 +3,7 @@
 .. slug: tensordot-pure-persistent
 .. date: 2025-10-15 10:32:20 UTC
 .. tags: blosc2 hdf5 zarr tiledb dask numpy
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

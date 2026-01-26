@@ -3,7 +3,7 @@
 .. slug: prize-push-Blosc2
 .. date: 2017-11-17 17:32:20 UTC
 .. tags: Google, Prize, Blosc2
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

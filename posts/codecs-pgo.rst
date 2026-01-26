@@ -3,7 +3,7 @@
 .. slug: codecs-pgo
 .. date: 2017-07-19 11:32:20 UTC
 .. tags: PGO, LZ4, Zstandard
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

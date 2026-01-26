@@ -3,7 +3,7 @@
 .. slug: new-forward-compat-policy
 .. date: 2018-02-21 15:32:20 UTC
 .. tags: forward compatibility policy splitmode
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

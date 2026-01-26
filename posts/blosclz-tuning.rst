@@ -3,7 +3,7 @@
 .. slug: blosclz-tuning
 .. date: 2017-07-14 06:32:20 UTC
 .. tags: blosclz, optimization, tuning
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

@@ -3,7 +3,7 @@
 .. slug: python-blosc2-initial-release
 .. date: 2021-05-10 07:32:20 UTC
 .. tags: blosc2 python
-.. category:
+.. category: posts
 .. link:
 .. status:
 .. description:

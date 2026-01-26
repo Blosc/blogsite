@@ -3,7 +3,7 @@
 .. slug: persistent-reductions
 .. date: 2024-11-05 12:58:20 UTC
 .. tags: lazy-expressions, persistent-reduction, data-processing, large-datasets
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

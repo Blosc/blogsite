@@ -3,7 +3,7 @@
 .. slug: optimizing-chunks-transpose
 .. date: 2025-04-08 9:00:00 UTC
 .. tags: blosc2 optimization matrix transposition compression numpy
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

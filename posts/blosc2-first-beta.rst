@@ -3,7 +3,7 @@
 .. slug: blosc2-first-beta
 .. date: 2019-08-13 01:32:20 UTC
 .. tags: blosc2 beta
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

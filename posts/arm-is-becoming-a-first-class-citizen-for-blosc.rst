@@ -3,7 +3,7 @@
 .. slug: arm-is-becoming-a-first-class-citizen-for-blosc
 .. date: 2015-09-09 11:32:20 UTC
 .. tags: ARM, NEON, Blosc2
-.. category: 
+.. category: posts
 .. link: 
 .. description: 
 .. type: text

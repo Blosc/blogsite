@@ -3,7 +3,7 @@
 .. slug: blosc2-pytables-perf
 .. date: 2022-12-23 12:32:20 UTC
 .. tags: blosc2 pytables performance
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

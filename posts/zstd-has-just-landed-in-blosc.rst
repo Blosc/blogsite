@@ -3,7 +3,7 @@
 .. slug: zstd-has-just-landed-in-blosc
 .. date: 2016-07-20 11:32:20 UTC
 .. tags: Zstd, Zstandard
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text

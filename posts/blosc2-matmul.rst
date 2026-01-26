@@ -3,7 +3,7 @@
 .. slug: optimizing-chunks-blosc2
 .. date: 2025-03-12 9:00:00 UTC
 .. tags: blosc2 optimization matrix multiplication matmul compression
-.. category:
+.. category: posts
 .. link:
 .. description: Exploring how to optimize chunk sizes in Blosc2 to improve performance in matrix multiplication.
 .. type: text

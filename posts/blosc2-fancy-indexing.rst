@@ -3,7 +3,7 @@
 .. slug: blosc2-fancy-indexing
 .. date: 2025-07-16 13:33:20 UTC
 .. tags: blosc2 fancyindex performance
-.. category:
+.. category: posts
 .. link:
 .. description:
 .. type: text
