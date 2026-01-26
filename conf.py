@@ -22,7 +22,7 @@ BLOG_AUTHOR = "The Blosc Developers"  # (translatable)
 BLOG_TITLE = "Blosc Home Page "  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
-SITE_URL = "http://blosc.org/"
+SITE_URL = "https://blosc.org/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
 # BASE_URL = "http://blosc.org/"
