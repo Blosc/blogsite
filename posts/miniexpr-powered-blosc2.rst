@@ -34,7 +34,7 @@ The following bar plots compare **old vs miniexpr** for Blosc2 (compressed and u
 .. image:: /images/miniexpr-powered-blosc2/barplot-Apple-M4-Pro-on-disk.png
 
 Mini Tables (Compressed Blosc2, GFLOPS)
---------------------------------------
+---------------------------------------
 
 .. table:: In-memory (old -> miniexpr)
 
