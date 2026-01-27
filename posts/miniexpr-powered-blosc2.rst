@@ -1,7 +1,7 @@
 .. title: Miniexpr-Powered Blosc2: Beating the Memory Wall (Again)
 .. author: Francesc Alted
 .. slug: miniexpr-powered-blosc2
-.. date: 2026-01-27 08:05:21 UTC
+.. date: 2026-01-29 08:05:21 UTC
 .. tags: roofline, performance, Blosc2, miniexpr, numpy, numexpr, memory wall
 .. category: posts
 .. link:
