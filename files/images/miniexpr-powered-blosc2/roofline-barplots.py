@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate before/after bar plots for Blosc2 (compressed vs uncompressed).
 
-This reads BENCH_DATA from roofline-plot.py (old) and roofline-plot-miniexpr.py (new)
+This reads BENCH_DATA from roofline-plot.py (before miniexpr) and roofline-plot-miniexpr.py (after miniexpr)
 so the plots stay in sync with the roofline datasets.
 """
 
@@ -12,13 +12,13 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 WORKLOADS = ["very low", "low", "medium"]
-BACKENDS = ["blosc2", "blosc2-nocomp"]
+BACKENDS = ["blosc2", "blosc2-nocomp", "numpy/numexpr"]
 
 FIGSIZE = (4.5, 2.5)
 TITLE_SIZE = 9
 LABEL_SIZE = 8
 TICK_SIZE = 7
-LEGEND_SIZE = 7
+LEGEND_SIZE = 6
 SPEEDUP_SIZE = 6
 
 
@@ -38,59 +38,75 @@ def human_machine(name: str) -> str:
     return name.replace("-", " ")
 
 
-def plot_machine_mode(machine: str, mode: str, old_data: dict, new_data: dict, out_dir: Path) -> None:
+def backend_label(backend: str) -> str:
+    if backend == "blosc2":
+        return "Blosc2 compressed"
+    if backend == "blosc2-nocomp":
+        return "Blosc2 uncompressed"
+    return "Numexpr"
+
+
+def plot_machine_mode(machine: str, mode: str, before_data: dict, after_data: dict, out_dir: Path) -> None:
     legend = "in-memory" if mode == "mem" else "on-disk"
 
-    old_results = ast.literal_eval(old_data[machine][mode])
-    new_results = ast.literal_eval(new_data[machine][mode])
+    before_results = ast.literal_eval(before_data[machine][mode])
+    after_results = ast.literal_eval(after_data[machine][mode])
 
     # Build arrays
     values = {}
     for backend in BACKENDS:
         values[backend] = {
-            "old": [old_results[backend][w]["GFLOPS"] for w in WORKLOADS],
-            "new": [new_results[backend][w]["GFLOPS"] for w in WORKLOADS],
+            "before": [before_results[backend][w]["GFLOPS"] for w in WORKLOADS],
+            "after": [after_results[backend][w]["GFLOPS"] for w in WORKLOADS],
         }
 
     # Layout
     x = list(range(len(WORKLOADS)))
-    width = 0.18
-    offsets = {
-        ("blosc2", "old"): -1.5 * width,
-        ("blosc2", "new"): -0.5 * width,
-        ("blosc2-nocomp", "old"): 0.5 * width,
-        ("blosc2-nocomp", "new"): 1.5 * width,
-    }
+    width = 0.16
+    offsets = {}
+    # 5 bars per workload: blosc2 before/after, blosc2-nocomp before/after, numexpr (after only)
+    offset_steps = [-2, -1, 0, 1, 2]
+    pairs = [
+        ("blosc2", "before"),
+        ("blosc2", "after"),
+        ("blosc2-nocomp", "before"),
+        ("blosc2-nocomp", "after"),
+        ("numpy/numexpr", "after"),
+    ]
+    for step, key in zip(offset_steps, pairs):
+        offsets[key] = step * width
 
     colors = {
         "blosc2": "#1f77b4",
         "blosc2-nocomp": "#2ca02c",
+        "numpy/numexpr": "#ff7f0e",
     }
 
     fig, ax = plt.subplots(figsize=FIGSIZE, constrained_layout=True)
 
     for backend in BACKENDS:
-        for era in ["old", "new"]:
+        eras = ["after"] if backend == "numpy/numexpr" else ["before", "after"]
+        for era in eras:
             xpos = [xi + offsets[(backend, era)] for xi in x]
             bars = ax.bar(
                 xpos,
                 values[backend][era],
                 width=width,
                 color=colors[backend],
-                alpha=0.45 if era == "old" else 0.9,
-                hatch="//" if era == "old" else None,
-                label=f"{'compressed' if backend == 'blosc2' else 'uncompressed'} ({era})",
+                alpha=0.45 if era == "before" else 0.9,
+                hatch="//" if era == "before" else None,
+                label=backend_label(backend) if backend == "numpy/numexpr" else f"{backend_label(backend)} ({era})",
             )
 
             # Speedup labels on the new bars
-            if era == "new":
-                for bar, base in zip(bars, values[backend]["old"]):
-                    new_val = bar.get_height()
+            if era == "after" and backend != "numpy/numexpr":
+                for bar, base in zip(bars, values[backend]["before"]):
+                    after_val = bar.get_height()
                     if base > 0:
-                        speedup = new_val / base
+                        speedup = after_val / base
                         ax.text(
                             bar.get_x() + bar.get_width() / 2.0,
-                            new_val * 1.03,
+                            after_val * 1.03,
                             f"{speedup:.2g}x",
                             ha="center",
                             va="bottom",
@@ -108,6 +124,7 @@ def plot_machine_mode(machine: str, mode: str, old_data: dict, new_data: dict, o
     ax.tick_params(axis="y", labelsize=TICK_SIZE)
     ax.grid(axis="y", linestyle="--", alpha=0.3)
     ax.legend(loc="upper left", fontsize=LEGEND_SIZE, frameon=False)
+    ax.set_ylim(0, 30)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / f"barplot-{machine}-{legend}.png"
@@ -117,10 +134,10 @@ def plot_machine_mode(machine: str, mode: str, old_data: dict, new_data: dict, o
 
 if __name__ == "__main__":
     root = Path(__file__).resolve().parent
-    old_data = extract_bench_data(root / "roofline-plot.py")
-    new_data = extract_bench_data(root / "roofline-plot-miniexpr.py")
+    before_data = extract_bench_data(root / "roofline-plot.py")
+    after_data = extract_bench_data(root / "roofline-plot-miniexpr.py")
 
-    out_dir = root / "output"
+    out_dir = root
     for machine in ["AMD-7800X3D", "Apple-M4-Pro"]:
         for mode in ["mem", "disk"]:
-            plot_machine_mode(machine, mode, old_data, new_data, out_dir)
+            plot_machine_mode(machine, mode, before_data, after_data, out_dir)

@@ -33,27 +33,6 @@ The following bar plots compare **old vs miniexpr** for Blosc2 (compressed and u
 
 .. image:: /images/miniexpr-powered-blosc2/barplot-Apple-M4-Pro-on-disk.png
 
-Mini Tables (Compressed Blosc2, GFLOPS)
----------------------------------------
-
-.. table:: In-memory (old -> miniexpr)
-
-   ===========  =======================  ======================
-   CPU          very-low (old->new, x)   low (old->new, x)
-   ===========  =======================  ======================
-   AMD 7800X3D  0.41 -> 1.70 (4.16x)     2.20 -> 6.32 (2.87x)
-   Apple M4 Pro 0.91 -> 2.31 (2.53x)     3.28 -> 9.24 (2.82x)
-   ===========  =======================  ======================
-
-.. table:: On-disk (old -> miniexpr)
-
-   ===========  =======================  ======================
-   CPU          very-low (old->new, x)   low (old->new, x)
-   ===========  =======================  ======================
-   AMD 7800X3D  0.57 -> 1.41 (2.50x)     2.66 -> 5.58 (2.10x)
-   Apple M4 Pro 0.49 -> 0.95 (1.93x)     2.57 -> 5.31 (2.07x)
-   ===========  =======================  ======================
-
 Roofline Context
 ----------------
 
