@@ -130,9 +130,10 @@ One can also download the project and use the ``cmake`` and ``cmake --build`` co
   # Compression with the OpenZL codec
   bl_array = blosc2.asarray(np_array, cparams=cparams)
   print(bl_array.cratio) # print compression ratio
-  >> 25.078369905956112
+  ## 25.078369905956112
 
 The ``OpenZLProfile`` enum contains the available profile pipelines that have been implemented in the plugin, which use the ``codec_meta`` field (an 8-bit integer) to specify the desired transformation via codecs, filters and other nodes for the compression graph. Starting from the Least-Significant-Bit (LSB), setting the bits tells OpenZL how to build the graph:
+
   CODEC | SHUFFLE | DELTA | SPLIT | CRC | x | x | x |
 
   - CODEC - If set, use LZ4. Else ZSTD.
