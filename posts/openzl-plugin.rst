@@ -136,7 +136,7 @@ The ``OpenZLProfile`` enum contains the available profile pipelines that have be
   - CODEC - If set, use LZ4. Else ZSTD.
   - SHUFFLE - If set, use shuffle (outputs a stream for every byte of input data typesize)
   - DELTA - If set, apply a bytedelta (to all streams if necessary)
-  - SPLIT - If set, do not recombine the bytestreams
+  - SPLIT - If set, do not recombine the byte streams
   - CRC - If set, store a checksum during compression and check it during decompression
 
 The remaining bits may be used in the future.
@@ -146,6 +146,6 @@ In the future it would be great to further expand the OpenZL functionalities tha
 Conclusions
 -----------
 
-C-Blosc2's ability to support dynamically loaded plugins allows the library to grow in features without increasing the size and complexity of the library itself. For more information about user-defined plugins, refer to this `blog entry <https://www.blosc.org/posts/registering-plugins/>`_. We have put this to work to offer linkage with the rather complex OpenZL library with a relatviely rapid turnaround from design to prototype to full release in around a month. This is thanks to prior hard work by open source contributors from Blosc but naturally also OpenZL - many thanks to all!
+C-Blosc2's ability to support dynamically loaded plugins allows the library to grow in features without increasing the size and complexity of the library itself. For more information about user-defined plugins, refer to this `blog entry <https://www.blosc.org/posts/registering-plugins/>`_. We have put this to work to offer linkage with the rather complex OpenZL library with a relatively rapid turnaround from design to prototype to full release in around a month. This is thanks to prior hard work by open source contributors from Blosc but naturally also OpenZL - many thanks to all!
 
 If you find our work useful and valuable, we would be grateful if you could support us by `making a donation <https://www.blosc.org/pages/donate/>`_. Your contribution will help us continue to develop and improve Blosc packages, making them more accessible and useful for everyone.  Our team is committed to creating high-quality and efficient software, and your support will help us to achieve this goal.
