@@ -65,18 +65,20 @@ The header ``blosc2_openzl.h`` then makes the ``info`` and ``encoder/decoder`` f
 
 
 PEP 427 and wheel structure
----------------------------
+----------------------------
 In order for the plugin to dynamically link to Blosc2, it has to be able to find the Blosc2 library at runtime. This has historically been quite finicky since different platforms and package managers may store Python packages (and the associated ``.so/.dylib/.dll`` library objects differently). Consequently, PEP 427 recommends distributing the Python wheels for packages which depend on compiled objects such as Python-Blosc2 in the following way ::
+
   blosc2
     ├── __init__.py
     ├── lib
-    |   ├── libblosc2.so
-    |   ├── cmake
-    |   └── pkgconfig
+    │   ├── libblosc2.so
+    │   ├── cmake
+    │   └── pkgconfig
     └── include
         └── blosc2.h
 
-Finding the necessary ``libblosc2.so`` object from the top-level ``CMakeLists.txt`` file for the plugin is then as easy as ::
+Finding the necessary ``libblosc2.so`` object from the top-level ``CMakeLists.txt`` file for the plugin is then as easy as::
+
   # Find blosc2 package location using Python
   execute_process(
       COMMAND "${Python_EXECUTABLE}" -c "import blosc2, pathlib; print(pathlib.Path(blosc2.__file__).parent)"
@@ -85,7 +87,7 @@ Finding the necessary ``libblosc2.so`` object from the top-level ``CMakeLists.tx
   set(BLOSC2_INCLUDE_DIR "${BLOSC2_PACKAGE_DIR}/include")
   set(BLOSC2_LIB_DIR "${BLOSC2_PACKAGE_DIR}/lib")
 
-After building the plugin backend in ``src/CMakelists.txt`` one simply links the plugin to the backend (in this case ``openzl``) and installs like so ::
+After building the plugin backend in ``src/CMakelists.txt`` one simply links the plugin to the backend (in this case ``openzl``) and installs like so::
 
   add_library(blosc2_openzl SHARED blosc2_openzl.c)
   target_include_directories(blosc2_openzl PUBLIC ${BLOSC2_INCLUDE_DIR})
@@ -99,20 +101,20 @@ After building the plugin backend in ``src/CMakelists.txt`` one simply links the
 Note that it is not necessary to link ``blosc2_openzl`` and ``blosc2`` in ``target_link_libraries`` as the former depends only on macros and structs defined in header files - and not functions. This makes the ``libblosc2_openzl.so`` object especially light and robust, as blosc2 is not registered as an explicit dependency. In fact on Linux, even if the ``blosc2_openzl.c`` were to include blosc2 functions, it is still not necessary to perform such linking!
 
 Following PEP 427 allows one to add an additional safeguard to check if the plugin fails to find blosc2 by adding the RUNTIME_PATH property to the installed object ::
+
     set_target_properties(blosc2_openzl PROPERTIES
         INSTALL_RPATH "$ORIGIN/../blosc2/lib"
     )
 
 It also allows one to easily find the plugin ``.so`` object when calling via python - in the ``blosc2_openzl/__init__.py`` file one can find the library path as easily as ``os.path.abspath(Path(__file__).parent / libname)`` where ``libname`` is the desired ``.so/.dylib/.dll`` object (depending on platform). All these benefits have led us to update the wheel structure for ``python-blosc2`` in the latest 4.0 release.
 
-
 Using OpenZL from Python
 ------------------------
-Installing is then as simple as ::
+Installing is then as simple as::
 
   pip install blosc2_openzl
 
-One can also download the project and use the ``cmake`` and ``cmake --build`` commands to compile C-level tests or examples. But let's get compressing with ``python`` straight away ::
+One can also download the project and use the ``cmake`` and ``cmake --build`` commands to compile C-level tests or examples. But let's get compressing with ``python`` straight away::
   
   import blosc2
   import numpy as np
