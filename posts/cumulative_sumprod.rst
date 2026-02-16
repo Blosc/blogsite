@@ -19,7 +19,7 @@ This has a couple of consequences. One is that memory consumption may be rather 
 The second consequence, for chunked array libraries, is that the order in which one loads chunks and calculates the result matters. Consider the following diagram, where we have a 1D array of three elements. To calculate the final sum, we may load the chunks in any order and do not require access to any previous value except the running total - loading the first, third and finally second chunks, we obtain the correct sum of 4. However, for the cumulative sum, each element of the resutl depends on the previous element (and from there the sum of all prior elements of the array). Consequently, we must ensure we load the chunks according to their order in memory - if not, we will end up an incorrect final result - a minimal criterion is that the final element of the cumulative sum should be the same as the sum, which is not the case here!
 
 .. image:: /images/cumulative_sumprod/ordermatters.png 
-    :width: 100%                                        
+    :width: 50%
     :align: center      
 
 Consequences for numerical precision
@@ -27,7 +27,7 @@ Consequences for numerical precision
 When calculating reductions, numerical precision is a common hiccup. For products, one can quickly over flow the data type - the product of ``arange(1, 14)`` already overflows the maximum value of ``int32``. For sums, rounding errors incurred due to adding elements of a small size to the running total of a large size can quickly become significant. For this reason, Numpy will try to use pairwise summation to calculate ``sum(a)`` - this involves breaking the array into small parts, calculating the sum on each small part (i.e. simply successively adding elements to a running total), and then recursively summing pairs of sums until the final result is reached. Each recirsive sum operation thus involves the sum of two numbers of similar size, thus reducing the rounding errors incurred when summing disparate numbers. This algorithm also only has a minimal additional overhead to the naive approach and is eminently parallelisable. And it has a natural recursive implementation, something which computer scientists always find appealing even if only for aesthetic reasons!
 
 .. image:: /images/cumulative_sumprod/pairwise_sum.png 
-    :width: 100%                                        
+    :width: 50%
     :align: center      
 
 Unfortunately, such an approach is not possible for cumulative sums since, as discussed above, order matters! One possibility is to use Kahan summation (the `Wikipedia article is excellent <https://en.wikipedia.org/wiki/Kahan_summation_algorithm>`_), which does have additional costs (both in terms of FLOPS and memory consumption) although these are not prohibitive. One essentially keeps track of the rounding errors incurred with an auxiliary running total and uses this to correct the sum:
@@ -52,7 +52,7 @@ Experiments
 We performed some experiments comparing the new ``blosc2.cumulative_sum`` function to Numpy's version for some large arrays of (of size ``(N, N, N)`` for various values of ``N``). Since the working set is double the size of the input array (input + output), we expect to see significant benefits from Blosc2 compression and exploitation of caching. Indeed, once the working set size starts to approach the available RAM (32 GB), NumPy begins to slow down rapidly and when the working set exceeds memory and swap must be used NumPy becomes vastly slower.
 
 .. image:: /images/cumulative_sumprod/cumsumbench.png 
-    :width: 100%                                        
+    :width: 50%
     :align: center      
 
 The plot shows the average computation time for ``cumulative_sum`` over the three different axes of the input array. The benchmark code may be found `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/cumsum_bench.py>`_
