@@ -26,7 +26,7 @@ Consequences for numerical precision
 ------------------------------------
 When calculating reductions, numerical precision is a common hiccup. For products, one can quickly over flow the data type - the product of ``arange(1, 14)`` already overflows the maximum value of ``int32``. For sums, rounding errors incurred due to adding elements of a small size to the running total of a large size can quickly become significant. For this reason, Numpy will try to use pairwise summation to calculate ``sum(a)`` - this involves breaking the array into small parts, calculating the sum on each small part (i.e. simply successively adding elements to a running total), and then recursively summing pairs of sums until the final result is reached. Each recirsive sum operation thus involves the sum of two numbers of similar size, thus reducing the rounding errors incurred when summing disparate numbers. This algorithm also only has a minimal additional overhead to the naive approach and is eminently parallelisable. And it has a natural recursive implementation, something which computer scientists always find appealing even if only for aesthetic reasons!
 
-.. image:: /images/cumulative_sumprod/pairwise_summation.png 
+.. image:: /images/cumulative_sumprod/pairwise_sum.png 
     :width: 100%                                        
     :align: center      
 
