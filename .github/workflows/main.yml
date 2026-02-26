@@ -64,7 +64,7 @@ jobs:
     - name: Check out Python-Blosc2
       run: git clone --recurse-submodules https://github.com/Blosc/python-blosc2.git
     - name: Install Python-Blosc2
-      run: uv pip install --group doc $(pwd)/python-blosc2
+      run: cd python-blosc2 && pip install --group doc $(pwd)/python-blosc2 && cd ..
       shell: bash -l {0}
     - name: Build Python-Blosc2 docs
       # TODO: Fix warnings in the build and restore `-W` parameter
