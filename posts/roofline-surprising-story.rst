@@ -10,6 +10,10 @@
 
 Can a library designed for computing with compressed data ever hope to outperform highly optimized numerical engines like NumPy and Numexpr? The answer is complex, and it hinges on the "memory wall" — a phenomenon which occurs when system memory limitations start to drag on CPU. This post uses Roofline analysis to explore this very question, dissecting the performance of Blosc2 and revealing the surprising scenarios where it can gain a competitive edge.
 
+.. note::
+
+   **Update on 2026-02-06:** We have published a follow-up post, `Python-Blosc2 4.0: Unleashing Compute Speed with miniexpr <https://ironarray.io/blog/miniexpr-powered-blosc2>`_, which revisits this topic. This new post explains how the integration of miniexpr into Blosc2's compute engine has significantly improved performance—especially for in-memory operations—updating the conclusions drawn in this original analysis. We highly recommend reading the new post for the latest insights.
+
 TL;DR
 -----
 
