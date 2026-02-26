@@ -8,7 +8,7 @@
 .. description:
 .. type: text
 
-As mentioned in previous blog posts (see `this blog <https://ironarray.io/blog/array-api>`_) the maintainers of ``python-blosc2`` are going all-in on Array API integration. This means adding new functions to bring the library up to the standard. Of course integrating a given function may be more or less difficult for each library which aspires to compatibility, depending on legacy code, design principles, and the overarching philosophy of the package. Since ``python-blosc2`` uses chunked arrays, handling reductions and mapping between local chunk- and global array-indexing can be tricky.
+As mentioned in previous blog posts (see `this blog <https://ironarray.io/blog/array-api>`_) the maintainers of ``python-blosc2`` are going all-in on Array API integration. This means adding new functions to bring the library up to the standard. Of course, integrating a given function may be more or less difficult for a given library which aspires to compatibility, depending on legacy code, design principles, and the overarching philosophy of the package. Since ``python-blosc2`` uses chunked arrays, handling reductions and mapping between local chunk- and global array-indexing can be tricky.
 
 Cumulative reductions
 ---------------------
@@ -16,7 +16,7 @@ Consider an array ``a`` of shape ``(1000, 2000, 3000)`` and data type ``float64`
 
 This has a couple of consequences. One is that memory consumption may be rather important: the array ``a`` will occupy ``math.prod((1000, 2000, 3000))*8/(1024**3) = 44.7GB``, but its sum along the first axis only ``.0447GB``. Thus we can easily store the final result in memory. Not so for the result of ``cumulative_sum`` which also occupies ``44.7GB``!
 
-The second consequence, for chunked array libraries, is that the order in which one loads chunks and calculates the result matters. Consider the following diagram, where we have a 1D array of three elements. To calculate the final sum, we may load the chunks in any order and do not require access to any previous value except the running total - loading the first, third and finally second chunks, we obtain the correct sum of 4. However, for the cumulative sum, each element of the resutl depends on the previous element (and from there the sum of all prior elements of the array). Consequently, we must ensure we load the chunks according to their order in memory - if not, we will end up an incorrect final result - a minimal criterion is that the final element of the cumulative sum should be the same as the sum, which is not the case here!
+The second consequence, for chunked array libraries, is that the order in which one loads chunks and calculates the result matters. Consider the following diagram, where we have a 1D array of three elements. To calculate the final sum, we may load the chunks in any order and do not require access to any previous value except the running total - loading the first, third and finally second chunks, we obtain the correct sum of 4. However, for the cumulative sum, each element of the result depends on the previous element (and from there the sum of all prior elements of the array). Consequently, we must ensure we load the chunks according to their order in memory - if not, we will end up with an incorrect final result. A minimal criterion is that the final element of the cumulative sum should be the same as the sum, which is not the case here!
 
 .. image:: /images/cumulative_sumprod/ordermatters.png 
     :width: 50%
@@ -24,7 +24,7 @@ The second consequence, for chunked array libraries, is that the order in which 
 
 Consequences for numerical precision
 ------------------------------------
-When calculating reductions, numerical precision is a common hiccup. For products, one can quickly over flow the data type - the product of ``arange(1, 14)`` already overflows the maximum value of ``int32``. For sums, rounding errors incurred due to adding elements of a small size to the running total of a large size can quickly become significant. For this reason, Numpy will try to use pairwise summation to calculate ``sum(a)`` - this involves breaking the array into small parts, calculating the sum on each small part (i.e. simply successively adding elements to a running total), and then recursively summing pairs of sums until the final result is reached. Each recirsive sum operation thus involves the sum of two numbers of similar size, thus reducing the rounding errors incurred when summing disparate numbers. This algorithm also only has a minimal additional overhead to the naive approach and is eminently parallelisable. And it has a natural recursive implementation, something which computer scientists always find appealing even if only for aesthetic reasons!
+When calculating reductions, numerical precision is a common hiccup. For products, one can quickly overflow the data type - the product of ``arange(1, 14)`` already overflows the maximum value of ``int32``. For sums, rounding errors incurred due to adding elements of a small size to the running total of a large size can quickly become significant. For this reason, Numpy will try to use pairwise summation to calculate ``sum(a)`` - this involves breaking the array into small parts, calculating the sum on each small part (i.e. simply successively adding elements to a running total), and then recursively summing pairs of sums until the final result is reached. Each recursive sum operation thus involves the sum of two numbers of similar size, thus reducing the rounding errors incurred when summing disparate numbers. This algorithm also only has a minimal additional overhead compared to the naive approach and is eminently parallelisable. And it has a natural recursive implementation, something which computer scientists always find appealing even if only for aesthetic reasons!
 
 .. image:: /images/cumulative_sumprod/pairwise_sum.png 
     :width: 50%
@@ -45,7 +45,7 @@ Unfortunately, such an approach is not possible for cumulative sums since, as di
 
 In implementation, we calculate the cumulative sum on a decompressed chunk in order and then carry forward the last element of the cumulative sum (i.e. the sum of the whole chunk) to the next chunk, incrementing the result of the cumulative sum by this carried-over value to give the *global* cumulative sum. Thus, we can use Kahan summation between the small(er) values of the local chunk cumulative sum and the large(r) carried-forward running total to try and conserve precision.
 
-Unfortunately, we still observe discrepancies with respect to the Numpy implementation (which sums element-by-element essentially) of cumulative sum - but this also differs from the results of ``np.sum`` due to the latter's use of pairwise summation! Finite arithmetic imposes an insuperable barrier: if you use three different algorithms, one cannot guarantee agreement in every possible case. Since the Kahan sum approach has a slight overhead, we decided to junk it, as it did not improve precision sufficiently to justify its use.
+Unfortunately, we still observe discrepancies with respect to the Numpy implementation (which sums element-by-element essentially) of cumulative sum - but this also differs from the results of ``np.sum`` due to the latter's use of pairwise summation! Finite arithmetic imposes an insuperable barrier: three different algorithms cannot guarantee agreement in every possible case. Since the Kahan sum approach has a slight overhead, we decided to junk it, as it did not improve precision sufficiently to justify its use.
 
 Experiments
 -----------
@@ -55,7 +55,7 @@ We performed some experiments comparing the new ``blosc2.cumulative_sum`` functi
     :width: 50%
     :align: center      
 
-The plot shows the average computation time for ``cumulative_sum`` over the three different axes of the input array. The benchmark code may be found `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/cumsum_bench.py>`_
+The plot shows the average computation time for ``cumulative_sum`` over the three different axes of the input array. The benchmark code may be found `here <https://github.com/Blosc/python-blosc2/blob/main/bench/ndarray/cumsum_bench.py>`_.
 
 Conclusions
 -----------
