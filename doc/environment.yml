@@ -12,7 +12,7 @@ dependencies:
 
 # Sphinx should be >= 6.2 and < 7.2 (because of breathe)
   - sphinx>=6.2,<7.2
-  - sphinx_paramlinks
+  - sphinx-paramlinks
   - pydata-sphinx-theme
   - doxygen
   - breathe>=4.35.0
