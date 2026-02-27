@@ -9,8 +9,6 @@ dependencies:
   - cython
   - msgpack-python
   - httpx
-
-# Sphinx should be >= 6.2 and < 7.2 (because of breathe)
   - sphinx
   - pydata-sphinx-theme
   - doxygen
