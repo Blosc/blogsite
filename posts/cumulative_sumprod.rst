@@ -8,7 +8,7 @@
 .. description:
 .. type: text
 
-As mentioned in previous blog posts (see `this blog <https://ironarray.io/blog/array-api>`_) the maintainers of ``python-blosc2`` are going all-in on Array API integration. This means adding new functions to bring the library up to the standard. Of course, integrating a given function may be more or less difficult for a given library which aspires to compatibility, depending on legacy code, design principles, and the overarching philosophy of the package. Since ``python-blosc2`` uses chunked arrays, handling reductions and mapping between local chunk- and global array-indexing can be tricky.
+As mentioned in previous blog posts (see `this blog <https://ironarray.io/blog/array-api>`_) the maintainers of ``python-blosc2`` are going all-in on Array API integration. This means adding new functions to bring the library up to the standard. Of course, integrating a given function may be more or less difficult for a given library which aspires to compatibility, depending on legacy code, design principles, and the overarching philosophy of the package. Since ``python-blosc2`` uses chunked arrays, handling reductions and mapping between local chunk- and global array-indexing can be tricky. We had some help from Yang Kang Chua at UConn with this functionality - many thanks to him!
 
 Cumulative reductions
 ---------------------
