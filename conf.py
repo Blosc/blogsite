@@ -29,6 +29,7 @@ SITE_URL = "https://blosc.org/"
 BLOG_EMAIL = "blosc@blosc.org"
 BLOG_DESCRIPTION = "Blosc, an extremely fast, multi-threaded, meta-compressor library"  # (translatable)
 
+
 # Nikola is multilingual!
 #
 # Currently supported languages are:
