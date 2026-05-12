@@ -71,6 +71,22 @@ CTable has two ways to insert data: ``append()`` adds one row at a time and goes
 
 It is tempting to filter a CTable step by step — first narrow by one condition, then filter the result by another. But each ``where()`` call creates a new view with its own mask computation. A single ``where()`` with all conditions joined by ``&`` does the same work in one pass and is **4.4x faster** than five chained calls returning the same final result.
 
+**Efficient Indexing**
+
+Indexes can speed up queries by orders of magnitude.  The embedded indexing engine stores data in compressed form, allowing for large savings in memory and disk. For example, a FULL index on a 1 *billion* rows with random values takes around 5.8 GB on disk, while an equivalent DuckDB index takes around 41 GB. Typically, queries that would take seconds can be reduced to milliseconds.
+
+.. image:: /images/new-ctable-intro/indexing_vs_duckdb_linux_amd_7800x3d_build_storage.png
+   :align: center
+   :alt: Indexing performance comparison between CTable and DuckDB
+
+.. image:: /images/new-ctable-intro/indexing_vs_duckdb_linux_amd_7800x3d_lookup.png
+   :align: center
+   :alt: Lookup performance comparison between CTable and DuckDB
+
+.. image:: /images/new-ctable-intro/indexing_vs_duckdb_memory.png
+   :align: center
+   :alt: Memory usage comparison between CTable and DuckDB
+
 **Schema validation has near-zero cost at scale**
 
 Every CTable has a typed schema with optional constraints (ranges, string lengths, etc.). When inserting data with ``extend()``, these constraints are checked via a vectorized NumPy path rather than row by row. At 1M rows with a NumPy structured array the validation overhead is essentially **1.00x —indistinguishable from skipping validation entirely**. Even with Python list input it only adds 1.31x. You get correctness guarantees without paying for them at scale.
