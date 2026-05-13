@@ -59,13 +59,13 @@ How you feed data into a CTable matters a lot. Loading 1M rows from a Python lis
 
 Filtering 1M rows with a range query (``id`` between 250k and 750k, so 50% of the table) takes around 13 ms in CTable vs 31 ms in pandas — **2.4x faster**. On top of that, the CTable occupies 20 MB compressed versus 31 MB for the equivalent pandas DataFrame, a **1.6x reduction in memory** essentially for free thanks to Blosc2's compression pipeline.
 
-**where() is nearly free regardless of selectivity**
-
-One property of the lazy mask approach is that ``where()`` costs roughly the same whether the result contains 10 rows or 999,990 rows out of 1M. In practice the time stays between 12 ms and 18 ms across all selectivity levels. You are not paying to materialise the matching rows — you are only computing a mask. The data is only read when you actually access it.
-
 **extend() vs append() — always batch if you can**
 
 CTable has two ways to insert data: ``append()`` adds one row at a time and goes through a full Pydantic validation cycle per row; ``extend()`` takes a batch and validates it in one vectorized NumPy pass. At 100k rows the difference is **2000x in favour of ``extend()``**. Even at 10k rows it is already 700x. The message is simple: if you have more than a handful of rows to insert, always batch them into a single ``extend()`` call.
+
+**where() is nearly free regardless of selectivity**
+
+One property of the lazy mask approach is that ``where()`` costs roughly the same whether the result contains 10 rows or 999,990 rows out of 1M. In practice the time stays between 12 ms and 18 ms across all selectivity levels. You are not paying to materialise the matching rows — you are only computing a mask. The data is only read when you actually access it.
 
 **Combining filters is 4x faster than chaining them**
 
