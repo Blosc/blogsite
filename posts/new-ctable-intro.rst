@@ -71,6 +71,10 @@ CTable has two ways to insert data: ``append()`` adds one row at a time and goes
 
 It is tempting to filter a CTable step by step — first narrow by one condition, then filter the result by another. But each ``where()`` call creates a new view with its own mask computation. A single ``where()`` with all conditions joined by ``&`` does the same work in one pass and is **4.4x faster** than five chained calls returning the same final result.
 
+.. image:: /images/new-ctable-intro/where_single_vs_chained.png
+   :align: center
+   :alt: Single combined where() vs three chained where() calls across selectivity levels
+
 **Memory footprint depends on your data**
 
 CTable compresses each column independently with Blosc2, so how much memory you save depends on how much structure your data has. With highly repetitive data — sequential integer IDs, a handful of distinct float values, constant booleans — a 100-million-row table fits in under 4 MB, versus over 1.6 GB for the equivalent pandas DataFrame. With fully random data the gain is more modest (around 1.6×), since high-entropy values leave little for the compressor to exploit. Real-world datasets typically land somewhere in between, but CTable is consistently more memory-efficient than pandas regardless of data entropy.
