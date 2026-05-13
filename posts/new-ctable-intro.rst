@@ -1,7 +1,7 @@
 .. title: Introducing CTable: a Blosc2-based columnar table
 .. author: Jorge Albiol, Francesc Alted
 .. slug: ctable-blosc2-columnar-table
-.. date: 2026-05-06 9:00:00 UTC
+.. date: 2026-05-13 9:37:04 UTC
 .. tags: ctable columnar table compression
 .. category: posts
 .. link:
