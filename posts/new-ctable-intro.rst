@@ -12,7 +12,12 @@ Working with large structured datasets in Python often means choosing between sp
 
 As compression is paramount in Blosc2 ecosystem, we have chosen a columnar approach because, by placing together data that is similar (values in the same column), it allows for best compression ratios.  Column storage also allows for better data management for some cases, like adding, deleting, accessing or replacing entire columns; admittedly, it it also has its own drawbacks, like more costly access along the row axis. Nevertheless, columnar storage is quite common in modern libraries.
 
-Another important piece for CTable is to leverage the extremely efficient compute engine that can operate on compressed data without dropping too much performance (and in some cases, even improving it).  That puts the basis for allowing great analytics machinery on top of CTable object, without the need to decompress entire columns (just small excerpts of them, fitting in CPU caches, is enough).
+Another important piece for CTable is to leverage the extremely efficient compute engine that can operate on compressed data without dropping too much performance (and in some cases, even improving it).  That puts the basis for allowing great analytics machinery on top of the CTable object, without the need to decompress entire columns (just small excerpts of them, fitting in CPU caches, is enough).
+
+.. image:: /images/new-ctable-intro/ctable_compressed_columns_selective_queries.png
+   :align: center
+   :width: 50%
+   :alt: CTable: compressed columns and selective queries
 
 Last but not least, the CTable object inherits the independence of media storage of underlying structures (NDArray, ObjectArray, ListArray...) so that data can be stored and used straight from memory, disk or the network (coming soon).  That means that you can open a data file containing a big CTable and immediately start doing analytics with it without the need to load/parse everything in-memory.  Of course, for maximum speed, you may also load everything in-memory too; but as the format is the same, loading/saving is just a matter of copying data from one media to another, without the need for parsing or conversion.
 
