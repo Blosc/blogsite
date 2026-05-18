@@ -1,7 +1,7 @@
 .. title: Introducing CTable: a Blosc2-based columnar table
 .. author: Jorge Albiol, Francesc Alted
 .. slug: ctable-blosc2-columnar-table
-.. date: 2026-05-06 9:00:00 UTC
+.. date: 2026-05-13 9:37:04 UTC
 .. tags: ctable columnar table compression
 .. category: posts
 .. link:
@@ -12,7 +12,12 @@ Working with large structured datasets in Python often means choosing between sp
 
 As compression is paramount in Blosc2 ecosystem, we have chosen a columnar approach because, by placing together data that is similar (values in the same column), it allows for best compression ratios.  Column storage also allows for better data management for some cases, like adding, deleting, accessing or replacing entire columns; admittedly, it it also has its own drawbacks, like more costly access along the row axis. Nevertheless, columnar storage is quite common in modern libraries.
 
-Another important piece for CTable is to leverage the extremely efficient compute engine that can operate on compressed data without dropping too much performance (and in some cases, even improving it).  That puts the basis for allowing great analytics machinery on top of CTable object, without the need to decompress entire columns (just small excerpts of them, fitting in CPU caches, is enough).
+Another important piece for CTable is to leverage the extremely efficient compute engine that can operate on compressed data without dropping too much performance (and in some cases, even improving it).  That puts the basis for allowing great analytics machinery on top of the CTable object, without the need to decompress entire columns (just small excerpts of them, fitting in CPU caches, is enough).
+
+.. image:: /images/new-ctable-intro/ctable_compressed_columns_selective_queries.png
+   :align: center
+   :width: 50%
+   :alt: CTable: compressed columns and selective queries
 
 Last but not least, the CTable object inherits the independence of media storage of underlying structures (NDArray, ObjectArray, ListArray...) so that data can be stored and used straight from memory, disk or the network (coming soon).  That means that you can open a data file containing a big CTable and immediately start doing analytics with it without the need to load/parse everything in-memory.  Of course, for maximum speed, you may also load everything in-memory too; but as the format is the same, loading/saving is just a matter of copying data from one media to another, without the need for parsing or conversion.
 
@@ -59,17 +64,45 @@ How you feed data into a CTable matters a lot. Loading 1M rows from a Python lis
 
 Filtering 1M rows with a range query (``id`` between 250k and 750k, so 50% of the table) takes around 13 ms in CTable vs 31 ms in pandas — **2.4x faster**. On top of that, the CTable occupies 20 MB compressed versus 31 MB for the equivalent pandas DataFrame, a **1.6x reduction in memory** essentially for free thanks to Blosc2's compression pipeline.
 
-**``where()`` is nearly free regardless of selectivity**
-
-One property of the lazy mask approach is that ``where()`` costs roughly the same whether the result contains 10 rows or 999,990 rows out of 1M. In practice the time stays between 12 ms and 18 ms across all selectivity levels. You are not paying to materialise the matching rows — you are only computing a mask. The data is only read when you actually access it.
-
-**``extend()`` vs ``append()`` — always batch if you can**
+**extend() vs append() — always batch if you can**
 
 CTable has two ways to insert data: ``append()`` adds one row at a time and goes through a full Pydantic validation cycle per row; ``extend()`` takes a batch and validates it in one vectorized NumPy pass. At 100k rows the difference is **2000x in favour of ``extend()``**. Even at 10k rows it is already 700x. The message is simple: if you have more than a handful of rows to insert, always batch them into a single ``extend()`` call.
+
+**where() is nearly free regardless of selectivity**
+
+One property of the lazy mask approach is that ``where()`` costs roughly the same whether the result contains 10 rows or 999,990 rows out of 1M. In practice the time stays between 12 ms and 18 ms across all selectivity levels. You are not paying to materialise the matching rows — you are only computing a mask. The data is only read when you actually access it.
 
 **Combining filters is 4x faster than chaining them**
 
 It is tempting to filter a CTable step by step — first narrow by one condition, then filter the result by another. But each ``where()`` call creates a new view with its own mask computation. A single ``where()`` with all conditions joined by ``&`` does the same work in one pass and is **4.4x faster** than five chained calls returning the same final result.
+
+.. image:: /images/new-ctable-intro/where_single_vs_chained.png
+   :align: center
+   :alt: Single combined where() vs three chained where() calls across selectivity levels
+
+**Memory footprint depends on your data**
+
+CTable compresses each column independently with Blosc2, so how much memory you save depends on how much structure your data has. With highly repetitive data — sequential integer IDs, a handful of distinct float values, constant booleans — a 100-million-row table fits in under 4 MB, versus over 1.6 GB for the equivalent pandas DataFrame. With fully random data the gain is more modest (around 1.6×), since high-entropy values leave little for the compressor to exploit. Real-world datasets typically land somewhere in between, but CTable is consistently more memory-efficient than pandas regardless of data entropy.
+
+.. image:: /images/new-ctable-intro/memory_footprint.png
+   :align: center
+   :alt: Memory footprint comparison between pandas and CTable across data entropy levels
+
+**Efficient Indexing**
+
+Indexes can speed up queries by orders of magnitude.  The embedded indexing engine stores data in compressed form, allowing for large savings in memory and disk. For example, a FULL index on a 1 *billion* rows with random values takes around 5.8 GB on disk, while an equivalent DuckDB index takes around 41 GB. Typically, queries that would take seconds can be reduced to milliseconds.
+
+.. image:: /images/new-ctable-intro/indexing_vs_duckdb_linux_amd_7800x3d_build_storage.png
+   :align: center
+   :alt: Indexing performance comparison between CTable and DuckDB
+
+.. image:: /images/new-ctable-intro/indexing_vs_duckdb_linux_amd_7800x3d_lookup.png
+   :align: center
+   :alt: Lookup performance comparison between CTable and DuckDB
+
+.. image:: /images/new-ctable-intro/indexing_vs_duckdb_memory.png
+   :align: center
+   :alt: Memory usage comparison between CTable and DuckDB
 
 **Schema validation has near-zero cost at scale**
 
