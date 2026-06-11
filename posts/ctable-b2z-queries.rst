@@ -119,12 +119,24 @@ What do we think these numbers support — and not support?
 
 Sixteen years after asking whether compression could be faster than ``memcpy``, the question has scaled up but kept its shape: the fastest byte is still the one you never touch. Blocks sized for caches made decompression cheap; the compute engine made math over blocks cheap; and CTable's block-level indexes now make *not touching* most of a table cheap, too. The fourth floor stands on the first.
 
+Reproduce it yourself
+---------------------
+
+Everything in this post lives in `bench/chicago-taxi <https://github.com/Blosc/python-blosc2/tree/main/bench/chicago-taxi>`_ in the python-blosc2 repository: the `notebook <https://github.com/Blosc/python-blosc2/blob/main/bench/chicago-taxi/compare-query-methods.ipynb>`_, the driver, the five per-engine query scripts, and a README with the details. The notebook downloads the dataset on first run and builds the ``.b2z`` from it, so the whole thing is two commands away:
+
+.. code-block:: console
+
+    pip install "blosc2>=4.4.3" pyarrow duckdb polars pandas matplotlib jupyter
+    jupyter lab compare-query-methods.ipynb   # then: Run All
+
+One practical tip if you chase the cold-cache numbers: flushing the OS file cache is necessary but not sufficient. After a flush and a few idle seconds, the *first* disk read also pays the drive's idle-state exit latency (tens of ms on power-managed NVMe), and it lands on whichever process touches the disk first — we learned this the hard way while preparing this post. The driver's ``--purge`` flag handles both the flush and the disk wake-up for you; the README explains the manual route.
+
 More info
 ---------
 
 - `Introducing CTable <https://www.blosc.org/posts/ctable-blosc2-columnar-table/>`_ — the design and feature tour
 - `Getting started with CTable <https://blosc.org/python-blosc2/getting_started/tutorials/13.ctable-basics.html>`_ and `Indexing CTables <https://blosc.org/python-blosc2/getting_started/tutorials/15.indexing-ctables.html>`_
-- `The benchmark notebook <https://github.com/Blosc/python-blosc2/blob/main/bench/chicago-taxi/compare-query-methods.ipynb>`_ — fully reproducible, dataset download included
+- `The benchmark directory <https://github.com/Blosc/python-blosc2/tree/main/bench/chicago-taxi>`_ — notebook, driver, per-engine scripts and README
 - `CTable API reference <https://blosc.org/python-blosc2/reference/ctable.html>`_
 
 Enjoy data!
