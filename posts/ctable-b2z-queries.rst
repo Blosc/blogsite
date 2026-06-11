@@ -71,11 +71,11 @@ The cold run is the scenario we care most about: you have a large file on disk, 
 .. image:: /images/ctable-b2z-queries/compare-query-time-cold.png
    :align: center
    :width: 75%
-   :alt: Cold query times: blosc2 0.056s, duckdb 0.107s, arrow 0.137s, polars 0.298s, pandas 0.534s
+   :alt: Cold query times: blosc2 0.057s, duckdb 0.106s, arrow 0.142s, polars 0.302s, pandas 0.539s
 
-CTable answers in **0.056 s** — about **1.9x faster than DuckDB** (0.107 s), 2.4x faster than PyArrow (0.137 s), 5x faster than polars (0.298 s) and 9.5x faster than pandas (0.534 s).
+CTable answers in **0.057 s** — about **1.9x faster than DuckDB** (0.106 s), 2.5x faster than PyArrow, 5.3x faster than polars and 9.4x faster than pandas.
 
-Let us be clear about why, because it is not magic and it is not a faster CPU loop. On a cold cache, the dominant cost is bytes coming off the disk. The SUMMARY indexes let CTable prune roughly **89% of the blocks** for this query: those blocks are neither read nor decompressed. Pruning pays twice — less I/O *and* less CPU — and on a first-touch query the I/O half is the whole ballgame.
+Let's be clear about why: it is not magic and it is not a faster CPU loop. On a cold cache, the dominant cost is bytes coming off the disk. The SUMMARY indexes let CTable prune roughly **89% of the blocks** for this query: those blocks are neither read nor decompressed. Pruning pays twice — less I/O *and* less CPU — and on a first-touch query the I/O half is the whole ballgame.
 
 Warm cache: a dead heat with a real database
 --------------------------------------------
@@ -85,18 +85,18 @@ Once the file is fully cached in RAM, I/O is nearly free and raw engine throughp
 .. image:: /images/ctable-b2z-queries/compare-query-time-warm.png
    :align: center
    :width: 75%
-   :alt: Warm query times: blosc2 0.031s and duckdb 0.034s in a dead heat, ahead of arrow, polars, pandas
+   :alt: Warm query times: blosc2 0.032s and duckdb 0.034s in a dead heat, ahead of arrow, polars, pandas
 
-CTable finishes in 0.031 s, DuckDB in 0.034 s — a **dead heat** (the two trade places within run-to-run noise), with both about 2.6x ahead of PyArrow, 7x ahead of polars, and 16x ahead of pandas. We find this result remarkable not because CTable "beats" anything here (it does not), but because of what is *absent*: there is no SQL engine in the Blosc2 process. A storage container holding the tie with a purpose-built database, purely on the strength of skipping work, tells us the layout is doing the heavy lifting.
+CTable finishes in 0.032 s, DuckDB in 0.034 s — a **dead heat** (the two trade places within run-to-run noise), with both about 2.8x ahead of PyArrow, 7.5x ahead of polars, and 16.7x ahead of pandas. We find this result remarkable not because CTable "beats" anything here (it does not), but because of what is *absent*: there is no SQL engine in the Blosc2 process. A storage container holding the tie with a purpose-built database, purely on the strength of skipping work, tells us the layout is doing the heavy lifting.
 
 Memory tells a similar story:
 
 .. image:: /images/ctable-b2z-queries/compare-query-mem-warm.png
    :align: center
    :width: 75%
-   :alt: Peak memory: duckdb ~60 MB, blosc2 ~85 MB, arrow ~210 MB, polars ~410 MB, pandas ~1.6 GB
+   :alt: Peak memory: duckdb ~61 MB, blosc2 ~83 MB, arrow ~232 MB, polars ~415 MB, pandas ~1.6 GB
 
-DuckDB (~60 MB) and CTable (~85 MB) are the two leanest by a wide margin — an order of magnitude below pandas (~1.6 GB), which materializes full columns before filtering. CTable never holds more than the blocks it could not prune, plus the 67 matching rows.
+DuckDB (~61 MB) and CTable (~83 MB) are the two leanest by a wide margin — an order of magnitude below pandas (~1.6 GB), which materializes full columns before filtering. CTable never holds more than the blocks it could not prune, plus the 67 matching rows.
 
 Why pruning wins: granularity
 -----------------------------
@@ -105,12 +105,12 @@ Parquet also carries min/max statistics — at **row-group** granularity, here ~
 
 The deeper point is architectural. A Blosc2 block is *the unit of decompression* — the same cache-sized block the compute engine streams. An index at that granularity skips exactly the work the query would otherwise do. An index at a coarser granularity than the I/O unit can only skip work in big, lucky lumps.
 
-And the honest caveat: this advantage rides on **selectivity**, not on any general superiority. ``tips > 100`` is rare enough that most 27 K-row blocks contain no match. A predicate that matches everywhere prunes nothing at any granularity, and on data sorted or clustered by the filter column, even Parquet's coarse row groups would start pruning effectively. Benchmarks are stories with a point of view; this one is about selective, first-touch queries.
+Caveat emptor: this advantage rides on **selectivity**, not on any general superiority. ``tips > 100`` is rare enough that most 27 K-row blocks contain no match. A predicate that matches everywhere prunes nothing at any granularity, and on data sorted or clustered by the filter column, even Parquet's coarse row groups would start pruning effectively.
 
-Seasoned conclusions
---------------------
+Conclusions
+-----------
 
-What do we think these numbers support — and not support?
+Several interesting takeaways emerge from this experiment:
 
 - **For selective cold queries on large tabular files, CTable/.b2z is genuinely fast** — the fastest of the five tools here, on a query and dataset it was not specially tuned for. If your workload looks like "open a big file, fetch a small subset, move on", the block-level indexing earns its 2% of disk many times over.
 - **Warm, it ties — it does not dethrone.** DuckDB remains an excellent engine, and on cached data it matches CTable while speaking full SQL with joins and aggregations that CTable does not attempt. If your problems are relational, use a relational engine.
@@ -128,8 +128,6 @@ Everything in this post lives in `bench/chicago-taxi <https://github.com/Blosc/p
 
     pip install "blosc2>=4.4.3" pyarrow duckdb polars pandas matplotlib jupyter
     jupyter lab compare-query-methods.ipynb   # then: Run All
-
-One practical tip if you chase the cold-cache numbers: flushing the OS file cache is necessary but not sufficient. After a flush and a few idle seconds, the *first* disk read also pays the drive's idle-state exit latency (tens of ms on power-managed NVMe), and it lands on whichever process touches the disk first — we learned this the hard way while preparing this post. The driver's ``--purge`` flag handles both the flush and the disk wake-up for you; the README explains the manual route.
 
 More info
 ---------
