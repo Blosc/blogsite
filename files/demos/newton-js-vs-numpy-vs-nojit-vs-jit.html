@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Newton fractal — blosc2's JIT, live in your browser</title>
+<!-- Pyodide v314 (Python 3.14) + PyPI blosc2 cp314 wheel. Alt: v0.29.4 + GitHub cp313 wheel. -->
+<script src="https://cdn.jsdelivr.net/pyodide/v314.0.0/full/pyodide.js"></script>
+<style>
+  :root{
+    --bg:#070b18; --panel:#0d1424; --ink:#e7ecf5; --muted:#8a97b0;
+    --line:#1e283c; --accent:#7dd3fc; --good:#34d399;
+  }
+  *{box-sizing:border-box}
+  body{
+    font:15px/1.55 system-ui,-apple-system,sans-serif; margin:0; color:var(--ink);
+    background:radial-gradient(1100px 560px at 72% -12%, #16264a 0%, transparent 60%), var(--bg);
+  }
+  main{max-width:760px; margin:0 auto; padding:2.75rem 1.25rem 4rem}
+  h1{font-size:1.65rem; font-weight:700; letter-spacing:-.015em; margin:0 0 .55rem}
+  h1 .accent{color:var(--accent)}
+  .lede{color:var(--muted); max-width:62ch; margin:0 0 1.75rem}
+  .controls{display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin:1.1rem 0}
+  button{
+    font:inherit; font-weight:600; padding:.5rem 1.15rem; border-radius:8px;
+    border:1px solid transparent; background:var(--accent); color:#04263a; cursor:pointer;
+  }
+  button.secondary{background:transparent; color:var(--ink); border-color:var(--line)}
+  button:disabled{cursor:default; opacity:.45}
+  .muted{color:var(--muted)}
+  canvas{max-width:100%; display:block; border:1px solid var(--line); border-radius:10px; background:#0b1020}
+  #summary{margin:.25rem 0 1.1rem}
+  .verdict{font-size:1.18rem; font-weight:650; margin-bottom:.65rem}
+  .verdict b{color:var(--good)}
+  .chips{display:flex; gap:.5rem; flex-wrap:wrap}
+  .chip{
+    font:13px ui-monospace,SFMono-Regular,monospace; padding:.3rem .65rem; border-radius:999px;
+    border:1px solid var(--line); background:var(--panel); color:var(--muted);
+  }
+  .chip.win{border-color:var(--good); color:var(--good)}
+  details{margin-top:1.75rem; border-top:1px solid var(--line); padding-top:1rem}
+  summary{cursor:pointer; color:var(--muted); font-weight:600}
+  pre{
+    background:#0b1020; color:#86efac; padding:.85rem; margin:.9rem 0 0; white-space:pre-wrap;
+    max-height:14rem; overflow:auto; border:1px solid var(--line); border-radius:8px;
+    font:12px/1.5 ui-monospace,SFMono-Regular,monospace;
+  }
+  #stats{color:#cbd5e1}
+</style>
+
+<main>
+  <h1>Newton fractal — <span class="accent">blosc2</span>'s JIT, live in your browser</h1>
+  <p class="lede">The same fractal, computed four ways: plain JavaScript, NumPy, and
+  <code>blosc2</code> with its JIT compiler off and on. Same math, same pixels — only the engine
+  changes. The Python ones run entirely in WebAssembly via Pyodide: nothing installed, no server.
+  Press Run and watch which one finishes first.</p>
+
+  <div class="controls">
+    <button id="run" disabled>Run demo</button>
+    <span id="status" class="muted">loading Pyodide…</span>
+  </div>
+
+  <section id="widget" hidden>
+    <div id="summary"></div>
+    <canvas id="canvas"></canvas>
+    <div class="controls">
+      <button id="play">Play</button>
+      <button id="record" class="secondary">Record WebM</button>
+      <span id="wstatus" class="muted"></span>
+    </div>
+  </section>
+
+  <details open>
+    <summary>Details &amp; timing log</summary>
+    <pre id="stats"></pre>
+    <pre id="log"></pre>
+  </details>
+</main>
+
+<script>
+const CFG = {
+  CANVAS_PADDING: 16, CANVAS_GAP: 18, HEADER_HEIGHT: 56, FOOTER_HEIGHT: 40,
+  // Playback time is proportional to real compute time: the slowest panel plays for
+  // TARGET_PLAYBACK_MS, the rest finish proportionally sooner (a 5x-faster panel visibly
+  // finishes ~5x earlier). Tiny MIN floor only so the fastest frames aren't 0 ms.
+  TARGET_PLAYBACK_MS: 5000, MIN_FRAME_MS: 4, MAX_FRAME_MS: 900,
+  TARGET_FPS: 30, HOLD_LAST_MS: 1200,
+};
+const $ = id => document.getElementById(id);
+const log = s => { $("log").textContent += s + "\n"; $("log").scrollTop = 1e9; };
+const sum = a => a.reduce((x, y) => x + y, 0);
+
+// Browsers don't expose the JS engine version directly; infer engine + browser from UA.
+function jsEngine() {
+  const ua = navigator.userAgent;
+  let m;
+  if ((m = ua.match(/Edg\/([\d.]+)/)))    return `V8 (Edge ${m[1]})`;
+  if ((m = ua.match(/OPR\/([\d.]+)/)))     return `V8 (Opera ${m[1]})`;
+  if ((m = ua.match(/Chrome\/([\d.]+)/)))  return `V8 (Chrome ${m[1]})`;
+  if ((m = ua.match(/Firefox\/([\d.]+)/))) return `SpiderMonkey (Firefox ${m[1]})`;
+  if ((m = ua.match(/Version\/([\d.]+).*\bSafari\b/))) return `JavaScriptCore (Safari ${m[1]})`;
+  return ua;
+}
+
+// Python side: numpy + blosc2 no-JIT/JIT. View is fixed; only the relaxation
+// parameter animates. Kernel is one statement per line (DSL parser) and imported
+// from a file so blosc2's DSL can read its source (inspect.getsource).
+// NOTE: no convergence flag — a var set in the loop and read post-loop makes the JIT
+// fall back. We always encode root + 0.9*iters/max_iter; slow/non-converged pixels
+// just come out dark.
+const PY = String.raw`
+import base64, json, time
+import numpy as np
+import blosc2
+
+WIDTH, HEIGHT = 452, 301  # ~2x the pixel area of 320x213, same aspect ratio
+DTYPE = np.float64
+ASPECT = HEIGHT / WIDTH
+NFRAMES = 24
+MAXITER = 48
+CX, CY, SPANX = 0.0, 0.0, 3.4
+R1Y = 0.8660254  # sqrt(3)/2 : imag part of the two complex cube roots of unity
+RELAX = [float(v) for v in np.linspace(1.0, 1.85, NFRAMES)]
+
+# Newton iteration for f(z)=z^3-1, packed result = root_index + 0.9*(iters/max_iter).
+@blosc2.dsl_kernel
+def newton_dsl(a, b, max_iter, relax):
+    za = a
+    zb = b
+    mif = float(max_iter)
+    it = mif
+    for k in range(max_iter):
+        a2 = za * za
+        b2 = zb * zb
+        fr = za * a2 - 3.0 * za * b2 - 1.0
+        fi = 3.0 * a2 * zb - zb * b2
+        dr = 3.0 * (a2 - b2)
+        di = 6.0 * za * zb
+        den = dr * dr + di * di + 0.000000000001
+        qr = relax * (fr * dr + fi * di) / den
+        qi = relax * (fi * dr - fr * di) / den
+        za = za - qr
+        zb = zb - qi
+        if qr * qr + qi * qi < 0.000001:
+            it = float(k)
+            break
+    d0 = (za - 1.0) * (za - 1.0) + zb * zb
+    d1 = (za + 0.5) * (za + 0.5) + (zb - 0.8660254) * (zb - 0.8660254)
+    d2 = (za + 0.5) * (za + 0.5) + (zb + 0.8660254) * (zb + 0.8660254)
+    root = 0.0
+    md = d0
+    if d1 < md:
+        md = d1
+        root = 1.0
+    if d2 < md:
+        md = d2
+        root = 2.0
+    return root + 0.9 * (it / mif)
+
+def newton_numpy(a, b, max_iter, relax):
+    za = a.copy(); zb = b.copy()
+    mif = float(max_iter)
+    it = np.full(a.shape, mif)
+    alive = np.ones(a.shape, dtype=bool)
+    for k in range(max_iter):
+        a2 = za * za; b2 = zb * zb
+        fr = za * a2 - 3.0 * za * b2 - 1.0; fi = 3.0 * a2 * zb - zb * b2
+        dr = 3.0 * (a2 - b2); di = 6.0 * za * zb; den = dr * dr + di * di + 1e-12
+        qr = relax * (fr * dr + fi * di) / den; qi = relax * (fi * dr - fr * di) / den
+        za = za - qr; zb = zb - qi
+        c = alive & ((qr * qr + qi * qi) < 1e-6); it[c] = k; alive &= ~c
+        if not alive.any():
+            break
+    d0 = (za - 1.0) ** 2 + zb ** 2
+    d1 = (za + 0.5) ** 2 + (zb - R1Y) ** 2
+    d2 = (za + 0.5) ** 2 + (zb + R1Y) ** 2
+    root = np.zeros(a.shape); md = d0.copy()
+    m = d1 < md; md = np.where(m, d1, md); root = np.where(m, 1.0, root)
+    m = d2 < md; root = np.where(m, 2.0, root)
+    return root + 0.9 * (it / mif)
+
+# Fixed view -> build the coordinate grids once.
+_x = np.linspace(CX - SPANX / 2, CX + SPANX / 2, WIDTH, dtype=DTYPE)
+_y = np.linspace(CY - SPANX * ASPECT / 2, CY + SPANX * ASPECT / 2, HEIGHT, dtype=DTYPE)
+A_NP, B_NP = np.meshgrid(_x, _y)
+_chunks = (min(100, HEIGHT), min(150, WIDTH))
+_blocks = (max(1, _chunks[0] // 4), max(1, _chunks[1] // 3))
+_cp = blosc2.CParams(codec=blosc2.Codec.LZ4, clevel=1)
+# _cp = blosc2.CParams(codec=blosc2.Codec.ZSTD, clevel=5)
+# _cp = blosc2.CParams()
+A_B2 = blosc2.asarray(A_NP, chunks=_chunks, blocks=_blocks, cparams=_cp)
+B_B2 = blosc2.asarray(B_NP, chunks=_chunks, blocks=_blocks, cparams=_cp)
+
+ROOT_COLORS = np.array([[230, 80, 80], [80, 200, 120], [90, 130, 240]], dtype=np.float64)
+
+def render_rgba(val):
+    root = np.clip(np.floor(val).astype(np.int32), 0, 2)
+    frac = (val - np.floor(val)) / 0.9       # iters/max_iter in [0,1]
+    # Per-frame histogram equalization of the shade: at high relax the whole plane
+    # converges slowly, so an absolute iters->shade map goes uniformly dark. Equalizing
+    # by rank keeps every frame's bright/dark balance (and root hues) consistent.
+    flat = frac.ravel()
+    rank = np.empty(flat.size, dtype=np.float64)
+    rank[flat.argsort()] = np.linspace(0.0, 1.0, flat.size)
+    shade = 0.30 + 0.70 * (1.0 - rank.reshape(frac.shape))   # floor so hue stays visible
+    rgb = (ROOT_COLORS[root] * shade[..., None]).astype(np.uint8)
+    rgba = np.empty((HEIGHT, WIDTH, 4), dtype=np.uint8)
+    rgba[..., :3] = rgb
+    rgba[..., 3] = 255
+    return rgba
+
+JIT_OK = True
+JIT_ERR = ""
+try:
+    blosc2.lazyudf(newton_dsl, (A_B2, B_B2, MAXITER, 1.2), dtype=DTYPE, cparams=_cp, jit=True)[:]
+except Exception as _e:
+    JIT_OK = False
+    JIT_ERR = str(_e)
+
+def compute_frame(i):
+    relax = RELAX[i]
+
+    t = time.perf_counter()
+    esc_numpy = newton_numpy(A_NP, B_NP, MAXITER, relax)
+    numpy_ms = max(1, int(round((time.perf_counter() - t) * 1000)))
+
+    t = time.perf_counter()
+    esc_nojit = blosc2.lazyudf(newton_dsl, (A_B2, B_B2, MAXITER, relax), dtype=DTYPE, cparams=_cp, jit=False)[:]
+    nojit_ms = max(1, int(round((time.perf_counter() - t) * 1000)))
+
+    t = time.perf_counter()
+    esc_jit = blosc2.lazyudf(newton_dsl, (A_B2, B_B2, MAXITER, relax), dtype=DTYPE, cparams=_cp, jit=True)[:]
+    jit_ms = max(1, int(round((time.perf_counter() - t) * 1000)))
+
+    out = {"i": i, "numpy_ms": numpy_ms, "nojit_ms": nojit_ms, "jit_ms": jit_ms, "raw": 0, "comp": 0}
+    for key, esc in (("numpy", esc_numpy), ("nojit", esc_nojit), ("jit", esc_jit)):
+        rgba = render_rgba(esc)
+        b2 = blosc2.asarray(rgba, cparams=_cp)   # use the same codec as the inputs
+        out[key + "_b64"] = base64.b64encode(rgba.tobytes()).decode("ascii")
+        out["raw"] += int(rgba.nbytes)
+        out["comp"] += max(1, int(round(b2.nbytes / b2.cratio)))
+    return json.dumps(out)
+`;
+
+// ---- JavaScript Newton: same kernel, same packing, same palette as Python ----
+const R1Y = 0.8660254;
+const ROOT_COLORS = [[230, 80, 80], [80, 200, 120], [90, 130, 240]];
+
+function newtonJS(cx, cy, spanX, maxIter, relax, W, H, aspect) {
+  const spanY = spanX * aspect;
+  const x0 = cx - spanX / 2, dx = spanX / (W - 1);
+  const y0 = cy - spanY / 2, dy = spanY / (H - 1);
+  const mif = maxIter;
+  const out = new Float64Array(W * H);
+  let idx = 0;
+  for (let row = 0; row < H; row++) {
+    const b = y0 + dy * row;
+    for (let col = 0; col < W; col++) {
+      const a = x0 + dx * col;
+      let za = a, zb = b, it = mif;
+      for (let k = 0; k < maxIter; k++) {
+        const a2 = za * za, b2 = zb * zb;
+        const fr = za * a2 - 3.0 * za * b2 - 1.0, fi = 3.0 * a2 * zb - zb * b2;
+        const dr = 3.0 * (a2 - b2), di = 6.0 * za * zb;
+        const den = dr * dr + di * di + 0.000000000001;
+        const qr = relax * (fr * dr + fi * di) / den, qi = relax * (fi * dr - fr * di) / den;
+        za -= qr; zb -= qi;
+        if (qr * qr + qi * qi < 0.000001) { it = k; break; }
+      }
+      const d0 = (za - 1.0) * (za - 1.0) + zb * zb;
+      const d1 = (za + 0.5) * (za + 0.5) + (zb - R1Y) * (zb - R1Y);
+      const d2 = (za + 0.5) * (za + 0.5) + (zb + R1Y) * (zb + R1Y);
+      let root = 0, md = d0;
+      if (d1 < md) { md = d1; root = 1; }
+      if (d2 < md) { root = 2; }
+      out[idx++] = root + 0.9 * (it / mif);
+    }
+  }
+  return out;
+}
+
+function renderRGBA_js(val, W, H) {
+  const N = val.length;
+  // Per-frame histogram equalization of the shade (mirrors render_rgba in Python):
+  // rank each pixel's iters/max_iter so every frame keeps a balanced bright/dark spread.
+  const frac = new Float64Array(N);
+  for (let i = 0; i < N; i++) { const v = val[i]; frac[i] = (v - Math.floor(v)) / 0.9; }
+  const order = Array.from({ length: N }, (_, i) => i).sort((p, q) => frac[p] - frac[q]);
+  const rank = new Float64Array(N);
+  for (let r = 0; r < N; r++) rank[order[r]] = N > 1 ? r / (N - 1) : 0;
+  const out = new Uint8ClampedArray(N * 4);
+  for (let i = 0; i < N; i++) {
+    const root = Math.min(2, Math.floor(val[i]));
+    const shade = 0.30 + 0.70 * (1 - rank[i]);
+    const c = ROOT_COLORS[root], o = i * 4;
+    out[o] = c[0] * shade; out[o + 1] = c[1] * shade; out[o + 2] = c[2] * shade; out[o + 3] = 255;
+  }
+  return out;
+}
+
+let py;
+(async () => {
+  try {
+    py = await loadPyodide();
+    $("status").textContent = "installing blosc2 from PyPI…";
+    await py.loadPackage("micropip");
+    await py.runPythonAsync(`import micropip; await micropip.install("blosc2>=4.5.1")`);
+    py.FS.writeFile("/newton.py", new TextEncoder().encode(PY));
+    await py.runPythonAsync(`
+import sys, blosc2
+if "/" not in sys.path:
+    sys.path.insert(0, "/")
+import newton
+from newton import NFRAMES, WIDTH, HEIGHT, ASPECT, CX, CY, SPANX, MAXITER, RELAX, JIT_OK, JIT_ERR, compute_frame
+`);
+    const pyVer = await py.runPythonAsync("import platform; platform.python_version()");
+    log(`Python ${pyVer}  •  Pyodide ${py.version}  (WASM)`);
+    log(`JavaScript engine: ${jsEngine()}`);
+    log(`numpy ${await py.runPythonAsync("import numpy; numpy.__version__")} ready`);
+    log(`blosc2 ${await py.runPythonAsync("blosc2.__version__")} ready`);
+    log(py.globals.get("JIT_OK") ? "JIT compiler: available ✓"
+                                 : "JIT compiler: NOT available — " + py.globals.get("JIT_ERR"));
+    $("status").textContent = "ready.";
+    $("run").disabled = false;
+    $("run").onclick = runDemo;
+  } catch (e) {
+    $("status").textContent = "ERROR: " + e;
+    throw e;
+  }
+})();
+
+async function runDemo() {
+  $("run").disabled = true; $("widget").hidden = true;
+  const n = py.globals.get("NFRAMES");
+  const W = py.globals.get("WIDTH"), H = py.globals.get("HEIGHT");
+  const aspect = py.globals.get("ASPECT");
+  const cx = py.globals.get("CX"), cy = py.globals.get("CY"), spanx = py.globals.get("SPANX");
+  const maxiter = py.globals.get("MAXITER");
+  const relax = py.globals.get("RELAX").toJs();
+  const cf = py.globals.get("compute_frame");
+
+  const jsRun = [], numpy = [], nojit = [], jit = [];
+  let rawTotal = 0, compTotal = 0;
+  try {
+    for (let i = 0; i < n; i++) {
+      $("status").textContent = `computing frame ${i + 1}/${n}…`;
+      await new Promise(requestAnimationFrame);
+
+      const t0 = performance.now();
+      const esc = newtonJS(cx, cy, spanx, maxiter, relax[i], W, H, aspect);
+      const js_ms = Math.max(1, Math.round(performance.now() - t0));
+      const jsRgba = renderRGBA_js(esc, W, H);
+
+      const r = JSON.parse(cf(i));
+
+      jsRun.push({ compute_ms: js_ms, rgba: jsRgba });
+      numpy.push({ compute_ms: r.numpy_ms, rgba_b64: r.numpy_b64 });
+      nojit.push({ compute_ms: r.nojit_ms, rgba_b64: r.nojit_b64 });
+      jit.push({ compute_ms: r.jit_ms, rgba_b64: r.jit_b64 });
+      rawTotal += r.raw; compTotal += r.comp;
+      log(`frame ${String(i + 1).padStart(2, "0")}/${n}: js=${String(js_ms).padStart(4)}  numpy=${String(r.numpy_ms).padStart(4)}  no-jit=${String(r.nojit_ms).padStart(4)}  jit=${String(r.jit_ms).padStart(4)} ms`);
+    }
+  } catch (e) {
+    $("status").textContent = "ERROR computing frames (see log)";
+    log("COMPUTE ERROR:\n" + (e && e.message ? e.message : e));
+    $("run").disabled = false;
+    return;
+  }
+
+  const jsT = sum(jsRun.map(f => f.compute_ms));
+  const npT = sum(numpy.map(f => f.compute_ms));
+  const njT = sum(nojit.map(f => f.compute_ms));
+  const jitT = sum(jit.map(f => f.compute_ms));
+  const cratio = rawTotal / compTotal;
+  const statsText =
+    `frames:               ${n}  (${W}x${H}), max_iter=${maxiter}\n` +
+    `JIT compiler:         ${py.globals.get("JIT_OK") ? "available" : "NOT available"}\n` +
+    `JavaScript total:     ${jsT} ms\n` +
+    `numpy total:          ${npT} ms\n` +
+    `no-JIT total:         ${njT} ms\n` +
+    `JIT total:            ${jitT} ms\n` +
+    `JIT vs numpy:         ${(npT / jitT).toFixed(2)}x  (JIT faster if >1)\n` +
+    `JIT vs no-JIT:        ${(njT / jitT).toFixed(2)}x\n` +
+    `JS vs JIT:            ${(jitT / jsT).toFixed(2)}x  (JS faster if >1)\n` +
+    `frame cache (blosc2): ${(rawTotal / 2 ** 20).toFixed(1)} MiB -> ${(compTotal / 2 ** 20).toFixed(1)} MiB  (${cratio.toFixed(2)}x)`;
+  log("\n" + statsText);
+  $("stats").textContent = statsText;
+  $("status").textContent = "done.";
+  $("summary").innerHTML =
+    `<div class="verdict">Blosc2 JIT: <b>${(npT / jitT).toFixed(1)}×</b> faster than NumPy, ` +
+    `<b>${(njT / jitT).toFixed(1)}×</b> faster than no-JIT</div>` +
+    `<div class="chips">` +
+      `<span class="chip">JavaScript ${jsT} ms</span>` +
+      `<span class="chip">NumPy ${npT} ms</span>` +
+      `<span class="chip">Blosc2 No JIT ${njT} ms</span>` +
+      `<span class="chip win">Blosc2 JIT ${jitT} ms</span>` +
+    `</div>`;
+  $("run").disabled = false;
+
+  // One shared scale so playback duration tracks real compute: slowest panel -> ~target.
+  const scale = CFG.TARGET_PLAYBACK_MS / Math.max(jsT, npT, njT, jitT);
+  buildPlayer({
+    width: W, height: H, target_fps: CFG.TARGET_FPS, hold_last_ms: CFG.HOLD_LAST_MS,
+    runs: [makeRun("JavaScript", jsRun, scale), makeRun("Blosc2 JIT", jit, scale),
+           makeRun("NumPy", numpy, scale), makeRun("Blosc2 No JIT", nojit, scale)],
+  });
+}
+
+function makeRun(label, frames, scale) {
+  const hold = frames.map(f =>
+    Math.min(CFG.MAX_FRAME_MS, Math.max(CFG.MIN_FRAME_MS, Math.round(f.compute_ms * scale))));
+  const cum = [], cumCompute = [];
+  let h = 0, c = 0;
+  for (let i = 0; i < frames.length; i++) { h += hold[i]; cum.push(h); c += frames[i].compute_ms; cumCompute.push(c); }
+  return { label, total_compute_ms: sum(frames.map(f => f.compute_ms)),
+           hold_ms: hold, cumulative_hold_ms: cum, cumulative_compute_ms: cumCompute, frames };
+}
+
+// ---- native canvas player, N panels ----
+function buildPlayer(payload) {
+  $("widget").hidden = false;
+  const nPanels = payload.runs.length;
+  const cols = Math.ceil(Math.sqrt(nPanels));        // 4 panels -> 2x2
+  const rows = Math.ceil(nPanels / cols);
+  const canvas = $("canvas"), ctx = canvas.getContext("2d");
+  canvas.width = cols * payload.width + 2 * CFG.CANVAS_PADDING + (cols - 1) * CFG.CANVAS_GAP;
+  canvas.height = CFG.HEADER_HEIGHT + rows * payload.height + (rows - 1) * CFG.CANVAS_GAP + CFG.FOOTER_HEIGHT + 2 * CFG.CANVAS_PADDING;
+  const cache = new Map();
+  let busy = false;
+
+  const decode = (run, fi) => {
+    const key = run + ":" + fi;
+    if (cache.has(key)) return cache.get(key);
+    const f = payload.runs[run].frames[fi];
+    let bytes;
+    if (f.rgba) {
+      bytes = f.rgba;
+    } else {
+      const bin = atob(f.rgba_b64);
+      bytes = new Uint8ClampedArray(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    }
+    const img = new ImageData(bytes, payload.width, payload.height);
+    cache.set(key, img);
+    return img;
+  };
+
+  function panelState(run, elapsed) {
+    let idx = 0;
+    while (idx < run.cumulative_hold_ms.length && elapsed >= run.cumulative_hold_ms[idx]) idx++;
+    const done = idx >= run.frames.length;
+    idx = Math.min(idx, run.frames.length - 1);
+    return { idx, done, elapsedComputeMs: run.cumulative_compute_ms[idx] };
+  }
+
+  function drawPanel(x, y, ri, st) {
+    const run = payload.runs[ri], frame = run.frames[st.idx];
+    ctx.putImageData(decode(ri, st.idx), x, y);
+    ctx.strokeStyle = "#334155"; ctx.lineWidth = 2;
+    ctx.strokeRect(x - 1, y - 1, payload.width + 2, payload.height + 2);
+    ctx.fillStyle = "rgba(0,0,0,.82)"; ctx.fillRect(x + 12, y + 12, 230, 94);
+    ctx.fillStyle = "#fff"; ctx.font = "bold 22px sans-serif";
+    ctx.fillText(run.label, x + 24, y + 38);
+    ctx.font = "15px sans-serif";
+    ctx.fillText(`frame ${st.idx + 1}/${run.frames.length}`, x + 24, y + 60);
+    ctx.fillText(`current compute ${frame.compute_ms} ms`, x + 24, y + 80);
+    ctx.fillText(`elapsed compute ${st.elapsedComputeMs} ms`, x + 24, y + 100);
+    if (st.done) {
+      ctx.fillStyle = "rgba(16,185,129,.9)"; ctx.fillRect(x + payload.width - 106, y + 14, 92, 30);
+      ctx.fillStyle = "#03140e"; ctx.font = "bold 16px sans-serif";
+      ctx.fillText("DONE", x + payload.width - 82, y + 35);
+    }
+  }
+
+  function draw(elapsed) {
+    const gridTop = CFG.CANVAS_PADDING + CFG.HEADER_HEIGHT;
+    const footerY = gridTop + rows * payload.height + (rows - 1) * CFG.CANVAS_GAP + 24;
+    ctx.fillStyle = "#0b1020"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#f8fafc"; ctx.font = "bold 22px sans-serif";
+    ctx.fillText("Newton fractal — same math, four engines", CFG.CANVAS_PADDING, CFG.CANVAS_PADDING + 28);
+    ctx.fillStyle = "#cbd5e1"; ctx.font = "16px sans-serif";
+    const footer = payload.runs.map(r => `${r.label}=${r.total_compute_ms} ms`).join("   ");
+    ctx.fillText(footer, CFG.CANVAS_PADDING, footerY);
+    for (let k = 0; k < payload.runs.length; k++) {
+      const col = k % cols, row = Math.floor(k / cols);
+      const x = CFG.CANVAS_PADDING + col * (payload.width + CFG.CANVAS_GAP);
+      const y = gridTop + row * (payload.height + CFG.CANVAS_GAP);
+      drawPanel(x, y, k, panelState(payload.runs[k], elapsed));
+    }
+  }
+
+  async function playback(record) {
+    if (busy) return;
+    busy = true; $("play").disabled = true; $("record").disabled = true;
+    $("wstatus").textContent = record ? "Recording…" : "Playing…";
+    const totalMs = Math.max(...payload.runs.map(r => r.cumulative_hold_ms.at(-1))) + payload.hold_last_ms;
+
+    let recorder, chunks = [], stopped;
+    if (record) {
+      const stream = canvas.captureStream(payload.target_fps);
+      recorder = new MediaRecorder(stream, { mimeType: "video/webm;codecs=vp9", videoBitsPerSecond: 4e6 });
+      recorder.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+      stopped = new Promise(res => { recorder.onstop = res; });
+      recorder.start();
+    }
+
+    await new Promise(res => {
+      const start = performance.now();
+      const step = now => {
+        const e = now - start; draw(e);
+        if (e >= totalMs) res(); else requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+    draw(totalMs);
+
+    if (record) {
+      recorder.stop(); await stopped;
+      const url = URL.createObjectURL(new Blob(chunks, { type: recorder.mimeType || "video/webm" }));
+      const a = document.createElement("a");
+      a.href = url; a.download = "newton-js-vs-numpy-vs-nojit-vs-jit.webm";
+      a.click(); URL.revokeObjectURL(url);
+      $("wstatus").textContent = "Recorded WebM downloaded";
+    } else {
+      $("wstatus").textContent = "Playback finished";
+    }
+    $("play").disabled = false; $("record").disabled = false; busy = false;
+  }
+
+  $("play").onclick = () => playback(false);
+  $("record").onclick = () => playback(true);
+  draw(0);
+  $("wstatus").textContent = "Ready";
+}
+</script>
