@@ -1,7 +1,7 @@
 .. title: Not an island: bringing compression to the tabular ecosystem
 .. author: Francesc Alted
 .. slug: not-an-island-tabular-ecosystem
-.. date: 2026-07-17 12:00:00 UTC
+.. date: 2026-07-17 12:00:01 UTC
 .. tags: ctable arrow pandas interop compression
 .. category: posts
 .. link:
