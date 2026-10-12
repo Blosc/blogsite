@@ -1,0 +1,29 @@
+name: Guest post Nikola preview QC
+on:
+  push:
+    branches:
+      - post/pr805-when-more-threads-slower
+  workflow_dispatch:
+jobs:
+  preview:
+    name: Build Nikola preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nikola and Markdown dependencies
+        run: python -m pip install --disable-pip-version-check "nikola[extras]" markdown
+      - name: Build Blosc website
+        run: nikola build
+      - name: Validate guest post and images
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f output/posts/when-more-threads-make-things-slower/index.html
+          for f in 01-startup 02-workers 03-new-context 04-reused-context; do
+            test -s "output/images/pr805-threads/$f.svg"
+            grep -q "images/pr805-threads/$f.svg" output/posts/when-more-threads-make-things-slower/index.html
+          done
+          echo 'Guest post page and four embedded figures: PASS'
