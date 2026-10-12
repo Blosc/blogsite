@@ -2,7 +2,7 @@
 .. title: When More Threads Make Things Slower
 .. slug: when-more-threads-make-things-slower
 .. date: 2026-10-12 13:00:00 UTC
-.. tags: blosc2, compression, performance, threading
+.. tags: Blosc2, compression, performance, threading
 .. category: posts
 .. link:
 .. description: How a small C-Blosc2 change made tiny compression jobs much faster by avoiding unnecessary parallel work.
