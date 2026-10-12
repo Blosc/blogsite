@@ -24,9 +24,9 @@ We tend to think that more workers mean faster results. And often, that's true. 
 
 I came across this while working on [C-Blosc2](https://github.com/Blosc/c-blosc2), an open-source library that helps computers compress data.
 
-In one of our tests, a small compression request took about **710 microseconds**. After a relatively simple change, it took just **18 microseconds**.
+In one targeted Linux benchmark—a 16 KiB request with sixteen configured threads and a fresh compression context—a compression operation took about **710 microseconds**. After a relatively simple change, it took just **18 microseconds**.
 
-That's almost **39 times faster**.
+That's almost **39 times faster in this particular test**.
 
 The surprising part? We didn't make the compression itself any faster.
 
@@ -36,15 +36,7 @@ We simply stopped doing some of the work that came before it.
 
 ## The Hidden Cost of Getting Ready
 
-Before a computer can finish a job, it often needs to do a little preparation.
-
-Think about cooking dinner. You get the ingredients out, find a knife, and prepare your workspace. If you're making dinner for twenty people, those few minutes hardly matter.
-
-But what if you're just cutting an apple?
-
-Suddenly, the preparation might take longer than the task itself.
-
-Compression has a similar problem.
+Even a quick task can involve preparation. For a big job, that preparation may be worth it. For a tiny one, it can take longer than the work itself.
 
 When there's a lot of data, C-Blosc2 can split it into smaller pieces and let several workers handle them at the same time. That makes sense. There's enough work to keep everyone busy.
 
@@ -54,9 +46,7 @@ And that's where we found something interesting.
 
 The library could start preparing those workers before checking whether they were actually needed.
 
-Imagine getting sixteen people ready to move a single box.
-
-There's nothing wrong with the people. There's nothing wrong with the box. The problem is that most of the preparation was unnecessary.
+The workers weren't the problem. Asking them to get ready when they had nothing to do was.
 
 Once we understood that, the question changed.
 
@@ -110,7 +100,7 @@ And that's where the difference was remarkable.
 
 ![Before and after with newly created compression contexts](/images/pr805-threads/03-new-context.svg)
 
-*Time per request when a fresh workspace is created each time. Shorter bars mean less waiting.*
+*Selected benchmark configurations with a fresh compression context for each request. Times are in microseconds; lower is better.*
 
 For a request containing just **16 KiB** of data, with sixteen workers configured, the time dropped from about **710 microseconds** to **18 microseconds**.
 
@@ -124,15 +114,13 @@ Why?
 
 Because when there's plenty of real work to do, the time spent getting ready becomes a much smaller part of the overall task.
 
-Think back to the restaurant. Calling sixteen chefs to make one sandwich is excessive. Calling sixteen chefs to prepare dinner for two hundred guests is a different story.
-
-The value of having more workers depends on how much work there is.
+More workers can make sense for a bigger job. The important thing is having enough work for them to do.
 
 We also tested situations where the computer could reuse its preparation between requests. In those cases, the results varied more. Some jobs became faster, others saw little benefit, and a few were slower.
 
 ![Before and after with reused compression contexts](/images/pr805-threads/04-reused-context.svg)
 
-*Results when the compression workspace is reused. The benefit varies with the workload; the chart shows three selected configurations.*
+*Three selected benchmark configurations using a reused compression context and sixteen configured threads. Times are in microseconds; lower is better. Results vary by workload.*
 
 That's a useful reminder that performance improvements are rarely universal. There's still room to improve how different workloads are handled.
 
