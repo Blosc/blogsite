@@ -5,75 +5,65 @@
 .. tags: Blosc2, compression, performance, threading
 .. category: posts
 .. link:
-.. description: How avoiding unnecessary worker setup reduces the cost of small compression requests in C-Blosc2.
+.. description: Why avoiding unnecessary parallel setup can make small C-Blosc2 compression requests faster.
 .. type: text
 .. author: Johnny Kao
 -->
 
-*How a small change to worker scheduling improved small compression requests, and what the results mean for data-processing workloads.*
+*Why matching the number of workers to the available compression blocks can make small requests much faster.*
 
-A common assumption in performance engineering is that more threads should make a program faster. This works well when there is enough work to distribute, but it can backfire when the task is smaller than the overhead of organizing the workers. Imagine a kitchen preparing a single sandwich: bringing fifteen additional cooks into the room would probably take longer than preparing the order. Compression can run into much the same problem when an application has configured many threads but supplies only a small amount of data.
+More threads usually help compression when there is enough data to process in parallel. For a small request, however, the cost of preparing those threads can exceed the useful work. While working on [C-Blosc2 PR #805](https://github.com/Blosc/c-blosc2/pull/805), I found a case where a **16 KiB compression request with sixteen configured threads** took about **710 µs** with a fresh context. After the change, the same measured operation took about **18 µs**, almost **39× faster**. This is a result for that particular request and context lifecycle, not a 39× increase in the compression algorithm's throughput.
 
-While working on [C-Blosc2 PR #805](https://github.com/Blosc/c-blosc2/pull/805), I found that a small compression request could spend much more time preparing parallel execution than performing useful compression work. In one focused Linux benchmark, a **16 KiB request with sixteen configured threads and a newly created compression context** took approximately **710 microseconds** before the change and **18 microseconds** afterward, a speedup of almost **39×** in that specific configuration. The compression algorithm itself was unchanged. The improvement came from deciding whether parallel workers were needed *before* paying to prepare them.
+The improvement came from two decisions that are easy to distinguish: **skip parallel startup when a request contains only one block**, and **avoid scheduling workers that have no blocks to process** when a request contains only a few blocks. Neither requires changing how the data is compressed. To understand the results, we first need to look at what each decision avoids, and then at the tests used to evaluate them.
 
 <!-- TEASER_END -->
 
-## Where the Overhead Comes From
+## Two Ways to Avoid Unnecessary Parallel Work
 
-Parallel compression is useful when the input contains enough blocks to keep multiple workers busy. A small request, however, may contain only one block, even if the calling application has configured sixteen threads. In that case there is nothing to split among the available workers, so preparing parallel execution cannot accelerate the actual compression. The startup cost can instead dominate the elapsed time, particularly if the application creates a fresh compression context for each operation.
+### 1. Skip parallel startup for a single block
 
-The first part of PR #805 addresses precisely that mismatch. Before initializing parallel workers, the library can determine whether the input offers only a single unit of work and take the direct path when it does. This avoids unnecessary worker setup without changing the data format or the compression operation that processes the block.
+C-Blosc2 can divide an input into blocks and compress them in parallel, which is useful when several blocks can be processed independently. With a **16 KiB block size**, though, a **16 KiB input contains just one block**. Even if the application configures sixteen threads, there is still only one piece of compression work. Starting the parallel backend before recognizing that fact adds overhead without offering any opportunity for parallel speedup.
+
+The first change in PR #805 makes that decision earlier. If the request has only one block, compression proceeds without preparing the parallel workers. The existing compression algorithm does the same useful work; the unnecessary setup simply no longer happens.
 
 ![Before and after: a single-block job skips unnecessary parallel startup](/images/pr805-threads/01-startup.svg)
 
-*For a single-block request, skipping parallel startup removes work that cannot contribute to compression throughput.*
+*For a single block, the request can bypass parallel startup entirely.*
 
-A related inefficiency appears when the input has a few blocks, but fewer than the configured number of threads. For example, sixteen available threads do not make sixteen workers useful when there are only three blocks to process. PR #805 also limits the work assigned to the number of blocks that can actually benefit from parallelism, rather than preparing assignments for workers with nothing to do.
+### 2. Schedule only workers that can do useful work
+
+Not every request fits in a single block. Consider **three blocks with sixteen threads configured**: there is useful parallel work, but not enough to keep sixteen workers occupied. Preparing or notifying workers that will receive no block can still add scheduling overhead, even though some parallelism is appropriate.
+
+The second change therefore matches the work dispatched to the number of available blocks rather than blindly following the configured thread count. Unlike the single-block path, this does not remove parallel execution; it limits unnecessary worker participation within it.
 
 ![Workers assigned before and after PR #805](/images/pr805-threads/02-workers.svg)
 
-*With three blocks and sixteen configured threads, at most three workers can have useful block assignments.*
+*When three blocks are available, there is no useful block assignment for thirteen additional workers.*
 
-These are intentionally modest changes: instead of introducing a new compression algorithm or trying to make thread creation inherently faster, they avoid parallel work that the current request cannot use. This also makes the performance behavior easier to explain. The optimization should have its strongest effect on small inputs where scheduling and startup are a large fraction of total latency, while the benefit becomes less important as actual compression work grows.
+## Testing the Optimization
 
-## What This Means for a Rainfall Dataset
+The purpose of our benchmarks was to verify whether reducing unnecessary parallel work could improve compression performance, particularly for small requests where worker preparation might account for a significant portion of the execution time. We also wanted to understand how the improvement changed as the amount of data increased, since an optimization that works well for small inputs may not provide the same benefit for larger workloads.
 
-To evaluate the change with realistic data rather than an artificial byte pattern, I used a rainfall-data sample and repeated it to construct inputs of different sizes. Rainfall data is a useful illustration because an application might ingest observations, transform or aggregate them, and compress batches of measurements before writing them to storage. The relevant distinction for this optimization is not that the measurements represent rainfall, but **how much data each individual compression call receives and whether its compression context is reused**.
+To make the comparison reproducible, we used a rainfall-grid sample as a reproducible source of real data, repeating its contents to test different input sizes and thread configurations. The rainfall data itself was not the target of the optimization; it simply provided a consistent input for comparing the original and modified implementations. The tests were performed under matched conditions, and the complete methodology and results are available in the [reproducibility repository](https://github.com/Johnny-Kao/c-blosc2-pr805-reproducibility).
 
-Consider a workflow that reads a rainfall dataset, divides it into small chunks, and compresses those chunks separately as they are produced. If the application repeatedly creates new compression contexts for tiny chunks while leaving a relatively high thread count configured, each call may pay a substantial setup cost despite having only one useful block. PR #805 reduces that portion of the per-call cost. In such a workflow the **compression stage for small chunks** can become faster, and repeated savings may accumulate over many calls. This does not imply that loading the rainfall file, computing rainfall statistics, accessing storage, or the entire end-to-end pipeline becomes 39 times faster; those activities were not measured by the focused compression benchmark.
+![Performance comparison before and after PR #805](/images/pr805-threads/03-new-context.svg)
 
-For example, if the application spends most of its time compressing many small independently processed chunks, a lower per-chunk compression latency could make a noticeable difference to throughput. If it instead loads the data once, keeps a compression context alive, and compresses large blocks, worker setup is a smaller part of the total cost, so the improvement may be modest. Applications that only decompress existing rainfall data should not expect a speedup from this compression-side change. These distinctions matter more for predicting practical gains than the overall size of the rainfall dataset: a large dataset processed as many tiny requests behaves differently from one compressed in a few large requests.
+*Selected compression benchmarks using newly created contexts. Measurements include context setup and cleanup; lower is better.*
 
-## Benchmark Results and Their Limits
+The most significant improvement appeared in small compression requests. With a **16 KiB input and sixteen configured threads**, the measured operation dropped from approximately **710 µs to 18 µs**, representing a speedup of nearly **39×**. This result illustrates how expensive unnecessary parallel preparation can become when there is too little work to distribute. By avoiding that preparation, the library can substantially reduce the cost of processing small requests without changing the compression algorithm itself.
 
-I compared the original C-Blosc2 implementation with the modified version on the same Linux machine, using the same data and compression settings. The measurements deliberately cover different request sizes and distinguish newly created compression contexts from reused ones, since those two usage patterns expose very different amounts of worker-startup overhead. The complete [benchmark code and results](https://github.com/Johnny-Kao/c-blosc2-pr805-reproducibility) are available, along with a [successful GitHub Actions run](https://github.com/Johnny-Kao/c-blosc2-pr805-reproducibility/actions/runs/37950149167).
+The benefits were not uniform across all configurations. As the amount of data increased, more parallel work became available, and the relative advantage of avoiding startup overhead became smaller. Other tested configurations also showed more modest improvements or occasional regressions, reinforcing the importance of evaluating performance changes across different workloads rather than relying on a single favorable result.
 
-![Before and after with newly created compression contexts](/images/pr805-threads/03-new-context.svg)
+## Why We Chose the Simpler Approach
 
-*Selected configurations in which a fresh compression context is created for each request. Lower latency is better; timings are in microseconds.*
+During development, we explored more aggressive ways to reduce parallel overhead, including keeping worker threads ready between compression requests. Early experiments showed that some of these approaches could deliver even greater speedups. However, achieving the best performance in a particular benchmark was only one part of the challenge. More aggressive designs also introduced additional complexity in managing workers and their state, creating potential risks for existing behavior and future maintenance.
 
-The largest improvement among the configurations discussed here came from the **16 KiB, sixteen-thread, fresh-context** test: about **710 µs** before the patch versus **18 µs** after it, or nearly **39×** faster. At the same request size with four configured threads, the measured speedup was greater than **10×**. These results directly support the startup-overhead explanation: when a call has little actual compression work and must prepare its context, eliminating unnecessary parallel preparation can remove most of its previous runtime.
+An optimization in a widely used library must work well beyond the specific workload it targets. Improvements for small compression requests should not come at the expense of larger workloads, and new mechanisms should remain understandable and maintainable for future contributors. This meant weighing the potential performance gains against the risk of regressions, implementation complexity, and the long-term cost of maintaining the code.
 
-The pattern changes for larger inputs. As compression occupies more of the total execution time, worker preparation represents a smaller share of each request, and additional threads may be doing useful work. It would therefore be misleading to treat the best small-request speedup as the expected improvement for an entire rainfall-processing application or for all compression workloads.
+We ultimately chose a more focused approach: avoiding unnecessary worker startup and scheduling only the workers that could perform useful work. This delivered substantial improvements in the targeted cases without introducing a more complex worker-management system. Although further optimization opportunities remain, the goal was not to maximize a single benchmark result, but to achieve a meaningful performance improvement with a manageable engineering trade-off.
 
-![Before and after with reused compression contexts](/images/pr805-threads/04-reused-context.svg)
+## Conclusion
 
-*Selected configurations using a reused context and sixteen configured threads. Lower latency is better; the effects vary by workload.*
+The useful distinction is between **threads configured** and **blocks available to process**. PR #805 improves that match at two points: it skips parallel startup for one-block requests and avoids scheduling excess workers when only a few blocks exist. The rainfall fixture helped make the comparison reproducible, but the improvement applies to the shape of the compression request, not the subject of the data.
 
-With a reused compression context, the measured results were more mixed: some configurations improved, others changed little, and a few became slower. This is an important limitation rather than a contradiction. The high fresh-context speedups largely concern setup that a reused-context workflow has already amortized, while other scheduling costs can become more prominent. Consequently, the most defensible practical expectation is **lower latency for small compression requests that otherwise incur unnecessary parallel setup**, not a universal increase in compression throughput.
-
-## Why We Did Not Keep Workers Permanently Ready
-
-The merged solution was not my first attempt. I initially experimented with keeping workers ready between operations so subsequent calls would not need to repeat their setup. In an early experiment, an operation that took approximately **40 µs** was reduced to roughly **2 µs**. Although promising, that approach also introduced lifecycle problems that were absent from the simpler change.
-
-One example arose when a program created a new process using a fork-like operation. The child could inherit bookkeeping that referred to waiting workers without inheriting those running workers themselves, leaving the new process waiting for threads that no longer existed. We investigated a way to handle that situation, but doing so increased the complexity of resource management and of the states that needed to remain correct. Keeping a worker pool alive is not merely a one-time performance choice; it also requires the library to manage that pool reliably across process and context lifetimes.
-
-The final approach takes a narrower path: avoid preparing unnecessary workers rather than maintaining additional ones indefinitely. This captured an important benefit for the small-request case without introducing a new persistent-worker lifecycle. Platform behavior also mattered during review and testing; in particular, the existing startup behavior was preserved on Windows rather than accepting a compatibility regression for the sake of the optimization. These constraints are part of the engineering result, not incidental details.
-
-## Conclusions
-
-PR #805 is an example of a performance improvement that comes from avoiding work, rather than making the central algorithm more sophisticated. When there is only one compression block, preparing a parallel team has no benefit, and when there are only a few blocks, creating assignments for many more workers adds overhead without additional useful processing. Checking the work available before preparing parallel execution provides a direct way to remove those costs.
-
-For users processing rainfall observations or similar scientific arrays, the change is most relevant when data is compressed in **many small requests**, especially with **fresh contexts and a thread count larger than the number of useful blocks**. The measurements show substantial improvements for targeted requests, but they do not establish an equivalent speedup for reading, analyzing, or storing the full dataset. The practical lesson is to examine not only the total volume of data, but also the size and lifecycle of the operations that process it.
-
-The change was merged as [C-Blosc2 PR #805](https://github.com/Blosc/c-blosc2/pull/805). I would like to thank Francesc Alted and the Blosc maintainers for their reviews and for helping keep the final implementation simpler and safer. The broader takeaway is straightforward: before optimizing the cost of parallel execution, check whether the current workload needs that parallel execution at all.
+These changes were merged in [C-Blosc2 PR #805](https://github.com/Blosc/c-blosc2/pull/805). I would like to thank Francesc Alted and the Blosc maintainers for reviewing the contribution and helping keep the solution focused on avoiding unnecessary work.
