@@ -8,7 +8,7 @@ on:
 
 jobs:
   build_website:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     name: 'Build website'
     steps:
 
@@ -37,7 +37,7 @@ jobs:
 
     # blosc.org/c-blosc2
     - name: Check out C-Blosc2
-      run: git clone https://github.com/Blosc/c-blosc2.git
+      run: git clone --depth 1 https://github.com/Blosc/c-blosc2.git
     - name: Build C-Blosc2 docs
       # TODO: Fix warnings in the build and restore `-W` parameter
       run: sphinx-build c-blosc2/doc _site/c-blosc2
@@ -45,7 +45,7 @@ jobs:
 
     # blosc.org/python-blosc
     - name: Check out Python-Blosc
-      run: git clone --recurse-submodules https://github.com/Blosc/python-blosc.git
+      run: git clone --depth 1 --recurse-submodules https://github.com/Blosc/python-blosc.git
     - name: Build Python-Blosc
       run: cd python-blosc && python setup.py build
       shell: bash -l {0}
@@ -57,13 +57,9 @@ jobs:
       run: cd python-blosc && sphinx-build doc ../_site/python-blosc
       shell: bash -l {0}
 
-    - name: Install pandoc
-      run: sudo apt install pandoc
-      shell: bash -l {0}
-
     # blosc.org/python-blosc2
     - name: Check out Python-Blosc2
-      run: git clone --recurse-submodules https://github.com/Blosc/python-blosc2.git
+      run: git clone --depth 1 --recurse-submodules https://github.com/Blosc/python-blosc2.git
     - name: Install Python-Blosc2
       run: cd python-blosc2 && python -m pip install --upgrade pip && python -m pip install . --group doc && cd ..
       shell: bash -l {0}
@@ -79,7 +75,7 @@ jobs:
   deploy_website:
     needs: build_website
     if: ${{ github.event_name == 'push' || github.event_name == 'repository_dispatch' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     name: 'Deploy website'
     permissions:
       pages: write
