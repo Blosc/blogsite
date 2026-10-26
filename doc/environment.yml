@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python
+  - pandoc
   - pip>=25.1
   - scikit-build
   - cmake
