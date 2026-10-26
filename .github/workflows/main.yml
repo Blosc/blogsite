@@ -10,6 +10,10 @@ jobs:
   build_website:
     runs-on: ubuntu-24.04
     name: 'Build website'
+    env:
+      CFLAGS: "-O0"
+      CXXFLAGS: "-O0"
+      CMAKE_ARGS: "-DCMAKE_C_FLAGS_RELEASE=-O0 -DCMAKE_CXX_FLAGS_RELEASE=-O0"
     steps:
 
     # Set up environment
