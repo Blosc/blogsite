@@ -10,7 +10,7 @@
 .. author: Francesc Alted, Scott Prater
 -->
 
-I am thrilled to announce that the Blosc2 project has been awarded a contract of **€286,000** from the [Sovereign Tech Agency](https://www.sovereign.tech/) (STA) to modernize, expand, and harden our core C foundation (**C-Blosc2**).
+We are thrilled to announce that the Blosc2 project has been awarded a contract of **€286,000** from the [Sovereign Tech Agency](https://www.sovereign.tech/) (STA) to modernize, expand, and harden our core C foundation (**C-Blosc2**).
 
 Over the next 15 months, this funding will allow us to tackle long-standing architectural bottlenecks, decouple high-level capabilities from Python, formalize open binary specifications, and establish enterprise-grade security and compatibility testing across the entire Blosc ecosystem.
 
