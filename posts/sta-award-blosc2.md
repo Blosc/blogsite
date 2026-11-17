@@ -14,7 +14,8 @@ We are thrilled to announce that the Blosc2 project has been awarded a contract 
 
 Over the next 15 months, this funding will allow us to tackle long-standing architectural bottlenecks, decouple high-level capabilities from Python, formalize open binary specifications, and establish enterprise-grade security and compatibility testing across the entire Blosc ecosystem.
 
-![Blosc2 Project and the Sovereign Tech Agency](/images/Blosc2-Project-STA.png)
+![Blosc2 Project and the Sovereign Tech Agency](/images/Blosc2-Project-STA.png){: style="width: 50%; max-width: 500px; height: auto; display: block; margin: 0
+    auto;" }
 
 <!-- TEASER_END -->
 
