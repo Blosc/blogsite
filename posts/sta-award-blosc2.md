@@ -2,7 +2,7 @@
 .. title: Sovereign Tech Agency Award for Blosc2
 .. slug: sta-award-blosc2
 .. date: 2026-11-17 09:45:00 UTC
-.. tags: contract, award, blosc2, c-blosc2, sovereign-tech-agency
+.. tags: Sovereign-Tech-Agency, award, Blosc2, C-Blosc2
 .. category: posts
 .. link:
 .. description: The Sovereign Tech Agency awards €286,000 to modernize and harden the C-Blosc2 core foundation.
